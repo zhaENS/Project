@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  7 AUG 2014 19:02
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  7 AUG 2014 19:09
 entering extended mode
 **Report250714_OfirShukron.tex
 
@@ -338,7 +338,7 @@ LaTeX Warning: No \author given.
 File: encounterHistogram123Loops.jpg Graphic file (type jpg)
 
 <use encounterHistogram123Loops.jpg>
-Package pdftex.def Info: encounterHistogram123Loops.jpg used on input line 35.
+Package pdftex.def Info: encounterHistogram123Loops.jpg used on input line 41.
 (pdftex.def)             Requested size: 457.70189pt x 195.52702pt.
 
 <meanEncounterProbability123Loops.jpg, id=51, 1144.275pt x 739.76375pt>
@@ -346,14 +346,14 @@ File: meanEncounterProbability123Loops.jpg Graphic file (type jpg)
 
 <use meanEncounterProbability123Loops.jpg>
 Package pdftex.def Info: meanEncounterProbability123Loops.jpg used on input lin
-e 36.
+e 42.
 (pdftex.def)             Requested size: 228.85094pt x 147.95012pt.
  [2] [3pdfTeX warning (ext4): destination with the same identifier (name{figure
 .1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.47 
+l.53 
       <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Analysis of TAD/encoun
 terHistogram123Loops.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/An
 alysis of TAD/meanEncounterProbability123Loops.jpg>]
@@ -362,7 +362,7 @@ File: encounterHistogram1To10InternalLoops.jpg Graphic file (type jpg)
 
 <use encounterHistogram1To10InternalLoops.jpg>
 Package pdftex.def Info: encounterHistogram1To10InternalLoops.jpg used on input
- line 51.
+ line 57.
 (pdftex.def)             Requested size: 407.42526pt x 221.93083pt.
 
 <meanEncounterProbabilityInternalLoops.jpg, id=70, 1358.07375pt x 739.76375pt>
@@ -370,7 +370,7 @@ File: meanEncounterProbabilityInternalLoops.jpg Graphic file (type jpg)
 
 <use meanEncounterProbabilityInternalLoops.jpg>
 Package pdftex.def Info: meanEncounterProbabilityInternalLoops.jpg used on inpu
-t line 52.
+t line 58.
 (pdftex.def)             Requested size: 203.70227pt x 110.95976pt.
 
 <polymerModelWithLoopAndInternalConnectors.jpg, id=71, 795.72281pt x 477.28313p
@@ -378,10 +378,10 @@ t>
 File: polymerModelWithLoopAndInternalConnectors.jpg Graphic file (type jpg)
  <use polymerModelWithLoopAndInternalConnectors.jpg>
 Package pdftex.def Info: polymerModelWithLoopAndInternalConnectors.jpg used on 
-input line 53.
+input line 59.
 (pdftex.def)             Requested size: 159.14174pt x 95.45493pt.
 
-Overfull \hbox (17.42526pt too wide) in paragraph at lines 51--54
+Overfull \hbox (17.42526pt too wide) in paragraph at lines 57--60
  [][] 
  []
 
@@ -390,7 +390,7 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.62 \subsubsection
+l.68 \subsubsection
                    {One TAD} <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents
 /Analysis of TAD/encounterHistogram1To10InternalLoops.jpg> <D:/Ofir/Work/ENS/Po
 lymer Chain Dynamics/Documents/Analysis of TAD/meanEncounterProbabilityInternal
@@ -400,7 +400,7 @@ olymerModelWithLoopAndInternalConnectors.jpg>]
 File: encounterHistogram_1to8Loops.jpg Graphic file (type jpg)
 
 <use encounterHistogram_1to8Loops.jpg>
-Package pdftex.def Info: encounterHistogram_1to8Loops.jpg used on input line 68
+Package pdftex.def Info: encounterHistogram_1to8Loops.jpg used on input line 74
 .
 (pdftex.def)             Requested size: 302.62988pt x 184.94048pt.
 
@@ -408,21 +408,21 @@ Package pdftex.def Info: encounterHistogram_1to8Loops.jpg used on input line 68
 File: meanEncounterProbabilityOneTAD1To8Loops.jpg Graphic file (type jpg)
 <use meanEncounterProbabilityOneTAD1To8Loops.jpg>
 Package pdftex.def Info: meanEncounterProbabilityOneTAD1To8Loops.jpg used on in
-put line 69.
+put line 75.
 (pdftex.def)             Requested size: 170.79073pt x 88.7678pt.
 
 <fittedExpOneTAD1To8Loops.jpg, id=80, 1423.3175pt x 739.76375pt>
 File: fittedExpOneTAD1To8Loops.jpg Graphic file (type jpg)
 
 <use fittedExpOneTAD1To8Loops.jpg>
-Package pdftex.def Info: fittedExpOneTAD1To8Loops.jpg used on input line 70.
+Package pdftex.def Info: fittedExpOneTAD1To8Loops.jpg used on input line 76.
 (pdftex.def)             Requested size: 170.79073pt x 88.7678pt.
  [5pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.76 
+l.82 
       <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Analysis of TAD/encoun
 terHistogram_1to8Loops.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/
 Analysis of TAD/meanEncounterProbabilityOneTAD1To8Loops.jpg> <D:/Ofir/Work/ENS/
@@ -432,7 +432,7 @@ File: encounterHistogram1To10LoopsInEachTAD.jpg Graphic file (type jpg)
 
 <use encounterHistogram1To10LoopsInEachTAD.jpg>
 Package pdftex.def Info: encounterHistogram1To10LoopsInEachTAD.jpg used on inpu
-t line 79.
+t line 85.
 (pdftex.def)             Requested size: 280.04556pt x 184.94048pt.
 
 <meanEncounterProbabilityTwoTADs.jpg, id=87, 1284.8pt x 739.76375pt>
@@ -440,21 +440,21 @@ File: meanEncounterProbabilityTwoTADs.jpg Graphic file (type jpg)
 
 <use meanEncounterProbabilityTwoTADs.jpg>
 Package pdftex.def Info: meanEncounterProbabilityTwoTADs.jpg used on input line
- 80.
+ 86.
 (pdftex.def)             Requested size: 128.48752pt x 73.9807pt.
 
 <fittedExpTwoTADs1To10Loops.jpg, id=88, 1317.92375pt x 739.76375pt>
 File: fittedExpTwoTADs1To10Loops.jpg Graphic file (type jpg)
 
 <use fittedExpTwoTADs1To10Loops.jpg>
-Package pdftex.def Info: fittedExpTwoTADs1To10Loops.jpg used on input line 81.
+Package pdftex.def Info: fittedExpTwoTADs1To10Loops.jpg used on input line 87.
 (pdftex.def)             Requested size: 131.8001pt x 73.9807pt.
  [6pdfTeX warning (ext4): destination with the same identifier (name{figure.4})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.89 \begin{enumerate}
+l.95 \begin{enumerate}
                        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Analy
 sis of TAD/encounterHistogram1To10LoopsInEachTAD.jpg> <D:/Ofir/Work/ENS/Polymer
  Chain Dynamics/Documents/Analysis of TAD/meanEncounterProbabilityTwoTADs.jpg> 
@@ -465,16 +465,16 @@ File: possibleArrangementOfThreeBeadsAndAloop.jpg Graphic file (type jpg)
 
 <use possibleArrangementOfThreeBeadsAndAloop.jpg>
 Package pdftex.def Info: possibleArrangementOfThreeBeadsAndAloop.jpg used on in
-put line 107.
+put line 113.
 (pdftex.def)             Requested size: 185.56783pt x 280.42197pt.
  [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 135.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
  [8pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.135 \end{document}
+l.141 \end{document}
                      <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Analysi
 s of TAD/possibleArrangementOfThreeBeadsAndAloop.jpg>] [9pdfTeX warning (ext4):
  destination with the same identifier (name{table.1}) has been already used, du
@@ -482,18 +482,18 @@ plicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.135 \end{document}
+l.141 \end{document}
                     ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 135.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Analysis of TAD\Report25071
 4_OfirShukron.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 135.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 135.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
 Package rerunfilecheck Info: File `Report250714_OfirShukron.out' has not change
 d.
 (rerunfilecheck)             Checksum: 3677FDE11DD5054108A45919AC9F4ACE;568.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 135.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
  6200 strings out of 493921
@@ -516,7 +516,7 @@ s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><d:/Program Files
 )/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files (x86)/M
 iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on Report250714_OfirShukron.pdf (9 pages, 1503842 bytes).
+Output written on Report250714_OfirShukron.pdf (9 pages, 1505108 bytes).
 PDF statistics:
  179 PDF objects out of 1000 (max. 8388607)
  38 named destinations out of 1000 (max. 500000)
