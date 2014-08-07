@@ -22,9 +22,16 @@ for the  inner beads, and
 \frac{dR_1}{dt}&=& -\frac{d\kappa D}{b^2}\left(R_1-R_{2}\right)+\sqrt{2D}\frac{dw_1}{dt}\\
 \frac{dR_N}{dt}&=& -\frac{d\kappa D}{b^2}\left(R_N-R_{N-1}\right)+\sqrt{2D}\frac{dw_N}{dt}
 \end{eqnarray*}
-for the end beads. Where $R_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $w$ is white noise with mean 0 and variance 1. 
+for the end beads. Where $R_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
 
-The flexibility of our framework enables us to simulate 3-dimensional chains in open space or in 3 types of domains: a sphere, a cylinder, and between two large plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads of the chain. In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation. We extend this idea to allows the formation and dissociation of loops, a model termed dynamic loop model.
+The flexibility of our framework enables us to simulate 3-dimensional chains in open space or in 3 types of domains: a sphere, a cylinder, and between two large plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads of the chain.
+To include such minimal distance we set in the equations 
+\begin{eqution*}
+
+\end{equation*}
+
+
+ In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation. We extend this idea to allows the formation and dissociation of loops, a model termed dynamic loop model.
 At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
 
 \section{Simulations}
