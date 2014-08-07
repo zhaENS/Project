@@ -1,0 +1,31 @@
+\BOOKMARK [1][-]{section.1}{The Topologically associating domains \(TADs\)}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{A short review of the 5C method}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{The Data}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Coarse-graining of the data}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{The encounter matrix}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Analysis of the data}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{From encounter frequency to encounter probability}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{Showing the TADs}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.3}{Symmetry of encounter frequency data}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.4}{Peaks of the encounter data}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.5}{Fitting the encounter data}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.6}{Heterogeneity of the parameters over the beads}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{Simulations}{}% 13
+\BOOKMARK [2][-]{subsection.4.1}{Initial settings}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.2}{Verification of the validity of the output of the simulation framework}{section.4}% 15
+\BOOKMARK [3][-]{subsubsection.4.2.1}{The encounter frequency}{subsection.4.2}% 16
+\BOOKMARK [2][-]{subsection.4.3}{Simulating cross-linked polymer with a single link}{section.4}% 17
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Increasing the encounter distance}{subsection.4.3}% 18
+\BOOKMARK [2][-]{subsection.4.4}{Simulating cross-linked polymer with subsequent cross-link}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.5}{Simulation of variable loop number}{section.4}% 20
+\BOOKMARK [2][-]{subsection.4.6}{One TAD}{section.4}% 21
+\BOOKMARK [3][-]{subsubsection.4.6.1}{One TAD with 'tail'}{subsection.4.6}% 22
+\BOOKMARK [3][-]{subsubsection.4.6.2}{Two TADs}{subsection.4.6}% 23
+\BOOKMARK [2][-]{subsection.4.7}{Simulating dynamic loops model}{section.4}% 24
+\BOOKMARK [2][-]{subsection.4.8}{Simulating the 3C experiment}{section.4}% 25
+\BOOKMARK [2][-]{subsection.4.9}{Simulating dense regions}{section.4}% 26
+\BOOKMARK [2][-]{subsection.4.10}{Simulating TAD D and E with cross-links corresponding to the peaks of 5C data}{section.4}% 27
+\BOOKMARK [2][-]{subsection.4.11}{Simulating the conditional encounter probability}{section.4}% 28
+\BOOKMARK [2][-]{subsection.4.12}{simulating the effect of increasing the encounter distance}{section.4}% 29
+\BOOKMARK [1][-]{section.5}{Review Of Literature}{}% 30
+\BOOKMARK [2][-]{subsection.5.1}{From Nora et.al 2012, Vol 485}{section.5}% 31

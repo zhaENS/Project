@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<simulationFrameworkParams type="struct">
+
+  <simulatorParams type="struct">
+    <numSimulationBatches type="integer">1</numSimulationBatches><!--Number of simulation batches --> 
+    <numSimulations type="integer">1</numSimulations>        <!--Number of simulations. integer. for infinite number place Inf-->
+    <numSteps type="integer">1000</numSteps>                <!--Number of steps in each simulation, for infinite place Inf -->
+    <runSimulation type="boolean">true</runSimulation>       <!-- a flag indicating whether to allow the simulation to run at initiation --> 
+    <dimension  type="integer" >3</dimension>                <!--The dimension of simulations -->
+    <numChains type="integer">1</numChains>                  <!--Number of chains-->
+    <encounterDist type="double">0.1</encounterDist>         <!-- The distance for which two monomer are considered to have met -->
+    <showSimulation type="boolean">false</showSimulation>    <!--Display simulation on-line [true/false]-->
+    <recordData type="boolean">false</recordData>             <!--Activate dataRecorder [true/false] -->
+    <notifyByEmail type="boolean">false</notifyByEmail>       <!--Notifies at the end of simulation by email -->
+    <notifyCycleLength type="integer">30</notifyCycleLength> <!-- the number of simulation rounds after which an email notification is sent -->
+    <recipeFileName type="char">debugRecipe</recipeFileName> <!--the recipe file name should be located with the code--> 
+    <recipesFolder type="char"></recipesFolder>
+  </simulatorParams>  
+  
+  <rouseParams type="struct">
+    <chainNumber type="integer">1</chainNumber>
+    <bendingElasticityForce  type="boolean" >false</bendingElasticityForce>
+    <lennardJonesForce  type="boolean" >false</lennardJonesForce>
+    <springForce  type="boolean" >true</springForce>
+    <numBeads type ="integer" >64</numBeads>
+    <dt  type="double" >5e-4</dt>
+    <b   type ="double" >0.2</b>
+    <minBeadDist  type="double" >0</minBeadDist>
+    <fixedBeadNum  type="integer">[]</fixedBeadNum>
+    <noiseDistribution  type="string">Gaussian</noiseDistribution>
+    <diffusionConst  type="double" >1</diffusionConst>
+    <springConst  type ="double" >-0.01</springConst>
+    <noiseStd  type="double" >sqrt(2*5e-4)</noiseStd>
+    <noiseMean  type="double" >0</noiseMean>
+    <LJPotentialDepth  type="double" >10^-15</LJPotentialDepth>
+    <LJPotentialWidth type="double" >10^-5</LJPotentialWidth>
+    <bendingConst  type="double">90</bendingConst>
+    <connectMonomers type="integer">[]</connectMonomers>
+    <beta type="double">2</beta> <!--the anomolouse exponent. If beta~=2 all beads are connected -->
+    <!-- connectMonomers is an array n by 2 of integer pairs, e.g. [1 10; 7 19]-->
+  </rouseParams>
+
+  <domainParams type="struct">
+    <domainShape type="String">none</domainShape>
+    <domainWidth type="double">10</domainWidth>
+    <domainHeight type="double">50</domainHeight>
+    <reflectionType type="String">preserveEnergy</reflectionType>
+    <domainCenter type="double">[0 0 0]</domainCenter>    
+  </domainParams>
+
+  <distributionHandler type="struct">    
+  </distributionHandler>
+  
+  <dataRecorder type="struct">
+      <saveType type ="String">none</saveType><!-- save to external mat file. no data is save in the class. options [external/internal/none/all]-->
+      <resultsFolder type="String">D:\Ofir\Work\PolymerChainDynamicsResults</resultsFolder>
+      <recipeFileName type ="char"> </recipeFileName> <!-- will be copied by framework -->
+       <encounterDist type="double"></encounterDist>    <!-- The distance for which two monomer are considered to have met -->
+  </dataRecorder>
+  
+  <plotHandler type="struct">
+    <!-- this class was not yet constructed-->
+  </plotHandler>
+</simulationFrameworkParams>
+
+
+

@@ -1,0 +1,15 @@
+<description> Describe the simulation here... </description>
+<func> PreSimulationBatchActions </func>
+<func> PreRunActions </func>
+tadLimits = [1 32];
+r = randperm(32);
+% randomly connect beads
+obj.params.connectedBeads = [];
+for rIdx = 1:obj.round
+obj.params.connectedBeads(end+1,1:2) = [r(2*rIdx-1:2*rIdx)];
+end
+
+<func> PreStepActions </func>
+<func> PostStepActions </func>
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>

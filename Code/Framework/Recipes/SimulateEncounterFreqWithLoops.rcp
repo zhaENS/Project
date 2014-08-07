@@ -1,0 +1,12 @@
+<description> In this simulation the encounter time and number is recorder for a Rouse polymer, each time two beads are connected </description>
+<func> PreSimulationBatchActions </func>
+<func> PreRunActions </func>
+obj.params.rouseParams.connectMonomers = [obj.batchRound, obj.batchRound+1+obj.simulationRound];
+% initialize the chains with the new parameters 
+obj.InitializeChains;
+<func> PreStepActions </func>
+<func> PostStepActions </func>
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>
+obj.params.simulatorParams.numSimulations = obj.params.simulatorParams.numSimulations-1;
+

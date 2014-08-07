@@ -1,0 +1,31 @@
+\contentsline {section}{\numberline {1}The Topologically associating domains (TADs)}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}A short review of the 5C method}{3}{subsection.1.1}
+\contentsline {section}{\numberline {2}The Data}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}Coarse-graining of the data}{5}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}The encounter matrix}{6}{subsection.2.2}
+\contentsline {section}{\numberline {3}Analysis of the data}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}From encounter frequency to encounter probability}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Showing the TADs}{6}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Symmetry of encounter frequency data}{6}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Peaks of the encounter data}{8}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Fitting the encounter data}{9}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}Heterogeneity of the parameters over the beads}{13}{subsection.3.6}
+\contentsline {section}{\numberline {4}Simulations}{15}{section.4}
+\contentsline {subsection}{\numberline {4.1}Initial settings}{15}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Verification of the validity of the output of the simulation framework}{15}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}The encounter frequency}{17}{subsubsection.4.2.1}
+\contentsline {subsection}{\numberline {4.3}Simulating cross-linked polymer with a single link}{19}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}Increasing the encounter distance}{20}{subsubsection.4.3.1}
+\contentsline {subsection}{\numberline {4.4}Simulating cross-linked polymer with subsequent cross-link}{22}{subsection.4.4}
+\contentsline {subsection}{\numberline {4.5}Simulation of variable loop number}{22}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.6}One TAD}{22}{subsection.4.6}
+\contentsline {subsubsection}{\numberline {4.6.1}One TAD with 'tail'}{24}{subsubsection.4.6.1}
+\contentsline {subsubsection}{\numberline {4.6.2}Two TADs}{26}{subsubsection.4.6.2}
+\contentsline {subsection}{\numberline {4.7}Simulating dynamic loops model}{26}{subsection.4.7}
+\contentsline {subsection}{\numberline {4.8}Simulating the 3C experiment}{28}{subsection.4.8}
+\contentsline {subsection}{\numberline {4.9}Simulating dense regions}{29}{subsection.4.9}
+\contentsline {subsection}{\numberline {4.10}Simulating TAD D and E with cross-links corresponding to the peaks of 5C data}{29}{subsection.4.10}
+\contentsline {subsection}{\numberline {4.11}Simulating the conditional encounter probability}{30}{subsection.4.11}
+\contentsline {subsection}{\numberline {4.12}simulating the effect of increasing the encounter distance}{31}{subsection.4.12}
+\contentsline {section}{\numberline {5}Review Of Literature}{31}{section.5}
+\contentsline {subsection}{\numberline {5.1}From Nora et.al 2012, Vol 485}{31}{subsection.5.1}

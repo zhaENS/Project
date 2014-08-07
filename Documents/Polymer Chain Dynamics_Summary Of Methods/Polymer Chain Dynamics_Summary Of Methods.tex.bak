@@ -1,0 +1,11 @@
+\documentclass[12pt]{report}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\title{Polymer chain Dynamics - Summary of Methods}
+\begin{document}
+\maketitle
+\section{Simulation Framework}
+The beads- In our system of a chain of beads connected by harmonic springs, the beads represent monomers of a polymer chain.in our setting, these monomers can be thought of as the nucleusomes.
+Nucleosome- In Eukaryote cell, the nucleusome packs around 2 meters of DNA material into an accessible package called the nucleusome. It size is roughly 10$\mu$m
+
+\end{document} 

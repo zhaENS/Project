@@ -1,0 +1,13 @@
+<description> Describe the simulation here... </description>
+<func> PreSimulationBatchActions </func>
+<func> PreRunActions </func>
+<func> PreStepActions </func>
+<func> PostStepActions </func>
+if obj.beadsDist(1,10)<0.1
+% Connect the beads
+obj.connectionMap.indices.in.list(end+1,
+else 
+
+end
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>

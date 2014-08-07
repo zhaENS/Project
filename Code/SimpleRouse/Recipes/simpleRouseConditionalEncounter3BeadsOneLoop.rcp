@@ -1,0 +1,79 @@
+<description> Describe the simulation here... </description>
+<func> PreSimulationBatchActions </func>
+% define the position of bead A B and C in relation to the loop
+% the loop is defined between beads 21 and 42
+% the list of positions is defined as follows for A B and c in columns respectively
+% this is the hardcoded list of positions
+obj.userData.beadPositionList=[31, 5, 10;...
+                               31, 5, 59;...
+                                5, 31, 10;...
+                                5, 31, 59;...
+                                5, 10, 31;...
+                                5, 59, 31;...
+                                26,36, 5;...
+                                26, 5, 36;...
+                                5, 26, 36;...
+                                26,31, 36;...
+                                5, 10, 15;...
+                                5, 10, 59;...
+                                5, 59, 10;...
+                                59, 5, 10];
+
+% intialize the encounter counters 
+obj.userData.encounterHistBeadABeadB(obj.round) = 0;
+obj.userData.encounterHistBeadBBeadC(obj.round) = 0;
+
+<func> PreRunActions </func>
+obj.stepExitFlag = false;
+
+<func> PreStepActions </func>
+
+<func> PostStepActions </func>
+bd = obj.handles.classes.rouseChain.beadDist(:,:,end);
+bpList = obj.userData.beadPositionList;
+if bd(bpList(obj.round,1),bpList(obj.round,2))<=obj.params.encounterDist &&...
+   bd(bpList(obj.round,2),bpList(obj.round,3))>obj.params.encounterDist
+
+% if bead A reached bead B before bead B reached bead C
+% add the encounter to the encounter probability and record the time. 
+
+obj.userData.encounterHistBeadABeadB(obj.round)= obj.userData.encounterHistBeadABeadB(obj.round)+1;
+% record first encounter time
+obj.userData.encounterTimeBeadABeadB{obj.round}(obj.simulation) = obj.step*obj.params.dt;
+obj.userData.encounterTimeBeadBBeadC{obj.round}(obj.simulation) = NaN;
+
+obj.stepExitFlag = true;
+elseif bd(bpList(obj.round,1),bpList(obj.round,2))>obj.params.encounterDist &&...
+   bd(bpList(obj.round,2),bpList(obj.round,3))<=obj.params.encounterDist
+% if bead B reached bead C before bead B reached bead A
+% add the encounter to the encounter probability and record the time. 
+
+obj.userData.encounterHistBeadBBeadC(obj.round)= obj.userData.encounterHistBeadBBeadC(obj.round)+1;
+% record first encounter time
+obj.userData.encounterTimeBeadBBeadC{obj.round}(obj.simulation) = obj.step*obj.params.dt;
+obj.userData.encounterTimeBeadABeadB{obj.round}(obj.simulation) = NaN;
+
+obj.stepExitFlag = true;
+
+elseif bd(bpList(obj.round,1),bpList(obj.round,2))<=obj.params.encounterDist &&...
+   bd(bpList(obj.round,2),bpList(obj.round,3))<=obj.params.encounterDist
+% if the two beads are close, take te closer one 
+  if bd(bpList(obj.round,1),bpList(obj.round,2))<bd(bpList(obj.round,2),bpList(obj.round,3))
+  % add to bead A bead B
+obj.userData.encounterHistBeadABeadB(obj.round)= obj.userData.encounterHistBeadABeadB(obj.round)+1;
+% record first encounter time
+obj.userData.encounterTimeBeadABeadB{obj.round}(obj.simulation) = obj.step*obj.params.dt;
+obj.userData.encounterTimeBeadBBeadC{obj.round}(obj.simulation) = NaN;
+
+  else
+obj.userData.encounterHistBeadBBeadC(obj.round)= obj.userData.encounterHistBeadBBeadC(obj.round)+1;
+% record first encounter time
+obj.userData.encounterTimeBeadBBeadC{obj.round}(obj.simulation) = obj.step*obj.params.dt;
+obj.userData.encounterTimeBeadABeadB{obj.round}(obj.simulation) = NaN;
+
+  end
+obj.stepExitFlag = true;
+end
+
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>

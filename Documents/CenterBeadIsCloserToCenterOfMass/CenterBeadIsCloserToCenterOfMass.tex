@@ -1,0 +1,57 @@
+\documentclass[12pt]{report}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+\section{Central bead is the closest bead to the center of mass}
+Let our chain be defined as a sequence of $N$ uncorrelated and dependent random variables in the following way\\
+$p_1 = n_1$\\
+$p_2 = p_1+n_2=n_1+n_2$\\
+$p_3 = p_2+n_3=n1+n_2+n_3$\\
+.\\
+.\\
+$p_N = \sum_{i=1}^{i=N}n_i$\\
+where $n_i\sim N(0,1)\forall i=1..N$ and $N$ is an odd integer.
+
+We define the chain center of mass as:\\
+\begin{equation*}
+p_{cm}=\frac{1}{N}\sum_{i=1}^{i=N}p_i = \frac{1}{N}(Nn_1+(N-1)n_2+(N-3)n_3+...n_N)=\sum_{i=1}^{N}(\frac{N-i+1}{N})n_i
+\end{equation*}
+
+The question we address here is for which index $k\in[1..N]$ does the point $p_k$ is closest to $p_{cm}$?
+
+Each $p_i$ is distributed normally with mean $\mu_i =0$ (since the sum of means of the preceding points is zero) and $\sigma_i=\sqrt{\sigma_{i-1}^2+1+2\rho\sigma_{i-1}}$, where $\rho$ is the correlation coefficient. Since each two subsequent points are uncorrelated, by definition $\rho=0$. More specifically, the $\rho$ in the expression for the standard deviation of point $i$ is given by $E[(n_i-\mu_i)(p_{i-1}-\mu_{i-1})]/\sigma_{n_i}\sigma_{i-1}=E[n_ip_{i-1}]/\sigma_j$, where $E$ is the expectation. Since $n_i$ is independent of $p_{i-1}$, we get
+\begin{equation*}
+E[n_ip_{i-1}])=E[n_i]E[p_{i-1}]=0
+\end{equation*}
+Therefore we get 
+\begin{equation*}
+\sigma_i=\sqrt{i}
+\end{equation*}
+
+The center of mass $p_{cm}$ has mean $\mu_{cm}=0$ and standard deviation that can be written as
+\begin{equation*}
+\sigma_{cm}=\sum_{i=1}^{i=N}\left( \frac{N-i+1}{N}) \right)^2 = \frac{N(N+1)(2N+1)}{6N^2}
+\end{equation*}
+
+We now look for the point $p_j$ for which the distribution of the random variable 
+\begin{equation*}
+Y(j)=p_{cm}-p_j
+\end{equation*}
+is the most "concentrated" around zero. [this part should be better characterized].
+In this sense, the standard deviation of $Y(j)$ should be the smallest among all $i=1..N$.
+
+the random variable $Y(j)$ can be written as
+\begin{equation*}
+Y(j) = \sum_{k=1}^{N}\left(1+\frac{1-k}{N}\right)n_k -\sum_{k=1}^{j}n_k = \sum_{k=1}^{j}\frac{1-k}{N}n_k +\sum_{k=j+1}^{N}(1+\frac{1-k}{N})n_k
+\end{equation*}
+
+The standard deviation of $Y_j$ is
+\begin{equation*}
+\sigma_{Y(j)}=\sqrt{\sum_{k=1}^{j}\left(\frac{1-k}{N}\right)^2+\sum_{k=j+1}^{N}\left(\frac{N+1-k}{N} \right)^2}=\frac{1}{N}\sqrt{\sum_{k=1}^{j-1}k^2+\sum_{k=1}^{N-j}k^2}
+\end{equation*}
+To find the $j$ that minimizes this expression, we can disregard the square root, and denote $Q(j)=\sum_{k=1}^{j-1}k^2$, so $Q(N-j+1)=\sum_{k=1}^{N-j}k^2$. Differentiate to find $Q'(j)-Q'(N-j+1)=0$  we see that when $j= \frac{N+1}{2}$\\
+\begin{equation*}
+Q'(\frac{N+1}{2})-Q'(N-\frac{N+1}{2}+1)=Q'(\frac{N+1}{2})
+\end{equation*} 
+
+\end{document}

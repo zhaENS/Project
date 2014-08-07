@@ -1,0 +1,10 @@
+<description> Describe the simulation here... </description>
+<func> PreSimulationBatchActions </func>
+connectedBeads = [10 19 ; 28 37; 46 55];
+% increase the number of fixed loops
+obj.params.connectedBeads = connectedBeads(1:obj.round,:);
+<func> PreRunActions </func>
+<func> PreStepActions </func>
+<func> PostStepActions </func>
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>

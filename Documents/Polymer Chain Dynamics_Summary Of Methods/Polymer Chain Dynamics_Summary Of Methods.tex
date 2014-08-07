@@ -1,0 +1,118 @@
+\documentclass[12pt]{report}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Polymer chain Dynamics. Simulation Framework- user manual}
+\author{Ofir Shukron}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Simulation Framework}\label{secSimulatorFramework}
+The beads- In our system of a chain of beads connected by harmonic springs, the beads represent monomers of a polymer chain.in our setting, these monomers can be thought of as the nucleusomes.
+Nucleosome- In Eukaryote cell, the nucleusome packs around 2 meters of DNA material into an accessible package called the nucleusome. It size is roughly $10\mu m$.
+
+\chapter{Classes}\label{classes}
+In this chapter we review the different classes of the simulation framework and give details about the input/output of each method along with the properties of the class and concise explanation regarding the role of each of its methods
+The sections' titles are brought here with the classes names as appearing in the code. 
+
+\section{RouseSimulatorFramework}\label{secRouseSimulatorFramework}
+This class is the backbone of the simulation framework. It coordinates the action between all classes participating in the simulations. The class receives the parameters of each of its participating classes, distributes them and initializes each class.
+
+\subsection{Properties}
+\begin{itemize}
+\item{\textbf{handles}} -holds the handles for classes and graphical object. All classes' handles are held under the fields \textit{handles.classes}, all graphical handles, e.g figure, axes, buttons, et. are held under \textit{handles.graphical}. 
+\item{\textbf{params}} - holds the parameters for each of the participating classes. The parameters are parsed at the classes initialization from an .xml file (see section) and arranged as a structure placed in this property.
+\end{itemize}
+
+\subsection{Methods}
+\begin{itemize}
+\item{\textbf{PreRunActions}}- Actions performed before a simulation round begins. 
+
+\item{\textbf{PostRunActions}} activates a sequence of predefined commands after each simulation round. In the present release the post run action is predefined to record simulation end time using \textit{SimulatorDataRecorder.SetsimulationEndTime} method, save results using \textit{SimulatorDataRecorder.SaveResults} method and notify about the simulation successful ending by email using \textit{SendMail} function, located in the 3rdParty folder.
+\end{itemize}
+
+
+\section{SimulationDataRecorder}\label{secSimulatorDataRecorder}
+Handles recording of the simulation data.
+\subsection{Properties}
+\begin{itemize}
+\item{\textbf{simulationData}
+ Structure containing the fields:
+\begin{enumerate}
+\item{\textbf{chainObj}} – the Rouse chain object initialized using the Rouse class(see section \ref{secRouse})
+\item{\textbf{numChains}} – number of chains.
+\item{\textbf{step}} – current simulation step.
+\item{\textbf{time}} – current simulation time, calculated as $step\times\Delta t$
+\item{\textbf{positions}}- the current position of the beads in the chain
+\item{\textbf{beadDist}} – pair-wise bead distance matrix. This in a multidimensional matrix of size $[numBead \times
+numBead \times step]$
+\end{enumerate}}
+
+\item{\textbf{simulationRound}} – the current round of simulation
+\item{\textbf{params}} – contains the parameters for the class.
+\end{itemize}
+
+\subsubsection{paramList}
+\begin{itemize}
+\item{saveType}- [all/external/none] (see SaveResults method )
+\item{resultsFolder} – the path to the results folder. Can be relative or absolute
+\end{itemize}
+
+\subsection{Methods}
+\begin{itemize}
+\item{\textbf{SaveResults}
+ Implements 4 types of saving: [all/external/internal/none]
+\begin{enumerate}
+\item{\textit{all}}- save all data. Data is stored on the class and exported
+\item{\textit{external}}- save all data to .mat files. No data is saved on the class
+\item{\textit{internal}}- data is saved only on the class
+\item{\textit{none}} - don't save any data. No data is saved on the class and none is exported to .mat files
+\end{enumerate}}
+
+\item{\textbf{ClearCurrentSimulationData}} Clears the data from the class properties
+ \end{itemize}
+ 
+ 
+\section{Rouse}\label{secRouse}
+
+\subsection{Properties}
+
+\begin{itemize}
+\item{\textbf{time-}} time of the simulation, defined as $step\times\Delta t$
+\item{\textbf{step-}} simulation step
+\item{\textbf{}}
+\item{\textbf{positions}}
+\begin{enumerate}
+\item{\textbf{beads-}} the coordinates of the beads relative to $(0,0,0)$.
+\begin{enumerate}
+\item{\textbf{cur-}} bead position at the present simulation step 
+\item{\textbf{prev-}} bead position at the previous simulation step
+\end{enumerate}
+\item{\textbf{springs-}} The vectors defining the springs.
+\begin{enumerate}
+\item{\textbf{angleBetweenSprings-}} this is a sparse representation of a 3D matrix defining the angle between bead $i$, $j$, and $k$. The convention is the position $(i,j,k)$ represent the angle between bead $i$, $j$, and $k$, where $i$ is the row, $j$ is the column, and $k$ is the depth (height) of the matrix. Strings are defined by a vector composed of subtracting the bead position $i$ from $i+1$.
+\item{\textbf{length}}- the length of the springs is the norm of each of the vectors defining the  springs
+\end{enumerate}
+
+
+\end{enumerate}
+\end{itemize}
+
+\subsection{Methods}
+\begin{itemize}
+\item{\textbf{setBeadsMobilityMatrix}}
+\item{\textbf{GetNewBeadsPosition}}
+\end{itemize}
+
+\subsection{Noise} 
+The noise terms can be determined to be any type of noise distribution, with mean and variance as parameters. The default values are drawn from a Gaussian distribution with mean zero and variance 1. 
+To save computation time for each step, the noise terms are determined every 10,000 simulation steps. 
+
+\section{The Recipe files}
+The recipe files are used to allow the user to insert simulation specific commands without changing the content of the code. Recipe files allow the user to insert 4 functions, which are executed in: PreSimulationBatchActions, PreRunActions, PostRunActions, PostSimulationBatchActions. of the simulation framework. 
+
+ 
+
+\end{document} 

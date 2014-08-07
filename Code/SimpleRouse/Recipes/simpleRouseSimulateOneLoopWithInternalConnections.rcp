@@ -1,0 +1,16 @@
+<description> Describe the simulation here... </description>
+<func> PreSimulationBatchActions </func>
+
+
+<func> PreRunActions </func>
+obj.params.connectedBeads = [5 60];% this is a fixed loop
+loopRange = [6:59];
+r = randperm(numel(loopRange));
+% choose the bead pairs 
+for rIdx = 1:obj.round
+obj.params.connectedBeads(end+1,1:2) = loopRange(r(2*rIdx-1:2*rIdx));
+end
+<func> PreStepActions </func>
+<func> PostStepActions </func>
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>

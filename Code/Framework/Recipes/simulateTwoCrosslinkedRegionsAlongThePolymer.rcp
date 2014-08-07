@@ -1,0 +1,29 @@
+<description> Describe the simulation here... </description>
+<func> PreSimulationBatchActions </func>
+connectedMonomers = [54:74];
+a1 = [];
+a2 = [];
+count       = 1;
+for aIdx    = 54:74
+for bIdx    = aIdx+1:20
+a1(count,1) = aIdx;
+a2(count,1) = bIdx;
+count = count+1;
+end
+end
+
+for aIdx = 94:104
+for bIdx = aIdx+1:10
+a1(count,1) = aIdx;
+a2(count,1) = bIdx;
+count = count+1;
+end
+end
+% create the chain with the new connected monomers
+obj.params.rouseParams.connectMonomers = [a1,a2];
+obj.InitializeChains
+<func> PreRunActions </func>
+<func> PreStepActions </func>
+<func> PostStepActions </func>
+<func> PostRunActions </func>
+<func> PostSimulationBatchActions </func>
