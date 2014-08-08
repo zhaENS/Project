@@ -24,10 +24,10 @@ for the  inner beads, and
 \end{eqnarray*}
 for the end beads. Where $R_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
 
-The flexibility of our framework enables us to simulate 3-dimensional chains in open space or in 3 types of domains: a sphere, a cylinder, and between two large plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads of the chain.
+The flexibility of our framework enables us to simulate 3-dimensional chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads of the chain.
 To include such minimal distance we set in the equations 
-\begin{eqution*}
-
+\begin{equation*}
+\phi_{Rouse}=-\frac{\kappa}{2}\sum_{n=1}^N\left((\|R_n-R_{n-1}\|-l_0)^2\right)
 \end{equation*}
 
 
