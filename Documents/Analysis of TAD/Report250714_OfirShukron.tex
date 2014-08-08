@@ -159,7 +159,7 @@ The different cases are summarized graphically in Figure \ref{possibleArrangemen
 \end{figure}
 The conditional probability encounters and the mean first encounter time, are summarized in the Table \ref{conditionalEncouterProbabilityAndMFET}
 according to the cases specified above
-\begin{table}
+\begin{table}[H]
 
 \begin{tabular}{l|l|l|l|l}
 case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
@@ -182,10 +182,13 @@ case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
 \caption{\scriptsize{Summary of the results of simulating the conditional probability that bead B meets A before C (Bead A-B), and probability that bead B meets C before A (Bead B-C), with the mean first encounter time (MFET) given in units of seconds. For each cse 10 simulation were performed}}\label{conditionalEncouterProbabilityAndMFET}
 \end{table} 
 
-\subsection{Conditional encounter of 3 Loci in a linear chain}
+\subsection{Conditional encounter of 3 beads in a linear chain}
 
 In the analysis of the experimental data as performed by Giorgetti et al, 3 loci were found to be significant to the internal organization of TAD D. These loci overlap the position of the highly interacting Xite/Tsix, Chic1, and Linx. , which correspond to beads in the range 25-27, 33-35, and 86-89 respectively.
 
-We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). 
+We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). All simulations were ran until an encounter occurred. time step was set to $8.3\times 10^{-5}$ [sec]. The encounter distance was set to $b/5=0.02$, where $b$ is the standard-deviation of the distance between adjacent beads. 
+
+\subsection{Conditional encounter of 3 beads in the random loop model}
+
 
 \end{document}
