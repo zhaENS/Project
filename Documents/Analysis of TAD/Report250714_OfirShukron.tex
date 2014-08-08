@@ -9,7 +9,7 @@
      
 \title{Simulating the formation of TADs - Report}
 \maketitle
-In this document we explore through simulations the conditions required for the appearance of the Topologically Associating Domains (TADs). The observation of such regions is reported in Nora et al 2012 as the results of the HiC experiments of the genomic region including the X inactivation center of the X chromosome. Experimental data is supplied by G. Luca, as a subset of the experimental data obtained in Nora et. al 2012. To have a good ground for comparison, we follow data coarse-graining procedure as described in the supplementary material of Luca et al 2014, which transforms the segment encounter data to those of beads.   
+In this document we explore through simulations the conditions required for the appearance of the Topologically Associating Domains (TADs). The observation of such regions is reported in Nora et al 2012 as the results of the HiC experiments of the genomic region including the X inactivation center of the X chromosome. Experimental data is supplied by L. Giorgetti as a subset of the experimental data obtained in Nora et. al 2012. To have a good ground for comparison, we follow data coarse-graining procedure as described in the supplementary material of Giorgetti et al 2014, which transforms the segment encounter data to those of beads by dividing the genome into equal parts of 3000 bp.   
 
 \section{The Simulation Framework}
 We have constructed a stochastic simulation framework, which allows the examination of the behavior of the polymer chain in various configurations.
@@ -59,17 +59,20 @@ Pr(dist_{ij}\leq \epsilon)=\alpha_{ij}|i-j|^{-\beta}
 for each pair of beads in the chain. 
 
 \section{Analysis of the Experimental data}
-In our analysis we use the coarse-grained interpretation of the data as performed by Luca et. al.  This coarse-grained data results in a polymer chain of 308 beads of length 3000 base-pairs each. This genomic region corresponds to the areas of the TADs D and E as presented in Nora et. al. 2012. 
+In our analysis we use the coarse-grained interpretation of the data as performed by Giorgetti et al 2014.  A genomic strand of of 92,432 bp, was equally divided into 3000bp beads, according tot he mean size of the restriction fragments of HindIII enzyme (see Giorgetti et al supplementary material). This coarse-graining resulted in a polymer chain of 307 beads of length 3000 base-pairs each. This genomic region corresponds to the areas of the TADs D (108 beads) and E (199 beads) as presented in Nora et al 2012. 
 
-The basis for the analysis of the experimental data is the encounter matrix. This is a 308 by 308 matrix containing the pair-wise encounter frequencies between beads of the chain in roughly 8 million cells. Analysis of bead encounter probability then follows these simple steps
+The basis for the analysis of the experimental data is the encounter matrix. This is a 307 by 307 matrix containing the pair-wise encounter frequencies between beads of the chain in roughly 8 million cells. Calculation of the bead encounter probability then follows these simple steps
 \begin{enumerate}
 \item for row $i$ (corresponds to bead $i$), average encounter frequencies at an equal distance from bead $i$. i.e. sum cell $i-m$ and $i+m$, to produce the single sided encounter frequency.
 \item divide the results by the total sum of encounters for bead $i$, yielding bead encounter probabilities as a function of distance in bead units. 
-
 \item fit a function of the form $\alpha d^{-\beta}$, with $\alpha = \frac{1}{\sum_{j=1}^k j^{-\beta}}$, and $d$ is the distance in bead units, and $\beta$ the parameter to be determined.
 \end{enumerate}
      
 \section{Simulations}
+In this section we present the results of simulation we have performed for various configuration of the chain. 
+Simulations are performed for a chain of 64 beads unless stated otherwise. Although the experimental data consist of longer chain, we simulate 64 bead chains as it is a good trade-off between running time and acquiring a good statistical sample group. Due to the properties of Gaussian chain such as the Rouse mode, the concepts shown in our simulation results should not differ much when length of the chain increases.
+
+All simulation were made until relaxation time of the slowest Rouse mode
 
 \subsection{One, two and Three loops at fixed positions}
 Here we present \textit{in-silico} experimental results conducted for the case of fixed 1,2, and 3 loops, i.e. beads connected to form loops remain the same throughout the simulations. We use a polymer composed of 64 beads and sequentially simulate the model with loops between bead [10 19], [28 37] and  [46 55] of the linear chain. For each number of loops, 10,000 simulations were performed.
@@ -178,5 +181,11 @@ case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
 \end{tabular}
 \caption{\scriptsize{Summary of the results of simulating the conditional probability that bead B meets A before C (Bead A-B), and probability that bead B meets C before A (Bead B-C), with the mean first encounter time (MFET) given in units of seconds. For each cse 10 simulation were performed}}\label{conditionalEncouterProbabilityAndMFET}
 \end{table} 
+
+\subsection{Conditional encounter of 3 Loci in a linear chain}
+
+In the analysis of the experimental data as performed by Giorgetti et al, 3 loci were found to be significant to the internal organization of TAD D. These loci overlap the position of the highly interacting Xite/Tsix, Chic1, and Linx. , which correspond to beads in the range 25-27, 33-35, and 86-89 respectively.
+
+We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). 
 
 \end{document}
