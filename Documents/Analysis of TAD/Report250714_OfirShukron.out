@@ -1,8 +1,11 @@
 \BOOKMARK [1][-]{section.1}{The Simulation Framework}{}% 1
-\BOOKMARK [1][-]{section.2}{Simulations}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{One, two and Three loops at fixed positions}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Internal loops}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Random fixed loops}{section.2}% 5
-\BOOKMARK [3][-]{subsubsection.2.3.1}{One TAD}{subsection.2.3}% 6
-\BOOKMARK [2][-]{subsection.2.4}{Two TADS}{section.2}% 7
-\BOOKMARK [2][-]{subsection.2.5}{The conditional encounter probability of two beads and a loop}{section.2}% 8
+\BOOKMARK [1][-]{section.2}{Analysis of the Experimental data}{}% 2
+\BOOKMARK [1][-]{section.3}{Simulations}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{One, two and Three loops at fixed positions}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Internal loops}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Random fixed loops}{section.3}% 6
+\BOOKMARK [3][-]{subsubsection.3.3.1}{One TAD}{subsection.3.3}% 7
+\BOOKMARK [2][-]{subsection.3.4}{Two TADS}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.5}{The conditional encounter probability of two beads and a loop}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.6}{Conditional encounter of 3 beads in a linear chain}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.7}{Conditional encounter of 3 beads in the random loop model}{section.3}% 11
