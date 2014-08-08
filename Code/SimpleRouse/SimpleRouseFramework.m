@@ -178,8 +178,7 @@ classdef SimpleRouseFramework<handle
                 obj.CalculateMeanEncounterProbability;
                 obj.FitMeanEncounterProbability
                 obj.FitBeadEncounterProbability;
-            end
-            
+            end            
         end
         
         function DisplayAnalyzedData(obj)
@@ -359,6 +358,7 @@ classdef SimpleRouseFramework<handle
         
         function DisplayMeanEncounterProbability(obj)
             f = figure('FileName','meanEncounterProbability') ;
+            title('Mean Encounter Prob','FontSize',16);
             a = axes('Parent',f,'NextPlot','Add');
             dists = (1:obj.params.numBeads-1)';
             for rIdx = 1:obj.params.numRounds
