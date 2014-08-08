@@ -1,7 +1,8 @@
 <description> In this simulation we examine the conditional probability that bead b meat b before c, in a 108 beads chain corresponding to TAD D. the position of the beads correspond to Xite/Tsix, Chic1, and Linx </description>
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params
-
+obj.params.numRounds      = 1;
+obj.params.numSimulations = 10000;
 obj.params.numBeads       = 108;
 obj.params.connectedBeads = [];
 obj.params.analyzeResults = true;
