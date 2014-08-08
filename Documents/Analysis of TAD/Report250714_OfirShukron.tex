@@ -57,12 +57,22 @@ At the end of simulations we extract the encounter histogram of beads and fit it
 Pr(dist_{ij}\leq \epsilon)=\alpha_{ij}|i-j|^{-\beta}
 \end{equation*}
 for each pair of beads in the chain. 
- 
+
+\section{Analysis of the Experimental data}
+In our analysis we use the coarse-grained interpretation of the data as performed by Luca et. al.  This coarse-grained data results in a polymer chain of 308 beads of length 3000 base-pairs each. This genomic region corresponds to the areas of the TADs D and E as presented in Nora et. al. 2012. 
+
+The basis for the analysis of the experimental data is the encounter matrix. This is a 308 by 308 matrix containing the pair-wise encounter frequencies between beads of the chain in roughly 8 million cells. Analysis of bead encounter probability then follows these simple steps
+\begin{enumerate}
+\item for row $i$ (corresponds to bead $i$), average encounter frequencies at an equal distance from bead $i$. i.e. sum cell $i-m$ and $i+m$, to produce the single sided encounter frequency.
+\item divide the results by the total sum of encounters for bead $i$, yielding bead encounter probabilities as a function of distance in bead units. 
+
+\item fit a function of the form $\alpha d^{-\beta}$, with $\alpha = \frac{1}{\sum_{j=1}^k j^{-\beta}}$, and $d$ is the distance in bead units, and $\beta$ the parameter to be determined.
+\end{enumerate}
      
 \section{Simulations}
 
 \subsection{One, two and Three loops at fixed positions}
-Here we present \textit{in-silico} experimental results conducted for the case of fixed 1,2, and 3 loops, i.e. beads connected to form the loops remain the same throughout the simulations. We use a polymer composed of 64 beads and sequentially simulate the model with loops between bead [10 19], [28 37] and  [46 55] of the linear chain. For each number of loops, 10,000 simulations were performed.
+Here we present \textit{in-silico} experimental results conducted for the case of fixed 1,2, and 3 loops, i.e. beads connected to form loops remain the same throughout the simulations. We use a polymer composed of 64 beads and sequentially simulate the model with loops between bead [10 19], [28 37] and  [46 55] of the linear chain. For each number of loops, 10,000 simulations were performed.
 
 The encounter histograms are presented in Figure \ref{encounterHistogram123Loops} The mean encounter probability calculated for each case is shown in Figure \ref{encounterHistogram123Loops}. The encounter data was fitted with a function of the form $\alpha x^{-\beta}$. The beta values are reported in the legend of Figure \ref{encounterHistogram123Loops}. Since the loops length was set to 9, the encounter probability for the three cases, as a function of distance, shows an increase around distance 9. The values of the probability at that distance are 0.03, 0.034, and 0.035, for 1, 2 and 3 fixed loops respectively. 
 \begin{figure}[H]
