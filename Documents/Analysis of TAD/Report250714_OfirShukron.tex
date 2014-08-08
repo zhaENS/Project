@@ -12,20 +12,29 @@
 In this document we explore through simulations the conditions required for the appearance of the Topologically Associating Domains (TADs). The observation of such regions is reported in Nora et al 2012 as the results of the HiC experiments of the genomic region including the X inactivation center of the X chromosome. Experimental data is supplied by G. Luca, as a subset of the experimental data obtained in Nora et. al 2012. To have a good ground for comparison, we follow data coarse-graining procedure as described in the supplementary material of Luca et al 2014, which transforms the segment encounter data to those of beads.   
 
 \section{The Simulation Framework}
-We have constructed a stochastic simulation framework, which allows the examination of the behavior of the Rouse model in various configurations.
-The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
+We have constructed a stochastic simulation framework, which allows the examination of the behavior of the polymer chain in various configurations.
+We use the Rouse model to mathematically describe the polymer chain as a linear series of beads connected by harmonic springs. The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
+\begin{equation*}
+\frac{dR_n}{dt} = -D\nabla_{R_n}\phi_{Rouse}+\sqrt{2D}\frac{dw_n}{dt}
+\end{equation*}
+with the potential 
+\begin{equation*}
+\phi_{Rouse}=\frac{\kappa}{2}\sum_{n=1}^N \left(R_n-R_{n-1}\right)^2
+\end{equation*}
+ which in the linear chain case gives rise to the set of equations
+
 \begin{equation*}
 \frac{dR_n}{dt}= -\frac{d\kappa D}{b^2}\left(2R_n-R_{n+1}-R_{n-1}\right)+\sqrt{2D}\frac{dw_n}{dt}
 \end{equation*}
-for the  inner beads, and 
+for the inner beads, and 
 \begin{eqnarray*}
 \frac{dR_1}{dt}&=& -\frac{d\kappa D}{b^2}\left(R_1-R_{2}\right)+\sqrt{2D}\frac{dw_1}{dt}\\
 \frac{dR_N}{dt}&=& -\frac{d\kappa D}{b^2}\left(R_N-R_{N-1}\right)+\sqrt{2D}\frac{dw_N}{dt}
 \end{eqnarray*}
 for the end beads. Where $R_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
 
-The flexibility of our framework enables us to simulate 3-dimensional chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads of the chain.
-To include such minimal distance we modify the Rouse potential as
+The flexibility of our framework enables us to simulate 3-dimensional single or ensemble of chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads.
+To include the minimal distance, $l_0>0$, we modify the Rouse potential to read
 \begin{equation*}
 \phi_{Rouse}=-\frac{\kappa}{2}\sum_{n=1}^N\left((\|R_n-R_{n-1}\|-l_0)^2\right)
 \end{equation*}
@@ -33,6 +42,18 @@ and simulate coupled (coordinate-wise) system of equations
 
 In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation. We extend this idea to allows the formation and dissociation of loops, a model termed dynamic loop model.
 At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
+
+We consider that two beads $R_i$ and $R_j$ had encountered if
+\begin{equation*}
+ dist_{ij}=\|R_i-R_j\|\leq \epsilon
+\end{equation*}
+with $0<\epsilon <b$. \\
+ 
+The encounter probability in a linear Rouse chain is given by 
+\begin{equation}
+Pr(dist_{ij}<\epsilon)= \alpha |i-j|^{-1.5}
+\end{equation}
+with $\alpha>0$. 
 
 \section{Simulations}
 

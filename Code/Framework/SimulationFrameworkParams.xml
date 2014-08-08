@@ -5,12 +5,12 @@
   <simulatorParams type="struct">
     <numSimulationBatches type="integer">1</numSimulationBatches><!--Number of simulation batches --> 
     <numSimulations type="integer">1</numSimulations>        <!--Number of simulations. integer. for infinite number place Inf-->
-    <numSteps type="integer">1000</numSteps>                <!--Number of steps in each simulation, for infinite place Inf -->
+    <numSteps type="integer">20</numSteps>                <!--Number of steps in each simulation, for infinite place Inf -->
     <runSimulation type="boolean">true</runSimulation>       <!-- a flag indicating whether to allow the simulation to run at initiation --> 
     <dimension  type="integer" >3</dimension>                <!--The dimension of simulations -->
     <numChains type="integer">1</numChains>                  <!--Number of chains-->
     <encounterDist type="double">0.1</encounterDist>         <!-- The distance for which two monomer are considered to have met -->
-    <showSimulation type="boolean">false</showSimulation>    <!--Display simulation on-line [true/false]-->
+    <showSimulation type="boolean">true</showSimulation>    <!--Display simulation on-line [true/false]-->
     <recordData type="boolean">false</recordData>             <!--Activate dataRecorder [true/false] -->
     <notifyByEmail type="boolean">false</notifyByEmail>       <!--Notifies at the end of simulation by email -->
     <notifyCycleLength type="integer">30</notifyCycleLength> <!-- the number of simulation rounds after which an email notification is sent -->
@@ -42,8 +42,8 @@
   </rouseParams>
 
   <domainParams type="struct">
-    <domainShape type="String">none</domainShape>
-    <domainWidth type="double">10</domainWidth>
+    <domainShape type="String">cylinder</domainShape>
+    <domainWidth type="double">2</domainWidth>
     <domainHeight type="double">50</domainHeight>
     <reflectionType type="String">preserveEnergy</reflectionType>
     <domainCenter type="double">[0 0 0]</domainCenter>    
