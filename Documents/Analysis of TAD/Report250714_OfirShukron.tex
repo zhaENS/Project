@@ -13,7 +13,7 @@ In this document we explore through simulations the conditions required for the 
 
 \section{The Simulation Framework}
 We have constructed a stochastic simulation framework, which allows the examination of the behavior of the polymer chain in various configurations.
-We use the Rouse model to mathematically describe the polymer chain as a linear series of beads connected by harmonic springs. The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
+We use the Rouse model to mathematically describe the polymer chain as a series of beads connected by harmonic springs. The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
 \begin{equation*}
 \frac{dR_n}{dt} = -D\nabla_{R_n}\phi_{Rouse}+\sqrt{2D}\frac{dw_n}{dt}
 \end{equation*}
@@ -33,33 +33,36 @@ for the inner beads, and
 \end{eqnarray*} 
 for the end beads. Where $R_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
 
-The flexibility of our framework enables us to simulate 3-dimensional single or ensemble of chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance between adjacent beads.
-To include the minimal distance, $l_0>0$, we modify the Rouse potential to read
+The flexibility of our framework enables us to simulate a single or an ensemble of chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance, $l_0>0$, between adjacent beads. Hence, we modify the Rouse potential to read
 \begin{equation*}
 \phi_{Rouse}=-\frac{\kappa}{2}\sum_{n=1}^N\left((\|R_n-R_{n-1}\|-l_0)^2\right)
 \end{equation*}
-and simulate coupled (coordinate-wise) system of equations 
+and simulate the coupled (coordinate-wise) system of equations it yields.
 
-In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation. We extend this idea to allows the formation and dissociation of loops, a model termed dynamic loop model.
+In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model.
 At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
 
 We consider that two beads $R_i$ and $R_j$ had encountered if
 \begin{equation*}
  dist_{ij}=\|R_i-R_j\|\leq \epsilon
 \end{equation*}
-with $0<\epsilon <b$. \\
- 
-The encounter probability in a linear Rouse chain is given by 
+with $0<\epsilon <b$. The theoretical encounter probability in a linear Rouse chain is given by 
 \begin{equation}
 Pr(dist_{ij}<\epsilon)= \alpha |i-j|^{-1.5}
 \end{equation}
 with $\alpha>0$. 
 
+At the end of simulations we extract the encounter histogram of beads and fit it with a function of the form 
+\begin{equation*}
+Pr(dist_{ij}\leq \epsilon)=\alpha_{ij}|i-j|^{-\beta}
+\end{equation*}
+for each pair of beads in the chain. 
+
+ 
 \section{Simulations}
 
 \subsection{One, two and Three loops at fixed positions}
-Here we present \textit{in-silico} experimental results conducted for the case of fixed 1,2, and 3 loops, i.e the beads connected to form the loops remain the same throughout the simulations. We use a polymer composed of 64 beads and sequentially simulate the model with loops between bead [10 19], [28 37] and  [46 55] of the linear chain.
-For each number of loops, 10,000 simulations were performed.
+Here we present \textit{in-silico} experimental results conducted for the case of fixed 1,2, and 3 loops, i.e. beads connected to form the loops remain the same throughout the simulations. We use a polymer composed of 64 beads and sequentially simulate the model with loops between bead [10 19], [28 37] and  [46 55] of the linear chain. For each number of loops, 10,000 simulations were performed.
 
 The encounter histograms are presented in Figure \ref{encounterHistogram123Loops} The mean encounter probability calculated for each case is shown in Figure \ref{encounterHistogram123Loops}. The encounter data was fitted with a function of the form $\alpha x^{-\beta}$. The beta values are reported in the legend of Figure \ref{encounterHistogram123Loops}. Since the loops length was set to 9, the encounter probability for the three cases, as a function of distance, shows an increase around distance 9. The values of the probability at that distance are 0.03, 0.034, and 0.035, for 1, 2 and 3 fixed loops respectively. 
 \begin{figure}[H]
