@@ -186,7 +186,20 @@ case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
 
 In the analysis of the experimental data as performed by Giorgetti et al, 3 loci were found to be significant to the internal organization of TAD D. These loci overlap the position of the highly interacting Xite/Tsix, Chic1, and Linx. , which correspond to beads in the range 25-27, 33-35, and 86-89 respectively.
 
-We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). All simulations were ran until an encounter occurred. time step was set to $8.3\times 10^{-5}$ [sec]. The encounter distance was set to $b/5=0.02$, where $b$ is the standard-deviation of the distance between adjacent beads. 
+We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). All simulations were ran until an encounter occurred. Time step was set to $8.3\times 10^{-5}$ [sec]. The encounter distance was set to $b/5=0.02$, where $b$ is the standard-deviation of the distance between adjacent beads. 
+
+The conditional encounter probability is summarized in the following table 
+\begin{table}[H]
+\begin{tabular}{l |c |c |}
+ prob loci & prob & MFET [sec]\\
+\hline
+ Chic1$\rightarrow$ Xite/Tsix & 0.9378 & 0.2273\\
+ Chic1 $\rightarrow$ Linx     & 0.0622 & 0.1903
+
+\end{tabular}
+
+\end{table}
+
 
 \subsection{Conditional encounter of 3 beads in the random loop model}
 
