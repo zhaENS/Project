@@ -13,6 +13,15 @@ obj.params.saveBeadDist   = 'current';
 % define the position of the 3 loci in terms of bead numbers. the beads are A,B,C
 obj.userData.beadPositionList = [26, 34, 86];
 
+
+
+% Intialize the encounter counters 
+obj.userData.encounterHistBeadABeadB(obj.round) = 0;
+obj.userData.encounterHistBeadBBeadC(obj.round) = 0;
+                              
+<func> PreRunActions </func>
+% restart the exit flag
+obj.stepExitFlag = false;
 % define 10 random loops (not including the 3 loci)
 rn = randperm(108);
 % remove the position of the beads
@@ -25,14 +34,6 @@ for lIdx = 1:10
  obj.params.connectedBeads(lIdx,1:2) = rn(2*lIdx-1:2*lIdx);
 end
 obj.userData.randomLoops(1:10,1:2,obj.simulation+1) = obj.params.connectedBeads;
-
-% Intialize the encounter counters 
-obj.userData.encounterHistBeadABeadB(obj.round) = 0;
-obj.userData.encounterHistBeadBBeadC(obj.round) = 0;
-                              
-<func> PreRunActions </func>
-% restart the exit flag
-obj.stepExitFlag = false;
 
 <func> PreStepActions </func>
 
