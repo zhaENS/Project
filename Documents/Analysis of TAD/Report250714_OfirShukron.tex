@@ -6,45 +6,51 @@
 \usepackage{color}
 \usepackage{float}
 \begin{document}
-     
+
 \title{Simulating the formation of TADs - Report}
 \maketitle
 In this document we explore through simulations the conditions required for the appearance of the Topologically Associating Domains (TADs). The observation of such regions is reported in Nora et al 2012 as the results of the HiC experiments of the genomic region including the X inactivation center of the X chromosome. Experimental data is supplied by L. Giorgetti as a subset of the experimental data obtained in Nora et. al 2012. To have a good ground for comparison, we follow data coarse-graining procedure as described in the supplementary material of Giorgetti et al 2014, which transforms the segment encounter data to those of beads by dividing the genome into equal parts of 3000 bp.   
 
+
+
+\tableofcontents
+  
 \section{The Simulation Framework}
-We have constructed a stochastic simulation framework, which allows the examination of the behavior of the polymer chain in various configurations.
-We use the Rouse model to mathematically describe the polymer chain as a series of beads connected by harmonic springs. The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
+We have constructed a computational stochastic simulation framework, which allows the examination of the behavior of the polymer chain in various configurations.
+We use the Rouse model to mathematically describe the polymer chain as a series of beads connected by harmonic springs (see figure \ref{exampleOfChains}). The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
 \begin{equation*}
-\frac{dR_n}{dt} = -D\nabla_{R_n}\phi_{Rouse}+\sqrt{2D}\frac{dw_n}{dt}
+\dot{r_n} = -D\nabla_{r_n}\phi_{Rouse}+\sqrt{2D}\dot{w_n}
 \end{equation*}
 with the potential 
 \begin{equation*}
-\phi_{Rouse}=\frac{\kappa}{2}\sum_{n=1}^N \left(R_n-R_{n-1}\right)^2
+\phi_{Rouse}=\frac{\kappa}{2}\sum_{n=1}^N \left(r_n-r_{n-1}\right)^2
 \end{equation*}
  which in the linear chain case gives rise to the set of equations
 
 \begin{equation*}
-\frac{dR_n}{dt}= -\frac{d\kappa D}{b^2}\left(2R_n-R_{n+1}-R_{n-1}\right)+\sqrt{2D}\frac{dw_n}{dt}
+\dot{r_n}= -\frac{d\kappa D}{b^2}\left(2r_n-r_{n+1}-r_{n-1}\right)+\sqrt{2D}\dot{w_n}
 \end{equation*}
 for the inner beads, and 
 \begin{eqnarray*}
-\frac{dR_1}{dt}&=& -\frac{d\kappa D}{b^2}\left(R_1-R_{2}\right)+\sqrt{2D}\frac{dw_1}{dt}\\
-\frac{dR_N}{dt}&=& -\frac{d\kappa D}{b^2}\left(R_N-R_{N-1}\right)+\sqrt{2D}\frac{dw_N}{dt}
+\dot{r_1} &=& -\frac{d\kappa D}{b^2}\left(r_1-r_{2}\right)+\sqrt{2D}\dot{w_1}\\
+\dot{r_N} &=& -\frac{d\kappa D}{b^2}\left(r_N-r_{N-1}\right)+\sqrt{2D}\dot{w_N}
 \end{eqnarray*} 
-for the end beads. Where $R_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
+for the end beads. Where $r_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
+
 
 The flexibility of our framework enables us to simulate a single or an ensemble of chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance, $l_0>0$, between adjacent beads. Hence, we modify the Rouse potential to read
 \begin{equation*}
-\phi_{Rouse}=-\frac{\kappa}{2}\sum_{n=1}^N\left((\|R_n-R_{n-1}\|-l_0)^2\right)
+\phi_{Rouse}=-\frac{\kappa}{2}\sum_{n=1}^N\left((\|r_n-r_{n-1}\|-l_0)^2\right)
 \end{equation*}
 and simulate the coupled (coordinate-wise) system of equations it yields.
 
-In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model.
+In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation (see Figure \ref{exampleOfChains} left panel). In the course of simulation (such as in subsection \ref{RandomFixedLoops}), we can randomize the location of these fixed loops, a model we name \textit{random fixed loop model}. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model. In this model only when the affine beads are located within some minimal distance $\epsilon$ to one another they form a loop with association rate $\lambda$ per unit of time. Looped affine beads can dissociate with dissociation rate $1-\lambda$.
+
 At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
 
 We consider that two beads $R_i$ and $R_j$ had encountered if
 \begin{equation*}
- dist_{ij}=\|R_i-R_j\|\leq \epsilon
+ dist_{ij}=\|r_i-r_j\|\leq \epsilon
 \end{equation*}
 with $0<\epsilon <b$. The theoretical encounter probability in a linear Rouse chain is given by 
 \begin{equation}
@@ -57,9 +63,15 @@ At the end of simulations we extract the encounter histogram of beads and fit it
 Pr(dist_{ij}\leq \epsilon)=\alpha_{ij}|i-j|^{-\beta}
 \end{equation*}
 for each pair of beads in the chain. 
+\begin{figure}[H]
+\includegraphics[scale=0.2]{chainExample108BeadsWith2Loops}
+\includegraphics[scale=0.2]{chainExample108Beads}
+\caption{\scriptsize{Two examples of the beads-springs model. A linear chain model (Right) and a chain with internal 2 loops (Left)}}\label{exampleOfChains}
+\end{figure}
+
 
 \section{Analysis of the Experimental data}
-In our analysis we use the coarse-grained interpretation of the data as performed by Giorgetti et al 2014.  A genomic strand of of 92,432 bp, was equally divided into 3000bp beads, according tot he mean size of the restriction fragments of HindIII enzyme (see Giorgetti et al supplementary material). This coarse-graining resulted in a polymer chain of 307 beads of length 3000 base-pairs each. This genomic region corresponds to the areas of the TADs D (108 beads) and E (199 beads) as presented in Nora et al 2012. 
+In our analysis we use the coarse-grained interpretation of the data as performed by Giorgetti et al 2014.  A genomic strand of of 92,432 bp, was equally divided into 3000bp beads, according tot he mean size of the restriction fragments of HindIII enzyme (see Giorgetti et al supplementary material) in the process of the HiC experiments. This coarse-graining resulted in a polymer chain of 307 beads of length 3000 base-pairs each. This genomic region corresponds to the areas of the TADs D (108 beads) and E (199 beads) as presented in Nora et al 2012. 
 
 The basis for the analysis of the experimental data is the encounter matrix. This is a 307 by 307 matrix containing the pair-wise encounter frequencies between beads of the chain in roughly 8 million cells. Calculation of the bead encounter probability then follows these simple steps
 \begin{enumerate}
@@ -68,7 +80,7 @@ The basis for the analysis of the experimental data is the encounter matrix. Thi
 \item fit a function of the form $\alpha d^{-\beta}$, with $\alpha = \frac{1}{\sum_{j=1}^k j^{-\beta}}$, and $d$ is the distance in bead units, and $\beta$ the parameter to be determined.
 \end{enumerate}
      
-\section{Simulations}
+\section{Simulation Results}
 In this section we present the results of simulation we have performed for various configuration of the chain. 
 Simulations are performed for a chain of 64 beads unless stated otherwise. Although the experimental data consist of longer chain, we simulate 64 bead chains as it is a good trade-off between running time and acquiring a good statistical sample group. Due to the properties of Gaussian chain such as the Rouse mode, the concepts shown in our simulation results should not differ much when length of the chain increases.
 
@@ -106,7 +118,7 @@ The calculated mean encounter probabilities  for the 10 cases are presented in F
 \end{figure}
 
 
-\subsection{Random fixed loops}
+\subsection{Random fixed loops}\label{RandomFixedLoops}
 In this experiment we add random length loops between bead $i$ and $j$. We term the range of beads between $i$ and $j$ as a TAD. 
 
 \subsubsection{One TAD}
@@ -132,9 +144,40 @@ We follow similar procedure as with the one TAD simulation, only now we create r
 \caption{\scriptsize{The encounter histograms (upper panel) of the case with two TADs. As the number of loops in each TAD increases from 1 to 10, the two TADs emerges. The mean encounter probability (lower left panel) of the 10 cases resembles that of the one TAD case due to to 32 beads size of the TAD. The fitted $\beta$ values for the encounter probability of each bead in the 10 cases (lower right panel).}}
 \end{figure}
  
+\subsection{Conditional encounter of 3 beads in a linear chain}
+
+In the analysis of the experimental data as performed by Giorgetti et al, 3 loci were found to be significant to the internal organization of TAD D. These loci overlap the position of the highly interacting Xite/Tsix, Chic1, and Linx, which correspond to beads in the range 25-27, 33-35, and 86-89 respectively.
+
+We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). All simulations were ran until an encounter occurred. Time step was set to $8.3\times 10^{-5}$ [sec]. The encounter distance was set to $b/5=0.02$, where $b$ is the standard-deviation of the distance between adjacent beads. 
+
+The conditional encounter probability is summarized in the following table 
+\begin{table}[H]
+\begin{tabular}{l |c| c |c |}
+ prob loci & bead num. &prob & MFET [sec]\\
+\hline
+ Chic1$\rightarrow$ Xite/Tsix & 34$\rightarrow$ 26 & 0.9378 & 0.2273\\
+ Chic1 $\rightarrow$ Linx     & 34 $\rightarrow$ 87 & 0.0622 & 0.1903
+
+\end{tabular}
+
+\end{table}
 
 
-\subsection{The conditional encounter probability of two beads and a loop}
+\subsection{Conditional encounter of 2 beads in the random loop model}
+Next, we examine the conditional encounter probability of the 3 loci (beads 26,34, and 87) in the context of the random fixed loops model as described in subsection \ref{RandomFixedLoops}. To simulate the D TAD, we use a chain of 108 beads, and run 10000 simulations with a time step of $8.3\times 10^{-5}$ [sec], and an encounter distance of $b/5=0.02$. We set 10 randomly placed fixed loops for each simulation, where the beads 26,34,and 87 are prohibited from forming loops. The conditional probability of bead 34 meeting bead 26 before it meats bead 87 is summarized Table \ref{conditionalEncounterDynamicLoop} along with the mean first encounter time.
+
+\begin{table}[H]
+
+\begin{tabular}{l | c| c| c|}
+ prob loci & bead num. &prob & MFET [sec]\\
+\hline
+ Chic1$\rightarrow$ Xite/Tsix & 34 $\rightarrow$ 26   & 0.725 & 0.1154\\
+ Chic1 $\rightarrow$ Linx     & 34 $\rightarrow$ 87  & 0.275 & 0.1422	
+ \end{tabular}
+ \caption{}\label{conditionalEncounterDynamicLoop}
+\end{table}
+
+\subsection{The conditional encounter probability of 2 beads and a loop}
 We now turn to explore the conditional probability that a bead $B$ encounters bead $A$ before it encounter bead $C$ in a chain containing one loop. There are 27 configurations for the position of the beads in relation to the loop. Here we address the case of a chain with two equally sized tails. Thus, due to symmetry we reduce the possible configurations to 14. We term the beads contained in the loop as 'in the loop' and beads outside as beads 'on the tail'. The possible configurations are: 
 \begin{enumerate}
 \item $A$ in the loop, $B$ and $C$ on the same tail
@@ -181,27 +224,5 @@ case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
 \end{tabular}
 \caption{\scriptsize{Summary of the results of simulating the conditional probability that bead B meets A before C (Bead A-B), and probability that bead B meets C before A (Bead B-C), with the mean first encounter time (MFET) given in units of seconds. For each cse 10 simulation were performed}}\label{conditionalEncouterProbabilityAndMFET}
 \end{table} 
-
-\subsection{Conditional encounter of 3 beads in a linear chain}
-
-In the analysis of the experimental data as performed by Giorgetti et al, 3 loci were found to be significant to the internal organization of TAD D. These loci overlap the position of the highly interacting Xite/Tsix, Chic1, and Linx. , which correspond to beads in the range 25-27, 33-35, and 86-89 respectively.
-
-We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). All simulations were ran until an encounter occurred. Time step was set to $8.3\times 10^{-5}$ [sec]. The encounter distance was set to $b/5=0.02$, where $b$ is the standard-deviation of the distance between adjacent beads. 
-
-The conditional encounter probability is summarized in the following table 
-\begin{table}[H]
-\begin{tabular}{l |c |c |}
- prob loci & prob & MFET [sec]\\
-\hline
- Chic1$\rightarrow$ Xite/Tsix & 0.9378 & 0.2273\\
- Chic1 $\rightarrow$ Linx     & 0.0622 & 0.1903
-
-\end{tabular}
-
-\end{table}
-
-
-\subsection{Conditional encounter of 3 beads in the random loop model}
-
 
 \end{document}
