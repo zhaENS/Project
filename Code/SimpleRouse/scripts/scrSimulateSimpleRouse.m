@@ -16,5 +16,5 @@ c      = clock;
 hour   = num2str(c(4));
 minute = num2str(c(5));
 resultsFolder = fullfile(pwd,'..','PolymerChainDynamicsResults');
-saveName = sprintf('%s',['simpleRouse_',hour,'_', minute,'_',d,'.mat']);
+saveName = sprintf('%s',['simpleRouse_',rp.recipeFileName,'_',hour,'_', minute,'_',d,'.mat']);
 save(fullfile(resultsFolder,saveName),'srf')

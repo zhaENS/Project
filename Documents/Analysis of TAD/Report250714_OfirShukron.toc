@@ -7,5 +7,5 @@
 \contentsline {subsubsection}{\numberline {3.3.1}One TAD}{8}{subsubsection.3.3.1}
 \contentsline {subsection}{\numberline {3.4}Two TADS}{9}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}Conditional encounter of 3 beads in a linear chain}{9}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}Conditional encounter of 2 beads in the random loop model}{10}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.6}Conditional encounter of 2 beads in the random fixed loops model}{10}{subsection.3.6}
 \contentsline {subsection}{\numberline {3.7}The conditional encounter probability of 2 beads and a loop}{10}{subsection.3.7}
