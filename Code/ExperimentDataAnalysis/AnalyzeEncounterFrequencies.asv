@@ -302,22 +302,19 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         function DisplayAllDataFit(obj,dispScale)
-            % display mean encounter data fit 
                 if~exist('dispScale','var');
                      dispScale = 'linear';
                 end
-                f = figure('FileName','meanDataFit');                
+                f = figure;                
                 a = axes('Parent',f,...
                          'NextPlot','Add',...
                          'XScale',dispScale,...
                          'YScale',dispScale,...
                          'NextPlot','Add',...
-                         'FontSize',40,...
-                         'XLim',[1 obj.beadData.numBeads]);
-                     
-                xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
-                ylabel(sprintf('%s','Encounter Prob.'),'FontSize',40);
-                title('Mean Data Fit','fontSize', 40)
+                         'FontSize',24);
+                xlabel(sprintf('%s','Distance [beads]'),'FontSize',24);
+                ylabel(sprintf('%s','Encounter Prob.'),'FontSize',24);
+                title('All Data Fit','fontSize', 20)
                 
                 for bIdx = 1:numel(obj.beadData.bead);
                     if~isempty(obj.beadData.bead(bIdx).fitResults.average.encounterProb)
@@ -333,8 +330,8 @@ classdef AnalyzeEncounterFrequencies<handle
                             'LineStyle','-',...
                             'LineWidth',3,...
                             'DisplayName',sprintf('%s%s','Bead',num2str(bIdx)),...
-                            'handleVisibility','off',...
-                            'Parent',a)                         
+                            'Parent',a) 
+                        
                     else
 %                         sprintf('%s%s%a', sprintf('%s%s',' fit for bead ',num2str((bIdx))),' is empty')
                     end
@@ -348,9 +345,8 @@ classdef AnalyzeEncounterFrequencies<handle
                              'LineStyle','-',...
                              'LineWidth',7,...
                              'Color','r',...
-                             'DisplayName',['mean data fit. \beta =' num2str(B)] );    
-                 legend(get(a,'Children'));
-                 
+                             'DisplayName',['\beta =' B] );    
+                 axis tight
         end
         
         function DisplayEncounterMatrices(obj, windowSize)
@@ -608,8 +604,8 @@ classdef AnalyzeEncounterFrequencies<handle
              fNames = {'Rep1','Rep2','Average'};
              % fit using a smoothing spline 
              for fIdx = 1:numel(fNames)
-               [obj.results.fit.(fNames{fIdx}).expSpline,~] = spaps(1:numel(obj.results.fit.(lower(fNames{fIdx})).exp),...
-                   obj.results.fit.(lower(fNames{fIdx})).exp',smoothingFac);   
+               [obj.results.fit.(fNames{fIdx}).expSpline,~] = spaps(1:numel(obj.results.fit.(fNames{fIdx}).exp),...
+                   obj.results.fit.(fNames{fIdx}).exp',smoothingFac);   
                
                 f = figure('Name',['fittedExpValuesWithSpline',fNames{fIdx}],...
                            'FileName',['fittedExpValuesWithSpline',fNames{fIdx}]);
@@ -634,7 +630,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 ylabel('Fitted \beta values','FontSize',40);                
                 
                 % plot the smoothing spline
-                fn = fnplt(obj.results.fit.(lower(fNames{fIdx})).expSpline);
+                fn = fnplt(obj.results.fit.(fNames{fIdx}).expSpline);
                 line('XData',fn(1,:),...
                      'YData',fn(2,:),...
                      'DisplayName','Spline',...
