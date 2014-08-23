@@ -67,7 +67,7 @@ classdef AnalyzeEncounterFrequencies<handle
             titles = {'beadStart1','beadEnd1','beadStart2','beadEnd2',...
                       'rep1Count','rep2Count','averageCount','stdCount'};
                   
-            % Only take data in the valid range of beads 
+            % Read data only in the valid range of beads 
             if ~isempty(obj.params.beadRangeToAnalyze)
                 range = obj.params.beadRangeToAnalyze;
                 % take only beads in the range and such that have interactions with beads
@@ -120,7 +120,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 counter = counter+1;
             end
             
-            obj.segmentData.histogram.freq   = hist([obj.segmentData.segment(:).segmentLengthInBeads],obj.beadData.numBeads);
+            obj.segmentData.histogram.freq   = hist([obj.segmentData.segment(:).segmentLengthInBeads],obj.beadData.numBeads);% length distribution
             obj.segmentData.histogram.bins   = obj.beadSizeInbp:obj.beadSizeInbp:obj.beadSizeInbp*obj.beadData.numBeads;
             obj.segmentData.histogram.xLabel = 'Estimated Segment Length';
             obj.segmentData.histogram.yLabel = 'Frequency';
@@ -128,19 +128,22 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         function ProcessEncounters(obj)
-            % Process by bead
+            % Process encounters by bead
             expNames = {'rep1','rep2','average'};
             for eIdx = 1:3
                 allFreq     = obj.encounterMatrix.(expNames{eIdx});
                 eMatrix     = cell(obj.beadData.numBeads,1);
                 
                 for sIdx = 1:size(allFreq,1)
-                    before = allFreq(sIdx,sIdx-1:-1:1);
+                    before = allFreq(sIdx,sIdx-1:-1:1);% flipped 
                     after  = allFreq(sIdx,sIdx+1:1:end);
                     freq   = zeros(2,obj.beadData.numBeads-1);
                     freq(1,1:numel(before)) = before;
                     freq(2,1:numel(after))  = after;
-                    freq = sum(freq);
+                    normFac = ones(1,size(freq,2));
+                    normFac(1:min([numel(before),numel(after)])) = 2;
+                    freq = sum(freq)./normFac; % this becomes the average of before and after;
+                    
 %                     if numel(after)>numel(before)
 %                         after(1:numel(before)) = after(1:numel(before))+before;
 %                         freq = after;
@@ -316,10 +319,10 @@ classdef AnalyzeEncounterFrequencies<handle
                          'XScale',dispScale,...
                          'YScale',dispScale,...
                          'NextPlot','Add',...
-                         'FontSize',16);
-                xlabel(sprintf('%s%s',dispScale,'(Distance in beads)'),'FontSize',16);
-                ylabel(sprintf('%s%s',dispScale,'(Encounter Prob)'),'FontSize',16);
-                title('allDataFit','fontSize', 16)
+                         'FontSize',24);
+                xlabel(sprintf('%s','Distance [beads]'),'FontSize',24);
+                ylabel(sprintf('%s','Encounter Prob.'),'FontSize',24);
+                title('All Data Fit','fontSize', 20)
                 
                 for bIdx = 1:numel(obj.beadData.bead);
                     if~isempty(obj.beadData.bead(bIdx).fitResults.average.encounterProb)
@@ -333,6 +336,7 @@ classdef AnalyzeEncounterFrequencies<handle
                             'MarkerEdgeColor',lineC,...
                             'MarkerFaceColor','k',...                            
                             'LineStyle','-',...
+                            'LineWidth',3,...
                             'DisplayName',sprintf('%s%s','Bead',num2str(bIdx)),...
                             'Parent',a) 
                         
@@ -340,14 +344,17 @@ classdef AnalyzeEncounterFrequencies<handle
 %                         sprintf('%s%s%a', sprintf('%s%s',' fit for bead ',num2str((bIdx))),' is empty')
                     end
                 end
+                
                   % plot the fitted line
-                    A = obj.results.fit.allData.bias ;
-                    B = obj.results.fit.allData.exp  ;
+                    A = obj.results.fit.allData.bias;
+                    B = obj.results.fit.allData.exp;
                         line('XData',1:obj.beadData.numBeads-1,...
                              'YData',(A*(1:obj.beadData.numBeads-1).^(-B)),...
                              'LineStyle','-',...
-                             'LineWidth',3,...
-                             'Color',lineC);    
+                             'LineWidth',7,...
+                             'Color','r',...
+                             'DisplayName',['\beta =' B] );    
+                 axis tight
         end
         
         function DisplayEncounterMatrices(obj, windowSize)
@@ -399,27 +406,32 @@ classdef AnalyzeEncounterFrequencies<handle
                 dispScale = 'linear';% axes display scale [linear/log]
             end
             
-            fNames = {'rep1','rep2','average'};
+            fNames = {'Rep1','Rep2','Average'};
             for fIdx = 1:numel(fNames)
                 f = figure;
                 a = axes('Parent',f,...
                     'NextPlot','Add',...
                     'XScale',dispScale,...
-                    'YScale',dispScale);
-                xlabel(sprintf('%s%s',dispScale,'(distance [beads units])'));
-                ylabel(sprintf('%s%s',dispScale,'(Prob. encounters)'));
-                title(fNames{fIdx})
+                    'YScale',dispScale,...
+                    'FontSize',24);
+                xlabel(sprintf('%s','Distance [beads units]'),'FontSize',24);
+                ylabel(sprintf('%s','Prob. encounters'),'FontSize',24);
+                
+                title(fNames{fIdx},'fontSize',20)
                 for sIdx = 1:numel(obj.beadData.bead)
-                    if~isempty(obj.beadData.bead(sIdx).fitResults.(fNames{fIdx}).encounterProb)
+                    if~isempty(obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).encounterProb)
 %                         freq = obj.beadData.bead(sIdx).fitResults.(fNames{fIdx}).encounterNumber;
 %                         freq(freq==0)=NaN;
-                        line('XData',obj.beadData.bead(sIdx).fitResults.(fNames{fIdx}).beadDist,...
-                            'YData',obj.beadData.bead(sIdx).fitResults.(fNames{fIdx}).encounterNumber,...
+                        line('XData',obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).beadDist,...
+                            'YData',obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).encounterNumber,...
                             'Color',rand(1,3),...
                             'Marker','.',...
+                            'MarkerSize',7,...
                             'LineStyle','-',...
+                            'LineWidth',3,...
                             'DisplayName',sprintf('%s%s','Bead',num2str(sIdx)),...
-                            'Parent',a)
+                            'Parent',a);
+                        axis tight
                     else
 
                     end
@@ -432,25 +444,36 @@ classdef AnalyzeEncounterFrequencies<handle
             % for the two replicas and their average            
             fNames = {'rep1','rep2','average'};
             for fIdx = 1:numel(fNames)
-                expFigName = sprintf('%s%s','exponent for ', fNames{fIdx});
-                figure('Name',expFigName), hold on
+                % plot fitted beta values 
+                expFigName = sprintf('%s%s','\beta for ', fNames{fIdx});
+                figure('Name',expFigName);
+                hold on
                 for bIdx = 1:numel(obj.beadData.bead);
-                plot(bIdx,obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp,'.')                
+                 plot(bIdx,obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp,'.')
                 end
-                title(expFigName)
-                xlabel('bead number');
+                title(expFigName,'FontSize',20)
+                xlabel('Bead number','fontSize',24);
+                ylabel('Fitted \beta','FontSize',24);
+                set(gca,'FontSize',24);
+                axis tight
                 
-                biasFigName = sprintf('%s%s','bias for ', fNames{fIdx});
-                figure('Name',biasFigName),hold on
+                % plot fitted bias values 
+                biasFigName = sprintf('%s%s','Bias for ', fNames{fIdx});                                
+                figure('Name',biasFigName);
+                hold on
                 for bIdx = 1:numel(obj.beadData.bead);
                    plot(bIdx,obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias,'.')   
                 end
-                title(biasFigName);
-                xlabel('bead number');
+                title(biasFigName,'FontSize',20);
+                xlabel('Bead number','FontSize',24);
+                ylabel('Fitted bias','FontSize',24);
+                set(gca,'FontSize',24);
+                axis tight
             end            
         end
         
         function DisplayFitByBead(obj,beadNumbers,dispScale)
+            warning off
               fNames = {'rep1','rep2','average'};
               if ~exist('beadNumbers','var')||strcmpi(beadNumbers,'all')
                   beadNumbers = 1:obj.beadData.numBeads;                                    
@@ -460,15 +483,18 @@ classdef AnalyzeEncounterFrequencies<handle
                   dispScale = 'linear';
               end
             for fIdx = 1:numel(fNames)
-                f = figure;                
+                f = figure('Name',['FitByBead',fNames{fIdx}]);                
                 a = axes('Parent',f,...
                          'NextPlot','Add',...
                          'XScale',dispScale,...
                          'YScale',dispScale,...
-                         'NextPlot','Add');
-                xlabel(sprintf('%s%s',dispScale,'(distance in beads)'));
-                ylabel(sprintf('%s%s',dispScale,'(num. encounters)'));
-                title(fNames{fIdx})
+                         'NextPlot','Add',...
+                         'FontSize',24);
+                     
+                xlabel(sprintf('%s','Distance [beads]'),'FontSize',24);
+                ylabel(sprintf('%s','Num. encounters'),'FontSize',24);                
+                title(fNames{fIdx},'FontSize',20)
+                
                 lineC = [linspace(0,1,numel(beadNumbers))',0.5*ones(numel(beadNumbers),1),0.5*ones(numel(beadNumbers),1)];% line color
                 for bIdx = 1:numel(beadNumbers)
                     if~isempty(obj.beadData.bead(beadNumbers(bIdx)).fitResults)
@@ -483,18 +509,19 @@ classdef AnalyzeEncounterFrequencies<handle
                             'MarkerEdgeColor','c',...
                             'MarkerFaceColor','k',...                            
                             'LineStyle','-',...
+                            'LineWidth',2,...
                             'DisplayName',sprintf('%s%s','Bead',num2str(beadNumbers(bIdx))),...
                             'Parent',a)
                         
                         % plot the fitted line
                         A = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).bias;
-                        B = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).exp;                                                   
+                        B = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).exp;
                         line('XData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist,...
                              'YData',(A*(obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist).^(-B)),...
                              'LineStyle','-',...
-                             'LineWidth',3,...
-                             'Color',lineC(bIdx,:),...
-                             'DisplayName',sprintf('%s%s%s%s','exp: ',num2str(B), ' bias: ',num2str(A)));                       
+                             'LineWidth',4,...
+                             'Color','r',...
+                             'DisplayName',sprintf('%s%s%s%s%s%s','Bead ',num2str(bIdx),' \beta: ',num2str(B), ' bias: ',num2str(A)));                       
 
                     else
                         sprintf('%s%s%a', sprintf('%s%s','Bead',num2str(beadNumbers(bIdx))),'is empty');
@@ -567,11 +594,34 @@ classdef AnalyzeEncounterFrequencies<handle
              % fit using a smoothing spline 
              for fIdx = 1:numel(fNames)
                [obj.results.fit.(fNames{fIdx}).expSpline,~] = spaps(1:numel(obj.results.fit.(fNames{fIdx}).exp),...
-                   obj.results.fit.(fNames{fIdx}).exp',1);   
-                figure, plot(1:numel(obj.beadData.bead),obj.results.fit.(fNames{fIdx}).exp,'.'),...
-                    title(sprintf('%s%s','exp for ', fNames{fIdx}));xlabel('monomer number');
+                   obj.results.fit.(fNames{fIdx}).exp',3);   
+                f= figure('Name',['fittedExpValuesWithSpline',fNames{fIdx}]);
+                a = axes('Parent',f,'NextPlot','Add');
+                line('XData',1:numel(obj.beadData.bead),...
+                     'YData',obj.results.fit.(fNames{fIdx}).exp,...
+                     'Marker','o',...
+                     'MarkerEdgeColor','g',...
+                     'MarkerSize',7,...
+                     'MarkerFaceColor','b',...
+                     'lineStyle','none',...
+                     'DisplayName','\beta',...
+                     'Parent',a);
+                title(sprintf('%s%s','Fitted \beta for ', fNames{fIdx}),'FontSize',20);
+                xlabel('Bead number','FontSize',24);
+                ylabel('Fitted \beta values','FontSize',24);
+                set(gca,'fontSize',24);
                 hold on 
-                fnplt(obj.results.fit.(fNames{fIdx}).expSpline)                   
+                % plot the smoothing spline
+                fn = fnplt(obj.results.fit.(fNames{fIdx}).expSpline);
+                line('XData',fn(1,:),...
+                     'YData',fn(2,:),...
+                     'DisplayName','Spline',...
+                     'Parent',a,...
+                     'LineWidth',2,...
+                     'Color','b');
+                     
+                axis tight
+                legend(get(a,'Children'))
              end
              
         end
@@ -692,7 +742,7 @@ classdef AnalyzeEncounterFrequencies<handle
             % encounterData(:,2) - log(included bead indices)
             % x(1) - is the bias 
             % x(2) - is the slope 
-            logBeadDist = encounterData(:,2);
+            logBeadDist      = encounterData(:,2);
             logEncounterFreq = encounterData(:,1);
             valsOut = (sum((x(1)-x(2)*logBeadDist-logEncounterFreq).^2));
         end
