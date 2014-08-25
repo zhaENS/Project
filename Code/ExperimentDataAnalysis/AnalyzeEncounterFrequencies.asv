@@ -465,29 +465,11 @@ classdef AnalyzeEncounterFrequencies<handle
                           'XLim',[1 obj.beadData.numBeads],...
                           'NextPlot','Add');
                       
-                % indicate whether the bead is missing in the legend
-                if obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).existInDb
-                    dispName = ['bead ', num2str(bIdx)];
-                else
-                    dispName = ['bead ', num2str(bIdx),' (missing)'];
-                end
-                
-                % plot the values of the fitted exponent 
-                for bIdx = 1:numel(obj.beadData.bead);
-                   line('Parent',ae,...
-                       'XData',bIdx,...
-                       'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).exp,...
-                       'LineStyle','none',...
-                       'Marker','o',...
-                       'MarkerFaceColor','b',...
-                       'DisplayName',dispName)
-                end
-                
-                title(expFigName,'FontSize',40);
-                xlabel('Bead number','FontSize',40);
-                ylabel('Fitted \beta','FontSize',40);
-                
-                % plot fitted bias values 
+                title(ae,expFigName,'FontSize',40);
+                xlabel(ae,'Bead number','FontSize',40);
+                ylabel(ae,'Fitted \beta','FontSize',40);
+                      
+               % plot fitted bias values 
                 biasFigName = sprintf('%s%s','Bias for ', fNames{fIdx});                                
                 
                 fb = figure('Name',biasFigName,...
@@ -496,21 +478,38 @@ classdef AnalyzeEncounterFrequencies<handle
                           'FontSize',40,...
                           'XLim',[1 obj.beadData.numBeads],...
                           'NextPlot','Add');
-                      
+                                      
+                title(ab,biasFigName,'FontSize',40);
+                xlabel(ab,'Bead number','FontSize',40);
+                ylabel(ab,'Fitted bias','FontSize',40);          
+
+                                
                 for bIdx = 1:numel(obj.beadData.bead);
-                    line('Parent',ab,...
+                    % indicate whether the bead is missing in the legend
+                if obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).existInDb
+                    dispName = ['bead ', num2str(bIdx)];
+                else
+                    dispName = ['bead ', num2str(bIdx),' (missing)'];
+                end
+                % plot the values of the fitted exponent 
+                   line('Parent',ae,...
+                        'XData',bIdx,...
+                        'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).exp,...
+                        'LineStyle','none',...
+                        'Marker','o',...
+                        'MarkerFaceColor','b',...
+                        'DisplayName',dispName)
+                   
+                 % plot the values of the fitted bias  
+                   line('Parent',ab,...
                          'XData',bIdx,...
                          'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).bias,...
                          'Marker','o',...
-                         'Color','b',...
+                         'MarkerFaceColor','b',...                        
                          'LineStyle','none',...
-                         'DisplayName',
-                                            
+                         'DisplayName',dispName);
                 end
-                
-                title(biasFigName,'FontSize',40);
-                xlabel('Bead number','FontSize',40);
-                ylabel('Fitted bias','FontSize',40);                               
+    
             end            
         end
         
@@ -540,9 +539,14 @@ classdef AnalyzeEncounterFrequencies<handle
                 lineC = [linspace(0,1,numel(beadNumbers))',0.5*ones(numel(beadNumbers),1),0.5*ones(numel(beadNumbers),1)];% line color
                 for bIdx = 1:numel(beadNumbers)
                     if~isempty(obj.beadData.bead(beadNumbers(bIdx)).fitResults)
-                        freq = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).encounterNumber;
-                        freq(freq==0)=NaN;
-                        
+%                         freq = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).encounterNumber;
+%                         freq(freq==0)=NaN;
+                        % indicate in the legend if the bead is missing 
+                        if obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).existInDb
+                            dispName = sprintf('%s%s','Bead',num2str(beadNumbers(bIdx)));
+                        else
+                            dispName = sprintf('%s%s','Bead',num2str(beadNumbers(bIdx)),' (missing)');
+                        end
                         line('XData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist,...
                             'YData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterProb,...
                             'Color',lineC(bIdx,:),...
@@ -552,7 +556,7 @@ classdef AnalyzeEncounterFrequencies<handle
                             'MarkerFaceColor','k',...                            
                             'LineStyle','-',...
                             'LineWidth',2,...
-                            'DisplayName',sprintf('%s%s','Bead',num2str(beadNumbers(bIdx))),...
+                            'DisplayName',dispName,...
                             'Parent',a)
                         
                         % plot the fitted line
@@ -569,9 +573,7 @@ classdef AnalyzeEncounterFrequencies<handle
                         sprintf('%s%s%a', sprintf('%s%s','Bead',num2str(beadNumbers(bIdx))),'is empty');
                     end
                 end
-            end
-            
-            
+            end                        
         end             
         
         function PlotSegments(obj)
@@ -638,7 +640,7 @@ classdef AnalyzeEncounterFrequencies<handle
              fNames = {'Rep1','Rep2','Average'};
              % fit using a smoothing spline 
              for fIdx = 1:numel(fNames)
-               [obj.results.fit.(fNames{fIdx}).expSpline,~] = spaps(1:numel(obj.results.fit.(lower(fNames{fIdx})).exp),...
+               [obj.results.fit.(lower(fNames{fIdx})).expSpline,~] = spaps(1:numel(obj.results.fit.(lower(fNames{fIdx})).exp),...
                    obj.results.fit.(lower(fNames{fIdx})).exp',smoothingFac);   
                
                 f = figure('Name',['fittedExpValuesWithSpline',fNames{fIdx}],...
