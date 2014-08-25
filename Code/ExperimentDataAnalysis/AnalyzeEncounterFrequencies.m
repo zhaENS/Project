@@ -8,8 +8,6 @@ classdef AnalyzeEncounterFrequencies<handle
     % recognized the site AAGCTT and cleaves it between the AA, leaving a
     % sticky end
     
-    %TODO: check the normalization of the data in relation to the fit. 
-    % fit should be constrained in a different manner. 
     properties
         data
         allData
@@ -204,12 +202,12 @@ classdef AnalyzeEncounterFrequencies<handle
                 for bIdx = 1:size(obj.beadData.encounterData.oneSide.(fNames{fIdx}),1)
                     
                     freq = obj.beadData.encounterData.oneSide.(fNames{fIdx})(bIdx,1);% raw data
-                    if ~all(freq{:}==0)
+                    if ~all(freq{:}==0)% if it is present in the database
                      freq = {freq{:}./sum(freq{:})};% normalize to create probability
                     end
                     
                     y = freq{:}';
-                    % ignore missing data
+                    % Ignore missing data
                     includedPlaces = y~=0;
                     y = y(includedPlaces);
                     x = find(includedPlaces);
@@ -224,7 +222,8 @@ classdef AnalyzeEncounterFrequencies<handle
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterNumber = freq{:}(includedPlaces)';
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterProb   = y;%freq{:}';
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).functionValues  = model(fitObject.slope,x);
-                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).model           = model;   
+                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).model           = model; 
+                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).existInDb       = true; 
                         % save data in a struct for easy plotting
                         obj.results.fit.(fNames{fIdx}).exp(bIdx)                          = fitObject.slope;
                         obj.results.fit.(fNames{fIdx}).bias(bIdx)                         = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias ;  
@@ -248,6 +247,7 @@ classdef AnalyzeEncounterFrequencies<handle
                                 obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterNumber = [];
                                 obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterProb   = [];
                                 obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).functionValues  = [];
+                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).existInDb       = false;
                                 obj.results.fit.(fNames{fIdx}).exp(missingIdx(mIdx))  = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp;
                                 obj.results.fit.(fNames{fIdx}).bias(missingIdx(mIdx)) = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias;
                             end
@@ -272,7 +272,7 @@ classdef AnalyzeEncounterFrequencies<handle
             n     = zeros(1,obj.beadData.numBeads-1); 
             dists = 1:obj.beadData.numBeads-1;
             
-            for bIdx = 1:numel(obj.beadData.encounterData.oneSide.average)
+            for bIdx = 1:obj.beadData.numBeads
                 normEncounter = obj.beadData.encounterData.oneSide.average{bIdx};
                 if all(normEncounter==0)
                     
@@ -404,30 +404,42 @@ classdef AnalyzeEncounterFrequencies<handle
             
             fNames = {'Rep1','Rep2','Average'};
             for fIdx = 1:numel(fNames)
-                f = figure('FileName',['encounterProbabilityByDistance',fNames{fIdx}]);
-                a = axes('Parent',f,...
-                    'NextPlot','Add',...
-                    'XScale',dispScale,...
-                    'YScale',dispScale,...
-                    'FontSize',40,...
-                    'XLim',[1 obj.beadData.numBeads]);
+                % create main figure
+                f = figure('FileName',['encounterProbabilityByDistance',fNames{fIdx}],...
+                    'Name',['encounterProbabilityByDistance',fNames{fIdx}]);
                 
-                xlabel(sprintf('%s','Distance [beads units]'),'FontSize',40);
-                ylabel(sprintf('%s','Prob. encounters'),'FontSize',40);
+                % create main axes
+                a = axes('Parent',f,...
+                         'NextPlot','Add',...
+                         'XScale',dispScale,...
+                         'YScale',dispScale,...
+                         'FontSize',40,...
+                         'XLim',[1 obj.beadData.numBeads]);
+                
+                xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
+                ylabel(sprintf('%s','Prob. Encounter'),'FontSize',40);
                 
                 title(fNames{fIdx},'fontSize',40)
                 for sIdx = 1:numel(obj.beadData.bead)
                     if~isempty(obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).encounterProb)
-%                         freq = obj.beadData.bead(sIdx).fitResults.(fNames{fIdx}).encounterNumber;
-%                         freq(freq==0)=NaN;
-                        line('XData',obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).beadDist,...
-                            'YData',obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).encounterNumber,...
+                        fResults = obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx}));
+                        % indicate whether the bead is missing in the
+                        % legend
+                        if fResults.existInDb
+                            dispName = sprintf('%s%s','Bead',num2str(sIdx));
+                        else 
+                            dispName = sprintf('%s%s%s','Bead',num2str(sIdx),' (missing)');
+                        end
+                        
+                        % plot the encoutner data and fit
+                        line('XData',fResults.beadDist,...
+                            'YData',fResults.encounterNumber,...
                             'Color',rand(1,3),...
                             'Marker','.',...
                             'MarkerSize',7,...
                             'LineStyle','-',...
                             'LineWidth',3,...
-                            'DisplayName',sprintf('%s%s','Bead',num2str(sIdx)),...
+                            'DisplayName',dispName,...
                             'Parent',a);                       
                     else
 
@@ -443,28 +455,21 @@ classdef AnalyzeEncounterFrequencies<handle
             for fIdx = 1:numel(fNames)
                 % plot fitted beta values 
                 expFigName = sprintf('%s%s','\beta for ', fNames{fIdx});
+                
+                % create main figure
                 fe = figure('Name',expFigName,...
                             'FileName',['FittedExpValues',fNames{fIdx}]);
+                % create main axes
                 ae = axes('Parent',fe,...
                           'FontSize',40,...
                           'XLim',[1 obj.beadData.numBeads],...
                           'NextPlot','Add');
-                
-                for bIdx = 1:numel(obj.beadData.bead);
-                   line('Parent',ae,...
-                       'XData',bIdx,...
-                       'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).exp,...
-                       'LineStyle','none',...
-                       'Marker','o',...
-                       'MarkerFaceColor','b',...
-                       'DisplayName',['bead ', num2str(bIdx)])
-                end
-                
-                title(expFigName,'FontSize',40);
-                xlabel('Bead number','FontSize',40);
-                ylabel('Fitted \beta','FontSize',40);
-                
-                % plot fitted bias values 
+                      
+                title(ae,expFigName,'FontSize',40);
+                xlabel(ae,'Bead number','FontSize',40);
+                ylabel(ae,'Fitted \beta','FontSize',40);
+                      
+               % plot fitted bias values 
                 biasFigName = sprintf('%s%s','Bias for ', fNames{fIdx});                                
                 
                 fb = figure('Name',biasFigName,...
@@ -473,14 +478,38 @@ classdef AnalyzeEncounterFrequencies<handle
                           'FontSize',40,...
                           'XLim',[1 obj.beadData.numBeads],...
                           'NextPlot','Add');
-                      
+                                      
+                title(ab,biasFigName,'FontSize',40);
+                xlabel(ab,'Bead number','FontSize',40);
+                ylabel(ab,'Fitted bias','FontSize',40);          
+
+                                
                 for bIdx = 1:numel(obj.beadData.bead);
-                   plot(ab,bIdx,obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).bias,'o')   
+                    % indicate whether the bead is missing in the legend
+                if obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).existInDb
+                    dispName = ['bead ', num2str(bIdx)];
+                else
+                    dispName = ['bead ', num2str(bIdx),' (missing)'];
                 end
-                
-                title(biasFigName,'FontSize',40);
-                xlabel('Bead number','FontSize',40);
-                ylabel('Fitted bias','FontSize',40);                               
+                % plot the values of the fitted exponent 
+                   line('Parent',ae,...
+                       'XData',bIdx,...
+                       'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).exp,...
+                       'LineStyle','none',...
+                       'Marker','o',...
+                       'MarkerFaceColor','b',...
+                       'DisplayName',dispName)
+                   
+                 % plot the values of the fitted bias  
+                  line('Parent',ab,...
+                         'XData',bIdx,...
+                         'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).bias,...
+                         'Marker','o',...
+                         'Color','b',...
+                         'LineStyle','none',...
+                         'DisplayName',dispName);
+                end
+    
             end            
         end
         
@@ -501,11 +530,11 @@ classdef AnalyzeEncounterFrequencies<handle
                          'XScale',dispScale,...
                          'YScale',dispScale,...
                          'NextPlot','Add',...
-                         'FontSize',24);
+                         'FontSize',40);
                      
-                xlabel(sprintf('%s','Distance [beads]'),'FontSize',24);
-                ylabel(sprintf('%s','Num. encounters'),'FontSize',24);                
-                title(fNames{fIdx},'FontSize',20)
+                xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
+                ylabel(sprintf('%s','Num. encounters'),'FontSize',40);                
+                title(fNames{fIdx},'FontSize',40)
                 
                 lineC = [linspace(0,1,numel(beadNumbers))',0.5*ones(numel(beadNumbers),1),0.5*ones(numel(beadNumbers),1)];% line color
                 for bIdx = 1:numel(beadNumbers)
@@ -516,7 +545,7 @@ classdef AnalyzeEncounterFrequencies<handle
                         line('XData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist,...
                             'YData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterProb,...
                             'Color',lineC(bIdx,:),...
-                            'Marker','o',...
+                            'Marker','none',...
                             'MarkerSize',2,...
                             'MarkerEdgeColor','c',...
                             'MarkerFaceColor','k',...                            
@@ -750,6 +779,7 @@ classdef AnalyzeEncounterFrequencies<handle
                                 'encounterNumber',[],...
                                 'encounterProb', [],...
                                 'functionValues',[],...
+                                'existInDb',[],...
                                 'model',[]);
         end
         
