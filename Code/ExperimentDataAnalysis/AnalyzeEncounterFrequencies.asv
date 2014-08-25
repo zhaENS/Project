@@ -18,7 +18,7 @@ classdef AnalyzeEncounterFrequencies<handle
         params
         beadSizeInbp = 3000;
         fitModel     = fittype(@(slope,x)(1./(sum(x.^(-slope)))).*x.^(-slope))
-%         fitModel     = fittype(@(slope,bias,x)(bias.*x.^(-slope)))
+        %         fitModel     = fittype(@(slope,bias,x)(bias.*x.^(-slope)))
     end
     
     events
@@ -26,18 +26,18 @@ classdef AnalyzeEncounterFrequencies<handle
     
     methods
         function obj = AnalyzeEncounterFrequencies()
-          % Class constructor 
+            % Class constructor
         end
         
         function Initialize(obj,params)
             
-             if nargin<2 % if no params are loaded, load default params
+            if nargin<2 % if no params are loaded, load default params
                 % default location of xls file
                 obj.params.xlsFilePath = fullfile(pwd,'..','Data','Luca','MC_TAD_DE_E14d0_rep2+3_true.xlsx');
-                obj.params.fillGapsBy   = 'sameValuesAsBoundary'; % when the dat is  missing (i.e, the segment takes the position of few beads, 
-                obj.params.beadRangeToAnalyze = [1 307]; % if empty, analyze all, 
+                obj.params.fillGapsBy   = 'sameValuesAsBoundary'; % when the dat is  missing (i.e, the segment takes the position of few beads,
+                obj.params.beadRangeToAnalyze = [1 307]; % if empty, analyze all,
             else
-                obj.params.xlsFilePath = params.xlsFilePath;                
+                obj.params.xlsFilePath = params.xlsFilePath;
             end
             
             obj.ReadData;% load data from xls
@@ -45,9 +45,9 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.ProcessEncounters;
             obj.FitData;
             obj.FitMeanModel;
-            %            obj.DisplayEncounterMatrices;            
+            %            obj.DisplayEncounterMatrices;
         end
-            
+        
         function ReadData(obj)
             % a sequence of calls to list segments lengths and beads and
             % the transformations (interms of indices) between segments and
@@ -64,18 +64,18 @@ classdef AnalyzeEncounterFrequencies<handle
             % Read data from xls
             [values,~, obj.allData.all]= xlsread(obj.params.xlsFilePath);
             titles = {'beadStart1','beadEnd1','beadStart2','beadEnd2',...
-                      'rep1Count','rep2Count','averageCount','stdCount'};
-                  
-            % Read data only in the valid range of beads 
+                'rep1Count','rep2Count','averageCount','stdCount'};
+            
+            % Read data only in the valid range of beads
             if ~isempty(obj.params.beadRangeToAnalyze)
                 range = obj.params.beadRangeToAnalyze;
                 % take only beads in the range and such that have interactions with beads
-                % in the range 
+                % in the range
                 values = values(values(:,2)<=range(2) & values(:,1)>=range(1) & values(:,4)<=range(2) & values(:,3)>=range(1),:);
             end
             
             % store the data for each replicate of experiment and the
-            % average 
+            % average
             for tIdx = 1:numel(titles);
                 obj.allData.(titles{tIdx})= values(:,tIdx);
             end
@@ -90,7 +90,7 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.beadData.numBeads         = min([obj.params.beadRangeToAnalyze(2),307])- obj.params.beadRangeToAnalyze(1)+1;
             % the first index is the number of bead in which the restriction segment
             % starts. The second index (column) is the bead in which the
-            % segment ends 
+            % segment ends
             
         end
         
@@ -134,7 +134,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 eMatrix     = cell(obj.beadData.numBeads,1);
                 
                 for sIdx = 1:size(allFreq,1)
-                    before = allFreq(sIdx,sIdx-1:-1:1);% flipped 
+                    before = allFreq(sIdx,sIdx-1:-1:1);% flipped
                     after  = allFreq(sIdx,sIdx+1:1:end);
                     freq   = zeros(2,obj.beadData.numBeads-1);
                     freq(1,1:numel(before)) = before;
@@ -150,9 +150,9 @@ classdef AnalyzeEncounterFrequencies<handle
                     eMatrix{sIdx} = freq;
                 end
                 obj.beadData.encounterData.oneSide.(expNames{eIdx}) = eMatrix;
-            end            
+            end
         end
-                
+        
         function CreateEncounterFrequencyMatrices(obj)
             % For the two replicates and the average, create encounter
             % frequency matrices. These matrices represent the even
@@ -183,7 +183,7 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         function FitData(obj)
-            % Fit a function of the form y = a*x^-b to each monomer 
+            % Fit a function of the form y = a*x^-b to each monomer
             % encounter frequency data
             fNames = {'rep1','rep2','average'};
             model                = obj.fitModel;
@@ -195,7 +195,7 @@ classdef AnalyzeEncounterFrequencies<handle
             fOptions.StartPoint  = 1.5; % [slope]
             fOptions.Lower       = 0.2; % [slope]
             fOptions.Robust      = 'Bisquare';
-%             fOptions.Display     = 'iter';
+            %             fOptions.Display     = 'iter';
             for fIdx = 1:numel(fNames);
                 prevMissing = false;% indicateor of whether the previous bead is missing.
                 missingIdx  = [];% missing beads indices
@@ -203,7 +203,7 @@ classdef AnalyzeEncounterFrequencies<handle
                     
                     freq = obj.beadData.encounterData.oneSide.(fNames{fIdx})(bIdx,1);% raw data
                     if ~all(freq{:}==0)% if it is present in the database
-                     freq = {freq{:}./sum(freq{:})};% normalize to create probability
+                        freq = {freq{:}./sum(freq{:})};% normalize to create probability
                     end
                     
                     y = freq{:}';
@@ -214,7 +214,7 @@ classdef AnalyzeEncounterFrequencies<handle
                     
                     if ~all(y==0)
                         [fitObject, gof] = fit(x,y,model,fOptions);
-                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx})                 = obj.NewFitResultsStruct;                        
+                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx})                 = obj.NewFitResultsStruct;
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias            = (1/sum((1:obj.beadData.numBeads-1).^(-fitObject.slope)));
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp             = fitObject.slope;
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).gof             = gof;
@@ -222,45 +222,45 @@ classdef AnalyzeEncounterFrequencies<handle
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterNumber = freq{:}(includedPlaces)';
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterProb   = y;%freq{:}';
                         obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).functionValues  = model(fitObject.slope,x);
-                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).model           = model; 
-                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).existInDb       = true; 
+                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).model           = model;
+                        obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).existInDb       = true;
                         % save data in a struct for easy plotting
                         obj.results.fit.(fNames{fIdx}).exp(bIdx)                          = fitObject.slope;
-                        obj.results.fit.(fNames{fIdx}).bias(bIdx)                         = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias ;  
+                        obj.results.fit.(fNames{fIdx}).bias(bIdx)                         = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias ;
                         
                         if prevMissing
                             if strcmpi(obj.params.fillGapsBy,'sameValuesAsBoundary')% options [sameValueAsBoundary/Interp]
-                            % fill-in the gaps with fit values obtained at
-                            % the boundary of the gap 
-                            bStart  = (obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).bias);
-                            bEnd    = (obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias);
-                            bValues = linspace(bStart,bEnd,numel(missingIdx));% linear interpolation of the bias values
-                            eStart  = obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).exp;
-                            eEnd    = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp;
-                            eValues = linspace(eStart,eEnd,numel(missingIdx));% linear interpolation of the exp values
-                            for mIdx = 1:numel(missingIdx)
-                            obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx})              = obj.NewFitResultsStruct;
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias     = bValues(mIdx);
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp      = eValues(mIdx);
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).gof      = 'missing bead- data interpolated from nearest neighbor';
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).beadDist = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist;
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterNumber = [];
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterProb   = [];
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).functionValues  = [];
-                                obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).existInDb       = false;
-                                obj.results.fit.(fNames{fIdx}).exp(missingIdx(mIdx))  = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp;
-                                obj.results.fit.(fNames{fIdx}).bias(missingIdx(mIdx)) = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias;
-                            end
-                            missingIdx  = [];% reset the missing idx 
-                            prevMissing = false;% reset the missing flag
+                                % fill-in the gaps with fit values obtained at
+                                % the boundary of the gap
+                                bStart  = (obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).bias);
+                                bEnd    = (obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias);
+                                bValues = linspace(bStart,bEnd,numel(missingIdx));% linear interpolation of the bias values
+                                eStart  = obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).exp;
+                                eEnd    = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp;
+                                eValues = linspace(eStart,eEnd,numel(missingIdx));% linear interpolation of the exp values
+                                for mIdx = 1:numel(missingIdx)
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx})              = obj.NewFitResultsStruct;
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias     = bValues(mIdx);
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp      = eValues(mIdx);
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).gof      = 'missing bead- data interpolated from nearest neighbor';
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).beadDist = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist;
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterNumber = [];
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterProb   = [];
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).functionValues  = [];
+                                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).existInDb       = false;
+                                    obj.results.fit.(fNames{fIdx}).exp(missingIdx(mIdx))  = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp;
+                                    obj.results.fit.(fNames{fIdx}).bias(missingIdx(mIdx)) = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias;
+                                end
+                                missingIdx  = [];% reset the missing idx
+                                prevMissing = false;% reset the missing flag
                             end
                         else
                             obj.results.fit.(fNames{fIdx}).exp(bIdx)  = fitObject.slope;
                             obj.results.fit.(fNames{fIdx}).bias(bIdx) = fitObject.slope-1;
-                        end                                                
+                        end
                     else
                         prevMissing = true;
-                        missingIdx(end+1) = bIdx;% record the indices of the missing beads in the block                        
+                        missingIdx(end+1) = bIdx;% record the indices of the missing beads in the block
                     end
                 end
             end
@@ -268,20 +268,20 @@ classdef AnalyzeEncounterFrequencies<handle
         
         function FitMeanModel(obj)
             % Calculate the mean of the mean data
-%             n = zeros(1,obj.beadData.numBeads-1);
-            n     = zeros(1,obj.beadData.numBeads-1); 
+            %             n = zeros(1,obj.beadData.numBeads-1);
+            n     = zeros(1,obj.beadData.numBeads-1);
             dists = 1:obj.beadData.numBeads-1;
             
             for bIdx = 1:obj.beadData.numBeads
                 normEncounter = obj.beadData.encounterData.oneSide.average{bIdx};
                 if all(normEncounter==0)
                     
-                else                
-                normEncounter = normEncounter/sum(obj.beadData.encounterData.oneSide.average{bIdx});
+                else
+                    normEncounter = normEncounter/sum(obj.beadData.encounterData.oneSide.average{bIdx});
                 end
                 n = n+normEncounter;
             end
-            n     = n./obj.beadData.numBeads;% divide to get the mean           
+            n     = n./obj.beadData.numBeads;% divide to get the mean
             obj.results.fit.allData.meanEncounterProb = n;
             model                = obj.fitModel;
             fOptions             = fitoptions(model);
@@ -290,117 +290,122 @@ classdef AnalyzeEncounterFrequencies<handle
             fOptions.MaxFunEvals = 1e6;
             fOptions.MaxIter     = 1e6;
             fOptions.StartPoint  = 1.5;% [slope]
-            fOptions.Lower       = 0.2;% [slope] 
+            fOptions.Lower       = 0.2;% [slope]
             fOptions.Weights      = n'~=0;
             
-           [fitObject, gof]              = fit(dists',n',model,fOptions);
-           obj.results.fit.allData.bias  = 1/(sum(dists.^(-fitObject.slope)));
-           obj.results.fit.allData.exp   = fitObject.slope;
-           obj.results.fit.allData.gof   = gof;  
-           obj.results.fit.allData.model = model;
-           
+            [fitObject, gof]              = fit(dists',n',model,fOptions);
+            obj.results.fit.allData.bias  = 1/(sum(dists.^(-fitObject.slope)));
+            obj.results.fit.allData.exp   = fitObject.slope;
+            obj.results.fit.allData.gof   = gof;
+            obj.results.fit.allData.model = model;
+            
         end
         
         function DisplayAllDataFit(obj,dispScale)
-            % display mean encounter data fit 
-                if~exist('dispScale','var');
-                     dispScale = 'linear';
+            % display mean encounter data fit
+            if~exist('dispScale','var');
+                dispScale = 'linear';
+            end
+            f = figure('FileName','meanDataFit');
+            a = axes('Parent',f,...
+                'NextPlot','Add',...
+                'XScale',dispScale,...
+                'YScale',dispScale,...
+                'NextPlot','Add',...
+                'FontSize',40,...
+                'XLim',[1 obj.beadData.numBeads]);
+            
+            xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
+            ylabel(sprintf('%s','Encounter Prob.'),'FontSize',40);
+            title('Mean Data Fit','fontSize', 40)
+            
+            for bIdx = 1:numel(obj.beadData.bead);
+                if~isempty(obj.beadData.bead(bIdx).fitResults.average.encounterProb)
+                    
+                    lineC = rand(1,3);
+                    line('XData',obj.beadData.bead(bIdx).fitResults.average.beadDist,...
+                        'YData',obj.beadData.bead(bIdx).fitResults.average.encounterProb,...
+                        'Color',lineC,...
+                        'Marker','o',...
+                        'MarkerSize',2,...
+                        'MarkerEdgeColor',lineC,...
+                        'MarkerFaceColor','k',...
+                        'LineStyle','-',...
+                        'LineWidth',3,...
+                        'DisplayName',sprintf('%s%s','Bead',num2str(bIdx)),...
+                        'handleVisibility','off',...
+                        'Parent',a)
+                else
+                    %                         sprintf('%s%s%a', sprintf('%s%s',' fit for bead ',num2str((bIdx))),' is empty')
                 end
-                f = figure('FileName','meanDataFit');                
-                a = axes('Parent',f,...
-                         'NextPlot','Add',...
-                         'XScale',dispScale,...
-                         'YScale',dispScale,...
-                         'NextPlot','Add',...
-                         'FontSize',40,...
-                         'XLim',[1 obj.beadData.numBeads]);
-                     
-                xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
-                ylabel(sprintf('%s','Encounter Prob.'),'FontSize',40);
-                title('Mean Data Fit','fontSize', 40)
-                
-                for bIdx = 1:numel(obj.beadData.bead);
-                    if~isempty(obj.beadData.bead(bIdx).fitResults.average.encounterProb)
-                       
-                        lineC = rand(1,3);
-                        line('XData',obj.beadData.bead(bIdx).fitResults.average.beadDist,...
-                            'YData',obj.beadData.bead(bIdx).fitResults.average.encounterProb,...
-                            'Color',lineC,...
-                            'Marker','o',...
-                            'MarkerSize',2,...
-                            'MarkerEdgeColor',lineC,...
-                            'MarkerFaceColor','k',...                            
-                            'LineStyle','-',...
-                            'LineWidth',3,...
-                            'DisplayName',sprintf('%s%s','Bead',num2str(bIdx)),...
-                            'handleVisibility','off',...
-                            'Parent',a)                         
-                    else
-%                         sprintf('%s%s%a', sprintf('%s%s',' fit for bead ',num2str((bIdx))),' is empty')
-                    end
-                end
-                
-                  % plot the fitted line
-                    A = obj.results.fit.allData.bias;
-                    B = obj.results.fit.allData.exp;
-                        line('XData',1:obj.beadData.numBeads-1,...
-                             'YData',(A*(1:obj.beadData.numBeads-1).^(-B)),...
-                             'LineStyle','-',...
-                             'LineWidth',7,...
-                             'Color','r',...
-                             'DisplayName',['mean data fit. \beta =' num2str(B)] );    
-                 legend(get(a,'Children'));
-                 
+            end
+            
+            % plot the fitted line
+            A = obj.results.fit.allData.bias;
+            B = obj.results.fit.allData.exp;
+            line('XData',1:obj.beadData.numBeads-1,...
+                'YData',(A*(1:obj.beadData.numBeads-1).^(-B)),...
+                'LineStyle','-',...
+                'LineWidth',7,...
+                'Color','r',...
+                'DisplayName',['mean data fit. \beta =' num2str(B)] );
+            legend(get(a,'Children'));
+            
         end
         
         function DisplayEncounterMatrices(obj, windowSize)
             % Display the encounter matrices. the pixels of the matrices
-            % indicate the number of times bead i met bead j. 
+            % indicate the number of times bead i met bead j.
             % the parameter windowsize, determine the window size of the
             % median filter. The median filter is utilized to follow the
-            % protocol used by Nora et al 2012. 
-            % windowSize must be a positive integer. 
+            % protocol used by Nora et al 2012.
+            % windowSize must be a positive integer.
             if ~exist('windowSize','var')
                 windowSize = 1;
             end
-            cmap = hot(256);% define color map 
+            cmap = hot(256);% define color map
             
-            % display rep1 
-            figure,           
-            emRep1  = medfilt2(obj.encounterMatrix.rep1,[windowSize,windowSize]); 
+            % display rep1
+            figure,
+            emRep1  = medfilt2(obj.encounterMatrix.rep1,[windowSize,windowSize]);
             maxRep1 = max(emRep1(:));
             emRep1 = emRep1./maxRep1;% normalize
             
             % construct a color scheme from white to black through red such
-            % that black is 
+            % that black is
             imagesc(emRep1);
             title('replicate 1');
             colormap((cmap))
             axis ij
             
-            % display rep2 
-            figure, 
+            % display rep2
+            figure,
             imagesc(medfilt2(obj.encounterMatrix.rep2,[windowSize,windowSize]));
-            title('replicate 2'); 
+            title('replicate 2');
             colormap((cmap))
             axis ij
             
-            % display average 
-            figure, 
+            % display average
+            figure,
             emAverage = medfilt2(obj.encounterMatrix.rep2,[windowSize,windowSize]);
             maxAverage = max(emAverage(:));
             emAverage  = emAverage./maxAverage;
             imagesc(emAverage);
-            title('average between replicates'); 
+            title('average between replicates');
             colormap(flipud(cmap))
             axis ij
             colormapeditor
-        end                
+        end
         
-        function DisplayEncounterFrequencyByBead(obj,dispScale)
-            if nargin<2
+        function DisplayEncounterProbabilityByBead(obj,dispScale,sides)
+            if ~exist('dispScale','var')
                 dispScale = 'linear';% axes display scale [linear/log]
             end
+            
+            if ~exist('sides','var')
+                sides = 'oneSide';
+            end
+            
             
             fNames = {'Rep1','Rep2','Average'};
             for fIdx = 1:numel(fNames)
@@ -410,138 +415,151 @@ classdef AnalyzeEncounterFrequencies<handle
                 
                 % create main axes
                 a = axes('Parent',f,...
-                         'NextPlot','Add',...
-                         'XScale',dispScale,...
-                         'YScale',dispScale,...
-                         'FontSize',40,...
-                         'XLim',[1 obj.beadData.numBeads]);
+                    'NextPlot','Add',...
+                    'XScale',dispScale,...
+                    'YScale',dispScale,...
+                    'FontSize',40,...
+                    'XLim',[1 obj.beadData.numBeads]);
                 
                 xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
                 ylabel(sprintf('%s','Prob. Encounter'),'FontSize',40);
                 
                 title(fNames{fIdx},'fontSize',40)
-                for sIdx = 1:numel(obj.beadData.bead)
-                    if~isempty(obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx})).encounterProb)
-                        fResults = obj.beadData.bead(sIdx).fitResults.(lower(fNames{fIdx}));
+                for bIdx = 1:numel(obj.beadData.bead)
+                    if~isempty(obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).encounterProb)
+                        fResults = obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx}));
                         % indicate whether the bead is missing in the
                         % legend
                         if fResults.existInDb
-                            dispName = sprintf('%s%s','Bead',num2str(sIdx));
-                        else 
-                            dispName = sprintf('%s%s%s','Bead',num2str(sIdx),' (missing)');
+                            dispName = sprintf('%s%s','Bead',num2str(bIdx));
+                        else
+                            dispName = sprintf('%s%s%s','Bead',num2str(bIdx),' (missing)');
+                        end
+                        if strcmpi(sides,'oneSide')
+                            % plot the encoutner data and fit
+                            line('XData',fResults.beadDist,...
+                                'YData',fResults.encounterNumber,...
+                                'Color',rand(1,3),...
+                                'Marker','.',...
+                                'MarkerSize',7,...
+                                'LineStyle','-',...
+                                'LineWidth',3,...
+                                'DisplayName',dispName,...
+                                'Parent',a);
+                        elseif strcmpi(sides,'twoSides')
+                            line('XData',...
+                                'YData',eData,...
+                                'Parent',a);
                         end
                         
-                        % plot the encoutner data and fit
-                        line('XData',fResults.beadDist,...
-                            'YData',fResults.encounterNumber,...
-                            'Color',rand(1,3),...
-                            'Marker','.',...
-                            'MarkerSize',7,...
-                            'LineStyle','-',...
-                            'LineWidth',3,...
-                            'DisplayName',dispName,...
-                            'Parent',a);                       
+                        
                     else
-
+                        % do nothing
                     end
                 end
+                
+                
+                
+                
+                
             end
         end
         
         function DisplayFittedParameters(obj)
-            % Display the fitted parameters of the encounter probability, using the model defined in obj.modelfit, 
-            % for the two replicas and their average            
+            % Display the fitted parameters of the encounter probability, using the model defined in obj.modelfit,
+            % for the two replicas and their average
             fNames = {'Rep1','Rep2','Average'};
             for fIdx = 1:numel(fNames)
-                % plot fitted beta values 
+                % plot fitted beta values
                 expFigName = sprintf('%s%s','\beta for ', fNames{fIdx});
                 
                 % create main figure
                 fe = figure('Name',expFigName,...
-                            'FileName',['FittedExpValues',fNames{fIdx}]);
+                    'FileName',['FittedExpValues',fNames{fIdx}]);
                 % create main axes
                 ae = axes('Parent',fe,...
-                          'FontSize',40,...
-                          'XLim',[1 obj.beadData.numBeads],...
-                          'NextPlot','Add');
-                      
+                    'FontSize',40,...
+                    'XLim',[1 obj.beadData.numBeads],...
+                    'NextPlot','Add');
+                
                 title(ae,expFigName,'FontSize',40);
                 xlabel(ae,'Bead number','FontSize',40);
                 ylabel(ae,'Fitted \beta','FontSize',40);
-                      
-               % plot fitted bias values 
-                biasFigName = sprintf('%s%s','Bias for ', fNames{fIdx});                                
+                
+                % plot fitted bias values
+                biasFigName = sprintf('%s%s','Bias for ', fNames{fIdx});
                 
                 fb = figure('Name',biasFigName,...
-                            'FileName',['FittedExpValues',fNames{fIdx}]);
+                    'FileName',['FittedExpValues',fNames{fIdx}]);
                 ab = axes('Parent',fb,...
-                          'FontSize',40,...
-                          'XLim',[1 obj.beadData.numBeads],...
-                          'NextPlot','Add');
-                                      
+                    'FontSize',40,...
+                    'XLim',[1 obj.beadData.numBeads],...
+                    'NextPlot','Add');
+                
                 title(ab,biasFigName,'FontSize',40);
                 xlabel(ab,'Bead number','FontSize',40);
-                ylabel(ab,'Fitted bias','FontSize',40);          
-
-                                
+                ylabel(ab,'Fitted bias','FontSize',40);
+                
+                
                 for bIdx = 1:numel(obj.beadData.bead);
                     % indicate whether the bead is missing in the legend
-                if obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).existInDb
-                    dispName = ['bead ', num2str(bIdx)];
-                else
-                    dispName = ['bead ', num2str(bIdx),' (missing)'];
-                end
-                % plot the values of the fitted exponent 
-                   line('Parent',ae,...
+                    if obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).existInDb
+                        dispName = ['bead ', num2str(bIdx)];
+                    else
+                        dispName = ['bead ', num2str(bIdx),' (missing)'];
+                    end
+                    % plot the values of the fitted exponent
+                    line('Parent',ae,...
                         'XData',bIdx,...
                         'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).exp,...
                         'LineStyle','none',...
                         'Marker','o',...
                         'MarkerFaceColor','b',...
                         'DisplayName',dispName)
-                   
-                 % plot the values of the fitted bias  
-                   line('Parent',ab,...
-                         'XData',bIdx,...
-                         'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).bias,...
-                         'Marker','o',...
-                         'MarkerFaceColor','b',...                        
-                         'LineStyle','none',...
-                         'DisplayName',dispName);
+                    
+                    % plot the values of the fitted bias
+                    line('Parent',ab,...
+                        'XData',bIdx,...
+                        'YData',obj.beadData.bead(bIdx).fitResults.(lower(fNames{fIdx})).bias,...
+                        'Marker','o',...
+                        'MarkerFaceColor','b',...
+                        'LineStyle','none',...
+                        'DisplayName',dispName);
                 end
-    
-            end            
+                
+            end
         end
         
         function DisplayFitByBead(obj,beadNumbers,dispScale)
             warning off
-              fNames = {'rep1','rep2','average'};
-              if ~exist('beadNumbers','var')||strcmpi(beadNumbers,'all')
-                  beadNumbers = 1:obj.beadData.numBeads;                                    
-              end
-              
-              if ~exist('dispScale','var')
-                  dispScale = 'linear';
-              end
+            fNames = {'rep1','rep2','average'};
+            if ~exist('beadNumbers','var')||strcmpi(beadNumbers,'all')
+                beadNumbers = 1:obj.beadData.numBeads;
+            end
+            
+            if ~exist('dispScale','var')
+                dispScale = 'linear';
+            end
             for fIdx = 1:numel(fNames)
-                f = figure('Name',['FitByBead',fNames{fIdx}]);                
+                f = figure('Name',['FitByBead',fNames{fIdx}]);
                 a = axes('Parent',f,...
-                         'NextPlot','Add',...
-                         'XScale',dispScale,...
-                         'YScale',dispScale,...
-                         'NextPlot','Add',...
-                         'FontSize',40);
-                     
-                xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
-                ylabel(sprintf('%s','Num. encounters'),'FontSize',40);                
-                title(fNames{fIdx},'FontSize',40)
+                    'NextPlot','Add',...
+                    'XScale',dispScale,...
+                    'YScale',dispScale,...
+                    'NextPlot','Add',...
+                    'FontSize',40);
                 
-                lineC = [linspace(0,1,numel(beadNumbers))',0.5*ones(numel(beadNumbers),1),0.5*ones(numel(beadNumbers),1)];% line color
+                xlabel(sprintf('%s','Distance [beads]'),'FontSize',40);
+                ylabel(sprintf('%s','Num. encounters'),'FontSize',40);
+                title(fNames{fIdx},'FontSize',40)
+                % line color
+                lineC = [linspace(0,1,numel(beadNumbers))',0.5*ones(numel(beadNumbers),1),0.5*ones(numel(beadNumbers),1)];
+                
                 for bIdx = 1:numel(beadNumbers)
                     if~isempty(obj.beadData.bead(beadNumbers(bIdx)).fitResults)
-%                         freq = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).encounterNumber;
-%                         freq(freq==0)=NaN;
-                        % indicate in the legend if the bead is missing 
+                        %                         freq = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).encounterNumber;
+                        %                         freq(freq==0)=NaN;
+                        % indicate in the legend if the bead is missing
                         if obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).existInDb
                             dispName = sprintf('%s%s','Bead',num2str(beadNumbers(bIdx)));
                         else
@@ -553,7 +571,7 @@ classdef AnalyzeEncounterFrequencies<handle
                             'Marker','none',...
                             'MarkerSize',2,...
                             'MarkerEdgeColor','c',...
-                            'MarkerFaceColor','k',...                            
+                            'MarkerFaceColor','k',...
                             'LineStyle','-',...
                             'LineWidth',2,...
                             'DisplayName',dispName,...
@@ -563,18 +581,18 @@ classdef AnalyzeEncounterFrequencies<handle
                         A = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).bias;
                         B = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).exp;
                         line('XData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist,...
-                             'YData',(A*(obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist).^(-B)),...
-                             'LineStyle','-',...
-                             'LineWidth',4,...
-                             'Color','r',...
-                             'DisplayName',sprintf('%s%s%s%s%s%s','Bead ',num2str(bIdx),' \beta: ',num2str(B), ' bias: ',num2str(A)));                       
-
+                            'YData',(A*(obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist).^(-B)),...
+                            'LineStyle','-',...
+                            'LineWidth',4,...
+                            'Color','r',...
+                            'DisplayName',['Bead ',num2str(bIdx),' \beta: ',num2str(B), ' bias: ',num2str(A)]);
+                        
                     else
                         sprintf('%s%s%a', sprintf('%s%s','Bead',num2str(beadNumbers(bIdx))),'is empty');
                     end
                 end
-            end                        
-        end             
+            end
+        end
         
         function PlotSegments(obj)
             % plot a cylinder representing the polymer, with red
@@ -597,10 +615,10 @@ classdef AnalyzeEncounterFrequencies<handle
             z  = repmat((1:pLength)',1,numel(t));
             c  = 255*ones(size(x));
             m  = mesh(x,y,z,'Parent',a,...
-                            'CData',c,...
-                            'FaceColor','b',...
-                            'CDataMapping','scaled',...
-                            'FaceLighting','gouraud');
+                'CData',c,...
+                'FaceColor','b',...
+                'CDataMapping','scaled',...
+                'FaceLighting','gouraud');
             
             for bIdx = 1:numel(allSegments(:,1))
                 % plot places where we know segments exist for the
@@ -616,73 +634,73 @@ classdef AnalyzeEncounterFrequencies<handle
         
         function obj = ReloadObj(obj,structIn)
             % Reload a constructed obj with a structure
-               prop= properties(structIn);
-             for fIdx = 1:numel(prop)
-              obj.(prop{fIdx}) = structIn.(prop{fIdx});
-             end
+            prop= properties(structIn);
+            for fIdx = 1:numel(prop)
+                obj.(prop{fIdx}) = structIn.(prop{fIdx});
+            end
         end
         
         function objOut = SaveObj(obj)
-            % Save the object to a structure for saving as mat file 
-             prop= properties(obj);
-             for fIdx = 1:numel(prop)
+            % Save the object to a structure for saving as mat file
+            prop= properties(obj);
+            for fIdx = 1:numel(prop)
                 objOut.(prop{fIdx}) = obj.(prop{fIdx});
-             end
-             uisave('objOut')
+            end
+            uisave('objOut')
         end
-         
+        
         function FitCurveToExpData(obj,smoothingFac)
             % fit a curve to the exponents of the fitted encounter
-            % frequency data 
+            % frequency data
             if ~exist('smoothingFac','var')
                 smoothingFac = 1;
             end
-             fNames = {'Rep1','Rep2','Average'};
-             % fit using a smoothing spline 
-             for fIdx = 1:numel(fNames)
-               [obj.results.fit.(lower(fNames{fIdx})).expSpline,~] = spaps(1:numel(obj.results.fit.(lower(fNames{fIdx})).exp),...
-                   obj.results.fit.(lower(fNames{fIdx})).exp',smoothingFac);   
-               
+            fNames = {'Rep1','Rep2','Average'};
+            % fit using a smoothing spline
+            for fIdx = 1:numel(fNames)
+                [obj.results.fit.(lower(fNames{fIdx})).expSpline,~] = spaps(1:numel(obj.results.fit.(lower(fNames{fIdx})).exp),...
+                    obj.results.fit.(lower(fNames{fIdx})).exp',smoothingFac);
+                
                 f = figure('Name',['fittedExpValuesWithSpline',fNames{fIdx}],...
-                           'FileName',['fittedExpValuesWithSpline',fNames{fIdx}]);
+                    'FileName',['fittedExpValuesWithSpline',fNames{fIdx}]);
                 a = axes('Parent',f,...
-                         'NextPlot','Add',...
-                         'FontSize',40,...
-                         'XLim',[1 obj.beadData.numBeads],...
-                         'YLim',[0 max(obj.results.fit.(lower(fNames{fIdx})).exp)+0.2]);
+                    'NextPlot','Add',...
+                    'FontSize',40,...
+                    'XLim',[1 obj.beadData.numBeads],...
+                    'YLim',[0 max(obj.results.fit.(lower(fNames{fIdx})).exp)+0.2]);
                 
                 line('XData',1:numel(obj.beadData.bead),...
-                     'YData',obj.results.fit.(lower(fNames{fIdx})).exp,...
-                     'Marker','o',...
-                     'MarkerEdgeColor','k',...
-                     'MarkerSize',8,...
-                     'MarkerFaceColor','b',...
-                     'lineStyle','none',...
-                     'DisplayName','\beta',...
-                     'Parent',a);
-                 
+                    'YData',obj.results.fit.(lower(fNames{fIdx})).exp,...
+                    'Marker','o',...
+                    'MarkerEdgeColor','k',...
+                    'MarkerSize',8,...
+                    'MarkerFaceColor','b',...
+                    'lineStyle','none',...
+                    'DisplayName','\beta',...
+                    'Parent',a);
+                
                 title(sprintf('%s%s','Fitted \beta for ', fNames{fIdx}),'FontSize',40);
                 xlabel('Bead number','FontSize',40);
-                ylabel('Fitted \beta values','FontSize',40);                
+                ylabel('Fitted \beta values','FontSize',40);
                 
                 % plot the smoothing spline
                 fn = fnplt(obj.results.fit.(lower(fNames{fIdx})).expSpline);
                 line('XData',fn(1,:),...
-                     'YData',fn(2,:),...
-                     'DisplayName','Spline',...
-                     'Parent',a,...
-                     'LineWidth',3,...
-                     'Color','k');
-                                     
+                    'YData',fn(2,:),...
+                    'DisplayName','Spline',...
+                    'Parent',a,...
+                    'LineWidth',3,...
+                    'Color','k');
+                
                 legend(get(a,'Children'))
-             end             
+            end
         end
         
         function FindHigherEncountersThanAverage(obj)%Unfinished
             nums  = 1:obj.beadData.numBeads;
             nums  = repmat(nums,obj.beadData.numBeads,1);
             dists = abs(nums-nums');
-            exp   = obj.results.fit.allData.exp;           
+            exp   = obj.results.fit.allData.exp;
             model = obj.results.fit.allData.model(exp,dists);
             hrep1 = obj.encounterMatrix.rep1;
             hrep2 = obj.encounterMatrix.rep2;
@@ -698,65 +716,65 @@ classdef AnalyzeEncounterFrequencies<handle
                 end
             end
             hrep1 = hrep1>model;
-            hrep2 = hrep2>model;                                        
+            hrep2 = hrep2>model;
             figure, imshow(hrep1); title(sprintf('%s%s','rep1 ',num2str(exp)));
-%             figure, imshow(hrep2); title('rep2');
+            %             figure, imshow(hrep2); title('rep2');
             
         end
         
         function CheckEncounterDataSymmetry(obj)
-            % Check the two-sided encounter data for each bead. 
+            % Check the two-sided encounter data for each bead.
             % The encounter data of 'left' and 'right' are compared by
             % taking the difference of the minimal number of beads of both
-            % sides. 
+            % sides.
             fNames = {'rep1','rep2','average'};
             d = zeros(obj.beadData.numBeads,numel(fNames));
             meanDiff = zeros(1,numel(fNames));
             for fIdx = 1:numel(fNames)
-              for bIdx = 1:numel(obj.beadData.encounterData.twoSides.(fNames{fIdx})(:,1))
-                % find the end with the least number of beads 
-                [~,m] = min([numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1}),...
-                             numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2})]);
-                numPoints = numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,m});
-                
-                if ~isempty(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1})
+                for bIdx = 1:numel(obj.beadData.encounterData.twoSides.(fNames{fIdx})(:,1))
+                    % find the end with the least number of beads
+                    [~,m] = min([numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1}),...
+                        numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2})]);
+                    numPoints = numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,m});
                     
-                    pLeft = obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1}(1:numPoints);
-                    pLeft = pLeft./sum(pLeft);
-                   
-                    pRight = obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2}(1:numPoints);
-                    pRight = pRight./sum(pRight);% get prob by normalizeing 
-
-                    d(bIdx,fIdx) = mean(pLeft-pRight);
-                else
-                    d(bIdx,fIdx) = NaN;
+                    if ~isempty(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1})
+                        
+                        pLeft = obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1}(1:numPoints);
+                        pLeft = pLeft./sum(pLeft);
+                        
+                        pRight = obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2}(1:numPoints);
+                        pRight = pRight./sum(pRight);% get prob by normalizeing
+                        
+                        d(bIdx,fIdx) = mean(pLeft-pRight);
+                    else
+                        d(bIdx,fIdx) = NaN;
+                    end
                 end
-            end
-            
-            meanDiff(fIdx) = mean(d(~isnan(d(:,fIdx)),fIdx));
-            
-            f(fIdx) = figure;            
-            ax(fIdx) = axes('Parent',f(fIdx),'NextPlot','Add');
-            
-            % plot the mean prob difference of the two sides for each bead
-            line('XData',1:obj.beadData.numBeads,...
-                 'YData',d(:,fIdx),'Linewidth',3,...
-                 'Parent',ax(fIdx),...
-                 'DisplayName','two-sided encounter Prob diff.',...
-                 'Color','b')            
-            % plot the mean prob difference of the two sides for all beads  
-            line('XData',[1,numel(d(:,fIdx))],...
-                 'YData',meanDiff(fIdx)*ones(1,2),...
-                 'Color','r',...
-                 'LineWidth',3,...
-                 'Parent',ax(fIdx),...
-                 'DisplayName','mean prob diff')
-             
-            xlabel('Bead number','FontSize',16);
-            ylabel('mean encounter prob. difference','FontSize',16);
-            title(fNames{fIdx},'Fontsize',16)
-            set(gca,'Fontsize',16)
-            legend(get(ax(fIdx),'Children'));
+                
+                meanDiff(fIdx) = mean(d(~isnan(d(:,fIdx)),fIdx));
+                
+                f(fIdx) = figure;
+                ax(fIdx) = axes('Parent',f(fIdx),'NextPlot','Add');
+                
+                % plot the mean prob difference of the two sides for each bead
+                line('XData',1:obj.beadData.numBeads,...
+                    'YData',d(:,fIdx),'Linewidth',3,...
+                    'Parent',ax(fIdx),...
+                    'DisplayName','two-sided encounter Prob diff.',...
+                    'Color','b')
+                % plot the mean prob difference of the two sides for all beads
+                line('XData',[1,numel(d(:,fIdx))],...
+                    'YData',meanDiff(fIdx)*ones(1,2),...
+                    'Color','r',...
+                    'LineWidth',3,...
+                    'Parent',ax(fIdx),...
+                    'DisplayName','mean prob diff')
+                
+                xlabel('Bead number','FontSize',16);
+                ylabel('mean encounter prob. difference','FontSize',16);
+                title(fNames{fIdx},'Fontsize',16)
+                set(gca,'Fontsize',16)
+                legend(get(ax(fIdx),'Children'));
             end
             
         end
@@ -774,37 +792,37 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         function fitRStruct = NewFitResultsStruct()
-            % create a new fitting structure to hold results 
+            % create a new fitting structure to hold results
             fitRStruct = struct('bias',[],...
-                                'exp',[],...
-                                'gof',[],...
-                                'beadDist',[],...
-                                'encounterNumber',[],...
-                                'encounterProb', [],...
-                                'functionValues',[],...
-                                'existInDb',[],...
-                                'model',[]);
+                'exp',[],...
+                'gof',[],...
+                'beadDist',[],...
+                'encounterNumber',[],...
+                'encounterProb', [],...
+                'functionValues',[],...
+                'existInDb',[],...
+                'model',[]);
         end
         
         function valsOut = model(x,encounterData)%unused
-            % this si the SSD of the fitted parameters 
+            % this si the SSD of the fitted parameters
             % encounterData is a two column vector. the first column is the
             % encounter frequencies, the second is the index of included
-            % beads. 
+            % beads.
             % encounterData(:,1) - log(encounter frequencies)
             % encounterData(:,2) - log(included bead indices)
-            % x(1) - is the bias 
-            % x(2) - is the slope 
+            % x(1) - is the bias
+            % x(2) - is the slope
             logBeadDist      = encounterData(:,2);
             logEncounterFreq = encounterData(:,1);
             valsOut = (sum((x(1)-x(2)*logBeadDist-logEncounterFreq).^2));
         end
         
         function [valInEq, valEq] = modelConstraint(x,includedBeads)
-            % constrain of the fitted model 
+            % constrain of the fitted model
             % we wish the sum of elements to be one
             logBeadDist = includedBeads;
-            valEq       = sum(exp(x(1)-x(2)*logBeadDist))-1;% *numel(includedBeads)-x(2)*sum((includedBeads))-1;            
+            valEq       = sum(exp(x(1)-x(2)*logBeadDist))-1;% *numel(includedBeads)-x(2)*sum((includedBeads))-1;
             valInEq     = valEq;
         end
     end
