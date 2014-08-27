@@ -1,4 +1,8 @@
 classdef SimpleRouseFramework<handle
+    % this is a framework to run and analyze the results of a simple rouse
+    % chain 
+    %TODO: finish the connection by Brownian bridge function 
+    
     properties
         params
         beadDistance
@@ -265,12 +269,13 @@ classdef SimpleRouseFramework<handle
                 %                 obj.fOptions.Weights = obj.meanEncounterProbability(1,:,pIdx)~=0;
                 %                 [obj.fitResults.mean{pIdx}, ~] = fit(dists,obj.meanEncounterProbability(1,:,pIdx)',obj.fitModel,...
                 %                     obj.fOptions);
+%                 places = obj.meanEncounterProbability(1,:,rIdx)~=0;
                 f =@(b)sum(((1/sum((dists).^(-b)))*(dists).^(-b)-obj.meanEncounterProbability(1,:,rIdx)').^2);
+                % set zero weights to points with no data 
+                
                 [obj.fitResults.mean{rIdx}.b] = fminbnd(f,0.2,2.2,obj.fOptions);
                 %                 obj.fOptions.Weights = [];
-            end
-            
-            
+            end            
         end
         
         function FitBeadEncounterProbability(obj)
@@ -284,6 +289,7 @@ classdef SimpleRouseFramework<handle
                     k2 = numel(1:numel(1:bIdx-1));
                     minK = min([k1,k2]);
                     numPts = obj.params.numBeads-1-minK;% take as many points as there is data available (omit lagging zeros)
+                    
                     %                 [beadFit, gof] = fit(dists,obj.beadEncounterProbability(bIdx,:,pIdx)',obj.fitModel,obj.fOptions);
                     f = @(b)sum((((1/sum((dists(1:numPts)).^(-b)))*(dists(1:numPts)).^(-b))-obj.beadEncounterProbability(bIdx,1:numPts,pIdx)').^2);
                     e = fminbnd(f,0.2,2.2,obj.fOptions);
@@ -298,18 +304,23 @@ classdef SimpleRouseFramework<handle
         function DisplayFittedExponents(obj)
             % Display the values of beta obtained for each bead in each
             % round
-            f = figure('FileName','fittedExp');
-            a = axes('Parent',f,'NextPlot','Add','FontSize',16);
+            f = figure('Name','fittedExp','FileName','fittedExp');
+            a = axes('Parent',f,'NextPlot','Add','FontSize',40);
+            title(a,'Fitted \beta values','FontSize',40);
             for rIdx = 1:obj.params.numRounds           
              line('XData',1:obj.params.numBeads,...
                   'YData',obj.fitResults.bead.fittedExp(:,rIdx),...
                   'Marker','.',...
+                  'LineWidth',7,...
+                  'Color',0.9*rand(1,3),...
                   'Parent',a,...
                   'DisplayName',['Experiment ', num2str(rIdx)]);
             end
             
-            xlabel(a,'Bead Number');
-            ylabel(a,'Fitted exponent');
+            xlabel(a,'Bead Number','FontSize',40);
+            ylabel(a,'Fitted \beta','FontSize',40);
+            l = legend(flipud(get(a,'children')));
+            set(l,'FontSize',30);
         end
         
         function DisplayBeadDataFit(obj,beadRange)
@@ -322,8 +333,9 @@ classdef SimpleRouseFramework<handle
             
             
             for rIdx = 1:obj.params.numRounds
-                f = figure('FileName',sprintf('%s%s','BeadDataFit_Experiment',num2str(rIdx)));
-                a(rIdx)= axes('NextPlot','Add','FontSize', 30,'Parent',f);% create axes                
+                figName = sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx));
+                f = figure('Name',figName,'FileName',figName);
+                a(rIdx)= axes('NextPlot','Add','FontSize', 40,'Parent',f);% create axes                
                 dists = 1:obj.params.numBeads-1;
                 for bIdx = 1:numel(beadRange)
                     lineColor = rand(1,3);
@@ -346,20 +358,26 @@ classdef SimpleRouseFramework<handle
                     % display expected model
                 line('XData',dists,...
                     'YData',(1/sum(dists.^(-1.5)))*dists.^(-1.5),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
-                    'LineWidth',3,...
                     'Color','r',...
                     'Parent',a(rIdx),...
                     'DisplayName','Theoretical encounter \beta=1.5',...
                     'LineWidth',5)
-                xlabel(a(rIdx),'Bead distance');
-                ylabel(a(rIdx),'Encounter prob');
+                
+                title(a(rIdx),sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx)),'FontSize',40)
+                xlabel(a(rIdx),'Bead distance','FontSize',40);
+                ylabel(a(rIdx),'Encounter prob','Fontsize',40);
             end
         end
         
         function DisplayMeanEncounterProbability(obj)
-            f = figure('FileName','meanEncounterProbability') ;
-            title('Mean Encounter Prob','FontSize',16);
-            a = axes('Parent',f,'NextPlot','Add');
+            f = figure('Name','meanEncounterProbability',...
+                       'FileName','meanEncounterProbability') ;
+            a = axes('Parent',f,'NextPlot','Add','FontSize',40);
+            
+            title(a,'Mean Encounter Prob','FontSize',40);
+            xlabel(a,'Distance [bead]','FontSize',40);
+            ylabel(a,'Encounter Prob.','FontSize',40);
+            
             dists = (1:obj.params.numBeads-1)';
             for rIdx = 1:obj.params.numRounds
                 c = rand(1,3);
@@ -385,16 +403,20 @@ classdef SimpleRouseFramework<handle
                 'Parent',a,...
                 'LineWidth',5,...
                 'DisplayName','Theoretical encounter \beta=1.5')
+           l= legend(flipud(get(a,'Children')));
+           set(l,'FontSize',18);
+
         end
         
         function DisplayEncounterHistograms(obj)
             
             for rIdx = 1:obj.params.numRounds
-                figure, imagesc(obj.encounterHistogram(:,:,rIdx)), colormap hot
-                title(sprintf('%s%d','Experiment ', rIdx),'FontSize',30);                
-                xlabel('Bead number','FontSize',25);
-                ylabel('BeadNumber','FontSize', 25);
-                set(gca,'FontSize',25);
+                figure('Name',['Experiment',num2str(rIdx)],'FileName',['EncounterHistogramExperiment',num2str(rIdx)]);
+                imagesc(obj.encounterHistogram(:,:,rIdx)), colormap hot
+                title(sprintf('%s%d','Experiment ', rIdx),'FontSize',40); 
+                xlabel('Bead number','FontSize',40);
+                ylabel('BeadNumber','FontSize', 40);
+                set(gca,'FontSize',40);
             end
             
         end

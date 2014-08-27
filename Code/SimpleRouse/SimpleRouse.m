@@ -88,10 +88,32 @@ classdef SimpleRouse<handle
             for bIdx = 2:obj.params.numBeads
                 obj.position.prev(bIdx,:) = obj.position.prev(bIdx-1,:)+ r(bIdx,:)*0.7*obj.params.b./norm(r(bIdx,:));
             end
+%             obj.CreateLoopsByBrownianBridge;
+            
             obj.savedPosition(:,:,obj.step) = obj.position.prev;
             obj.GetBeadsDist;
         end
         
+        function CreateLoopsByBrownianBridge(obj)%[unfinished]
+            % if connected beads are define, change bead locations by
+            % bridging the connected beads by a Brownian beads. This should
+            % save some running time 
+            if ~isempty(obj.params.connectedBeads)
+                % sort the loops according to size
+                % start with the biggest loop and sequentially bridge all
+                % connectors 
+                loopSize = obj.params.connectedBeads(:,2)-obj.params.connectedBeads(:,1);
+                [~, loopInds] = sort(loopSize,'Descend');
+                for lIdx = 1:numel(loopsInds)
+                    posStart = obj.position.prev(obj.params.connectedBeads(loopInds(lIdx),1),:);
+                    posEnd   = obj.position.prev(obj.params.connectedBeads(loopInds(lIdx),2),:);
+                    % replace all the path between the connected beads 
+ 
+                end
+                
+            end
+        end
+            
         function CreateControls(obj)
             if obj.params.plot
                 obj.handles.graphical.mainFigure = figure('Name','RouseSimulation',...

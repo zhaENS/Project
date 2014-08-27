@@ -1,8 +1,9 @@
 <description> In this simulation we create one big fixed loop and sequentially add internal connectors in it  </description>
 <func> SetRecipeParams </func>
+% re-set parameters just to make sure they are ok
 obj.params.numBeads       = 64;
-obj.params.connectedBeads = [15 50];% this is the fixed loop
 rouseParams.saveBeadDist  = 'last';
+rouseParams.recordPath    = false;
 
 <func> PreSimulationBatchActions </func>
 % actions before each simulation batch
@@ -10,12 +11,14 @@ rouseParams.saveBeadDist  = 'last';
 
 <func> PreRunActions </func>
 % actions performed before each simulation 
+if obj.round>1 % the first round is the control 
 % choose the bead pairs 
 obj.params.connectedBeads = [15 50];% this is the fixed loop
 loopRange = [obj.params.connectedBeads(1)+1:obj.params.connectedBeads(2)-1];
 r         = randperm(numel(loopRange));
 for rIdx = 1:obj.round-1
  obj.params.connectedBeads(1+rIdx,1:2) = loopRange(r(2*rIdx-1:2*rIdx));
+end
 end
 
 % actions before each simulation 
