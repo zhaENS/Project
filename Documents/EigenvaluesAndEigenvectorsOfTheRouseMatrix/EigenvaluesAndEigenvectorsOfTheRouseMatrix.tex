@@ -6,7 +6,7 @@
 \usepackage{color}
 \usepackage{float}
 \begin{document}
-\section{Eigenvalues}\label{eigenvalues}
+\section{Eigenvalues of the Rouse Matrix}\label{eigenvaluesOfTheRouseMatrix}
 In this document we derive the eigenvalues of the Rouse matrix. The Rouse matrix defines the connection in the harmonic potential of the Rouse polymer. The system of differential equation governing the dynamics of the chain comprised of $N$ monomers is 
 \begin{equation}
 \frac{d[X(t)]}{dt}=-k[R][X(t)]+[g(t)]
@@ -138,7 +138,7 @@ The eigenvalues are then
 \end{equation*}
 $p=0,1,...,(N-1)$.
 
-\section{Eigenvectors}
+\section{Eigenvectors of the Rouse Matrix}\label{eigenvectorsOfTheRouseMatrix}
 the $k^{th}$ entry in the $p^{th}$ eigenvector is 
 
 \begin{equation*}
@@ -148,7 +148,7 @@ c_k = \sqrt{\frac{2}{N}}\sin(\frac{k\pi p}{N})
 with $k=1,2,..,N$ and $p=0,1,...N-1$
 
 \section{Eigenvalues of the Rouse Ring}\label{eigenvaluesRouseRing}
-Connecting bead 1 and $N$ to form a ring, we now search for the eigenvalues of the new Rouse matrix, $R$, harboring the connection betwen 1 and $N$. For this end, we have to find the determinant of the matrix
+Connecting bead 1 and $N$ to form a ring, we now search for the eigenvalues of the new \textit{Rouse ring} matrix, $R$, harboring such a connection. For this end, we have to calculate the determinant of the matrix
 \begin{equation*}
 D_N=|R-\lambda I|=\left|
 \begin{matrix}
@@ -168,7 +168,7 @@ with $x=2-\lambda$. We can apply to the matrix of size $(N-1)\times (N-1)$ the s
 \begin{equation*}
 D_1 = x; D_2 = x^2-1
 \end{equation*}
-According to the solution in section \ref{eigenvalues} and in \cite{lin2011polymer}, we have 
+According to the solution in section \ref{eigenvaluesOfTheRouseMatrix} and in \cite{lin2011polymer}, we have 
 \begin{equation*}
 D_{N-1}= \frac{\sin(N\theta)}{\sin(\theta)}
 \end{equation*}
@@ -239,9 +239,33 @@ Therefore, the eigenvalues of the Rouse ring are
 \end{equation*}
 Since $\cos(\frac{2\pi \phi}{N})=\cos(\frac{2\pi(N-\phi)}{N})$, we have eigenvalues multiplicities. In our case, setting $\phi=p$ we have $\cos(\frac{2\pi p}{N})=\cos(\frac{2\pi(N-p)}{N})$ for $p=1,2,3,..,(N-2)$. For the end-values, $p=0$ and $p=N-1$ the eigenvalues are unique. 
 
+\section{Eigenvectors of the Rouse Ring}\label{eigenvectorsOfTheRouseRing}
+From the relation $Rv=\lambda v$ where $v$  is an eigenvector.
+We have the recursion relation for $j=2,...,N-1$
+\begin{equation*}
+v_j = \frac{v_{j-1}+v_{j+1}}{2\cos(\theta)}
+\end{equation*}
+The boundary conditions are 
+\begin{equation*}
+v_1 = \frac{v_2+v_N}{2\cos(\theta)},\quad v_N = \frac{v_1+v_{N-1}}{2\cos(\theta)}
+\end{equation*}
+Rearranging the terms for $v_1$ and $v_N$
+\begin{equation*}
+v_1 = \left[v_2+\frac{2v_{N-1}\cos(\theta)+v_2}{4\cos^2(\theta)-1}\right]/2\cos(\theta),\quad v_N = \frac{2v_{N-1}\cos(\theta)+v_2}{4\cos^2(\theta)-1}
+\end{equation*}
+where, again, we have used the relation $2-\lambda = 2\cos(\theta)$, resulting from substituting the particular solution $v_j=e^{ij\theta}$ into the recursion relation for $v_j$. 
 
-
-
+The general solution can be written as $v_j=Ae^{ij\theta}+Be^{-ij\theta}$. substituting into the terms of the boundary conditions, we get 
+\begin{equation*}
+Ae^{i\theta}+Be^{-i\theta}=\left[Ae^{2i\theta}+Be^{-2i\theta}+\frac{2\cos(\theta)[Ae^{i(N-1)\theta}+Be^{-i(N-1)\theta}]+Ae^{2i\theta}+Be^{-2i\theta}}{4\cos^2(\theta)-1}\right]/2\cos(\theta)
+\end{equation*}
+we get 
+\begin{equation*}
+A\left[e^{i\theta}-\frac{e^{2i\theta}}{2\cos(\theta)}-\frac{e^{i(N-1)\theta}}{4\cos^2(\theta)-1}-\frac{e^{2i\theta}}{2\cos(\theta)(4\cos^2(\theta)-1)}\right]=
+\end{equation*}
+\begin{equation*}
+B\left[-e^{-i\theta}+\frac{e^{-2i\theta}}{2\cos(\theta)} +\frac{e^{-i(N-1)\theta}}{4\cos^2(\theta)-1}+\frac{e^{-2i\theta}}{2\cos(\theta)(4\cos^2(\theta)-1)}\right]
+\end{equation*}
   
 % Bibliography  
 \bibliographystyle{plain}
