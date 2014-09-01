@@ -1,6 +1,6 @@
 \BOOKMARK [1][-]{section.1}{The Topologically associating domains \(TADs\)}{}% 1
 \BOOKMARK [2][-]{subsection.1.1}{A short review of the 5C method}{section.1}% 2
-\BOOKMARK [1][-]{section.2}{The Data}{}% 3
+\BOOKMARK [1][-]{section.2}{The Experimental Data}{}% 3
 \BOOKMARK [2][-]{subsection.2.1}{Coarse-graining of the data}{section.2}% 4
 \BOOKMARK [2][-]{subsection.2.2}{The encounter matrix}{section.2}% 5
 \BOOKMARK [1][-]{section.3}{Analysis of the data}{}% 6
@@ -28,4 +28,5 @@
 \BOOKMARK [2][-]{subsection.4.11}{Simulating the conditional encounter probability}{section.4}% 28
 \BOOKMARK [2][-]{subsection.4.12}{simulating the effect of increasing the encounter distance}{section.4}% 29
 \BOOKMARK [1][-]{section.5}{Review Of Literature}{}% 30
-\BOOKMARK [2][-]{subsection.5.1}{From Nora et.al 2012, Vol 485}{section.5}% 31
+\BOOKMARK [2][-]{subsection.5.1}{From Nora et.al 2012 nora2012spatial}{section.5}% 31
+\BOOKMARK [2][-]{subsection.5.2}{From Dekker et al 2013 dekker2013exploring}{section.5}% 32

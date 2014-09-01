@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+
+\bibitem{de2012decade}
+Elzo de~Wit and Wouter de~Laat.
+\newblock A decade of 3c technologies: insights into nuclear organization.
+\newblock {\em Genes \& development}, 26(1):11--24, 2012.
+
+\bibitem{dekker2013exploring}
+Job Dekker, Marc~A Marti-Renom, and Leonid~A Mirny.
+\newblock Exploring the three-dimensional organization of genomes: interpreting
+  chromatin interaction data.
+\newblock {\em Nature Reviews Genetics}, 14(6):390--403, 2013.
+
+\bibitem{dekker2002capturing}
+Job Dekker, Karsten Rippe, Martijn Dekker, and Nancy Kleckner.
+\newblock Capturing chromosome conformation.
+\newblock {\em science}, 295(5558):1306--1311, 2002.
+
+\bibitem{dostie2006chromosome}
+Jos{\'e}e Dostie, Todd~A Richmond, Ramy~A Arnaout, Rebecca~R Selzer, William~L
+  Lee, Tracey~A Honan, Eric~D Rubio, Anton Krumm, Justin Lamb, Chad Nusbaum,
+  et~al.
+\newblock Chromosome conformation capture carbon copy (5c): a massively
+  parallel solution for mapping interactions between genomic elements.
+\newblock {\em Genome research}, 16(10):1299--1309, 2006.
+
+\bibitem{giorgetti2014predictive}
+Luca Giorgetti, Rafael Galupa, Elph{\`e}ge~P Nora, Tristan Piolot, France Lam,
+  Job Dekker, Guido Tiana, and Edith Heard.
+\newblock Predictive polymer modeling reveals coupled fluctuations in
+  chromosome conformation and transcription.
+\newblock {\em Cell}, 157(4):950--963, 2014.
+
+\bibitem{nora2012spatial}
+Elph{\`e}ge~P Nora, Bryan~R Lajoie, Edda~G Schulz, Luca Giorgetti, Ikuhiro
+  Okamoto, Nicolas Servant, Tristan Piolot, Nynke~L van Berkum, Johannes
+  Meisig, John Sedat, et~al.
+\newblock Spatial partitioning of the regulatory landscape of the
+  x-inactivation centre.
+\newblock {\em Nature}, 485(7398):381--385, 2012.
+
+\end{thebibliography}
