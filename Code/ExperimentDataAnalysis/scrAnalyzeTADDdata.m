@@ -1,4 +1,4 @@
-% scrAnalyzeTADDdata
+% scrAnalyzeTADDdata %OBSOLETE
 % Analyze the data for TAD D alone.
 close all
 axesScale    = 'log'; % options [Linear\log];
