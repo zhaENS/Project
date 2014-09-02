@@ -43,6 +43,7 @@ From the supplementary material of the article by \href{http://www.sciencemag.or
 \item Roughly $10^8$ intact nuclei are isolated
 \item Nuclei are \href{http://en.wikipedia.org/wiki/Crosslinking_of_DNA}{cross-linked} by using $1\%$
 \href{http://en.wikipedia.org/wiki/Formaldehyde}{formaldehyde} or its relative paraformaldehyde for 10 minutes, which induces protein-protein and DNA-protein cross-linking. The cross-link is made by formaldehyde in the guanine nucleotide, between DNA-bound proteins and the nucleotide. 
+\item the cross-linking distance is between $10-100nm$ \cite{dekker2013exploring}
 \item All non cross-linked proteins are removed.  It is important to note that the DNA is purified only After the cross-links were made.
 \item A site-specific restriction enzyme (ECOr or HindIII, 6bp cuter) is used to digest the cross-linked DNA for 1 hour. 
 \item The restriction enzymes are inactivated using SDS and incubation for 20 minutes.
@@ -520,6 +521,47 @@ The bond length was set to $b=0.1$, the encounter distance was set to increase f
 \end{itemize}
 
 \subsection{From Dekker et al 2013 \cite{dekker2013exploring}}
+\begin{enumerate}
+\item This is a review of methods to analyze Chromosome Capture data and to infer mechanical properties of the DNA.
+\item The 3C methods determines the encounter frequency of genomic segments, probably in the range of $10-100nm$
+\item Chromosome are highly variable among cells \cite{muller2010stable}
+\item There are some organizational principals at the scale of the whole nucleus
+\item chromosomes occupy separate territories that do not usually mix\cite{marshall1997interphase}. When they do mix, they can potentially create functional interactions between loci on different chromosomes. 
+\item transcription does not occur diffusively throughout the nucleus, but happen at sub-nuclear sites enriched in components of the transcription and RNA processing machinery.
+\item Therefore, actively transcribed genes tend to co-localize
+\item transcriptionally inactive segments tend to associate with each other and can often be found localized at the nuclear periphery
+\item sub-nuclear positioning of the loci is correlated with gene expression
+\item imaging approaches do not allow analysis of the 3D folding of a complete genome at the kb resolution. 
+\item the 3C based methods do not distinguish functional from non-functional association of loci
+\item the loci encounter frequency is affected by \begin{enumerate}
+\item direct loci encounter
+\item encounters mediated by proteins
+\item indirect co-localization to the same sub-nuclear structure (e.g lamina)
+\item result of chromosome packing and folding 
+\item random encounters
+\item interactions defined by the polymer physical characteristics
+\end{enumerate}
+\item the 3D chromatin is highly variable even among identical cells\cite{marshall1997interphase}.
+\item analytical tools to interpret the 3c data focus first on specific point by-point looping interactions, e.g. between promoters and gene regulatory elements
+\item in previous article, thousands of long range ($>4mb$) interactions were identified between promoters and enhancer-like regions \cite{sanyal2012long}
+\item one abundant class of long range interaction involves promoters looping to sites bound by the \href{http://en.wikipedia.org/wiki/Insulator_(genetics)}{insulator protein} \href{http://en.wikipedia.org/wiki/CTCF}{CTCF}. The hypothesis is that these looping events have architectural role. 
+\item genes are regulated by multiple distal elements \cite{gerstein2012architecture}
+\item average pattern of looping interactions around promoters is asymmetric. Looping interaction are most frequently observed $\sim120kn$ upstream
+\item human and mouse genome are each composed of over 2000 TADs covering $90\%$ of the genome.
+\item TADs are defined by genetically encoded boundary elements \cite{nora2012spatial}.
+\item boundary elements are enriched with CTCF-bound loci
+\item the mechanisms that establish TAD boundaries are still unclear. 
+\item analysis of mouse genome suggests tat enhancer-promoter interactions are particularly frequent within TADs \cite{shen2012map}
+\item genes within the same TAD tend to be coordinately expressed during cell differentiation \cite{nora2012spatial}. Possibly because those genes share the same set of regulatory elements. 
+\item the 3D structure of the Igh locus was inferred by polymer modeling and genome tagging to give discrete areas of looping \cite{jhunjhunwala20083d}.
+\item the 3D structure of bacterial genome was determined by a combination of 5C data, imaging and modeling \cite{umbarger2011three}
+\item in yeast it was demonstrated that a small set of spatial constraints is sufficient to yield a highly organized genome structure, i.e volume exclusion \cite{tjong2012physical}
+\item HiC data shows lack of specific interactions for loci $>1Mb$ apart
+\item HiC data for non-synchronized human cells show 3 regimes, each exhibiting a power law decline in the contact probability $P(s)\sim s^{-\alpha}$. for $s<0.7Mb$ $\alpha\approx0.7$, corresponding to the TADs. For $0.7Mb<s<10Mb$, $\alpha\approx1$. For $s>10Mb$, $\alpha$ is not well measures due to poor statistics \cite{lieberman2009comprehensive}.
+\item a polymer model with excluded volume can give rise to an encounter probability with $\alpha=1$
+\item 
+
+\end{enumerate}
 
 % Bibliography  
 \bibliographystyle{plain}

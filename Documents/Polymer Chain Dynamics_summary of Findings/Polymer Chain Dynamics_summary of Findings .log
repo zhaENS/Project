@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  1 SEP 2014 20:12
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  2 SEP 2014 13:33
 entering extended mode
 **Polymer*Chain*Dynamics_summary*of*Findings*.tex
 
@@ -382,32 +382,34 @@ Overfull \hbox (29.00954pt too wide) in paragraph at lines 44--46
 or its rel-a-tive paraformalde-
  []
 
-<3Cschematic.jpg, id=222, 465.23813pt x 298.11375pt>
+<3Cschematic.jpg, id=223, 465.23813pt x 298.11375pt>
 File: 3Cschematic.jpg Graphic file (type jpg)
  <use 3Cschematic.jpg>
-Package pdftex.def Info: 3Cschematic.jpg used on input line 58.
+Package pdftex.def Info: 3Cschematic.jpg used on input line 59.
 (pdftex.def)             Requested size: 186.09195pt x 119.24338pt.
 
 Overfull \vbox (0.84998pt too high) has occurred while \output is active []
 
 
-[4pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
-has been already used, duplicate ignored
+[4]
+Missing character: There is no â in font cmr12!
+Missing character: There is no € in font cmr12!
+Missing character: There is no ™ in font cmr12!
+Missing character: There is no â in font cmr12!
+Missing character: There is no € in font cmr12!
+Missing character: There is no ™ in font cmr12!
+Missing character: There is no â in font cmr12!
+Missing character: There is no € in font cmr12!
+Missing character: There is no ™ in font cmr12!
+ [5pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
+ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.66 
-      <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics
-_summary of Findings/3Cschematic.jpg>]
-Missing character: There is no â in font cmr12!
-Missing character: There is no € in font cmr12!
-Missing character: There is no ™ in font cmr12!
-Missing character: There is no â in font cmr12!
-Missing character: There is no € in font cmr12!
-Missing character: There is no ™ in font cmr12!
-Missing character: There is no â in font cmr12!
-Missing character: There is no € in font cmr12!
-Missing character: There is no ™ in font cmr12!
+l.78 \item E
+            ach restriction fragment in the region is assigned two indices $...
+ <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summ
+ary of Findings/3Cschematic.jpg>]
 Missing character: There is no â in font cmr12!
 Missing character: There is no € in font cmr12!
 Missing character: There is no ¦ in font cmr12!
@@ -417,30 +419,30 @@ Missing character: There is no ™ in font cmr12!
 Missing character: There is no â in font cmr12!
 Missing character: There is no € in font cmr12!
 Missing character: There is no ™ in font cmr12!
- [5] [6]
-<symmetryOfEncountersRep1.jpg, id=261, 563.10374pt x 421.575pt>
+ [6]
+<symmetryOfEncountersRep1.jpg, id=264, 563.10374pt x 421.575pt>
 File: symmetryOfEncountersRep1.jpg Graphic file (type jpg)
 
 <use symmetryOfEncountersRep1.jpg>
-Package pdftex.def Info: symmetryOfEncountersRep1.jpg used on input line 126.
+Package pdftex.def Info: symmetryOfEncountersRep1.jpg used on input line 127.
 (pdftex.def)             Requested size: 168.93242pt x 126.47346pt.
 
-<symmetryOfEncountersRep2.jpg, id=263, 563.10374pt x 421.575pt>
+<symmetryOfEncountersRep2.jpg, id=266, 563.10374pt x 421.575pt>
 File: symmetryOfEncountersRep2.jpg Graphic file (type jpg)
 
 <use symmetryOfEncountersRep2.jpg>
-Package pdftex.def Info: symmetryOfEncountersRep2.jpg used on input line 127.
+Package pdftex.def Info: symmetryOfEncountersRep2.jpg used on input line 128.
 (pdftex.def)             Requested size: 168.93242pt x 126.47346pt.
 
-<symmetryOfEncountersAverage.jpg, id=265, 563.10374pt x 421.575pt>
+<symmetryOfEncountersAverage.jpg, id=268, 563.10374pt x 421.575pt>
 File: symmetryOfEncountersAverage.jpg Graphic file (type jpg)
 
 <use symmetryOfEncountersAverage.jpg>
-Package pdftex.def Info: symmetryOfEncountersAverage.jpg used on input line 128
+Package pdftex.def Info: symmetryOfEncountersAverage.jpg used on input line 129
 .
 (pdftex.def)             Requested size: 168.93242pt x 126.47346pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--129
+Underfull \hbox (badness 10000) in paragraph at lines 127--130
 [][] []
  []
 
@@ -449,36 +451,36 @@ Underfull \hbox (badness 10000) in paragraph at lines 126--129
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.159 
+l.160 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/symmetryOfEncountersRep1.jpg> <D:/Ofir/Work/ENS/Polymer C
 hain Dynamics/Documents/Polymer Chain Dynamics_summary of Findings/symmetryOfEn
 countersRep2.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Ch
 ain Dynamics_summary of Findings/symmetryOfEncountersAverage.jpg>] [9]
-<EncounterFrequenciesByDistanceRep1.jpg, id=291, 1687.30376pt x 937.5025pt>
+<EncounterFrequenciesByDistanceRep1.jpg, id=293, 1687.30376pt x 937.5025pt>
 File: EncounterFrequenciesByDistanceRep1.jpg Graphic file (type jpg)
 
 <use EncounterFrequenciesByDistanceRep1.jpg>
 Package pdftex.def Info: EncounterFrequenciesByDistanceRep1.jpg used on input l
-ine 203.
+ine 204.
 (pdftex.def)             Requested size: 337.45477pt x 187.49718pt.
 
-<fittedExpValuesWithSplineRep1.jpg, id=295, 1687.30376pt x 937.5025pt>
+<fittedExpValuesWithSplineRep1.jpg, id=297, 1687.30376pt x 937.5025pt>
 File: fittedExpValuesWithSplineRep1.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineRep1.jpg>
 Package pdftex.def Info: fittedExpValuesWithSplineRep1.jpg used on input line 2
-09.
+10.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
 
-<fittedBiasValuesRep1.jpg, id=296, 1687.30376pt x 937.5025pt>
+<fittedBiasValuesRep1.jpg, id=298, 1687.30376pt x 937.5025pt>
 File: fittedBiasValuesRep1.jpg Graphic file (type jpg)
 
 <use fittedBiasValuesRep1.jpg>
-Package pdftex.def Info: fittedBiasValuesRep1.jpg used on input line 210.
+Package pdftex.def Info: fittedBiasValuesRep1.jpg used on input line 211.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 209--211
+Underfull \hbox (badness 10000) in paragraph at lines 210--212
 [][]
  []
 
@@ -487,67 +489,67 @@ Underfull \hbox (badness 10000) in paragraph at lines 209--211
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.214 
+l.215 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/EncounterFrequenciesByDistanceRep1.jpg>]
-<fittedExpVsFittedBias.jpg, id=309, 1687.30376pt x 937.5025pt>
+<fittedExpVsFittedBias.jpg, id=311, 1687.30376pt x 937.5025pt>
 File: fittedExpVsFittedBias.jpg Graphic file (type jpg)
 
 <use fittedExpVsFittedBias.jpg>
-Package pdftex.def Info: fittedExpVsFittedBias.jpg used on input line 219.
+Package pdftex.def Info: fittedExpVsFittedBias.jpg used on input line 220.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
  [11pdfTeX warning (ext4): destination with the same identifier (name{figure.6}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.223 
+l.224 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/fittedExpValuesWithSplineRep1.jpg> <D:/Ofir/Work/ENS/Poly
 mer Chain Dynamics/Documents/Polymer Chain Dynamics_summary of Findings/fittedB
 iasValuesRep1.jpg>]
-<diffFittedBiasVsModelBias.jpg, id=322, 1687.30376pt x 937.5025pt>
+<diffFittedBiasVsModelBias.jpg, id=324, 1687.30376pt x 937.5025pt>
 File: diffFittedBiasVsModelBias.jpg Graphic file (type jpg)
 
 <use diffFittedBiasVsModelBias.jpg>
-Package pdftex.def Info: diffFittedBiasVsModelBias.jpg used on input line 237.
+Package pdftex.def Info: diffFittedBiasVsModelBias.jpg used on input line 238.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
  [12pdfTeX warning (ext4): destination with the same identifier (name{figure.7}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.241 
+l.242 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/fittedExpVsFittedBias.jpg>]
-<diffFittedExpRep1.jpg, id=331, 1687.30376pt x 937.5025pt>
+<diffFittedExpRep1.jpg, id=333, 1687.30376pt x 937.5025pt>
 File: diffFittedExpRep1.jpg Graphic file (type jpg)
 
 <use diffFittedExpRep1.jpg>
-Package pdftex.def Info: diffFittedExpRep1.jpg used on input line 249.
+Package pdftex.def Info: diffFittedExpRep1.jpg used on input line 250.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
 
-<diffFittedBiasRep1.jpg, id=332, 1687.30376pt x 937.5025pt>
+<diffFittedBiasRep1.jpg, id=334, 1687.30376pt x 937.5025pt>
 File: diffFittedBiasRep1.jpg Graphic file (type jpg)
 
 <use diffFittedBiasRep1.jpg>
-Package pdftex.def Info: diffFittedBiasRep1.jpg used on input line 250.
+Package pdftex.def Info: diffFittedBiasRep1.jpg used on input line 251.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
 
-<normDiffFittedExpfittedBiasRep1.jpg, id=333, 1687.30376pt x 937.5025pt>
+<normDiffFittedExpfittedBiasRep1.jpg, id=335, 1687.30376pt x 937.5025pt>
 File: normDiffFittedExpfittedBiasRep1.jpg Graphic file (type jpg)
 
 <use normDiffFittedExpfittedBiasRep1.jpg>
 Package pdftex.def Info: normDiffFittedExpfittedBiasRep1.jpg used on input line
- 251.
+ 252.
 (pdftex.def)             Requested size: 253.08464pt x 140.61931pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 249--252
+Underfull \hbox (badness 10000) in paragraph at lines 250--253
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 249--252
+Underfull \hbox (badness 10000) in paragraph at lines 250--253
 []
  []
 
@@ -556,7 +558,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 249--252
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.255 
+l.256 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/diffFittedBiasVsModelBias.jpg>] [14pdfTeX warning (ext4):
  destination with the same identifier (name{figure.9}) has been already used, d
@@ -564,59 +566,59 @@ uplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.260 
+l.261 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/diffFittedExpRep1.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dy
 namics/Documents/Polymer Chain Dynamics_summary of Findings/diffFittedBiasRep1.
 jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_
 summary of Findings/normDiffFittedExpfittedBiasRep1.jpg>]
-<distanceMatrix64Beads.jpg, id=349, 655.44875pt x 464.73625pt>
+<distanceMatrix64Beads.jpg, id=351, 655.44875pt x 464.73625pt>
 File: distanceMatrix64Beads.jpg Graphic file (type jpg)
 
 <use distanceMatrix64Beads.jpg>
-Package pdftex.def Info: distanceMatrix64Beads.jpg used on input line 288.
+Package pdftex.def Info: distanceMatrix64Beads.jpg used on input line 289.
 (pdftex.def)             Requested size: 196.63614pt x 139.42194pt.
  [15]
-<rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg, id=359, 930.47626pt x 5
+<rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg, id=361, 930.47626pt x 5
 88.1975pt>
 File: rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg Graphic file (type 
 jpg)
  <use rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg>
 Package pdftex.def Info: rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg 
-used on input line 306.
+used on input line 307.
 (pdftex.def)             Requested size: 279.14502pt x 176.4606pt.
  [16pdfTeX warning (ext4): destination with the same identifier (name{figure.10
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.310 
+l.311 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/distanceMatrix64Beads.jpg>]
-<encounterMatrix64Beads.jpg, id=368, 598.235pt x 475.7775pt>
+<encounterMatrix64Beads.jpg, id=370, 598.235pt x 475.7775pt>
 File: encounterMatrix64Beads.jpg Graphic file (type jpg)
 
 <use encounterMatrix64Beads.jpg>
-Package pdftex.def Info: encounterMatrix64Beads.jpg used on input line 321.
+Package pdftex.def Info: encounterMatrix64Beads.jpg used on input line 322.
 (pdftex.def)             Requested size: 179.47188pt x 142.73434pt.
 
-<encounterFrequencyBead1WithFit.jpg, id=369, 762.85pt x 614.295pt>
+<encounterFrequencyBead1WithFit.jpg, id=371, 762.85pt x 614.295pt>
 File: encounterFrequencyBead1WithFit.jpg Graphic file (type jpg)
 
 <use encounterFrequencyBead1WithFit.jpg>
 Package pdftex.def Info: encounterFrequencyBead1WithFit.jpg used on input line 
-322.
+323.
 (pdftex.def)             Requested size: 228.85677pt x 184.28992pt.
 
-<encounterFrequencyBead1WithFitLogScale.jpg, id=370, 760.8425pt x 598.235pt>
+<encounterFrequencyBead1WithFitLogScale.jpg, id=372, 760.8425pt x 598.235pt>
 File: encounterFrequencyBead1WithFitLogScale.jpg Graphic file (type jpg)
 
 <use encounterFrequencyBead1WithFitLogScale.jpg>
 Package pdftex.def Info: encounterFrequencyBead1WithFitLogScale.jpg used on inp
-ut line 323.
+ut line 324.
 (pdftex.def)             Requested size: 228.2545pt x 179.47188pt.
 
-Overfull \hbox (20.93973pt too wide) in paragraph at lines 321--324
+Overfull \hbox (20.93973pt too wide) in paragraph at lines 322--325
 [][] []
  []
 
@@ -625,7 +627,7 @@ Overfull \hbox (20.93973pt too wide) in paragraph at lines 321--324
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.327 
+l.328 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg>]
 [18pdfTeX warning (ext4): destination with the same identifier (name{figure.12}
@@ -633,53 +635,53 @@ s_summary of Findings/rmsDistanceBead1ToBeads2To64AndTheoreticalResults.jpg>]
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.333 \end{equation}
+l.334 \end{equation}
                      <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer
  Chain Dynamics_summary of Findings/encounterMatrix64Beads.jpg> <D:/Ofir/Work/E
 NS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary of Findings/
 encounterFrequencyBead1WithFit.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Do
 cuments/Polymer Chain Dynamics_summary of Findings/encounterFrequencyBead1WithF
 itLogScale.jpg>]
-<distanceMatrix64BeadsConnect24And44.jpg, id=382, 766.865pt x 579.16376pt>
+<distanceMatrix64BeadsConnect24And44.jpg, id=384, 766.865pt x 579.16376pt>
 File: distanceMatrix64BeadsConnect24And44.jpg Graphic file (type jpg)
 
 <use distanceMatrix64BeadsConnect24And44.jpg>
 Package pdftex.def Info: distanceMatrix64BeadsConnect24And44.jpg used on input 
-line 341.
+line 342.
 (pdftex.def)             Requested size: 230.06128pt x 173.75046pt.
 
-<rmsMatrix64BeadsConnect24And44.jpg, id=383, 762.85pt x 580.1675pt>
+<rmsMatrix64BeadsConnect24And44.jpg, id=385, 762.85pt x 580.1675pt>
 File: rmsMatrix64BeadsConnect24And44.jpg Graphic file (type jpg)
 
 <use rmsMatrix64BeadsConnect24And44.jpg>
 Package pdftex.def Info: rmsMatrix64BeadsConnect24And44.jpg used on input line 
-342.
+343.
 (pdftex.def)             Requested size: 228.85677pt x 174.05157pt.
 
-Overfull \hbox (71.52913pt too wide) in paragraph at lines 341--343
+Overfull \hbox (71.52913pt too wide) in paragraph at lines 342--344
 [][] []
  []
 
 
-<crossectionAtRow24DistanceMatrix64BeadsConnect24And44.jpg, id=385, 752.8125pt 
+<crossectionAtRow24DistanceMatrix64BeadsConnect24And44.jpg, id=387, 752.8125pt 
 x 555.07375pt>
 File: crossectionAtRow24DistanceMatrix64BeadsConnect24And44.jpg Graphic file (t
 ype jpg)
  <use crossectionAtRow24DistanceMatrix64BeadsConnect24And44.jpg>
 Package pdftex.def Info: crossectionAtRow24DistanceMatrix64BeadsConnect24And44.
-jpg used on input line 349.
+jpg used on input line 350.
 (pdftex.def)             Requested size: 225.84549pt x 166.52339pt.
 
-<crossectionAtRow44DistanceMatrix64BeadsConnect24And44.jpg, id=386, 680.5425pt 
+<crossectionAtRow44DistanceMatrix64BeadsConnect24And44.jpg, id=388, 680.5425pt 
 x 515.9275pt>
 File: crossectionAtRow44DistanceMatrix64BeadsConnect24And44.jpg Graphic file (t
 ype jpg)
  <use crossectionAtRow44DistanceMatrix64BeadsConnect24And44.jpg>
 Package pdftex.def Info: crossectionAtRow44DistanceMatrix64BeadsConnect24And44.
-jpg used on input line 350.
+jpg used on input line 351.
 (pdftex.def)             Requested size: 217.77805pt x 165.10017pt.
 
-Overfull \hbox (56.23462pt too wide) in paragraph at lines 349--351
+Overfull \hbox (56.23462pt too wide) in paragraph at lines 350--352
 [][] []
  []
 
@@ -688,61 +690,61 @@ Overfull \hbox (56.23462pt too wide) in paragraph at lines 349--351
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.354 
+l.355 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/distanceMatrix64BeadsConnect24And44.jpg> <D:/Ofir/Work/EN
 S/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary of Findings/r
 msMatrix64BeadsConnect24And44.jpg>]
-<encounterFrequency64BeadsConnect24And44EncounterDist0_05.jpg, id=398, 607.2687
+<encounterFrequency64BeadsConnect24And44EncounterDist0_05.jpg, id=400, 607.2687
 5pt x 454.69875pt>
 File: encounterFrequency64BeadsConnect24And44EncounterDist0_05.jpg Graphic file
  (type jpg)
 
 <use encounterFrequency64BeadsConnect24And44EncounterDist0_05.jpg>
 Package pdftex.def Info: encounterFrequency64BeadsConnect24And44EncounterDist0_
-05.jpg used on input line 359.
+05.jpg used on input line 360.
 (pdftex.def)             Requested size: 121.4516pt x 90.93813pt.
 
-<encounterFrequency64BeadsConnect24And44EncounterDist0_1.jpg, id=399, 653.44125
+<encounterFrequency64BeadsConnect24And44EncounterDist0_1.jpg, id=401, 653.44125
 pt x 488.82625pt>
 File: encounterFrequency64BeadsConnect24And44EncounterDist0_1.jpg Graphic file 
 (type jpg)
 
 <use encounterFrequency64BeadsConnect24And44EncounterDist0_1.jpg>
 Package pdftex.def Info: encounterFrequency64BeadsConnect24And44EncounterDist0_
-1.jpg used on input line 360.
+1.jpg used on input line 361.
 (pdftex.def)             Requested size: 124.15512pt x 92.87794pt.
 
-<encounterFrequency64BeadsConnect24And44EncounterDist0_2.jpg, id=400, 716.6775p
+<encounterFrequency64BeadsConnect24And44EncounterDist0_2.jpg, id=402, 716.6775p
 t x 564.1075pt>
 File: encounterFrequency64BeadsConnect24And44EncounterDist0_2.jpg Graphic file 
 (type jpg)
 
 <use encounterFrequency64BeadsConnect24And44EncounterDist0_2.jpg>
 Package pdftex.def Info: encounterFrequency64BeadsConnect24And44EncounterDist0_
-2.jpg used on input line 361.
+2.jpg used on input line 362.
 (pdftex.def)             Requested size: 121.83356pt x 95.897pt.
 
-<encounterHistBead24connect24And44EncounterDist0_1.jpg, id=402, 872.25874pt x 5
+<encounterHistBead24connect24And44EncounterDist0_1.jpg, id=404, 872.25874pt x 5
 96.2275pt>
 File: encounterHistBead24connect24And44EncounterDist0_1.jpg Graphic file (type 
 jpg)
  <use encounterHistBead24connect24And44EncounterDist0_1.jpg>
 Package pdftex.def Info: encounterHistBead24connect24And44EncounterDist0_1.jpg 
-used on input line 368.
+used on input line 369.
 (pdftex.def)             Requested size: 348.89731pt x 238.48677pt.
  [20pdfTeX warning (ext4): destination with the same identifier (name{figure.14
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.372 
+l.373 
       pdfTeX warning (ext4): destination with the same identifier (name{figure.
 15}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.372 
+l.373 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/crossectionAtRow24DistanceMatrix64BeadsConnect24And44.jpg
 > <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_sum
@@ -753,13 +755,13 @@ fir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary of
  Findings/encounterFrequency64BeadsConnect24And44EncounterDist0_1.jpg> <D:/Ofir
 /Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary of Fi
 ndings/encounterFrequency64BeadsConnect24And44EncounterDist0_2.jpg>]
-<eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected.jpg, id=412, 930.47626pt
+<eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected.jpg, id=414, 930.47626pt
  x 588.1975pt>
 File: eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected.jpg Graphic file (t
 ype jpg)
  <use eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected.jpg>
 Package pdftex.def Info: eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected.
-jpg used on input line 382.
+jpg used on input line 383.
 (pdftex.def)             Requested size: 186.09195pt x 117.6374pt.
 
 [21pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
@@ -767,116 +769,116 @@ jpg used on input line 382.
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.386 
+l.387 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/encounterHistBead24connect24And44EncounterDist0_1.jpg>]
-<stableLoopModelVariableLoopNumber32Beads.jpg, id=419, 704.6325pt x 572.1375pt>
+<stableLoopModelVariableLoopNumber32Beads.jpg, id=421, 704.6325pt x 572.1375pt>
 File: stableLoopModelVariableLoopNumber32Beads.jpg Graphic file (type jpg)
 <use stableLoopModelVariableLoopNumber32Beads.jpg>
 Package pdftex.def Info: stableLoopModelVariableLoopNumber32Beads.jpg used on i
-nput line 391.
+nput line 392.
 (pdftex.def)             Requested size: 281.848pt x 228.85094pt.
  [22pdfTeX warning (ext4): destination with the same identifier (name{figure.17
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.395 
+l.396 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected.jpg
 >]
-<logBeadDistanceVsEncounterProbabilityVariableLoops32Beads.jpg, id=424, 945.532
+<logBeadDistanceVsEncounterProbabilityVariableLoops32Beads.jpg, id=426, 945.532
 5pt x 658.46pt>
 File: logBeadDistanceVsEncounterProbabilityVariableLoops32Beads.jpg Graphic fil
 e (type jpg)
 
 <use logBeadDistanceVsEncounterProbabilityVariableLoops32Beads.jpg>
 Package pdftex.def Info: logBeadDistanceVsEncounterProbabilityVariableLoops32Be
-ads.jpg used on input line 398.
+ads.jpg used on input line 399.
 (pdftex.def)             Requested size: 283.66194pt x 197.53952pt.
 
 <changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg, id=
-425, 628.3475pt x 483.8075pt>
+427, 628.3475pt x 483.8075pt>
 File: changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg
  Graphic file (type jpg)
 
 <use changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg>
 Package pdftex.def Info: changeOfExponentAsAfunctionOfLoopsStableLoopModelVaria
-bleLoops32Beads.jpg used on input line 404.
+bleLoops32Beads.jpg used on input line 405.
 (pdftex.def)             Requested size: 188.50569pt x 145.14337pt.
 [23pdfTeX warning (ext4): destination with the same identifier (name{figure.18}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.407 
+l.408 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/stableLoopModelVariableLoopNumber32Beads.jpg> <D:/Ofir/Wo
 rk/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary of Findi
 ngs/logBeadDistanceVsEncounterProbabilityVariableLoops32Beads.jpg>]
-<stableLoopModelVariableLoopNumber64Beads.jpg, id=432, 816.04875pt x 617.30624p
+<stableLoopModelVariableLoopNumber64Beads.jpg, id=434, 816.04875pt x 617.30624p
 t>
 File: stableLoopModelVariableLoopNumber64Beads.jpg Graphic file (type jpg)
  <use stableLoopModelVariableLoopNumber64Beads.jpg>
 Package pdftex.def Info: stableLoopModelVariableLoopNumber64Beads.jpg used on i
-nput line 412.
+nput line 413.
 (pdftex.def)             Requested size: 244.81651pt x 185.1933pt.
  [24 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_
 summary of Findings/changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLo
 ops32Beads.jpg>]
-<logBeadDistanceVsEncounterProbabilityVariableLoops64Beads.jpg, id=440, 1666.22
+<logBeadDistanceVsEncounterProbabilityVariableLoops64Beads.jpg, id=442, 1666.22
 5pt x 872.25874pt>
 File: logBeadDistanceVsEncounterProbabilityVariableLoops64Beads.jpg Graphic fil
 e (type jpg)
 
 <use logBeadDistanceVsEncounterProbabilityVariableLoops64Beads.jpg>
 Package pdftex.def Info: logBeadDistanceVsEncounterProbabilityVariableLoops64Be
-ads.jpg used on input line 421.
+ads.jpg used on input line 422.
 (pdftex.def)             Requested size: 333.23909pt x 174.44865pt.
 
 <changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads.jpg, id=
-441, 1360.08125pt x 872.25874pt>
+443, 1360.08125pt x 872.25874pt>
 File: changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads.jpg
  Graphic file (type jpg)
 
 <use changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads.jpg>
 Package pdftex.def Info: changeOfExponentAsAfunctionOfLoopsStableLoopModelVaria
-bleLoops64Beads.jpg used on input line 427.
+bleLoops64Beads.jpg used on input line 428.
 (pdftex.def)             Requested size: 204.00339pt x 130.83316pt.
 [25pdfTeX warning (ext4): destination with the same identifier (name{figure.19}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.431 \subsubsection
+l.432 \subsubsection
                     {Two TADs}pdfTeX warning (ext4): destination with the same 
 identifier (name{figure.20}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.431 \subsubsection
+l.432 \subsubsection
                     {Two TADs} <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documen
 ts/Polymer Chain Dynamics_summary of Findings/stableLoopModelVariableLoopNumber
 64Beads.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain D
 ynamics_summary of Findings/logBeadDistanceVsEncounterProbabilityVariableLoops6
 4Beads.jpg>]
-<encounterFrequency128beadsWithTadTransientModel.jpg, id=449, 808.01875pt x 601
+<encounterFrequency128beadsWithTadTransientModel.jpg, id=451, 808.01875pt x 601
 .24625pt>
 File: encounterFrequency128beadsWithTadTransientModel.jpg Graphic file (type jp
 g)
  <use encounterFrequency128beadsWithTadTransientModel.jpg>
 Package pdftex.def Info: encounterFrequency128beadsWithTadTransientModel.jpg us
-ed on input line 445.
+ed on input line 446.
 (pdftex.def)             Requested size: 161.60088pt x 120.24712pt.
 
-<encounterCrossectionBead12TransientLoopModelwithTheoreticalCurve.jpg, id=450, 
+<encounterCrossectionBead12TransientLoopModelwithTheoreticalCurve.jpg, id=452, 
 1038.88126pt x 630.355pt>
 File: encounterCrossectionBead12TransientLoopModelwithTheoreticalCurve.jpg Grap
 hic file (type jpg)
 
 <use encounterCrossectionBead12TransientLoopModelwithTheoreticalCurve.jpg>
 Package pdftex.def Info: encounterCrossectionBead12TransientLoopModelwithTheore
-ticalCurve.jpg used on input line 446.
+ticalCurve.jpg used on input line 447.
 (pdftex.def)             Requested size: 207.77257pt x 126.06876pt.
 
 [26pdfTeX warning (ext4): destination with the same identifier (name{figure.21}
@@ -884,25 +886,25 @@ ticalCurve.jpg used on input line 446.
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.449 
+l.450 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/changeOfExponentAsAfunctionOfLoopsStableLoopModelVariable
 Loops64Beads.jpg>]
-<encounterMatrix3cExperiment.jpg, id=455, 651.43375pt x 538.01pt>
+<encounterMatrix3cExperiment.jpg, id=457, 651.43375pt x 538.01pt>
 File: encounterMatrix3cExperiment.jpg Graphic file (type jpg)
 
 <use encounterMatrix3cExperiment.jpg>
-Package pdftex.def Info: encounterMatrix3cExperiment.jpg used on input line 460
+Package pdftex.def Info: encounterMatrix3cExperiment.jpg used on input line 461
 .
 (pdftex.def)             Requested size: 130.28444pt x 107.60008pt.
 
-<encounterProbabilityBead1OfThe3cSimulation128Beads.jpg, id=456, 1038.88126pt x
+<encounterProbabilityBead1OfThe3cSimulation128Beads.jpg, id=458, 1038.88126pt x
  630.355pt>
 File: encounterProbabilityBead1OfThe3cSimulation128Beads.jpg Graphic file (type
  jpg)
  <use encounterProbabilityBead1OfThe3cSimulation128Beads.jpg>
 Package pdftex.def Info: encounterProbabilityBead1OfThe3cSimulation128Beads.jpg
- used on input line 461.
+ used on input line 462.
 (pdftex.def)             Requested size: 207.77257pt x 126.06876pt.
 
 [27pdfTeX warning (ext4): destination with the same identifier (name{figure.22}
@@ -910,87 +912,88 @@ Package pdftex.def Info: encounterProbabilityBead1OfThe3cSimulation128Beads.jpg
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.464 
+l.465 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/encounterFrequency128beadsWithTadTransientModel.jpg> <D:/
 Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary o
 f Findings/encounterCrossectionBead12TransientLoopModelwithTheoreticalCurve.jpg
 >]
-<meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=465, 1687.30376pt x 8
+<meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=467, 1687.30376pt x 8
 94.34125pt>
 File: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg Graphic file (type j
 pg)
  <use meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg>
 Package pdftex.def Info: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg u
-sed on input line 474.
+sed on input line 475.
 (pdftex.def)             Requested size: 337.45477pt x 178.86508pt.
  [28pdfTeX warning (ext4): destination with the same identifier (name{figure.23
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.478 
+l.479 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/encounterMatrix3cExperiment.jpg> <D:/Ofir/Work/ENS/Polyme
 r Chain Dynamics/Documents/Polymer Chain Dynamics_summary of Findings/encounter
 ProbabilityBead1OfThe3cSimulation128Beads.jpg>]
-<conditionalEncounterProb32BeadsVaryBead2From2To31.jpg, id=472, 562.1pt x 421.5
+<conditionalEncounterProb32BeadsVaryBead2From2To31.jpg, id=474, 562.1pt x 421.5
 75pt>
 File: conditionalEncounterProb32BeadsVaryBead2From2To31.jpg Graphic file (type 
 jpg)
  <use conditionalEncounterProb32BeadsVaryBead2From2To31.jpg>
 Package pdftex.def Info: conditionalEncounterProb32BeadsVaryBead2From2To31.jpg 
-used on input line 483.
+used on input line 484.
 (pdftex.def)             Requested size: 168.6313pt x 126.47346pt.
  [29pdfTeX warning (ext4): destination with the same identifier (name{figure.24
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.491 
+l.492 
       pdfTeX warning (ext4): destination with the same identifier (name{figure.
 25}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.491 
+l.492 
        <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamic
 s_summary of Findings/meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg> <D:
 /Ofir/Work/ENS/Polymer Chain Dynamics/Documents/Polymer Chain Dynamics_summary 
 of Findings/conditionalEncounterProb32BeadsVaryBead2From2To31.jpg>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 496.
+(hyperref)                removing `\@ifnextchar' on input line 497.
 
 [30] [31]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 522.
+(hyperref)                removing `\@ifnextchar' on input line 523.
 
-
+[32] [33]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_summ
-ary of Findings\Polymer Chain Dynamics_summary of Findings .bbl")
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 527.
- [32]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 527.
+ary of Findings\Polymer Chain Dynamics_summary of Findings .bbl" [34] [35])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 569.
+
+[36]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 569.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_summ
 ary of Findings\Polymer Chain Dynamics_summary of Findings .aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 527.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 527.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 569.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 569.
 Package rerunfilecheck Info: File `Polymer*Chain*Dynamics_summary*of*Findings*.
 out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 527.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 569.
  ) 
 Here is how much of TeX's memory you used:
- 6488 strings out of 493921
- 100879 string characters out of 3144879
- 178296 words of memory out of 3000000
- 9557 multiletter control sequences out of 15000+200000
+ 6549 strings out of 493921
+ 101574 string characters out of 3144879
+ 178665 words of memory out of 3000000
+ 9567 multiletter control sequences out of 15000+200000
  14899 words of font info for 56 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 29i,10n,32p,958b,404s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29i,10n,32p,958b,484s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><d
 :/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><d:/P
@@ -1006,10 +1009,10 @@ KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files (x86)/MiKTeX 
 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on "Polymer Chain Dynamics_summary of Findings .pdf" (32 pages, 
-3081034 bytes).
+Output written on "Polymer Chain Dynamics_summary of Findings .pdf" (36 pages, 
+3101747 bytes).
 PDF statistics:
- 571 PDF objects out of 1000 (max. 8388607)
- 123 named destinations out of 1000 (max. 500000)
+ 658 PDF objects out of 1000 (max. 8388607)
+ 174 named destinations out of 1000 (max. 500000)
  487 words of extra memory for PDF output out of 10000 (max. 10000000)
 

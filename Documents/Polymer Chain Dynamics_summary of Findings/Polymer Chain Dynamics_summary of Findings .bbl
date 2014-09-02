@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{de2012decade}
 Elzo de~Wit and Wouter de~Laat.
@@ -24,12 +24,49 @@ Jos{\'e}e Dostie, Todd~A Richmond, Ramy~A Arnaout, Rebecca~R Selzer, William~L
   parallel solution for mapping interactions between genomic elements.
 \newblock {\em Genome research}, 16(10):1299--1309, 2006.
 
+\bibitem{gerstein2012architecture}
+Mark~B Gerstein, Anshul Kundaje, Manoj Hariharan, Stephen~G Landt, Koon-Kiu
+  Yan, Chao Cheng, Xinmeng~Jasmine Mu, Ekta Khurana, Joel Rozowsky, Roger
+  Alexander, et~al.
+\newblock Architecture of the human regulatory network derived from encode
+  data.
+\newblock {\em Nature}, 489(7414):91--100, 2012.
+
 \bibitem{giorgetti2014predictive}
 Luca Giorgetti, Rafael Galupa, Elph{\`e}ge~P Nora, Tristan Piolot, France Lam,
   Job Dekker, Guido Tiana, and Edith Heard.
 \newblock Predictive polymer modeling reveals coupled fluctuations in
   chromosome conformation and transcription.
 \newblock {\em Cell}, 157(4):950--963, 2014.
+
+\bibitem{jhunjhunwala20083d}
+Suchit Jhunjhunwala, Menno~C van Zelm, Mandy~M Peak, Steve Cutchin, Roy Riblet,
+  Jacques~JM van Dongen, Frank~G Grosveld, Tobias~A Knoch, and Cornelis Murre.
+\newblock The 3d structure of the immunoglobulin heavy-chain locus:
+  implications for long-range genomic interactions.
+\newblock {\em Cell}, 133(2):265--279, 2008.
+
+\bibitem{lieberman2009comprehensive}
+Erez Lieberman-Aiden, Nynke~L van Berkum, Louise Williams, Maxim Imakaev,
+  Tobias Ragoczy, Agnes Telling, Ido Amit, Bryan~R Lajoie, Peter~J Sabo,
+  Michael~O Dorschner, et~al.
+\newblock Comprehensive mapping of long-range interactions reveals folding
+  principles of the human genome.
+\newblock {\em science}, 326(5950):289--293, 2009.
+
+\bibitem{marshall1997interphase}
+WF~Marshall, A~Straight, JF~Marko, J~Swedlow, A~Dernburg, A~Belmont, AW~Murray,
+  DA~Agard, and JW~Sedat.
+\newblock Interphase chromosomes undergo constrained diffusional motion in
+  living cells.
+\newblock {\em Current Biology}, 7(12):930--939, 1997.
+
+\bibitem{muller2010stable}
+Iris M{\"u}ller, Shelagh Boyle, Robert~H Singer, Wendy~A Bickmore, and
+  Jonathan~R Chubb.
+\newblock Stable morphology, but dynamic internal reorganisation, of interphase
+  human chromosomes in living cells.
+\newblock {\em PloS one}, 5(7):e11560, 2010.
 
 \bibitem{nora2012spatial}
 Elph{\`e}ge~P Nora, Bryan~R Lajoie, Edda~G Schulz, Luca Giorgetti, Ikuhiro
@@ -38,5 +75,30 @@ Elph{\`e}ge~P Nora, Bryan~R Lajoie, Edda~G Schulz, Luca Giorgetti, Ikuhiro
 \newblock Spatial partitioning of the regulatory landscape of the
   x-inactivation centre.
 \newblock {\em Nature}, 485(7398):381--385, 2012.
+
+\bibitem{sanyal2012long}
+Amartya Sanyal, Bryan~R Lajoie, Gaurav Jain, and Job Dekker.
+\newblock The long-range interaction landscape of gene promoters.
+\newblock {\em Nature}, 489(7414):109--113, 2012.
+
+\bibitem{shen2012map}
+Yin Shen, Feng Yue, David~F McCleary, Zhen Ye, Lee Edsall, Samantha Kuan,
+  Ulrich Wagner, Jesse Dixon, Leonard Lee, Victor~V Lobanenkov, et~al.
+\newblock A map of the cis-regulatory sequences in the mouse genome.
+\newblock {\em Nature}, 488(7409):116--120, 2012.
+
+\bibitem{tjong2012physical}
+Harianto Tjong, Ke~Gong, Lin Chen, and Frank Alber.
+\newblock Physical tethering and volume exclusion determine higher-order genome
+  organization in budding yeast.
+\newblock {\em Genome research}, 22(7):1295--1305, 2012.
+
+\bibitem{umbarger2011three}
+Mark~A Umbarger, Esteban Toro, Matthew~A Wright, Gregory~J Porreca, Davide Bau,
+  Sun-Hae Hong, Michael~J Fero, Lihua~J Zhu, Marc~A Marti-Renom, Harley~H
+  McAdams, et~al.
+\newblock The three-dimensional architecture of a bacterial genome and its
+  alteration by genetic perturbation.
+\newblock {\em Molecular cell}, 44(2):252--264, 2011.
 
 \end{thebibliography}
