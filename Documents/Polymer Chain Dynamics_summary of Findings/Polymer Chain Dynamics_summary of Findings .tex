@@ -1,4 +1,4 @@
-\documentclass[12pt]{paper}
+\documentclass[12pt]{book}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -12,7 +12,7 @@
 \maketitle
 \tableofcontents
 
-
+\chapter{Thoretical Materical}
 \section{The Topologically associating domains (TADs)}
 The \href{http://www.nature.com/nature/journal/v485/n7398/full/nature11049.html}{Topologically Associating Domains} (TADs), which belong to the X inactivation center (Xic), are discrete adjacent chromosomal regions prominently interacting among themselves. By interaction we mean close physical proximity of one region to another part of the same chromosome, determined by the resolution of the \href{http://en.wikipedia.org/wiki/Chromosome_conformation_capture#Carbon-Copy_Chromosome_Conformation_Capture_.285C.29}{5C technique} \cite{dostie2006chromosome}\cite{de2012decade}, for which chromosomal regions are fixed in formaldehyde, and contact are defined as region close enough to be considered as having protein-protein interactions.
 
@@ -491,10 +491,10 @@ In a chain of 32 beads, we increase the encounter distance and examine the diffe
 The bond length was set to $b=0.1$, the encounter distance was set to increase from $b/4$ to $2b$ with an increment of 0.01, a total of 18 simulation rounds. For each choice of encounter distance 50 simulation were preformed. simulations were ran to 5 times the relaxation time of the first Rouse mode. 
 
 
+\chapter{Review of Literature}
+Here we give several key points from articles bearing important principals from the understanding of chromosome internal interaction and organization 
 
-\section{Review Of Literature}
-
-\subsection{From Nora et.al 2012 \cite{nora2012spatial}}
+\section{From Nora et.al 2012 \cite{nora2012spatial}}
 \begin{itemize}
 \item The X inactivation center (Xic) orchestrate the initiation of the X chromosome inactivation by controlling the expression of non-protein-coding Xist transcript. 
 \item 5C techniques were  used to analyze the \textit{spatial} organization of the region including the Xist. The region analyzed  is 4.5 Mb in size. 
@@ -520,7 +520,7 @@ The bond length was set to $b=0.1$, the encounter distance was set to increase f
 \item the correlation between gene expression of genes in the same TAD did not depend on the distance between genes in the TAD. 
 \end{itemize}
 
-\subsection{From Dekker et al 2013 \cite{dekker2013exploring}}
+\section{From Dekker et al 2013 \cite{dekker2013exploring}}
 \begin{enumerate}
 \item This is a review of methods to analyze Chromosome Capture data and to infer mechanical properties of the DNA.
 \item The 3C methods determines the encounter frequency of genomic segments, probably in the range of $10-100nm$
@@ -560,8 +560,18 @@ The bond length was set to $b=0.1$, the encounter distance was set to increase f
 \item HiC data for non-synchronized human cells show 3 regimes, each exhibiting a power law decline in the contact probability $P(s)\sim s^{-\alpha}$. for $s<0.7Mb$ $\alpha\approx0.7$, corresponding to the TADs. For $0.7Mb<s<10Mb$, $\alpha\approx1$. For $s>10Mb$, $\alpha$ is not well measures due to poor statistics \cite{lieberman2009comprehensive}.
 \item a polymer model with excluded volume can give rise to an encounter probability with $\alpha=1$
 \item 
-
 \end{enumerate}
+
+\section{The Hierarchy of the 3D genome.  Gibcus 2013 \cite{gibcus2013hierarchy}}
+\begin{enumerate}
+\item neighboring chromosomes can overlap considerably 
+\item the nuclear envelope (double lipid bilayer) restricts genomic DNA to confined 3D space and provides a solid anchor point that allows for specific chromatin interactions. 
+\item The nuclear lamina is the inner nucleus membrane is associated with inactive heterochromatic chromatin directly or indirectly via lamina associated proteins.
+\item almost half of the genome in a given cell population is composed of lamina associated domains \cite{guelen2008domain}. 
+\item activated genes move to the nuclear interior and inactive genes are found in the lamina associated domains
+\item loci gather near sub-nuclear structures such as the nucleoli 
+\end{enumerate}
+
 
 % Bibliography  
 \bibliographystyle{plain}
