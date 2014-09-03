@@ -109,7 +109,7 @@ TADs are seen by displaying the normalized encounter data, after removing closes
 The normalization is done by taking each row $k$ of the encounter matrix, removing the data for the closest neighbors of bead $k$ and dividing by the sum of the row. A median filter of size 30 beads is then applied to the image (see methods in \cite{nora2012spatial}). 
  
 \subsection{Symmetry of encounter frequency data}
-We next examined whether the data can be regarded as symmetric in the sense of encounter probabilities for each bead. That is, whether bead $k$ has the same probability to meet its closest neighbors from the right and left in the linear chain, or not.  
+We next examine whether the data can be regarded as symmetric in the sense of encounter probabilities for each bead. That is, whether bead $k$ has the same probability to meet its closest neighbors from the right and left in the linear chain, or not.  
 
 The symmetry of encounter frequency data is shown by measuring the left and right encounter frequencies of each one of the beads comprising the chain.
 The left and right encounter data are defined in terms of bead index, where for the bead $j$ the left encounter frequencies are defined as a vector of length $j-1$ with the encounter data of bead $j$ with $1,..,j-1$, and $j+1,..,N$ for the right encounter frequencies. 
@@ -123,7 +123,7 @@ and
 \begin{equation*}
 R_j=\left[e(j+1), e(j+2),...,e(j+n_j)\right]
 \end{equation*}
-where $e(k)$ is the encounter frequency of the $k^{th}$ closest bead to the bead $j$. Note the reverse order of $L_j$.
+where $e(k)$ is the encounter frequency of the $k^{th}$ closest bead to bead $j$. Note the reverse order of $L_j$.
 
 We normalize each vector by dividing it by the sum of its encounters
 \begin{equation*}
@@ -136,25 +136,33 @@ To test the difference between left and right frequencies, we calculate the mean
 d_j=\frac{1}{n_j}\sum_{k=1}^{n_j} \left(\hat{L_j}(k)-\hat{R_j}(k)\right)
 \end{equation*}
 
-The Figure \ref{resultsOfFrequencyDifference} below shows the results of plotting the mean difference for the two replicates of the 5C data 
+The Figure \ref{figure_resultsOfFrequencyDifference} below shows the results of plotting the mean difference for the two replicates of the 5C data 
 
 \begin{figure}[H]
 \includegraphics*[scale=0.3]{symmetryOfEncountersRep1.jpg}
 \includegraphics*[scale=0.3]{symmetryOfEncountersRep2}
 \includegraphics*[scale=0.3]{symmetryOfEncountersAverage}
 \caption{\scriptsize{ The mean difference (y axes) between left and right encounter frequencies for each bead number (x axes) is shown for Rep1 (top left) Rep2 (top right) and average (bottom)}}
-\label{resultsOfFrequencyDifference}
+\label{figure_resultsOfFrequencyDifference}
 \end{figure}  
 
-The red lines in the Figure \ref{resultsOfFrequencyDifference} signify the mean of the difference data. For the three figures it is of the order $10^{-18}$. When points are missing, it means that the segment (restriction segment) occupies more than one bead, therefore the encounter data is zero there. 
+The red lines in the Figure \ref{figure_resultsOfFrequencyDifference} signify the mean of the difference data. For the three figures it is of the order $10^{-18}$. When points are missing, it means that the segment (restriction segment) occupies more than one bead, therefore the encounter data is zero there. 
 
-We can therefore treat the right and left data in the same manner and 'fold' the encounter data such that from now on we test the encounter data by bead distance. the 'folded' encounter data will be called just the encounter data from now on. 
+We can therefore treat the right and left data in the same manner and 'fold' the encounter data such that from now on we test the encounter data by bead distance. We will refer to the one-sided encounter as the encounter data from now on. 
 
-\subsection{Peaks of the encounter data}
-For some beads the encounter data shows peaks at some distance from the origin. 
-These peaks represent a frequent encounter with a distal part of the chain. The list of bead numbers and the frequent encounter they have with the distal chain parts (represented by bead numbers) is summarized in Table \ref{table_peaksOfTheEncounterData}
-% old table (One Sided)
-\begin{table}[H]\label{table_peaksOfTheEncounterData}
+\subsection{Peaks of the encounter data}\label{subsection_peaksOfTheEncounterData}
+For some beads the encounter data shows peaks at some distance from the origin (Figure \ref{figure_peaksOfTheEncounterProbabiltity307Beads}). 
+These peaks represent a frequent encounter with a distal part of the chain. The list of bead numbers and the frequent encounter they have with the distal chain parts (represented by bead numbers) is summarized in Table \ref{table_peaksOfTheEncounterDataOneSided}
+
+%TODO: the figure below should be replaced
+\begin{figure}[H]
+\includegraphics*[scale=0.2]{EncounterFrequenciesByDistanceRep1}
+\caption{\scriptsize{The encounter probability of each bead (Y axis) as a function of bead distance (X axis). The dashed red rectangles shows places of prominent non-nearest neighbors encounters}}
+\label{figure_peaksOfTheEncounterProbabiltity307Beads}
+\end{figure}
+
+% One Sided prominant encounters
+\begin{table}[H]\label{table_peaksOfTheEncounterDataOneSided}
 \begin{tabular}{l l l}
 bead numbers & encountered beads & TAD\\
 \hline
@@ -173,8 +181,8 @@ bead numbers & encountered beads & TAD\\
 \end{tabular}
 \end{table}
 
-% new Table (two sided)
-\begin{table}[H]
+% two sided prominant encounters 
+\begin{table}[H]\label{table_peaksOfTheEncounterDataTwoSided}
 \begin{tabular}{l l l l}
 bead numbers & encountered beads & TAD & rep\\
 \hline
@@ -203,7 +211,7 @@ bead numbers & encountered beads & TAD & rep\\
 \end{tabular}
 \end{table}
 
-The question arises as to whether these frequent encounter represent a loop in the polymer chain or is it the results of the 3D structure of the folded polymer? Since the 5C data is essentially taken over millions of cells it remains to show that these encounters (or loops) are indeed conserved elements of the Xic region.
+The question arises as to whether these frequent encounter represent a loop in the polymer chain or is it the results of the 3D structure of the folded polymer? Since the 5C data is essentially taken over millions of cells it remains to show that these encounters (or loops) are indeed conserved elements of the Xic region in cells and not a result of averaging in the population level.
 
 \subsection{Fitting the encounter data}\label{subsection_fittingTheEncounterData}
 In this and subsequent sections we work with the first replicate of the data.
@@ -215,42 +223,15 @@ e_j(d)= \frac{1}{\sum_{i=1}^{N_j}d_i^{-\beta}}d^{-\beta}
 \end{equation}
 $e_j$ is the normalized encounter frequency of bead $j$, $d$ is the distance in bead units , and $\beta$ is a parameter to be determined by the fitting process. 
 
-% the figure below should be replaced
-\begin{figure}[H]
-\includegraphics*[scale=0.2]{EncounterFrequenciesByDistanceRep1}
-\caption{\scriptsize{The encounter probability of each bead (Y axis) as a function of bead distance (X axis). The dashed red rectangles shows places of prominent non-nearest neighbors encounters}}
-\end{figure}
-
-The fitted exponent ($B$) and bias ($A$) values obtained by minimizing the error in the model \ref{equation_fitModel} are shown in Figure \ref{figure_fittedExpAndBias}
+The fitted exponent ($\beta$) value obtained by minimizing the error in the model \ref{equation_fitModel} are shown in Figure \ref{figure_fittedExpExperimentalData307Beads}
 \begin{figure}[H]
 \includegraphics[scale=0.15]{fittedExpValuesWithSplineRep1}
 \caption{\scriptsize{The fitted $\beta$ value for each bead 1 to 307. The continuous curve represents a smoothing of the fitted exponent values using a smoothing spline with tolerance of 2 (see Matlab documentation on \href{http://www.mathworks.fr/fr/help/curvefit/spaps.html}{spaps} function)}}
-\label{figure_fittedExpAndBias}
+\label{figure_fittedExpExperimentalData307Beads}
 \end{figure}
 
-\begin{figure}[H]
-\includegraphics[scale=0.15]{fittedExpVsFittedBias}
-\caption{\scriptsize{The fitted bias values are plotted as a function of fitted exponent values. The continuous cyan curve is a quadratic fit to the data. The equation that represents the fit appears in the top left corner}}
-\label{figure_fittedExpVsFittedBias}
-\end{figure}
+In Figure \ref{figure_fittedExpExperimentalData307Beads}, we see that the fitted exponent curve is somewhat tri-modal. With one peak located in roughly at bead 54, one at 125, and the left most at 200. The first and the last places correspond the mid points of the two TADs of the encounter. 
 
-In Figure \ref{fittedExpAndBias} top box, we see that the fitted exponent curve is somewhat tri-modal. With one peak located in roughly at bead 54, one at 125, and the left most at 200. The first and the last places correspond the mid points of the two TADs of the encounter. 
-
-From Figure \ref{figure_fittedExpVsFittedBias} we see that the bias values tend to increase positively with the exponent. A quadratic curve was fitted to the fitted exponent vs. fitted bias data and resulted in values
-\begin{equation}\label{equation_fitModelForExpVsBiasData}
-B^* = 0.84A^2-1.1A+0.4
-\end{equation}
-
- An important issue to address no is what is the validity of the fitted values?
-Comparing the actual bias values to the prediction of the fitted quadratic curve \ref{equation_fitModelForExpVsBiasData} we get the difference curve as appears in Figure \ref{figure_diffFittedBiasVsModelBias}. The mean difference between model predictions and model fit is 0.0274. We see that for the beads 35-50 there is a disagreement between prediction of model \ref{equation_fitModelForExpVsBiasData} and model \ref{fitModel} (green dashed box in Figure \ref{figure_diffFittedBiasVsModelBias}). 
-
-We therefore conclude that further in-depth evaluation of parameters is needed in specific regions of the polymer ot gain insight into the nature of the departure from the 'average' model fitted.
-
-\begin{figure}[H]
-\includegraphics[scale=0.15]{diffFittedBiasVsModelBias}
-\caption{\scriptsize{The difference between the fitted bias values $B$ and the values predicted by model \ref{fitModelForExpVsBiasData}. The red line shows the mean of the difference and equals 0.0274. The green dashed rectangle shows the beads for which the model prediction and the data fitting do not agree. It corresponds to roughly the beads 35-50}}
-\label{figure_diffFittedBiasVsModelBias}
-\end{figure}
 
 \subsection{Heterogeneity of the parameters over the beads}
 The question arises as to whether the beads behave in a similar manner in terms of parameter values (i.e obey the same model rules), and if not, would it be possible, just by assuming a model, to identify beads belonging to the same group, and elucidate the similarity or difference between groups of beads. 
@@ -262,7 +243,7 @@ the resulting matrices take the shape
 \includegraphics[scale=0.12]{diffFittedExpRep1}
 \includegraphics[scale=0.12]{diffFittedBiasRep1}
 \includegraphics[scale=0.12]{normDiffFittedExpfittedBiasRep1}
-\caption{\scriptsize{The norm of the difference between the fitted parameters from model \ref{fitModel} in a pairwise manner. the columns and rows represent bead numbers. The pairwise exponent difference norm (top), the pairwise difference norm for bias (middle); the norm of the two difference matrices (bottom)}}
+\caption{\scriptsize{The norm of the difference between the fitted parameters from model \ref{equation_fitModel} in a pairwise manner. the columns and rows represent bead numbers. The pairwise exponent difference norm (top), the pairwise difference norm for bias (middle); the norm of the two difference matrices (bottom)}}
 \label{figure_diffFittedParametersRep1}
 \end{figure}
 
@@ -457,7 +438,7 @@ The encounter histograms are presented in Figure \ref{figure_encounterHistogram1
 \end{figure}
 
 
-\subsection{Internal loops}
+\subsection{Internal loops}\label{subsection_internalLoops}
 We now turn to examine the encounter probability of a model containing one 'big' loop when internal loops are sequentially added in it (see Figure \ref{figure_encounterHistogram1To10InternalLoops} lower right panel).  
 That is, we connect bead $i$ and $j$ ($j>>i$) and add $n$ loops at of random lengths between bead $i+1$ and bead $j-1$, with the constraint that any bead cannot be connected to form more than one loop. 
 
@@ -469,7 +450,7 @@ The calculated mean encounter probabilities  for the 10 cases are presented in F
 \includegraphics[scale=0.3]{encounterHistogram1To10InternalLoops}
 \includegraphics[scale=0.15]{meanEncounterProbabilityInternalLoops}
 \includegraphics[scale=0.2]{polymerModelWithLoopAndInternalConnectors}
-\caption{\scriptsize{The encounter histogram (upper panel) of the model with one big loop between beads 5 and 60, when 1 to 10 internal loops are added to it. The mean encounter probabilities curves (lower left panel) as the number of internal loops is increased from 1 to 10. The simulated encounter data was fitted with a function of the form $\alpha x^{-\beta}$,where $x=1..63$ is the distance in beads units. The bump in distance 55 represents the connection between bead 5 and 59, which constitute the 'big' loop in our simulations and is seen as a consistent bright spot in the encounter histogram (upper panel). A cartoon of the looped model (lower right panel) with internal loops ,arrows indicate the beads to be connected}}
+\caption{\scriptsize{The encounter histogram (upper panel) of the model with one big loop between beads 5 and 60, when 1 to 10 internal loops are added to it. The mean encounter probabilities curves (lower left panel) as the number of internal loops is increased from 1 to 10. The simulated encounter data was fitted with a function of the form $\alpha x^{-\beta}$,where $x=1..63$ is the distance in beads units. The bump in distance 55 represents the connection between bead 5 and 59, which constitute the 'big' loop in our simulations and is seen as a consistent bright spot in the encounter histogram (upper panel). A cartoon of the looped model (lower right panel) with internal loops ,arrows indicate the beads to be connected. In the simulation in \ref{subsection_internalLoops} we simulate the polymer in the loop region, without the tails}}
 \label{figure_encounterHistogram1To10InternalLoops}
 \end{figure}
 
@@ -490,7 +471,7 @@ We sequentially add 1 to 8 random fixed loops in the region of the TAD, matching
 \end{figure}
 
 \subsection{Two TADS}
-We follow similar procedure as with the one TAD simulation, only now we create random loops in two regions to form two TADs. The first regions is defined between bead 1 to 32, the second region between bead 33 to 64. In each simulation round we sequentially increase the number of random fixed loops from 1 to 10. 
+We follow similar procedure as with the one TAD simulation, only now we create random loops in two regions to form two TADs. The first regions is defined between bead 1 to 32, the second region between bead 33 to 64. In each simulation round we sequentially increase the number of random fixed loops from 1 to 10 (Figure \ref{figure_randomLoopModel1To10Loops64BeadsTwoTADs}). 
 
 \begin{figure}[H]
 \centering
@@ -498,10 +479,8 @@ We follow similar procedure as with the one TAD simulation, only now we create r
 \includegraphics[scale=0.1]{meanEncounterProbabilityTwoTADs}
 \includegraphics[scale=0.1]{fittedExpTwoTADs1To10Loops}
 \caption{\scriptsize{The encounter histograms (upper panel) of the case with two TADs. As the number of loops in each TAD increases from 1 to 10, the two TADs emerges. The mean encounter probability (lower left panel) of the 10 cases resembles that of the one TAD case due to to 32 beads size of the TAD. The fitted $\beta$ values for the encounter probability of each bead in the 10 cases (lower right panel).}}
+\label{figure_randomLoopModel1To10Loops64BeadsTwoTADs}
 \end{figure}
-
-
-
 
 \section{Simulation of variable loop number}
 \subsection{One TAD}
@@ -512,7 +491,7 @@ To examine the effect of increasing the number of stable loops on the encounter 
 \label{figure_stableLoopModelVariableLoopNumber32Beads}
 \end{figure}
 
-for each choice of loop number, we fit a curve to the encounter probability as a function of distance.
+for each choice of loop number, we fit a curve to the encounter probability as a function of distance [beads].
 \begin{figure}[H]
 \includegraphics[scale=0.3]{logBeadDistanceVsEncounterProbabilityVariableLoops32Beads}
 \label{figure_logBeadDistanceVsEncounterProbabilityVariableLoops32Bead}
@@ -636,7 +615,8 @@ The different cases are summarized graphically in Figure \ref{figure_possibleArr
  \includegraphics[scale=0.5]{possibleArrangementOfThreeBeadsAndAloop.jpg}
  \caption{\scriptsize{The possible configuration in the case of three beads and a loop, leaving tails of equal length}}\label{figure_possibleArrangementOfThreeBeadsAndAloop}
 \end{figure}
-The conditional probability encounters and the mean first encounter time, are summarized in the Table \ref{conditionalEncouterProbabilityAndMFET}
+
+The conditional probability encounters and the mean first encounter time, are summarized in the Table \ref{table_conditionalEncouterProbabilityAndMFET}
 according to the cases specified above
 \begin{table}[H]
 
@@ -658,15 +638,8 @@ case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
 13& 0.56 & 8.39 & 0.44 & 6.19\\
 14& 0.01 & 0.02 & 0.99 & 0.3
 \end{tabular}
-\caption{\scriptsize{Summary of the results of simulating the conditional probability that bead B meets A before C (Bead A-B), and probability that bead B meets C before A (Bead B-C), with the mean first encounter time (MFET) given in units of seconds. For each cse 10 simulation were performed}}\label{conditionalEncouterProbabilityAndMFET}
+\caption{\scriptsize{Summary of the results of simulating the conditional probability that bead B meets A before C (Bead A-B), and probability that bead B meets C before A (Bead B-C), with the mean first encounter time (MFET) given in units of seconds. For each cse 10 simulation were performed}}\label{table_conditionalEncouterProbabilityAndMFET}
 \end{table} 
-
-
-% this section should be revised/deleted or moved to the begining of the simulation chapter 
-\section{The effect of increasing the encounter distance}\label{section_effectOfIncreasingTheEncounterDistance}
-In a chain of 32 beads, we increase the encounter distance and examine the difference in the encounter probability. 
-The bond length was set to $b=0.1$, the encounter distance was set to increase from $b/4$ to $2b$ with an increment of 0.01, a total of 18 simulation rounds. For each choice of encounter distance 50 simulation were preformed. simulations were ran to 5 times the relaxation time of the first Rouse mode. 
-
 
 \chapter{Review of Literature}\label{chapter_reviewOfLiterature}
 Here we give several key points from articles bearing important principals from the understanding of chromosome internal interaction and organization 
@@ -749,7 +722,29 @@ Here we give several key points from articles bearing important principals from 
 \item The nuclear lamina is the inner nucleus membrane is associated with inactive heterochromatic chromatin directly or indirectly via lamina associated proteins.
 \item almost half of the genome in a given cell population is composed of lamina associated domains \cite{guelen2008domain}. 
 \item activated genes move to the nuclear interior and inactive genes are found in the lamina associated domains
-\item loci gather near sub-nuclear structures such as the nucleoli 
+\item loci gather near sub-nuclear structures such as the nucleoli, which are sub-nuclear structures dedicated to expression by RNA polymerase I. 
+\item it has been shown that open, gene rich, areas and closed, gene-poor chromosomal domain are generally located in separate sub-nuclear regions \cite{fraser2007nuclear}
+\item sub-chromosomal compartment were detected, named A and B, according to functional compartmentalization of gene activity \cite{lieberman2009comprehensive}. 
+\item this compartmentalization is related to the association of loci to transcription factories and the nuclear lamina.  
+\item loci found clustered in the A compartment are generally gene rich, transcriptionally active and DNase I hypersensitive 
+\item loci found clustered in the B compartment are generally gen poor, transcriptionally silent, and DNase I insensitive \cite{lieberman2009comprehensive}.
+\item those compartments are cell type specific, and cannot be predicted according to gene density. 
+\item Chromatin domains preferentially associate with other domains of a comparable activity level.
+\item The actively transcribed genes colocalize at foci called \href{http://en.wikipedia.org/wiki/Transcription_factories}{transcription factories}
+\item groups of active genes, sometimes from different chromosome are found in these foci, enriched in the activity of RNA polymerase and other transcription factors.
+\item genes located within the same TAD tend to have coordinated dynamics of expression during differentiation
+\item so far TADs have not been described in bacteria, yeast, or plants. 
+\item TADs are a conserved feature of cells in the mammalian cells
+\item it is currently not clear what defines TAD boundary 
+\item TAD boundaries are enriched in \href{http://en.wikipedia.org/wiki/CTCF}{CTCF} sites
+\item CTCF at the boundaries of the TAD could imply CTCF protein its role in mediating and blocking long range interactions
+\item however, most CTCF binding sites are within TAD, so it is not sufficient to define TAD boundary \cite{nora2012spatial}
+\item it was suggested that CTCF recruits cohesin complexes.
+\item the mechanism by which long range interactions are mediated is largely unknown
+\item specific long range interactions recruit specific proteins to the gene promoter, and recruit RNA polymerase. 
+\item 
+
+ 
 \end{enumerate}
 
 
