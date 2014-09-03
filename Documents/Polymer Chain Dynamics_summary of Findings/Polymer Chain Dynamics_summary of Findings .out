@@ -1,30 +1,39 @@
 \BOOKMARK [0][-]{chapter.1}{Thoretical Materical}{}% 1
 \BOOKMARK [1][-]{section.1.1}{The Topologically associating domains \(TADs\)}{chapter.1}% 2
-\BOOKMARK [2][-]{subsection.1.1.1}{A short review of the 5C method}{section.1.1}% 3
-\BOOKMARK [1][-]{section.1.2}{The Experimental Data}{chapter.1}% 4
-\BOOKMARK [2][-]{subsection.1.2.1}{Coarse-graining of the data}{section.1.2}% 5
-\BOOKMARK [2][-]{subsection.1.2.2}{The encounter matrix}{section.1.2}% 6
-\BOOKMARK [1][-]{section.1.3}{Analysis of the data}{chapter.1}% 7
-\BOOKMARK [2][-]{subsection.1.3.1}{From encounter frequency to encounter probability}{section.1.3}% 8
-\BOOKMARK [2][-]{subsection.1.3.2}{Showing the TADs}{section.1.3}% 9
-\BOOKMARK [2][-]{subsection.1.3.3}{Symmetry of encounter frequency data}{section.1.3}% 10
-\BOOKMARK [2][-]{subsection.1.3.4}{Peaks of the encounter data}{section.1.3}% 11
-\BOOKMARK [2][-]{subsection.1.3.5}{Fitting the encounter data}{section.1.3}% 12
-\BOOKMARK [2][-]{subsection.1.3.6}{Heterogeneity of the parameters over the beads}{section.1.3}% 13
-\BOOKMARK [1][-]{section.1.4}{Simulations}{chapter.1}% 14
-\BOOKMARK [2][-]{subsection.1.4.1}{Initial settings}{section.1.4}% 15
-\BOOKMARK [2][-]{subsection.1.4.2}{Verification of the validity of the output of the simulation framework}{section.1.4}% 16
-\BOOKMARK [2][-]{subsection.1.4.3}{Simulating cross-linked polymer with a single link}{section.1.4}% 17
-\BOOKMARK [2][-]{subsection.1.4.4}{Simulating cross-linked polymer with subsequent cross-link}{section.1.4}% 18
-\BOOKMARK [2][-]{subsection.1.4.5}{Simulation of variable loop number}{section.1.4}% 19
-\BOOKMARK [2][-]{subsection.1.4.6}{One TAD}{section.1.4}% 20
-\BOOKMARK [2][-]{subsection.1.4.7}{Simulating dynamic loops model}{section.1.4}% 21
-\BOOKMARK [2][-]{subsection.1.4.8}{Simulating the 3C experiment}{section.1.4}% 22
-\BOOKMARK [2][-]{subsection.1.4.9}{Simulating dense regions}{section.1.4}% 23
-\BOOKMARK [2][-]{subsection.1.4.10}{Simulating TAD D and E with cross-links corresponding to the peaks of 5C data}{section.1.4}% 24
-\BOOKMARK [2][-]{subsection.1.4.11}{Simulating the conditional encounter probability}{section.1.4}% 25
-\BOOKMARK [2][-]{subsection.1.4.12}{simulating the effect of increasing the encounter distance}{section.1.4}% 26
-\BOOKMARK [0][-]{chapter.2}{Review of Literature}{}% 27
-\BOOKMARK [1][-]{section.2.1}{From Nora et.al 2012 nora2012spatial}{chapter.2}% 28
-\BOOKMARK [1][-]{section.2.2}{From Dekker et al 2013 dekker2013exploring}{chapter.2}% 29
-\BOOKMARK [1][-]{section.2.3}{The Hierarchy of the 3D genome. Gibcus 2013 gibcus2013hierarchy}{chapter.2}% 30
+\BOOKMARK [1][-]{section.1.2}{A short review of Chromosome Capture methods}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{The Experimental Data}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.4}{Analysis of the experimental data}{chapter.1}% 5
+\BOOKMARK [2][-]{subsection.1.4.1}{Coarse-graining of the data}{section.1.4}% 6
+\BOOKMARK [2][-]{subsection.1.4.2}{The encounter matrix}{section.1.4}% 7
+\BOOKMARK [2][-]{subsection.1.4.3}{From encounter frequency to encounter probability}{section.1.4}% 8
+\BOOKMARK [2][-]{subsection.1.4.4}{Showing the TADs}{section.1.4}% 9
+\BOOKMARK [2][-]{subsection.1.4.5}{Symmetry of encounter frequency data}{section.1.4}% 10
+\BOOKMARK [2][-]{subsection.1.4.6}{Peaks of the encounter data}{section.1.4}% 11
+\BOOKMARK [2][-]{subsection.1.4.7}{Fitting the encounter data}{section.1.4}% 12
+\BOOKMARK [2][-]{subsection.1.4.8}{Heterogeneity of the parameters over the beads}{section.1.4}% 13
+\BOOKMARK [0][-]{chapter.2}{Simulations}{}% 14
+\BOOKMARK [1][-]{section.2.1}{The Simulation Framework}{chapter.2}% 15
+\BOOKMARK [1][-]{section.2.2}{Initial simulation settings}{chapter.2}% 16
+\BOOKMARK [1][-]{section.2.3}{Verification of the validity of simulation framework}{chapter.2}% 17
+\BOOKMARK [2][-]{subsection.2.3.1}{The encounter frequency}{section.2.3}% 18
+\BOOKMARK [1][-]{section.2.4}{A polymer with a single cross-link}{chapter.2}% 19
+\BOOKMARK [2][-]{subsection.2.4.1}{Increasing the encounter distance}{section.2.4}% 20
+\BOOKMARK [1][-]{section.2.5}{One, two and three loops at fixed positions}{chapter.2}% 21
+\BOOKMARK [2][-]{subsection.2.5.1}{Internal loops}{section.2.5}% 22
+\BOOKMARK [1][-]{section.2.6}{Random fixed loops}{chapter.2}% 23
+\BOOKMARK [2][-]{subsection.2.6.1}{One TAD}{section.2.6}% 24
+\BOOKMARK [2][-]{subsection.2.6.2}{Two TADS}{section.2.6}% 25
+\BOOKMARK [1][-]{section.2.7}{Simulation of variable loop number}{chapter.2}% 26
+\BOOKMARK [2][-]{subsection.2.7.1}{One TAD}{section.2.7}% 27
+\BOOKMARK [2][-]{subsection.2.7.2}{Two TADs}{section.2.7}% 28
+\BOOKMARK [1][-]{section.2.8}{Dynamic loop model}{chapter.2}% 29
+\BOOKMARK [1][-]{section.2.9}{TAD D and E with cross-links corresponding to the peaks of the experimental data}{chapter.2}% 30
+\BOOKMARK [1][-]{section.2.10}{Conditional encounter probability}{chapter.2}% 31
+\BOOKMARK [2][-]{subsection.2.10.1}{Three beads in a linear chain}{section.2.10}% 32
+\BOOKMARK [2][-]{subsection.2.10.2}{Two beads in the random fixed loops model}{section.2.10}% 33
+\BOOKMARK [2][-]{subsection.2.10.3}{Two beads and a loop}{section.2.10}% 34
+\BOOKMARK [1][-]{section.2.11}{The effect of increasing the encounter distance}{chapter.2}% 35
+\BOOKMARK [0][-]{chapter.3}{Review of Literature}{}% 36
+\BOOKMARK [1][-]{section.3.1}{From Nora et.al 2012 nora2012spatial}{chapter.3}% 37
+\BOOKMARK [1][-]{section.3.2}{From Dekker et al 2013 dekker2013exploring}{chapter.3}% 38
+\BOOKMARK [1][-]{section.3.3}{The Hierarchy of the 3D genome. Gibcus 2013 gibcus2013hierarchy}{chapter.3}% 39

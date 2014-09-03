@@ -3,77 +3,93 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,backref,linkcolor=blue}
 \usepackage{color}
 \usepackage{float}
 
 \begin{document}
-\title{Polymer Chain Dynamics - Summary of Methods and Findings}
-
+\title{Polymer Chain Dynamics, Analysis of Topologically Associating Domains - Summary of Methods and Findings}
 \maketitle
 \tableofcontents
 
-\chapter{Thoretical Materical}
-\section{The Topologically associating domains (TADs)}
-The \href{http://www.nature.com/nature/journal/v485/n7398/full/nature11049.html}{Topologically Associating Domains} (TADs), which belong to the X inactivation center (Xic), are discrete adjacent chromosomal regions prominently interacting among themselves. By interaction we mean close physical proximity of one region to another part of the same chromosome, determined by the resolution of the \href{http://en.wikipedia.org/wiki/Chromosome_conformation_capture#Carbon-Copy_Chromosome_Conformation_Capture_.285C.29}{5C technique} \cite{dostie2006chromosome}\cite{de2012decade}, for which chromosomal regions are fixed in formaldehyde, and contact are defined as region close enough to be considered as having protein-protein interactions.
+\chapter{Thoretical Materical} \label{chapter_theoreticalMaterial}
 
-The Xic is a 4.5 Mb region located on embryonic stem cells' X chromosome and is believed to be conserved throughout the mammalian family.  \href{http://www.nature.com/nature/journal/v485/n7398/full/nature11049.html}{Nora et. al}\cite{nora2012spatial}, recognized 9 TADs within the Xic region, and termed them in alphabetical order A to I (see Figure \ref{TADsOfTheXChromosome}) These region span 200kb to 1Mb in size. 
+\section{The Topologically associating domains (TADs)}\label{section_theTADs}
+The Topologically Associating Domains (TADs) \cite{nora2012spatial}, which belong to the X inactivation center (Xic), are discrete adjacent chromosomal regions prominently interacting among themselves. By interaction we mean close physical proximity of one region to another part of the same chromosome, determined by the resolution of the \href{http://en.wikipedia.org/wiki/Chromosome_conformation_capture#Carbon-Copy_Chromosome_Conformation_Capture_.285C.29}{5C technique} \cite{dostie2006chromosome} \cite{de2012decade}, for which chromosomal regions are fixed in formaldehyde, and contact are defined as region close enough to be considered as having protein-protein interactions.
+
+The Xic is a 4.5 Mb region located on embryonic stem cells' X chromosome and is believed to be conserved throughout the mammalian family.  \href{http://www.nature.com/nature/journal/v485/n7398/full/nature11049.html}{Nora et. al}\cite{nora2012spatial}, recognized 9 TADs within the Xic region, and termed them in alphabetical order A to I (see Figure \ref{figure_TADsOfTheXChromosome}). These region span 200kb to 1Mb in size. 
 
 The Xic orchestrate the inactivation of the X chromosome by controlling the transcription of its coding sequences. The major player in the inactivation process is the \href{http://en.wikipedia.org/wiki/XIST_(gene)#cite_note-2}{Xist} sequence.  
 
-The Xist sequence is located on the TAD termed E. The repressive anti-sense of Xist, termed Tisx, is located on the adjacent D TAD (Figure \ref{genesOfTadDandE}). In this report we focus only on TADs D and E. The TADs D and E are approximately of size 324 kb and 537 kb respectively (see Figure \ref{TADsOfTheXChromosome}) and contain non-protein and protein coding sequences(For a graphical view see Figure \ref{genesOfTadDandE}), among which, the TAD D harbors the Xite regulator of Xist gene, and Tsix which is the repressive anti-sense transcript of Xist. 
+The Xist sequence is located on the TAD termed E. The repressive anti-sense of Xist, termed Tisx, is located on the adjacent D TAD (Figure \ref{figure_genesOfTadDandE}). In this report we focus only on TADs D and E. The TADs D and E are approximately of size 324 kb and 537 kb respectively (see Figure \ref{figure_TADsOfTheXChromosome}) and contain non-protein and protein coding sequences(For a graphical view see Figure \ref{figure_genesOfTadDandE}), among which, the TAD D harbors the Xite regulator of Xist gene, and Tsix which is the repressive anti-sense transcript of Xist. 
 
  
 \begin{figure}[H]
 \includegraphics*[scale=0.5]{TADsOfTheXChromosome_NoraEtAl2012}
 \caption{\scriptsize{A display of the TADs in the region of the X chromosome. Taken from Nora et al.Nature. 2012 Apr 11;485(7398):381-5 \cite{nora2012spatial}. The red-blue bar on top and left show the restriction segments cut by HINDIII (forward and reverse segments)}}
-\label{TADsOfTheXChromosome}
+\label{figure_TADsOfTheXChromosome}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[scale=0.3]{geneSequencesTADDandE}
 \caption{\scriptsize{The genes and non protein coding regions of TAD D and E. Image taken from from Nora et al.Nature. 2012 Apr 11;485(7398):381-5 \cite{nora2012spatial}}}
-\label{genesOfTadDandE}
+\label{figure_genesOfTadDandE}
 \end{figure}
 
-\subsection{A short review of the 5C method}
-The 5C method \cite{dostie2006chromosome} relies on the first steps of the seminal 3C method proposed by \href{http://www.sciencemag.org/content/295/5558/1306.full.pdf}{Dekker et al. 2002} \cite{dekker2002capturing}. 
-From the supplementary material of the article by \href{http://www.sciencemag.org/content/295/5558/1306/suppl/DC1}{Dekker et al}. The steps of the 3C can be described as follows (see also Figure \ref{3Cschematic}):
+\section{A short review of Chromosome Capture methods}\label{section_chromosomeCaptureMethod}
+The 5C method \cite{dostie2006chromosome} relies on the first steps of the seminal 3C method proposed by Dekker et al. 2002 \cite{dekker2002capturing}. 
+From the \href{http://www.sciencemag.org/content/295/5558/1306/suppl/DC1}{supplementary material} of \cite{dekker2002capturing}. The steps of the 3C can be described as follows (see also Figure \ref{figure_3Cschematic}:
 
 \begin{enumerate}
+ \itemsep1pt \parsep0pt \parskip0pt 
 \item Roughly $10^8$ intact nuclei are isolated
 \item Nuclei are \href{http://en.wikipedia.org/wiki/Crosslinking_of_DNA}{cross-linked} by using $1\%$
-\href{http://en.wikipedia.org/wiki/Formaldehyde}{formaldehyde} or its relative paraformaldehyde for 10 minutes, which induces protein-protein and DNA-protein cross-linking. The cross-link is made by formaldehyde in the guanine nucleotide, between DNA-bound proteins and the nucleotide. 
-\item the cross-linking distance is between $10-100nm$ \cite{dekker2013exploring}
-\item All non cross-linked proteins are removed.  It is important to note that the DNA is purified only After the cross-links were made.
-\item A site-specific restriction enzyme (ECOr or HindIII, 6bp cuter) is used to digest the cross-linked DNA for 1 hour. 
+\href{http://en.wikipedia.org/wiki/Formaldehyde}{formaldehyde}, or its relative paraformaldehyde, for 10 minutes, which induces protein-protein and DNA-protein cross-linking. The cross-link is made by formaldehyde in the guanine nucleotide, between DNA-bound proteins and the DNA. The \href{http://en.wikipedia.org/wiki/Lysine}{lysine} amino acid of the protein is connected through its $-NH_2$ group to the \href{http://en.wikipedia.org/wiki/Methylene_bridge}{Methylene bridge} ($-CH_2-$)
+
+\begin{figure}[H]
+\centering{
+\includegraphics[scale=0.3]{crosslinkFormaldehydeProtein}
+\caption{\scriptsize{The chemical bond between the $NH_2$ group of formaldehyde and the lysine $-NH_2$ group of the protein}}
+\label{figure_crosslinkFormaldehydeProtein}
+}
+\end{figure}
+
+Formaldehyde can be polymerized if alcohol is not added to it. Therefore, it is relevant to ask how the procedure in Nora et al \cite{nora2012spatial} was performed? 
+\item Cross-linking distance is between $10-100nm$ \cite{dekker2013exploring}
+\item All non cross-linked proteins are removed. It is important to note that the DNA is purified from non cross-linked proteins only \textit{after} the cross-links were made.
+\item A site-specific restriction enzyme (\href{http://en.wikipedia.org/wiki/EcoRI}{EcoRI} or \href{http://en.wikipedia.org/wiki/HindIII}{HindIII}, which are 6bp cutters) is used to digest the cross-linked DNA for 1 hour. 
 \item The restriction enzymes are inactivated using SDS and incubation for 20 minutes.
-\item The reaction is 15 times diluted to favor relevant DNA end ligation.
-\item The free ends of the cleaved DNA are ligated (DNA is still cross-linked with proteins) for 45 minutes using ligase.
+\item The reaction is 15 times diluted to favor relevant DNA-end ligation.
+\item The free ends of the cleaved DNA are ligated (DNA is still cross-linked with proteins) for 45 minutes using \href{http://en.wikipedia.org/wiki/Ligase}{ligase}.
 \item Reverse cross-linking by overnight incubation: the cross-links are destroyed, leaving segments of ligated DNA. The reverse cross-linking is done by incubation at $70^0$.
 \item DNA is purified from non cross-linked proteins.
-\item The products of the ligation are detected and quantified using PCR. 
+\item The products of the ligation are detected and quantified using PCR, by designing primers to specific ligation junctions. 
 \item a control template is created by using the same restriction enzyme on non cross-linked DNA and ligation of DNA fragments without dilution
 \end{enumerate}
 
 \begin{figure}[H]
+\centering{
 \includegraphics[scale = 0.4]{3Cschematic}
-\caption{\scriptsize{A schematic representation of the 3C method. Image taken from \href{http://www.sciencemag.org/content/295/5558/1306.full.pdf}{Dekker et al. 2002}\cite{dekker2002capturing}}}
-\label{3Cschematic}
+\caption{\scriptsize{A schematic representation of the 3C method. Image taken from Dekker et al. 2002 \cite{dekker2002capturing}}}
+\label{figure_3Cschematic}
+}
 \end{figure}
 
-\section{The Experimental Data}
-Two replicates of 5C experiments were conducted taking into account the Xic region. The data was coarse-grained as explained in \ref{coarseGrainingOfEncounterData}.
-The encounter data includes the number of encounters between 14,508 genomic segments. Each genomic segments is defined by the start and end bead.
+\section{The Experimental Data}\label{section_theExperimentalData}
+Two replicates of 5C experiments were conducted on the chromosome region encompassing the Xic region. The data was coarse-grained as explained in \ref{subsection_coarseGrainingOfEncounterData}, in accordance with the procedure by \cite{giorgetti2014predictive}\cite{nora2012spatial}.
+The encounter data includes 14,508 pairwise encounters of genomic loci. Each genomic segments is defined by a start and end-bead index.
 
-\subsection{Coarse-graining of the data}\label{coarseGrainingOfEncounterData}
+\section{Analysis of the experimental data}\label{section_AnalysisOfTheExperimentalData}
+
+\subsection{Coarse-graining of the data}\label{subsection_coarseGrainingOfEncounterData}
 The following paragraphs are an adapted version of the text in from Giorgetti et al. \cite{giorgetti2014predictive} supplementary material.
 
 In the genomic region of the TAD D and E, 124 forward (FOR) and 126 reverse (REV) primers anneal to alternate HindIII restriction fragments of variable size. 
-Since the average length of FOR and REV fragments in this region is 3078 bp, a 3000-bp beads was chosen, resulting in polymers of N=108 beads in the case of TAD D alone (chrX:100378306-100699670, total length 321’364 bp) and $N=307$ beads in the case of TAD D+E (total length 92’0432 bp). Thirty five percent of restriction fragments are longer then 3000 bp and will be mapped on multiple beads, while the remaining $65\%$ will contribute together with their nearest neighbor to define the expected contacts of single beads.
+Since the average length of FOR and REV fragments in this region is 3078 bp, a 3000-bp beads was chosen, resulting in polymers of N=108 beads in the case of TAD D alone (chrX:100378306-100699670, total length 321,364 bp) and $N=307$ beads in the case of TAD D+E (total length 920,432 bp). Thirty five percent of restriction fragments were longer then 3000 bp and were mapped on multiple beads, while the remaining $65\%$ contributed, together with their nearest neighbor, to define the expected contacts of single beads.
 
-To simulate 5C experiments, the uneven sampling of the genomic region provided by restriction fragments of different length must be mapped onto the even sampling provided by equally spaced beads. This is performed as follows:
-
+The uneven sampling of the genomic region, provided by restriction fragments of different length, must be mapped onto the even sampling provided by equally spaced beads. This is performed as follows\cite{giorgetti2014predictive}:
 \begin{enumerate}
+ \itemsep1pt \parsep0pt \parskip0pt 
 \item The $5$ end of the first bead in the chain is positioned at the 5’ end of the first restriction fragment in the region of interest 
 \item Each restriction fragment in the region is assigned two indices $i$ and $j$ $(i,j=1…N)$ corresponding to the beads to which its 5’ and 3’ ends overlap.
 \item 5C counts corresponding to each pair of restriction fragments are assigned to the corresponding pairs of indices (i,j) and (h,k), for example:
@@ -81,15 +97,14 @@ To simulate 5C experiments, the uneven sampling of the genomic region provided b
 \item 5C counts of two experimental replicates are averaged for each pair of restriction fragments and their standard deviation is taken as a measure of experimental uncertainty.
 \end{enumerate}
 
-\subsection{The encounter matrix}
-The data provided by Giorgetti et al.\cite{giorgetti2014predictive} contains the encounter frequency of beads (not segments!) constructed as explained in \ref{coarseGrainingOfEncounterData}. Sorting the encounter data into a 2D matrix results in a 307 by 307 array. Reminder: beads are numbered sequentially from the 5-end to the 3-end of the polymer.
+\subsection{The encounter matrix}\label{subsection_theEncounterMatrix}
+The data provided by Giorgetti et al.\cite{giorgetti2014predictive} contains the encounter frequency of beads (not segments!) constructed as explained in \ref{coarseGrainingOfEncounterData}. Sorting the encounter data into a 307 by 307 matrix we can visualize the pair-wise encounter frequencies. Reminder: beads are numbered sequentially from the 5-end to the 3-end of the polymer.
 
-\section{Analysis of the data}
 
-\subsection{From encounter frequency to encounter probability}
-We start by transforming the encounter data into encounter probability. Each line of the encounter matrix is divided by the sum of all encounters of the line.
+\subsection{From encounter frequency to encounter probability} \label{subsection_fromEncounterFrequencyToEncounterProbability}
+We start by transforming the encounter frequency into encounter probability as follows. Each line of the encounter matrix is divided by the sum of all encounters of the line.
 
-\subsection{Showing the TADs}
+\subsection{Showing the TADs}\label{subsection_showingTheTADs}
 TADs are seen by displaying the normalized encounter data, after removing closest beads data from the matrix of encounters. 
 The normalization is done by taking each row $k$ of the encounter matrix, removing the data for the closest neighbors of bead $k$ and dividing by the sum of the row. A median filter of size 30 beads is then applied to the image (see methods in \cite{nora2012spatial}). 
  
@@ -137,9 +152,9 @@ We can therefore treat the right and left data in the same manner and 'fold' the
 
 \subsection{Peaks of the encounter data}
 For some beads the encounter data shows peaks at some distance from the origin. 
-These peaks represent a frequent encounter with a distal part of the chain. The list of bead numbers and the frequent encounter they have with the distal chain parts (represented by bead numbers) is summarized in Table \ref{nonNeighborBeadEncounterTable}
+These peaks represent a frequent encounter with a distal part of the chain. The list of bead numbers and the frequent encounter they have with the distal chain parts (represented by bead numbers) is summarized in Table \ref{table_peaksOfTheEncounterData}
 % old table (One Sided)
-\begin{table}[H]\label{nonNeighborBeadEncounterTable}
+\begin{table}[H]\label{table_peaksOfTheEncounterData}
 \begin{tabular}{l l l}
 bead numbers & encountered beads & TAD\\
 \hline
@@ -190,54 +205,51 @@ bead numbers & encountered beads & TAD & rep\\
 
 The question arises as to whether these frequent encounter represent a loop in the polymer chain or is it the results of the 3D structure of the folded polymer? Since the 5C data is essentially taken over millions of cells it remains to show that these encounters (or loops) are indeed conserved elements of the Xic region.
 
-\subsection{Fitting the encounter data}
+\subsection{Fitting the encounter data}\label{subsection_fittingTheEncounterData}
 In this and subsequent sections we work with the first replicate of the data.
 
 To examine the behavior of the polymer as a whole, we fit for each bead's encounter data 
-(row or column) a function of the form 
-\begin{equation}\label{fitModel}
-\log(e_j(t))= \log(At^{-B})= \log(A)-B\log(t)
+a function of the form 
+\begin{equation}\label{equation_fitModel}
+e_j(d)= \frac{1}{\sum_{i=1}^{N_j}d_i^{-\beta}}d^{-\beta}
 \end{equation}
-where $t$ represents the distance in bead units to bead $j$, and $e_j(t)$ is the normalized encounter data by distance for bead $j$, $A$ and $B$ are parameters to be determined by the fitting process. 
+$e_j$ is the normalized encounter frequency of bead $j$, $d$ is the distance in bead units , and $\beta$ is a parameter to be determined by the fitting process. 
 
+% the figure below should be replaced
 \begin{figure}[H]
 \includegraphics*[scale=0.2]{EncounterFrequenciesByDistanceRep1}
 \caption{\scriptsize{The encounter probability of each bead (Y axis) as a function of bead distance (X axis). The dashed red rectangles shows places of prominent non-nearest neighbors encounters}}
 \end{figure}
 
-The fitted exponent ($B$) and bias ($A$) values obtained by minimizing the error in the model \ref{fitModel} are shown in Figure \ref{fittedExpAndBias}
+The fitted exponent ($B$) and bias ($A$) values obtained by minimizing the error in the model \ref{equation_fitModel} are shown in Figure \ref{figure_fittedExpAndBias}
 \begin{figure}[H]
 \includegraphics[scale=0.15]{fittedExpValuesWithSplineRep1}
-\includegraphics[scale=0.15]{fittedBiasValuesRep1}
-\caption{\scriptsize{The fitted exponent (top) and bias (bottom) for each bead index. In the upper plot, the continuous curve represents a smoothing of the fitted exponent values using a smoothing spline with tolerance of 2 (see Matlab documentation on \href{http://www.mathworks.fr/fr/help/curvefit/spaps.html}{spaps} function)}}
-\label{fittedExpAndBias}
+\caption{\scriptsize{The fitted $\beta$ value for each bead 1 to 307. The continuous curve represents a smoothing of the fitted exponent values using a smoothing spline with tolerance of 2 (see Matlab documentation on \href{http://www.mathworks.fr/fr/help/curvefit/spaps.html}{spaps} function)}}
+\label{figure_fittedExpAndBias}
 \end{figure}
-
-%TODO: remove the following paragraph
-It is apparent from Figures \ref{fittedExpAndBias} that there is some correlation between the fitted exponent values and the bias (indeed, since the integral of each function should be 1). To see it more clearly, we plot the fitted exponent and bias values on the same axes (Figure \ref{fittedExpVsFittedBias}). 
 
 \begin{figure}[H]
 \includegraphics[scale=0.15]{fittedExpVsFittedBias}
 \caption{\scriptsize{The fitted bias values are plotted as a function of fitted exponent values. The continuous cyan curve is a quadratic fit to the data. The equation that represents the fit appears in the top left corner}}
-\label{fittedExpVsFittedBias}
+\label{figure_fittedExpVsFittedBias}
 \end{figure}
 
 In Figure \ref{fittedExpAndBias} top box, we see that the fitted exponent curve is somewhat tri-modal. With one peak located in roughly at bead 54, one at 125, and the left most at 200. The first and the last places correspond the mid points of the two TADs of the encounter. 
 
-From Figure \ref{fittedExpVsFittedBias} we see that the bias values tend to increase positively with the exponent. A quadratic curve was fitted to the fitted exponent vs. fitted bias data and resulted in values
-\begin{equation}\label{fitModelForExpVsBiasData}
+From Figure \ref{figure_fittedExpVsFittedBias} we see that the bias values tend to increase positively with the exponent. A quadratic curve was fitted to the fitted exponent vs. fitted bias data and resulted in values
+\begin{equation}\label{equation_fitModelForExpVsBiasData}
 B^* = 0.84A^2-1.1A+0.4
 \end{equation}
 
  An important issue to address no is what is the validity of the fitted values?
-Comparing the actual bias values to the prediction of the fitted quadratic curve \ref{fitModelForExpVsBiasData} we get the difference curve as appears in Figure \ref{diffFittedBiasVsModelBias}. The mean difference between model predictions and model fit is 0.0274. We see that for the beads 35-50 there is a disagreement between prediction of model \ref{fitModelForExpVsBiasData} and model \ref{fitModel} (green dashed box in Figure \ref{diffFittedBiasVsModelBias}). 
+Comparing the actual bias values to the prediction of the fitted quadratic curve \ref{equation_fitModelForExpVsBiasData} we get the difference curve as appears in Figure \ref{figure_diffFittedBiasVsModelBias}. The mean difference between model predictions and model fit is 0.0274. We see that for the beads 35-50 there is a disagreement between prediction of model \ref{equation_fitModelForExpVsBiasData} and model \ref{fitModel} (green dashed box in Figure \ref{figure_diffFittedBiasVsModelBias}). 
 
 We therefore conclude that further in-depth evaluation of parameters is needed in specific regions of the polymer ot gain insight into the nature of the departure from the 'average' model fitted.
 
 \begin{figure}[H]
 \includegraphics[scale=0.15]{diffFittedBiasVsModelBias}
 \caption{\scriptsize{The difference between the fitted bias values $B$ and the values predicted by model \ref{fitModelForExpVsBiasData}. The red line shows the mean of the difference and equals 0.0274. The green dashed rectangle shows the beads for which the model prediction and the data fitting do not agree. It corresponds to roughly the beads 35-50}}
-\label{diffFittedBiasVsModelBias}
+\label{figure_diffFittedBiasVsModelBias}
 \end{figure}
 
 \subsection{Heterogeneity of the parameters over the beads}
@@ -247,48 +259,103 @@ To simultaneously see the heterogeneity of the fitted parameters over all beads,
 the resulting matrices take the shape
 
 \begin{figure}[H]
-\includegraphics[scale=0.15]{diffFittedExpRep1}
-\includegraphics[scale=0.15]{diffFittedBiasRep1}
-\includegraphics[scale=0.15]{normDiffFittedExpfittedBiasRep1}
+\includegraphics[scale=0.12]{diffFittedExpRep1}
+\includegraphics[scale=0.12]{diffFittedBiasRep1}
+\includegraphics[scale=0.12]{normDiffFittedExpfittedBiasRep1}
 \caption{\scriptsize{The norm of the difference between the fitted parameters from model \ref{fitModel} in a pairwise manner. the columns and rows represent bead numbers. The pairwise exponent difference norm (top), the pairwise difference norm for bias (middle); the norm of the two difference matrices (bottom)}}
-\label{diffFittedParametersRep1}
+\label{figure_diffFittedParametersRep1}
 \end{figure}
 
-It is now also apparent from Figure \ref{diffFittedParametersRep1} that beads 35-50 have different bias values then expected. To find beads for which the exponent values agree but the bias values do not, we search for a threshold for the difference of exponents and bias below which it could be said that values are similar. 
+It is now also apparent from Figure \ref{figure_diffFittedParametersRep1} that beads 35-50 have different bias values then expected. To find beads for which the exponent values agree but the bias values do not, we search for a threshold for the difference of exponents and bias below which it could be said that values are similar. 
 For this end, we can consider the data as having 'low' and 'high' difference values. 
 We search for a values $v_{exp}$ and $v_{bias}$ for which the 'within' group variance is low and the 'between' group variance is the highest. 
 Such approach leads naturally to employ the \href{http://en.wikipedia.org/wiki/Otsu's_method}{Otsu} method. Using this method on the matrix, the value of $v_{exp},v_{bias}$ are found to be 
 
-\begin{equation}
+\begin{equation*}
 v_{exp}= 0.262
-\end{equation}
-\begin{equation}
+\end{equation*}
+\begin{equation*}
 v_{bias}=0.18
-\end{equation}
+\end{equation*}
 
-\section{Simulations}
-\subsection{Initial settings}
-For the subsequent simulations, unless stated differently, we determine the simulation time step,$\Delta t$ and the simulation time as follows. 
+\chapter{Simulations}
+\section{The Simulation Framework}
+We have constructed a computational stochastic simulation framework, which allows us to examine the behavior of the polymer chain in various configurations.
+We use the \href{http://en.wikipedia.org/wiki/Rouse_model}{Rouse model} to mathematically describe the polymer chain as a series of beads connected by harmonic springs (see figure \ref{figure_exampleOfChains}). The stochastic differential equation describing the dynamics of bead $n$ in a chain of $N$ beads is 
+\begin{equation*}
+\dot{r_n} = -D\nabla_{r_n}\phi_{Rouse}+\sqrt{2D}\dot{w_n}
+\end{equation*}
+with the potential 
+\begin{equation*}
+\phi_{Rouse}=\frac{\kappa}{2}\sum_{n=1}^N \left(r_n-r_{n-1}\right)^2
+\end{equation*}
+which in the linear chain case gives rise to the set of equations
+\begin{equation*}
+\dot{r_n}= -\frac{d\kappa D}{b^2}\left(2r_n-r_{n+1}-r_{n-1}\right)+\sqrt{2D}\dot{w_n}
+\end{equation*}
+for the inner beads, and 
+\begin{eqnarray*}
+\dot{r_1} &=& -\frac{d\kappa D}{b^2}\left(r_1-r_{2}\right)+\sqrt{2D}\dot{w_1}\\
+\dot{r_N} &=& -\frac{d\kappa D}{b^2}\left(r_N-r_{N-1}\right)+\sqrt{2D}\dot{w_N}
+\end{eqnarray*} 
+for the end beads. Where $r_n$ are the coordinates of the $n^{th}$ bead, $d$ is the dimension, $\kappa$ is the spring constant, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads, and $w$ is N-dimensional white Gaussian noise with mean 0 and variance 1 in each component. 
+
+
+The flexibility of our framework enables us to simulate a single or an ensemble of chains in open space or in 3 types of domains: a sphere, a cylinder, and between two infinite plates. As an extension to the classical Rouse model, we can also simulate the chain with variable minimal distance, $l_0>0$, between adjacent beads. Hence, we modify the Rouse potential to read
+\begin{equation*}
+\phi_{Rouse}=-\frac{\kappa}{2}\sum_{n=1}^N\left((\|r_n-r_{n-1}\|-l_0)^2\right)
+\end{equation*}
+and simulate the coupled (coordinate-wise) system of equations it yields.
+
+In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation (see Figure \ref{figure_exampleOfChains} left panel). In the course of simulation (such as in subsection \ref{RandomFixedLoops}), we can randomize the location of these fixed loops, a model we name \textit{random fixed loop model}. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model. In this model only when the affine beads are located within some minimal distance $\epsilon$ to one another they form a loop with association rate $\lambda$ per unit of time. Looped affine beads can dissociate with dissociation rate $1-\lambda$.
+
+At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
+
+We consider that two beads $R_i$ and $R_j$ had encountered if
+\begin{equation*}
+ dist_{ij}=\|r_i-r_j\|\leq \epsilon
+\end{equation*}
+with $0<\epsilon <b$. The theoretical encounter probability in a linear Rouse chain is given by 
+\begin{equation}
+Pr(dist_{ij}<\epsilon)= \alpha |i-j|^{-1.5}
+\end{equation}
+with $\alpha>0$. 
+
+At the end of simulations we extract the encounter histogram of beads and fit it with a function of the form 
+\begin{equation*}
+Pr(dist_{ij}\leq \epsilon)=\alpha_{ij}|i-j|^{-\beta}
+\end{equation*}
+for each pair of beads in the chain. 
+\begin{figure}[H]
+\includegraphics[scale=0.2]{chainExample108BeadsWith2Loops}
+\includegraphics[scale=0.2]{chainExample108Beads}
+\caption{\scriptsize{Two examples of the beads-springs model. A linear chain model (Right) and a chain with internal 2 loops (Left)}}
+\label{figure_exampleOfChains}
+\end{figure}
+
+
+\section{Initial simulation settings}\label{section_initialSimulationSettings}
+For the subsequent simulations, unless stated otherwise, we determine the simulation time step,$\Delta t$ and the simulation time as follows. 
 the simulation step $\Delta t$  was determined such that it will prevent simulation 'blow-ups'
 \begin{equation*}
  \Delta t = \frac{b^2}{12D}
 \end{equation*}
 Which is the values that stabilizes the numerical solution to the ode with no noise. when noise is present, this values can be increased.
 
-The chain relaxation time is given by 
+The \textit{chain relaxation time} is given by 
 \begin{equation*}
 \tau_p = \frac{b^2\Delta t}{12d^2\sin^2(\frac{p\pi}{2N})}
 \end{equation*}
 where $p$ is the mode number. For simulations we use the relaxation time of the slowest mode $p=1$.
 
-\subsection{Verification of the validity of the output of the simulation framework}
+\section{Verification of the validity of simulation framework}
 Here we make sure that the output simulation framework obeys the expected behavior of the Rouse polymer. 
-A polymer of 64 beads, with no cross-linking is simulated for $40,000$ steps, the STD of link length was set to $b=0.1$. The result is presented in Figure \ref{distanceMatrix64Beads}
+A polymer of 64 beads, with no cross-linking is simulated for $40,000$ steps, the STD of link length was set to $b=0.1$. The result is presented in Figure \ref{figure_vereficationOfModelDistanceMatrix64Beads}
 
 \begin{figure}[H]
 \includegraphics[scale=0.3]{distanceMatrix64Beads}
 \caption{\scriptsize{The mean bead distance matrix after $50,000$ steps of the Rouse model}}
-\label{distanceMatrix64Beads}
+\label{figure_vereficationOfModelDistanceMatrix64Beads}
 \end{figure}
 
 For an easier comparison of the simulation output with theoretical results, we work from now on with the Root-Mean-Square (RMS) distance between beads. 
@@ -297,22 +364,25 @@ To see the expected increase in distance, we plot the cross-section of the RMS d
 \begin{equation}
 \Phi(R_n-R_m,n-m)=\left[\frac{3}{2\pi b^2|n-m|} \right]^{3/2}\exp{\left[-\frac{3(R_n-R_m)^2}{2|n-m|b^2} \right]}
 \end{equation}
+
 Where, $R_n$ is the vector of coordinates of bead $n$. The equation above is the consequence of the fact that the sum of normally distributed random variables is again a normally distributed random variable. In addition, it can be shown that 
+
 \begin{equation}\label{RmsDistance}
 <(R_n-R_m)^2>=|n-m|b^2
 \end{equation}
-Using the result above we compare the RMS distance between bead $1$ and beads $2,3,..,64$ with the function $|n-m|b^2$, appearing in equation \ref{RmsDistance}, with $b=0.1$. As can be seen from Figure \ref{rmsDistanceBead1ToBeads2To64AndTheoreticalResults}, there is an excellent agreement between the output of the simulations and the theoretical results.
+
+Using the result above we compare the RMS distance between bead $1$ and beads $2,3,..,64$ with the function $|n-m|b^2$, appearing in equation \ref{RmsDistance}, with $b=0.1$. As can be seen from Figure \ref{figure_rmsDistanceBead1ToBeads2To64AndTheoreticalResults}, there is an excellent agreement between the output of the simulations and the theoretical results.
 
 \begin{figure}[H]
 \includegraphics[scale=0.3]{rmsDistanceBead1ToBeads2To64AndTheoreticalResults}
 \caption{\scriptsize{The RMS distance of bead 1 to all other 63 beads is plotted (blue curve) vs. the theoretical result (dashed red curve) $dist(1,n)=nb^2$. As can be seen, there is an excellent agreement between the curves, indicating that the simulation framework operates as expected}}
-\label{rmsDistanceBead1ToBeads2To64AndTheoreticalResults}
+\label{figure_rmsDistanceBead1ToBeads2To64AndTheoreticalResults}
 \end{figure}
 
 The RMS distance between adjacent bead was found to be 0.105, in agreement with  the bond length $b=0.1$. The mean square end-to-end distance was found to be 0.6319, in agreement with the expected 0.64. Overall we can conclude that the system operates as expected.
 
-\subsubsection{The encounter frequency}
-According to the theory, the encounter frequency of a bead $m$ in a Rouse chain as a function of the distance of beads from it on the linear chain, should be proportional to $1/|m-n|$, where $n\ne m$ is the distance in bead units. To see that the simulation framework obeys this rule, the encounter frequency matrix was calculated. The encounter distance was set to $0.1$, the matrix is presented in Figure \ref{encounterMatrix64Beads}. To see the decay of the encounter matrix, we  plot the normalized encounter events of bead 1, and present the fit of the function
+\subsection{The encounter frequency}
+According to the theory, the encounter frequency of a bead $m$ in a Rouse chain as a function of the distance of beads from it on the linear chain, should be proportional to $1/|m-n|$, where $n\ne m$ is the distance in bead units. To see that the simulation framework obeys this rule, the encounter frequency matrix was calculated. The encounter distance was set to $0.1$, the matrix is presented in Figure \ref{figure_encounterMatrix64Beads}. To see the decay of the encounter matrix, we  plot the normalized encounter events of bead 1, and present the fit of the function
 \begin{equation}
 y = ax^{-b}
 \end{equation}
@@ -323,11 +393,11 @@ The encounter data was normalized prior to fitting by dividing it by the sum of 
 \includegraphics[scale=0.3]{encounterFrequencyBead1WithFit}
 \includegraphics[scale=0.3]{encounterFrequencyBead1WithFitLogScale}
 \caption{\scriptsize{The encounter frequency and verification of theoretical results. The encounter matrix (top left) for a 64 beads Rouse chain. The decay of the rows of the encounter matrix is presented for the first bead (top right) for which we have the most number of beads (blue line) and a fit to the encounter curve (red line). the encounter frequency of bead 1 in a log-log scale (bottom left, blue curve) and a fit according to the theory (red line).}}
-\label{encounterMatrix64Beads}
+\label{figure_encounterMatrix64Beads}
 \end{figure}
 
-\subsection{Simulating cross-linked polymer with a single link}
-Next, we test the behavior of the distance matrix for a 64 bead polymer for which bead 24 and 44 are cross-linked, creating a loop of size 20 beads. 
+\section{A polymer with a single cross-link}\label{section_aPolymerwithASingleCrossLink}
+Next, we calculate the distance matrix for a 64 bead polymer for which bead 24 and 44 are cross-linked, creating a loop of size 20 [beads]. 
 The simulation is run from relaxation time, a total of $50,000$ steps. The relaxation time is determined according to the formula
 \begin{equation}
 \tau_p = \frac{b^2\Delta t}{12d^2\sin^2(\frac{p\pi}{2N})}
@@ -342,98 +412,146 @@ minutes, which is the relaxation time of the first Rouse mode derived from the c
 \includegraphics[scale=0.3]{distanceMatrix64BeadsConnect24And44}
 \includegraphics[scale=0.3]{rmsMatrix64BeadsConnect24And44}
 \caption{\scriptsize{mean Distance matrix (left) and RMS distance matrix (right) over 50,000 steps of the simulation. Beads 24 and 44 are connected in a polymer of length 64 beads. As expected,the two matrices display similar qualitative behavior but with slightly different values}}
-\label{distanceMatrix64BeadsConnect24And44}
+\label{figure_distanceMatrix64BeadsConnect24And44}
 \end{figure}
 
-To see the decay of bead distance, we plot the cross-sections of the bead-distance matrix presented in Figure \ref{distanceMatrix64BeadsConnect24And44} at the rows 24 and 44. It 
+To see the decay of bead distance, we plot the cross-sections of the bead-distance matrix presented in Figure \ref{figure_distanceMatrix64BeadsConnect24And44} at the rows 24 and 44. It 
 \begin{figure}[H]
 \includegraphics[scale=0.3]{crossectionAtRow24DistanceMatrix64BeadsConnect24And44}
 \includegraphics[scale=0.32]{crossectionAtRow44DistanceMatrix64BeadsConnect24And44}
-\caption{\scriptsize{The cross section of the mean bead distance matrix presented in Figure \ref{distanceMatrix64BeadsConnect24And44} for bead 24 (left) and bead 44 (right). The height at point 44 (left panel) and point 24 (right panel) is the bond length $b=0.1$ as expected.}}
-\label{crossectionAtRow24DistanceMatrix64BeadsConnect24And44}
+\caption{\scriptsize{The cross section of the mean bead distance matrix presented in Figure \ref{figure_distanceMatrix64BeadsConnect24And44} for bead 24 (left) and bead 44 (right). The height at point 44 (left panel) and point 24 (right panel) is the bond length $b=0.1$ as expected.}}
+\label{figure_crossectionAtRow24DistanceMatrix64BeadsConnect24And44}
 \end{figure}
 
-\subsubsection{Increasing the encounter distance}
-Next we examined whether changing the encounter length in the cross-linked chain can explain the appearance of TADs. The encounter frequency between any two beads of the chain is shown in Figure \ref{encounterFreq64BeadsConnect24And44VaryEncounterLength}. The encounter length varied between half and twice of the connector length (0.1).
+\subsection{Increasing the encounter distance}
+Next we examined whether changing the encounter length in the cross-linked chain can explain the appearance of TADs. The encounter frequency between any two beads of the chain is shown in Figure \ref{figure_encounterFreq64BeadsConnect24And44VaryEncounterLength}. The encounter length varied between half and twice of the connector length (0.1).
 
 \begin{figure}[H]
 \includegraphics[scale=0.2]{encounterFrequency64BeadsConnect24And44EncounterDist0_05}
 \includegraphics[scale=0.19]{encounterFrequency64BeadsConnect24And44EncounterDist0_1}
 \includegraphics[scale=0.17]{encounterFrequency64BeadsConnect24And44EncounterDist0_2}
 \caption{\scriptsize{Encounter frequency matrices of a Rouse polymer with 64 beads with bead 24 and 44 connected by harmonic potential when varying the encounter distance from 0.05 (left), 0.1 (middle), and 0.2 (right). The bond length was set to $b=0.1$, the encounter distance was set to 0.1. Simulation ran over 50,000 steps of $10^{-4}$ seconds. Each pixel represent bead pair $(i,j)$ of the polymer.}}
-\label{encounterFreq64BeadsConnect24And44VaryEncounterLength}
+\label{figure_encounterFreq64BeadsConnect24And44VaryEncounterLength}
 \end{figure}
 
-The encounter histogram of bead 24 is displayed in Figure \ref{encounterHistBead24connect24And44EncounterDist0_1}.
+The encounter histogram of bead 24 is displayed in Figure \ref{figure_encounterHistBead24connect24And44EncounterDist0_1}.
 \begin{figure}[H]
 \includegraphics[scale=0.4]{encounterHistBead24connect24And44EncounterDist0_1}
 \caption{\scriptsize{the encounter histogram of bead 24 as a function of bead number. The polymer included 64 beads with Kuhn length of 0.1, the encounter distance was set to be 0.1. the self encounters were trivially zeroed out}}
-\label{encounterHistBead24connect24And44EncounterDist0_1}
+\label{figure_encounterHistBead24connect24And44EncounterDist0_1}
 \end{figure}
 
-\subsection{Simulating cross-linked polymer with subsequent cross-link}
-To explore the characteristics of the polymer dynamic system with one link, we construct a Rouse polymer with 32 beads, and subsequently link bead $i$ to bead $j$, where $i=1,2,...14$, $j=i+2,i+3,..,30$. The time step was determined to be $\Delta t = 5\times10^{-4}$ sec, over a series of 3500 steps. 
 
-The eigenvalues and eigenvectors of the \textit{mean} bead distance matrix were calculated.
-Eigenvalues were sorted in ascending order. In all simulation eigenvalues were negative except one, which took on a high positive value in relation to the other eigenvalues. 
+\section{One, two and three loops at fixed positions}
+Here we present \textit{in-silico} experimental results conducted for the case of fixed 1,2, and 3 loops, i.e. beads connected to form loops remain the same throughout the simulations. We use a polymer composed of 64 beads and sequentially simulate the model with loops between bead [10 19], [28 37] and [46 55] of the linear chain. For each case 10,000 simulations were performed.
 
-A characteristic pattern can be seen in Figure \ref{eigenValuesOfTheDistanceMatrix}
+The encounter histograms are presented in Figure \ref{figure_encounterHistogram123Loops} The mean encounter probability calculated for each case is shown in Figure \ref{figure_encounterHistogram123Loops}. The encounter data was fitted with a function of the form $\alpha x^{-\beta}$. The beta values are reported in the legend of Figure \ref{figure_encounterHistogram123Loops}. Since the loops length was set to 9, the encounter probability for the three cases, as a function of distance, shows an increase around distance 9. The values of the probability at that distance are 0.03, 0.034, and 0.035, for 1, 2 and 3 fixed loops respectively. 
+\begin{figure}[H]
+\centering
+\hspace{-72pt}
+\vspace{-40pt}
+\includegraphics[scale=0.4]{encounterHistogram123Loops}
+\includegraphics[scale=0.2]{meanEncounterProbability123Loops}
+\caption{\scriptsize{The encounter histograms (upper panel) of the 3 fixed position loops cases. (A) a single loop between beads [10 19]. (B) two loops in [10 19], [28 37]. (C) three loops in [10 19],[28 37], and [46 55]]. Each point in the 64 by 64 matrices above represent number of encounters between bead $i$ and $j$. The mean encounter probability (lower panel) for the 3 fixed loops cases: one fixed loop (green), 2 fixed loops (purple), and 3 fixed loops (blue). The fitted $\beta$ values  for the 3 cases are reported in the legend. The theoretical encounter probability curve ($\beta=1.5$) is shown in red. The bump around distance 9 indicates shows the higher encounter probability for the three cases, since the length of each loop was set to 9.}}
+\label{figure_encounterHistogram123Loops}
+\end{figure}
+
+
+\subsection{Internal loops}
+We now turn to examine the encounter probability of a model containing one 'big' loop when internal loops are sequentially added in it (see Figure \ref{figure_encounterHistogram1To10InternalLoops} lower right panel).  
+That is, we connect bead $i$ and $j$ ($j>>i$) and add $n$ loops at of random lengths between bead $i+1$ and bead $j-1$, with the constraint that any bead cannot be connected to form more than one loop. 
+
+For the results presented here, we chose the beads 5 and 60 to form the big loop, we perform 10 simulation rounds, in each we increase the number of internal loops from 1 to 10. The connected beads forming the internal loops are chosen at random. Encounter histogram for the 10 cases are shown in Figure \ref{figure_encounterHistogram1To10InternalLoops} (upper panel). As the number of internal loops is increased, the encounter probability between beads in the loop increases.
+
+The calculated mean encounter probabilities  for the 10 cases are presented in Figure \ref{figure_encounterHistogram1To10InternalLoops} (lower left panel)
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{encounterHistogram1To10InternalLoops}
+\includegraphics[scale=0.15]{meanEncounterProbabilityInternalLoops}
+\includegraphics[scale=0.2]{polymerModelWithLoopAndInternalConnectors}
+\caption{\scriptsize{The encounter histogram (upper panel) of the model with one big loop between beads 5 and 60, when 1 to 10 internal loops are added to it. The mean encounter probabilities curves (lower left panel) as the number of internal loops is increased from 1 to 10. The simulated encounter data was fitted with a function of the form $\alpha x^{-\beta}$,where $x=1..63$ is the distance in beads units. The bump in distance 55 represents the connection between bead 5 and 59, which constitute the 'big' loop in our simulations and is seen as a consistent bright spot in the encounter histogram (upper panel). A cartoon of the looped model (lower right panel) with internal loops ,arrows indicate the beads to be connected}}
+\label{figure_encounterHistogram1To10InternalLoops}
+\end{figure}
+
+
+\section{Random fixed loops}\label{section_RandomFixedLoops}
+In this experiment we add random length loops between bead $i$ and $j$. We term the range of beads between $i$ and $j$ as a TAD. 
+
+\subsection{One TAD}
+To simulate a TAD, we employ the random fixed loop model and restrict the bead pairs forming the loops to take indices between beads 1 to 32, the second half of the chain remains a linear Rouse chain. No bead can participate in forming more than one loop. 
+We sequentially add 1 to 8 random fixed loops in the region of the TAD, matching the case of 2 to 16 beads participating in loop formation. 
 
 \begin{figure}[H]
-\includegraphics[scale=0.2]{eigenValuesofTheDistanceMatrix32BeadsBead8IsConnected}
-\caption{\scriptsize{a surface representing the sorted eigenvalues}}
-\label{eigenValuesOfTheDistanceMatrix}
+\centering
+\includegraphics[scale=0.25]{encounterHistogram_1to8Loops}
+\includegraphics[scale=0.12]{meanEncounterProbabilityOneTAD1To8Loops}
+\includegraphics[scale=0.12]{fittedExpOneTAD1To8Loops}
+\caption{\scriptsize{The encounter histogram (upper panel) of the case of random fixed loops in the region 1 to 32. As the number of random loops increases from 1 to 8 we see the emergance of a TAD region. The mean encounter probability (lower left panel) of the eight cases. The decrease in $\beta$ as the number of loops increases is attributed to the increased encounter between the first 32 beads. The fitted $\beta$ values (lower right panel) for the encounter data of each bead is displayed for the 8 cases.}}
 \end{figure}
 
-\subsection{Simulation of variable loop number}
+\subsection{Two TADS}
+We follow similar procedure as with the one TAD simulation, only now we create random loops in two regions to form two TADs. The first regions is defined between bead 1 to 32, the second region between bead 33 to 64. In each simulation round we sequentially increase the number of random fixed loops from 1 to 10. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{encounterHistogram1To10LoopsInEachTAD}
+\includegraphics[scale=0.1]{meanEncounterProbabilityTwoTADs}
+\includegraphics[scale=0.1]{fittedExpTwoTADs1To10Loops}
+\caption{\scriptsize{The encounter histograms (upper panel) of the case with two TADs. As the number of loops in each TAD increases from 1 to 10, the two TADs emerges. The mean encounter probability (lower left panel) of the 10 cases resembles that of the one TAD case due to to 32 beads size of the TAD. The fitted $\beta$ values for the encounter probability of each bead in the 10 cases (lower right panel).}}
+\end{figure}
+
+
+
+
+\section{Simulation of variable loop number}
 \subsection{One TAD}
 To examine the effect of increasing the number of stable loops on the encounter probability, a chain of 32 beads was constructed. The number of stable loops varied from 0 to 16. the bond length $b=0.1$, the encounter distance was set to $b/2=0.05$, the time step was set to prevent simulation blow ups by the formula above, $\Delta t=8.3\times10^{-4}$. For each number of loops, random pairs of beads were chosen to be connected. 
 \begin{figure}[H]
 \includegraphics[scale=0.4]{stableLoopModelVariableLoopNumber32Beads}
 \caption{\scriptsize{The encounter histogram of a chain of 32 beads. When the number of loops varies from 0 to 16 an area resembling a TAD emerges}}
-\label{stableLoopModelVariableLoopNumber32Beads}
+\label{figure_stableLoopModelVariableLoopNumber32Beads}
 \end{figure}
 
 for each choice of loop number, we fit a curve to the encounter probability as a function of distance.
 \begin{figure}[H]
 \includegraphics[scale=0.3]{logBeadDistanceVsEncounterProbabilityVariableLoops32Beads}
-\label{logBeadDistanceVsEncounterProbabilityVariableLoops32Bead}
+\label{figure_logBeadDistanceVsEncounterProbabilityVariableLoops32Bead}
 \end{figure}
 
 The fitted exponent values are decreasing roughly quadratically. 
 \begin{figure}[H]
 \includegraphics[scale=0.3]{changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads}
-\label{changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads}
+\label{figure_changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads}
 \end{figure}
 	
-\subsubsection{One TAD with 'tail'}
-In this simulation we test the affect of the increase in the number of stable loops on the bead encounter probability. An ensemble of chains comprised of 64 beads were simulated to $1.2$ times the relaxation time of the first Rouse mode, resulting in about $16,000$ steps for each chain. For each loop number 300 simulation were carried out. The bond length was set to be $b=0.1$, the encounter distance $\epsilon=b/2$, time step was set to be $\delta t=10^{-4}$. Stable loops were defined between bead $1$ and $32$ which we expect to resemble a TAD. At each simulation round we increase the number of loops $L$ by choosing at random $2L$ bead indexes of bead to be connected, $L$ is varied from 0 to 15. the encounter histogram shows an increasing encounter pattern in the region the loops are defined in (see Figure \ref{stableLoopModelVariableLoopNumber64Beads})
+\subsubsection{One TAD with  a 'tail'}
+In this simulation we test the affect of the increase in the number of stable loops on the bead encounter probability. An ensemble of chains comprised of 64 beads were simulated to $1.2$ times the relaxation time of the first Rouse mode, resulting in about $16,000$ steps for each chain. For each loop number 300 simulation were carried out. The bond length was set to be $b=0.1$, the encounter distance $\epsilon=b/2$, time step was set to be $\delta t=10^{-4}$. Stable loops were defined between bead $1$ and $32$ which we expect to resemble a TAD. At each simulation round we increase the number of loops $L$ by choosing at random $2L$ bead indexes of bead to be connected, $L$ is varied from 0 to 15. the encounter histogram shows an increasing encounter pattern in the region the loops are defined in (see Figure \ref{figure_stableLoopModelVariableLoopNumber64Beads})
  
 \begin{figure}[H]
 \includegraphics[scale=0.3]{stableLoopModelVariableLoopNumber64Beads}
 \caption{\scriptsize{The affect of increasing the stable loops in a polymer of 64 beads. Loops were created at random between beads located in the first half of the polymer. Increasing the number of loops from 0 to 15 reveals a region resembling a TAD as seen in the data}}
-\label{stableLoopModelVariableLoopNumber64Beads}
+\label{figure_stableLoopModelVariableLoopNumber64Beads}
 \end{figure} 
  
- The encounter probabilities for the chains when increasing the loops from 0 to 15, can be seen in Figure \ref{logBeadDistanceVsEncounterProbabilityVariableLoops64Beads}
-For each encounter probability curve we fit a function of the form $ad^{-b}$. The change in the exponent $b$ as a function of the number of loops is seen in Figure \ref{changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads}
+ The encounter probabilities for the chains when increasing the loops from 0 to 15, can be seen in Figure \ref{figure_logBeadDistanceVsEncounterProbabilityVariableLoops64Beads}
+For each encounter probability curve we fit a function of the form $ad^{-b}$. The change in the exponent $b$ as a function of the number of loops is seen in Figure \ref{figure_changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads}
 
 \begin{figure}[H]
 \includegraphics[scale=0.2]{logBeadDistanceVsEncounterProbabilityVariableLoops64Beads}
 \caption{\scriptsize{Encounter probability vs bead distance for the 16 models representing variable stable loops number if the first half of the chain of 64 beads (top)}}
-\label{logBeadDistanceVsEncounterProbabilityVariableLoops64Beads}
+\label{figure_logBeadDistanceVsEncounterProbabilityVariableLoops64Beads}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[scale=0.15]{changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads}
 \caption{\scriptsize{The change in the value of the fitted exponent to the encounter probability curves of models with increasing number of stable loops. The decrease in the values of $b$ quadratic as can be seen by the cyan line fitted to the data.}}
-\label{changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads}
+\label{figure_changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops64Beads}
 \end{figure}
-\subsubsection{Two TADs}
- 
+\subsection{Two TADs}
+ % unfinished
 
-\subsection{Simulating dynamic loops model}
-It can be assumed that stiff fixed loops in the chromatin are not always stable, but can open and close transiently. We turn to examine whether a model with loops that can be formed, held fixed, for some period, and be released, can explain the appearance of the TADS. The rational behind is that the variability of cells used in the experiments some in different states, i,e. are found with different initial chromatin loops. When these cells are fixed and the chromatin is cross-linked, the cross-links that will form will depend on the proximity of the beads conditional on the loops present at the moment the experiment began. 
+\section{Dynamic loop model}\label{section_dynamicLoopModel}
+It can be assumed that stiff fixed loops in the chromatin are not always stable, but can open and close transiently. We turn to examine whether a model with loops that can be formed, held fixed, for some period, and be released, can explain the appearance of the TADS. The rational behind is that the variability of cells used in the experiments some in different states, i,e. are found with different initial chromatin loops. When these cells are fixed and the chromatin is cross-linked, the cross-links that will be formed will depend on the proximity of the beads conditional on the loops present at the moment the experiment began. 
 
 
 A polymer with 128 beads was simulated. We define two region with high affinity of their member beads to a specific point in them. These regions can be considered as the TADs. Each region is of size $25$ beads. The first region is defined to be from bead 1 to 25, the second from bead $77$ to $102$. 
@@ -450,52 +568,112 @@ Beads that come in close proximity to one another, are considered attached, and 
 
 For beads that are not affine to any other, like the beads 26 to 77, the encounter frequency retrieved matches the theoretical result. 
 
-\subsection{Simulating the 3C experiment}
-Next simulated  the conditions of the 3C experiment to examine whether we can retrieve the TADs. The simplified version of the experiment is simulated, i.e. we  take a Rouse chain comprised of 128 beads, we simulate the chain until steady-state, and we 'freeze' the picture. We then find all beads located within a distance $\epsilon$ from one another. At the end of the simulation we sum over all realizations and call it the encounter matrix. 
-
-The main difference between simulating a Rouse chain many times and performing this experiment is that in the the former, we simulate until steady state and from steady state onward we recored the encounter frequency at each step. The result is the encounter matrix of a \textit{single} chain evolving in time. In this experiment, we simulate different chains, with different initial condition, and the end result is the sum of encounters of \textit{different} chains. 
-
-The results show a strong deviation from the theoretical result. The encounter frequency of each bead decayed much slower than $N^{-1.5}$. Although this result can not explain the appearance of two different regions which have lower interactions among them, it can be form the basis for the understanding of the behavior of encounters in each one of the TADs. In later experiments we will try to change the architecture of the chain, making it heterogenic, by placing stiff boundaries between TADs. 
-
-\begin{figure}[H]
-\includegraphics[scale=0.2]{encounterMatrix3cExperiment}
-\includegraphics[scale=0.2]{encounterProbabilityBead1OfThe3cSimulation128Beads}
-\caption{The encounter matrix and encounter probability profile for the simulated 3C experiment. The encounter matrix (left) still shows a decaying pattern of encounter.}
-\end{figure}
-
-\subsection{Simulating dense regions}
-To verify that regions in the boundaries of the TADs are responsible for the interaction maps viewed in the article by Nora et al. We simulate a chain comprised of 120 beads. We cross-link a group of adjacent beads at two locations along the chain, the group 30-40 and the group 80-90. 3500 simulation steps are performed with a step size of $\Delta t = 5\dot10^{-4}$ sec. 
-
-\subsection{Simulating TAD D and E with cross-links corresponding to the peaks of 5C data}
+\section{TAD D and E with cross-links corresponding to the peaks of the experimental data}
 We next wanted to verify whether using a Rouse polymer and connecting beads for which the peaks of the experimental data, would allow us to reproduce the TADs. 
 
-A polymer with 307 beads was created, corresponding to the TAD D (107 beads) and E (200 beads). The cross-links were made at the mid point of bead numbers displayed in Table \ref{nonNeighborBeadEncounterTable}. Thirty simulations were performed and their average distance matrix after relaxation time is presented in Figure \ref{meanEncounterMatrixOfSimulatingTADEandDWithLoops}. As can be seen the location of the cross-links create 'hot spots' in the mean distance matrix. In comparison to Figure \ref{TADsOfTheXChromosome}, we see that there is little resemblance. Thus concluding that creating cross-links according to the encounter matrix, is not sufficient to reproduce the TADs.
+A polymer with 307 beads was created, corresponding to the TAD D (107 beads) and E (200 beads). The cross-links were made at the mid point of bead numbers displayed in Table \ref{nonNeighborBeadEncounterTable}. Thirty simulations were performed and their average distance matrix after relaxation time is presented in Figure \ref{figure_meanEncounterMatrixOfSimulatingTADEandDWithLoops}. As can be seen the location of the cross-links create 'hot spots' in the mean distance matrix. In comparison to Figure \ref{TADsOfTheXChromosome}, we see that there is little resemblance. Thus concluding that creating cross-links according to the encounter matrix, is not sufficient to reproduce the TADs.
 
 \begin{figure}[H]
 \includegraphics[scale=0.2]{meanEncounterMatrixOfSimulatingTADEandDWithLoops}
 \caption{\scriptsize{The mean of 30 simulation of the polymer with 307 beads, connected corresponding to the peaks of the encounter data (Luca et al). The small green circles represent locations of connected bead pairs. These circles overlap with peaks of the simulated encounter matrix. It is evident that the TAD structure was not reproduced with this approach. The x and y axes  represent bead numbers. Each pixel represents the encounter number of bead $i$ and $j$}}
-\label{meanEncounterMatrixOfSimulatingTADEandDWithLoops}
+\label{figure_meanEncounterMatrixOfSimulatingTADEandDWithLoops}
 \end{figure}
 
-\subsection{Simulating the conditional encounter probability}
-In these simulation we empirically find what is the probability that a bead $A$ meets a bead $B$ before it meets bead $C$. For this end, a chain of 32 beads was constructed. Each simulation contained 5 times the relaxation steps, in a total of 150 simulations for each choice of bead $n$. We vary bead $B$, from 2 to 31.$A$ was set to 1, $C$ was set to 32.
+\section{Conditional encounter probability}
 
+\subsection{Three beads in a linear chain}\label{subsection_conditionalEncounter3BeadsInALinearChain}
+
+In the analysis of the experimental data as performed by Giorgetti et al\cite{giorgetti2014predictive}, 3 loci were found to be significant to the internal organization of TAD D. These loci overlap the position of the highly interacting Xite/Tsix, Chic1, and Linx, which correspond to beads in the range 25-27, 33-35, and 86-89 respectively.
+
+We therefore simulate a 108 beads chain and assess the conditional probability that  bead 34 (Chic1) encounter bead 26 (Xite/Tsix) before bead 87 (Linx). All simulations were ran until an encounter occurred. Time step was set to $8.3\times 10^{-5}$ [sec]. The encounter distance was set to $b/5=0.02$, where $b$ is the standard-deviation of the distance between adjacent beads. 
+
+The conditional encounter probability is summarized in the following table 
+\begin{table}[H]
+\begin{tabular}{l |c| c |c |}
+ prob loci                    & bead num.           & prob & MFET [sec]\\
+\hline
+ Chic1$\rightarrow$ Xite/Tsix & 34$\rightarrow$ 26  & 0.9378 & 0.2273\\
+ Chic1 $\rightarrow$ Linx     & 34 $\rightarrow$ 87 & 0.0622 & 0.1903
+\end{tabular}
+\end{table}
+Not that we work in units of $k_BT$, hence the times should be multiplied by this factor. 
+
+\subsection{Two beads in the random fixed loops model}\label{subsection_conditionalEncounter2BeadsInTheRandomFixedLoopModel}
+Next, we examine the conditional encounter probability of the 3 loci (beads 26,34, and 87) in the context of the random fixed loops model as described in subsection \ref{section_RandomFixedLoops}. To simulate the D TAD, we use a chain of 108 beads, and run 10,000 simulations with a time step of $8.3\times 10^{-5}$ [sec], and an encounter distance of $b/5=0.02$. We set 10 randomly placed fixed loops for each simulation, where the beads 26, 34, and 87 are prohibited from forming loops. The conditional probability of bead 34 meeting bead 26 before it meats bead 87 is summarized Table \ref{table_conditionalEncounterDynamicLoop} along with the mean first encounter time.
+
+\begin{table}[H]
+
+\begin{tabular}{l | c| c| c|}
+ prob loci & bead num. &prob & MFET [sec]\\
+\hline
+ Chic1$\rightarrow$ Xite/Tsix & 34 $\rightarrow$ 26   & 0.725 & 0.1154\\
+ Chic1 $\rightarrow$ Linx     & 34 $\rightarrow$ 87  & 0.275 & 0.1422	
+ \end{tabular}
+ \caption{}\label{table_conditionalEncounterDynamicLoop}
+\end{table}
+
+\subsection{Two beads and a loop}\label{subsection_conditionalEncounter2BeadsAndALoop}
+We now turn to explore the conditional probability that a bead $B$ encounters bead $A$ before it encounter bead $C$ in a chain containing one loop. There are 27 configurations for the position of the beads in relation to the loop. Here we address the case of a chain with two equally sized tails. Thus, due to symmetry we reduce the possible configurations to 14. We term the beads contained in the loop as \textit{in the loop} and beads outside as beads \textit{on the tail}. The possible configurations are: 
+\begin{enumerate}
+ \itemsep1pt \parsep0pt \parskip1pt 
+\item $A$ in the loop, $B$ and $C$ on the same tail
+\item $A$ in the loop, $B$ and $C$ on different tails
+\item $B$ in the loop, $A$ and $C$ on the same tail
+\item $B$ in the loop, $A$ and $C$ on different tails
+\item $C$ in the loop, $A$ and $B$ on the same tail 
+\item $C$ in the loop, $A$ and $B$ on different tails 
+\item $A$ and $B$ in the loop, $C$ on the tail 
+\item $A$ and $C$ in the loop, $B$ on the tail 
+\item $B$ and $C$ in the loop, $A$ on the tail 
+\item $A$, $B$ and $C$ in the loop
+\item $A$, $B$ and $C$ are on the tail
+\item $A$, $B$ on one tail, $C$ on the other tail
+\item $A$, $C$ on one tail, $B$ on the other tail
+\item $B$, $C$ on one tail, $A$ on the other tail
+\end{enumerate}
+The different cases are summarized graphically in Figure \ref{figure_possibleArrangementOfThreeBeadsAndAloop}
 \begin{figure}[H]
-\includegraphics[scale=0.3]{conditionalEncounterProb32BeadsVaryBead2From2To31}
-\caption{\scriptsize{The conditional probability that bead 1 will meet bead 2 to 32}}
-\label{conditionalEncounterProb32BeadsVaryBead2From2To31}
+ \includegraphics[scale=0.5]{possibleArrangementOfThreeBeadsAndAloop.jpg}
+ \caption{\scriptsize{The possible configuration in the case of three beads and a loop, leaving tails of equal length}}\label{figure_possibleArrangementOfThreeBeadsAndAloop}
 \end{figure}
+The conditional probability encounters and the mean first encounter time, are summarized in the Table \ref{conditionalEncouterProbabilityAndMFET}
+according to the cases specified above
+\begin{table}[H]
 
-\subsection{simulating the effect of increasing the encounter distance}
+\begin{tabular}{l|l|l|l|l}
+case & Bead A-B & MFET A-B (sec)&Bead B-C & MFET B-C (sec)\\
+ \hline
+1 & 0.15 & 0.34 & 0.85 & 0.23\\
+2 & 0.76 & 3.97 & 0.23 & 3.11\\
+3 & 0.37 & 1.47 & 0.63 & 1.46\\
+4 & 0.53 & 1.79 & 0.47 & 2.25\\
+5 & 0.86 & 0.29 & 0.16 & 0.15\\
+6 & 0.29 & 2.57 & 0.71 & 4.14\\
+7 & 0.79 & 0.55 & 0.21 & 0.45\\
+8 & 0.63 & 1.83 & 0.37 & 2.20\\
+9 & 0.26 & 0.46 & 0.74 & 0.81\\
+10& 0.52 & 0.13 & 0.48 & 0.15\\
+11& 0.54 & 0.14 & 0.46 & 0.11\\
+12& 0.97 & 0.29 & 0.03 & 0.13\\
+13& 0.56 & 8.39 & 0.44 & 6.19\\
+14& 0.01 & 0.02 & 0.99 & 0.3
+\end{tabular}
+\caption{\scriptsize{Summary of the results of simulating the conditional probability that bead B meets A before C (Bead A-B), and probability that bead B meets C before A (Bead B-C), with the mean first encounter time (MFET) given in units of seconds. For each cse 10 simulation were performed}}\label{conditionalEncouterProbabilityAndMFET}
+\end{table} 
+
+
+% this section should be revised/deleted or moved to the begining of the simulation chapter 
+\section{The effect of increasing the encounter distance}\label{section_effectOfIncreasingTheEncounterDistance}
 In a chain of 32 beads, we increase the encounter distance and examine the difference in the encounter probability. 
 The bond length was set to $b=0.1$, the encounter distance was set to increase from $b/4$ to $2b$ with an increment of 0.01, a total of 18 simulation rounds. For each choice of encounter distance 50 simulation were preformed. simulations were ran to 5 times the relaxation time of the first Rouse mode. 
 
 
-\chapter{Review of Literature}
+\chapter{Review of Literature}\label{chapter_reviewOfLiterature}
 Here we give several key points from articles bearing important principals from the understanding of chromosome internal interaction and organization 
 
 \section{From Nora et.al 2012 \cite{nora2012spatial}}
 \begin{itemize}
+ \itemsep1pt \parsep0pt \parskip1pt 
 \item The X inactivation center (Xic) orchestrate the initiation of the X chromosome inactivation by controlling the expression of non-protein-coding Xist transcript. 
 \item 5C techniques were  used to analyze the \textit{spatial} organization of the region including the Xist. The region analyzed  is 4.5 Mb in size. 
 \item 200 kb to 1 Mb regions were discovered and named TAD.
@@ -522,6 +700,7 @@ Here we give several key points from articles bearing important principals from 
 
 \section{From Dekker et al 2013 \cite{dekker2013exploring}}
 \begin{enumerate}
+ \itemsep1pt \parsep0pt \parskip1pt 
 \item This is a review of methods to analyze Chromosome Capture data and to infer mechanical properties of the DNA.
 \item The 3C methods determines the encounter frequency of genomic segments, probably in the range of $10-100nm$
 \item Chromosome are highly variable among cells \cite{muller2010stable}
@@ -564,6 +743,7 @@ Here we give several key points from articles bearing important principals from 
 
 \section{The Hierarchy of the 3D genome.  Gibcus 2013 \cite{gibcus2013hierarchy}}
 \begin{enumerate}
+ \itemsep1pt \parsep0pt \parskip1pt 
 \item neighboring chromosomes can overlap considerably 
 \item the nuclear envelope (double lipid bilayer) restricts genomic DNA to confined 3D space and provides a solid anchor point that allows for specific chromatin interactions. 
 \item The nuclear lamina is the inner nucleus membrane is associated with inactive heterochromatic chromatin directly or indirectly via lamina associated proteins.

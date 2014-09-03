@@ -1,34 +1,40 @@
 \contentsline {chapter}{\numberline {1}Thoretical Materical}{5}{chapter.1}
 \contentsline {section}{\numberline {1.1}The Topologically associating domains (TADs)}{5}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}A short review of the 5C method}{6}{subsection.1.1.1}
-\contentsline {section}{\numberline {1.2}The Experimental Data}{8}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}Coarse-graining of the data}{8}{subsection.1.2.1}
-\contentsline {subsection}{\numberline {1.2.2}The encounter matrix}{9}{subsection.1.2.2}
-\contentsline {section}{\numberline {1.3}Analysis of the data}{9}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}From encounter frequency to encounter probability}{9}{subsection.1.3.1}
-\contentsline {subsection}{\numberline {1.3.2}Showing the TADs}{9}{subsection.1.3.2}
-\contentsline {subsection}{\numberline {1.3.3}Symmetry of encounter frequency data}{10}{subsection.1.3.3}
-\contentsline {subsection}{\numberline {1.3.4}Peaks of the encounter data}{11}{subsection.1.3.4}
-\contentsline {subsection}{\numberline {1.3.5}Fitting the encounter data}{13}{subsection.1.3.5}
-\contentsline {subsection}{\numberline {1.3.6}Heterogeneity of the parameters over the beads}{17}{subsection.1.3.6}
-\contentsline {section}{\numberline {1.4}Simulations}{19}{section.1.4}
-\contentsline {subsection}{\numberline {1.4.1}Initial settings}{19}{subsection.1.4.1}
-\contentsline {subsection}{\numberline {1.4.2}Verification of the validity of the output of the simulation framework}{19}{subsection.1.4.2}
-\contentsline {subsubsection}{The encounter frequency}{21}{section*.2}
-\contentsline {subsection}{\numberline {1.4.3}Simulating cross-linked polymer with a single link}{22}{subsection.1.4.3}
-\contentsline {subsubsection}{Increasing the encounter distance}{24}{section*.3}
-\contentsline {subsection}{\numberline {1.4.4}Simulating cross-linked polymer with subsequent cross-link}{25}{subsection.1.4.4}
-\contentsline {subsection}{\numberline {1.4.5}Simulation of variable loop number}{26}{subsection.1.4.5}
-\contentsline {subsection}{\numberline {1.4.6}One TAD}{26}{subsection.1.4.6}
-\contentsline {subsubsection}{One TAD with 'tail'}{28}{section*.4}
-\contentsline {subsubsection}{Two TADs}{30}{section*.5}
-\contentsline {subsection}{\numberline {1.4.7}Simulating dynamic loops model}{30}{subsection.1.4.7}
-\contentsline {subsection}{\numberline {1.4.8}Simulating the 3C experiment}{31}{subsection.1.4.8}
-\contentsline {subsection}{\numberline {1.4.9}Simulating dense regions}{32}{subsection.1.4.9}
-\contentsline {subsection}{\numberline {1.4.10}Simulating TAD D and E with cross-links corresponding to the peaks of 5C data}{32}{subsection.1.4.10}
-\contentsline {subsection}{\numberline {1.4.11}Simulating the conditional encounter probability}{33}{subsection.1.4.11}
-\contentsline {subsection}{\numberline {1.4.12}simulating the effect of increasing the encounter distance}{34}{subsection.1.4.12}
-\contentsline {chapter}{\numberline {2}Review of Literature}{35}{chapter.2}
-\contentsline {section}{\numberline {2.1}From Nora et.al 2012 \cite {nora2012spatial}}{35}{section.2.1}
-\contentsline {section}{\numberline {2.2}From Dekker et al 2013 \cite {dekker2013exploring}}{37}{section.2.2}
-\contentsline {section}{\numberline {2.3}The Hierarchy of the 3D genome. Gibcus 2013 \cite {gibcus2013hierarchy}}{39}{section.2.3}
+\contentsline {section}{\numberline {1.2}A short review of Chromosome Capture methods}{6}{section.1.2}
+\contentsline {section}{\numberline {1.3}The Experimental Data}{8}{section.1.3}
+\contentsline {section}{\numberline {1.4}Analysis of the experimental data}{8}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Coarse-graining of the data}{8}{subsection.1.4.1}
+\contentsline {subsection}{\numberline {1.4.2}The encounter matrix}{9}{subsection.1.4.2}
+\contentsline {subsection}{\numberline {1.4.3}From encounter frequency to encounter probability}{9}{subsection.1.4.3}
+\contentsline {subsection}{\numberline {1.4.4}Showing the TADs}{9}{subsection.1.4.4}
+\contentsline {subsection}{\numberline {1.4.5}Symmetry of encounter frequency data}{10}{subsection.1.4.5}
+\contentsline {subsection}{\numberline {1.4.6}Peaks of the encounter data}{11}{subsection.1.4.6}
+\contentsline {subsection}{\numberline {1.4.7}Fitting the encounter data}{13}{subsection.1.4.7}
+\contentsline {subsection}{\numberline {1.4.8}Heterogeneity of the parameters over the beads}{17}{subsection.1.4.8}
+\contentsline {chapter}{\numberline {2}Simulations}{19}{chapter.2}
+\contentsline {section}{\numberline {2.1}The Simulation Framework}{19}{section.2.1}
+\contentsline {section}{\numberline {2.2}Initial simulation settings}{21}{section.2.2}
+\contentsline {section}{\numberline {2.3}Verification of the validity of simulation framework}{21}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}The encounter frequency}{23}{subsection.2.3.1}
+\contentsline {section}{\numberline {2.4}A polymer with a single cross-link}{24}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Increasing the encounter distance}{26}{subsection.2.4.1}
+\contentsline {section}{\numberline {2.5}One, two and three loops at fixed positions}{27}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Internal loops}{28}{subsection.2.5.1}
+\contentsline {section}{\numberline {2.6}Random fixed loops}{30}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}One TAD}{30}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.2}Two TADS}{31}{subsection.2.6.2}
+\contentsline {section}{\numberline {2.7}Simulation of variable loop number}{31}{section.2.7}
+\contentsline {subsection}{\numberline {2.7.1}One TAD}{31}{subsection.2.7.1}
+\contentsline {subsubsection}{One TAD with a 'tail'}{33}{section*.2}
+\contentsline {subsection}{\numberline {2.7.2}Two TADs}{35}{subsection.2.7.2}
+\contentsline {section}{\numberline {2.8}Dynamic loop model}{35}{section.2.8}
+\contentsline {section}{\numberline {2.9}TAD D and E with cross-links corresponding to the peaks of the experimental data}{37}{section.2.9}
+\contentsline {section}{\numberline {2.10}Conditional encounter probability}{38}{section.2.10}
+\contentsline {subsection}{\numberline {2.10.1}Three beads in a linear chain}{38}{subsection.2.10.1}
+\contentsline {subsection}{\numberline {2.10.2}Two beads in the random fixed loops model}{38}{subsection.2.10.2}
+\contentsline {subsection}{\numberline {2.10.3}Two beads and a loop}{39}{subsection.2.10.3}
+\contentsline {section}{\numberline {2.11}The effect of increasing the encounter distance}{41}{section.2.11}
+\contentsline {chapter}{\numberline {3}Review of Literature}{43}{chapter.3}
+\contentsline {section}{\numberline {3.1}From Nora et.al 2012 \cite {nora2012spatial}}{43}{section.3.1}
+\contentsline {section}{\numberline {3.2}From Dekker et al 2013 \cite {dekker2013exploring}}{45}{section.3.2}
+\contentsline {section}{\numberline {3.3}The Hierarchy of the 3D genome. Gibcus 2013 \cite {gibcus2013hierarchy}}{47}{section.3.3}
