@@ -243,11 +243,11 @@ Since $\cos(\frac{2\pi \phi}{N})=\cos(\frac{2\pi(N-\phi)}{N})$, we have eigenval
 From the relation $Rv=\lambda v$ where $v$  is an eigenvector.
 We have the recursion relation for $j=2,...,N-1$
 \begin{equation*}
-v_j = \frac{v_{j-1}+v_{j+1}}{2\cos(\theta)}
+v_j = \frac{v_{j-1}+v_{j+1}}{2(1-\cos(\theta))}
 \end{equation*}
 The boundary conditions are 
 \begin{equation*}
-v_1 = \frac{v_2+v_N}{2\cos(\theta)},\quad v_N = \frac{v_1+v_{N-1}}{2\cos(\theta)}
+v_1 = \frac{v_2+v_N}{2(1-\cos(\theta))},\quad v_N = \frac{v_1+v_{N-1}}{2(1-\cos(\theta))}
 \end{equation*}
 Rearranging the terms for $v_1$ and $v_N$
 \begin{equation*}
