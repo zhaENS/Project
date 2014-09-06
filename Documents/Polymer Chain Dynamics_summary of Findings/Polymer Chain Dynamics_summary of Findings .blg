@@ -1,0 +1,14 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: Polymer Chain Dynamics_summary of Findings .aux
+Case mismatch error between cite keys DEKKER2013EXPLORING and dekker2013exploring
+---line 173 of file Polymer Chain Dynamics_summary of Findings .aux
+ : \citation{DEKKER2013EXPLORING
+ :                              }
+I'm skipping whatever remains of this command
+The style file: plain.bst
+Case mismatch error between cite keys GIBCUS2013HIERARCHY and gibcus2013hierarchy
+---line 191 of file Polymer Chain Dynamics_summary of Findings .aux
+ : \citation{GIBCUS2013HIERARCHY
+ :                              }
+I'm skipping whatever remains of this command
+Database file #1: PolymerChainDynamicsSummaryOfFindingsBibliography.bib
+(There were 2 error messages)

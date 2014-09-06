@@ -366,7 +366,7 @@ classdef AnalyzeEncounterFrequencies<handle
             cmap = hot(256);% define color map
             
             % display rep1
-            figure,
+            figure('Name','EncounterMatrix Rep1','FileName','encounterMatrixRep1');
             emRep1  = medfilt2(obj.encounterMatrix.rep1,[windowSize,windowSize]);
             maxRep1 = max(emRep1(:));
             emRep1 = emRep1./maxRep1;% normalize
@@ -374,27 +374,30 @@ classdef AnalyzeEncounterFrequencies<handle
             % construct a color scheme from white to black through red such
             % that black is
             imagesc(emRep1);
-            title('replicate 1');
+            set(gca,'FontSize',40)
+            title(gca,'replicate 1','FontSize',40);
             colormap((cmap))
             axis ij
             
             % display rep2
-            figure,
+            figure('Name','EncounterMatrix Rep2','FileName','encounterMatrixRep2');
             imagesc(medfilt2(obj.encounterMatrix.rep2,[windowSize,windowSize]));
-            title('replicate 2');
+            title('replicate 2','FontSize',40);
+            set(gca,'FontSize',40);
             colormap((cmap))
             axis ij
             
             % display average
-            figure,
-            emAverage = medfilt2(obj.encounterMatrix.rep2,[windowSize,windowSize]);
+            figure('Name','EncounterMatrix average','FileName','encounterMatrixAverage');
+            emAverage  = medfilt2(obj.encounterMatrix.rep2,[windowSize,windowSize]);
             maxAverage = max(emAverage(:));
             emAverage  = emAverage./maxAverage;
             imagesc(emAverage);
-            title('average between replicates');
+            set(gca,'FontSize',40);
+            title(gca,'Replicates Average');
             colormap(flipud(cmap))
             axis ij
-            colormapeditor
+%             colormapeditor
         end
         
         function DisplayEncounterProbabilityByBead(obj,dispScale,sides)
@@ -405,8 +408,7 @@ classdef AnalyzeEncounterFrequencies<handle
             if ~exist('sides','var')
                 sides = 'oneSide';
             end
-            
-            
+                        
             fNames = {'Rep1','Rep2','Average'};
             for fIdx = 1:numel(fNames)
                 % create main figure
@@ -442,7 +444,7 @@ classdef AnalyzeEncounterFrequencies<handle
                         if strcmpi(sides,'oneSide')
                             % plot the encoutner data and fit
                             line('XData',fResults.beadDist,...
-                                'YData',fResults.encounterNumber,...
+                                'YData',fResults.encounterProb,...
                                 'Color',rand(1,3),...
                                 'Marker','.',...
                                 'MarkerSize',7,...
@@ -453,7 +455,8 @@ classdef AnalyzeEncounterFrequencies<handle
                         elseif strcmpi(sides,'twoSides')
                             eData = [fliplr(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
                                 obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}];
-                            line('XData',[1:numel(eData)]-bIdx,...
+%                             eData = eData./sum(eData(:)); % convert to probability 
+                            line('XData',(1:numel(eData))-bIdx,...
                                 'YData',eData,...
                                 'Color',rand(1,3),...
                                 'Marker','.',...
@@ -661,7 +664,7 @@ classdef AnalyzeEncounterFrequencies<handle
         
         function FitCurveToExpData(obj,smoothingFac)
             % fit a curve to the exponents of the fitted encounter
-            % frequency data
+            % frequency data. use a smoothing spline with a smoothingFac>0
             if ~exist('smoothingFac','var')
                 smoothingFac = 1;
             end
