@@ -1,10 +1,10 @@
 function rouseParams        = SimpleRouseParams
 % parameters for the SimpleRouse class and simulations
-rouseParams.numRounds       = 12;% number of simulation rounds 
-rouseParams.numSimulations  = 1000;% number of simulations in each round
+rouseParams.numRounds       = 1;% number of simulation rounds 
+rouseParams.numSimulations  = 100;% number of simulations in each round
 rouseParams.dimension       = 3;
-rouseParams.numBeads        = 64;
-rouseParams.b               = 0.1;
+rouseParams.numBeads        = 2;
+rouseParams.b               = 1;
 rouseParams.diffusionConst  = 1;
 rouseParams.encounterDist   = rouseParams.b/5;
 rouseParams.dt              = 0.2*(rouseParams.b^2)/(12*rouseParams.diffusionConst);
@@ -19,10 +19,10 @@ rouseParams.connectedBeads  = []; % the beads connected other than the trivial c
 rouseParams.affineBeadsNum  = []; % a fixed pair indices of affine beads
 rouseParams.kOff            = 0.1;% the detachment rate of affine beads
 rouseParams.recipeFolder    = fullfile(pwd,'SimpleRouse','Recipes');
-rouseParams.recipeFileName  = 'simpleRouseSimulateOneLoopWithInternalConnections';
+rouseParams.recipeFileName  = 'simpleRouseSimulateMeanFirstEncounterEndToEnd';
 rouseParams.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 rouseParams.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
 rouseParams.plot            = false;  % TODO: should call the plotter  [obsolete]
 rouseParams.recordPath      = true;  % record bead position (slows down simulations)
-rouseParams.analyzeResults  = true;  % perform analysis post simulations 
+rouseParams.analyzeResults  = false;  % perform analysis post simulations 
 end
