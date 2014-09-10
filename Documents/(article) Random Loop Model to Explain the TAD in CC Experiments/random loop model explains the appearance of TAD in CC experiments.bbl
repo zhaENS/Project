@@ -1,11 +1,30 @@
 \begin{thebibliography}{1}
 
+\bibitem{cremer2001chromosome}
+Thomas Cremer and Christoph Cremer.
+\newblock Chromosome territories, nuclear architecture and gene regulation in
+  mammalian cells.
+\newblock {\em Nature reviews genetics}, 2(4):292--301, 2001.
+
+\bibitem{dekker2013exploring}
+Job Dekker, Marc~A Marti-Renom, and Leonid~A Mirny.
+\newblock Exploring the three-dimensional organization of genomes: interpreting
+  chromatin interaction data.
+\newblock {\em Nature Reviews Genetics}, 14(6):390--403, 2013.
+
 \bibitem{Giorgetti2014}
 Luca Giorgetti, Rafael Galupa, Elph\`{e}ge~P. Nora, Tristan Piolot, France Lam,
   Job Dekker, Guido Tiana, and Edith Heard.
 \newblock Predictive polymer modeling reveals coupled fluctuations in
   chromosome conformation and transcription.
 \newblock {\em Cell}, 157(4):950--963, May 2014.
+
+\bibitem{jhunjhunwala20083d}
+Suchit Jhunjhunwala, Menno~C van Zelm, Mandy~M Peak, Steve Cutchin, Roy Riblet,
+  Jacques~JM van Dongen, Frank~G Grosveld, Tobias~A Knoch, and Cornelis Murre.
+\newblock The 3d structure of the immunoglobulin heavy-chain locus:
+  implications for long-range genomic interactions.
+\newblock {\em Cell}, 133(2):265--279, 2008.
 
 \bibitem{Nora2012}
 Elph{\`e}ge~P Nora, Bryan~R Lajoie, Edda~G Schulz, Luca Giorgetti, Ikuhiro

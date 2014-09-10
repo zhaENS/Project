@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  27 AUG 2014 13:12
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  10 SEP 2014 10:36
 entering extended mode
 **random*loop*model*explains*the*appearance*of*TAD*in*CC*experiments.tex
 
@@ -201,18 +201,18 @@ LaTeX Warning: No \author given.
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.bbl") [2]
+ of TAD in CC experiments.bbl" [2]) [3]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
  of TAD in CC experiments.aux") ) 
 Here is how much of TeX's memory you used:
- 2294 strings out of 493921
- 29876 string characters out of 3144879
- 81243 words of memory out of 3000000
- 5578 multiletter control sequences out of 15000+200000
+ 2299 strings out of 493921
+ 29997 string characters out of 3144879
+ 82268 words of memory out of 3000000
+ 5583 multiletter control sequences out of 15000+200000
  13653 words of font info for 51 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,8n,26p,683b,194s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,8n,26p,826b,287s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cmextra/cmex8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/typ
 e1/public/amsfonts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
@@ -224,13 +224,14 @@ onts/cm/cmr6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
 cmss10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
 ssbx10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-sy6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8
-.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.p
-fb>
+sy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
+6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.p
+fb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb
+>
 Output written on "random loop model explains the appearance of TAD in CC exper
-iments.pdf" (2 pages, 127924 bytes).
+iments.pdf" (3 pages, 146385 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
+ 68 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
