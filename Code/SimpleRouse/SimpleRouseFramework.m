@@ -113,6 +113,10 @@ classdef SimpleRouseFramework<handle
             % actions performed before each simulation run
             obj.simulation = obj.simulation+1;
             eval(obj.recipe.PreRunActions);
+            
+            % initialize a new chain 
+            obj.handles.classes.rouseChain = SimpleRouse(obj.params);
+            obj.handles.classes.rouseChain.Initialize
         end
         
         function PreStepActions(obj)
@@ -127,10 +131,7 @@ classdef SimpleRouseFramework<handle
                 obj.PreRoundActions;                
                 for sIdx = 1:obj.params.numSimulations
                     tic
-                    obj.PreRunActions
-                    obj.handles.classes.rouseChain = SimpleRouse(obj.params);
-                    obj.handles.classes.rouseChain.Initialize
-                    
+                    obj.PreRunActions                    
                     while obj.step<obj.params.numSteps && ~obj.stepExitFlag
                         obj.PreStepActions
                         obj.handles.classes.rouseChain.Step;

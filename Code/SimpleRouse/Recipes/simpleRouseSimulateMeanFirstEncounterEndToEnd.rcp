@@ -1,0 +1,35 @@
+<description> Describe the simulation here... </description>
+<func> SetRecipeParams </func>
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+obj.params.numSteps = Inf;% set infinite number of steps 
+
+<func> PreSimulationBatchActions </func>
+%Actions performed before each simulation batch
+obj.userData.encounterTime = zeros(obj.params.numSimulations,1);
+
+<func> PreRunActions </func>
+%Actions performed before each simulation run.
+obj.stepExitFlag = false;
+
+% Note that Simplerouse class is initialized before each simulation
+<func> PreStepActions </func>
+%Actions performed before each step of the Rouse chain.
+
+<func> PostStepActions </func>
+%Actions performed before each step of the Rouse chain.
+pos = obj.handles.classes.rouseChain.position.cur;
+
+% calculate the end-to-end distance
+bead1 = pos(1,:);
+beadEnd = pos(obj.params.numBeads,:);
+beadD = norm(beadEnd-bead1);
+if beadD<obj.params.encounterDist
+% document the time, and start a new simulation 
+ obj.stepExitFlag = true;
+end
+
+<func> PostRunActions </func>
+%Actions performed sfter each simulation run.
+obj.userData.encounterTime(obj.simulation) = obj.simulationData(obj.round).simulation(obj.simulation).time;
+<func> PostSimulationBatchActions </func>
+%Actions performed before each simulation batch.
