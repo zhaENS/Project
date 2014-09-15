@@ -11,4 +11,5 @@
 \beamer@sectionintoc {5}{Simulation Results}{13}{0}{5}
 \beamer@subsectionintoc {5}{1}{Simulations with a simple rouse chain}{13}{0}{5}
 \beamer@subsectionintoc {5}{2}{Random loops model}{14}{0}{5}
-\beamer@sectionintoc {6}{Future Perspectives}{15}{0}{6}
+\beamer@subsectionintoc {5}{3}{Peaks in the periphery of TADs}{16}{0}{5}
+\beamer@sectionintoc {6}{Future Perspectives}{18}{0}{6}

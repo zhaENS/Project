@@ -217,19 +217,55 @@ $f_n$- white Gaussian noise
 \item placing loops corresponding to the peaks of the encounter data does not reproduce the TADs. 
 \end{itemize}
 \begin{figure}[H]
-\includegraphics[scale=0.15]{encounterMatrix64Beads}
-\includegraphics[scale=0.08]{meanEncounterMatrixOfSimulatingTADEandDWithLoops}
+\includegraphics[scale=0.17]{encounterMatrix64Beads}
+\includegraphics[scale=0.09]{meanEncounterMatrixOfSimulatingTADEandDWithLoops}
 \end{figure}
 \end{frame}
 
-\subsection{Random loops model}
-\begin{frame}{Random Loop Model}
+\subsection{Random loops model}\label{subsection_randomLoopsModel}
+\begin{frame}{Random Fixed Loop Model}
+\framesubtitle{One TAD}
 \begin{itemize}
-\item some beads in the same TAD have affinity toward one another
-\item affine beads located within a distance less than $\epsilon$ (the encounter distance) are connected
-\item the rate of disconnection between beads is $k_{off}$
+\item The enhancer-transcription factor elements' encounter motivates the simulation of a chain with randomly placed loops
+\item these encounters might not be as frequent as 'stable' loops in the chromatin and therefore not shown significantly in the encounter maps
+\item simulate a chain of 64 beads, having a random loop in a bounded genomic region
+\item increasing number of loops at random position is simulated 
 \end{itemize}
+
 \end{frame}
+
+\begin{frame}{Random loops in a bounded region }
+We examine the behavior of the encounter probability when we restrict the loops to be in one region of the polymer, increasing the number of loops from 1 to 8.
+\begin{figure}[H]
+\includegraphics[scale=0.13]{encounterHistogramOneTAD_1to8Loops}
+\includegraphics[scale=0.13]{fittedExpOneTAD1To8Loops}
+\end{figure}
+\end{frame}
+
+\subsection{Peaks in the periphery of TADs}\label{subsection_peaksInThePeripheryOfTADs}
+\begin{frame}{Peaks at the edges of the TADs}
+At the edges of TADs there are significant peaks of the encounter frequencies.
+The encounter data of Nora et al. was smoothed using a median filter therefore, those peaks where not shown clearly.
+Such peaks might indicate a stable loop in the structure of the genomic region and should be taken into account.
+
+\begin{figure}[H]
+\includegraphics[scale=0.2]{peaksOfTADDAndEInSurfPlot}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\framesubtitle{one TAD with 'tails'}
+\begin{enumerate}
+\item following the peaks observation, we form a mix of 'stable' big loop with internal random loops
+\item in a 64 beads chain, where the stable loop lies in its center
+\item we iteratively add 11 loops within the stable loop
+\end{enumerate}
+\begin{figure}[H]
+\includegraphics[scale=0.1]{polymerModelWithLoopAndInternalConnectors}
+\end{figure}
+\end{frame}
+
+
 
 \section{Future Perspectives}
 \begin{frame}{Future perspective}
