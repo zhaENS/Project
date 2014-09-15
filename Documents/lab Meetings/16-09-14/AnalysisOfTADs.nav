@@ -33,39 +33,29 @@
 \headcommand {\beamer@subsectionentry {0}{3}{3}{10}{The encounter probability}}\headcommand {\beamer@subsectionpages {9}{9}}
 \headcommand {\slideentry {3}{3}{1}{10/10}{The encounter probability}{0}}
 \headcommand {\beamer@framepages {10}{10}}
-\headcommand {\sectionentry {4}{Theoretical model}{11}{Theoretical model}{0}}
-\headcommand {\beamer@sectionpages {7}{10}}
-\headcommand {\beamer@subsectionpages {10}{10}}
-\headcommand {\slideentry {4}{0}{2}{11/11}{}{0}}
+\headcommand {\slideentry {3}{3}{2}{11/11}{The encounter probability}{0}}
 \headcommand {\beamer@framepages {11}{11}}
-\headcommand {\sectionentry {5}{Simulations}{12}{Simulations}{0}}
-\headcommand {\beamer@sectionpages {11}{11}}
-\headcommand {\beamer@subsectionpages {11}{11}}
-\headcommand {\beamer@subsectionentry {0}{5}{1}{12}{Simulations with a simple rouse chain}}\headcommand {\beamer@subsectionpages {12}{11}}
-\headcommand {\slideentry {5}{1}{1}{12/12}{Simulations with a simple rouse chain}{0}}
+\headcommand {\sectionentry {4}{Theoretical model}{12}{Theoretical model}{0}}
+\headcommand {\beamer@sectionpages {7}{11}}
+\headcommand {\beamer@subsectionpages {10}{11}}
+\headcommand {\slideentry {4}{0}{3}{12/12}{}{0}}
 \headcommand {\beamer@framepages {12}{12}}
-\headcommand {\beamer@subsectionentry {0}{5}{2}{13}{Loops corresponding to the peaks of the encounter data}}\headcommand {\beamer@subsectionpages {12}{12}}
-\headcommand {\slideentry {5}{2}{1}{13/13}{Loops corresponding to the peaks of the encounter data}{0}}
+\headcommand {\sectionentry {5}{Simulation Results}{13}{Simulation Results}{0}}
+\headcommand {\beamer@sectionpages {12}{12}}
+\headcommand {\beamer@subsectionpages {12}{12}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{13}{Simulations with a simple rouse chain}}\headcommand {\beamer@subsectionpages {13}{12}}
+\headcommand {\slideentry {5}{1}{1}{13/13}{Simulations with a simple rouse chain}{0}}
 \headcommand {\beamer@framepages {13}{13}}
-\headcommand {\beamer@subsectionentry {0}{5}{3}{14}{Dynamic loops model}}\headcommand {\beamer@subsectionpages {13}{13}}
-\headcommand {\slideentry {5}{3}{1}{14/14}{Dynamic loops model}{0}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{14}{Random loops model}}\headcommand {\beamer@subsectionpages {13}{13}}
+\headcommand {\slideentry {5}{2}{1}{14/14}{Random loops model}{0}}
 \headcommand {\beamer@framepages {14}{14}}
-\headcommand {\beamer@subsectionentry {0}{5}{4}{15}{Dynamic loops model with beads' affinity}}\headcommand {\beamer@subsectionpages {14}{14}}
-\headcommand {\slideentry {5}{4}{1}{15/15}{Dynamic loops model with beads' affinity}{0}}
+\headcommand {\sectionentry {6}{Future Perspectives}{15}{Future Perspectives}{0}}
+\headcommand {\beamer@sectionpages {13}{14}}
+\headcommand {\beamer@subsectionpages {14}{14}}
+\headcommand {\slideentry {6}{0}{2}{15/15}{}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\beamer@subsectionentry {0}{5}{5}{16}{Enlarging the encounter distance}}\headcommand {\beamer@subsectionpages {15}{15}}
-\headcommand {\slideentry {5}{5}{1}{16/16}{Enlarging the encounter distance}{0}}
-\headcommand {\beamer@framepages {16}{16}}
-\headcommand {\beamer@subsectionentry {0}{5}{6}{17}{3C experiment with stiff connectors}}\headcommand {\beamer@subsectionpages {16}{16}}
-\headcommand {\slideentry {5}{6}{1}{17/17}{3C experiment with stiff connectors}{0}}
-\headcommand {\beamer@framepages {17}{17}}
-\headcommand {\sectionentry {6}{Future Perspectives}{18}{Future Perspectives}{0}}
-\headcommand {\beamer@sectionpages {12}{17}}
-\headcommand {\beamer@subsectionpages {17}{17}}
-\headcommand {\slideentry {6}{0}{2}{18/18}{}{0}}
-\headcommand {\beamer@framepages {18}{18}}
-\headcommand {\beamer@partpages {1}{18}}
-\headcommand {\beamer@subsectionpages {18}{18}}
-\headcommand {\beamer@sectionpages {18}{18}}
-\headcommand {\beamer@documentpages {18}}
-\headcommand {\def \inserttotalframenumber {18}}
+\headcommand {\beamer@partpages {1}{15}}
+\headcommand {\beamer@subsectionpages {15}{15}}
+\headcommand {\beamer@sectionpages {15}{15}}
+\headcommand {\beamer@documentpages {15}}
+\headcommand {\def \inserttotalframenumber {15}}

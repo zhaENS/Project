@@ -7,12 +7,8 @@
 \beamer@subsectionintoc {3}{1}{TAD D and E}{8}{0}{3}
 \beamer@subsectionintoc {3}{2}{Peaks of the encounter data}{9}{0}{3}
 \beamer@subsectionintoc {3}{3}{The encounter probability}{10}{0}{3}
-\beamer@sectionintoc {4}{Theoretical model}{11}{0}{4}
-\beamer@sectionintoc {5}{Simulations}{12}{0}{5}
-\beamer@subsectionintoc {5}{1}{Simulations with a simple rouse chain}{12}{0}{5}
-\beamer@subsectionintoc {5}{2}{Loops corresponding to the peaks of the encounter data}{13}{0}{5}
-\beamer@subsectionintoc {5}{3}{Dynamic loops model}{14}{0}{5}
-\beamer@subsectionintoc {5}{4}{Dynamic loops model with beads' affinity}{15}{0}{5}
-\beamer@subsectionintoc {5}{5}{Enlarging the encounter distance}{16}{0}{5}
-\beamer@subsectionintoc {5}{6}{3C experiment with stiff connectors}{17}{0}{5}
-\beamer@sectionintoc {6}{Future Perspectives}{18}{0}{6}
+\beamer@sectionintoc {4}{Theoretical model}{12}{0}{4}
+\beamer@sectionintoc {5}{Simulation Results}{13}{0}{5}
+\beamer@subsectionintoc {5}{1}{Simulations with a simple rouse chain}{13}{0}{5}
+\beamer@subsectionintoc {5}{2}{Random loops model}{14}{0}{5}
+\beamer@sectionintoc {6}{Future Perspectives}{15}{0}{6}

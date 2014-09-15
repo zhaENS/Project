@@ -171,6 +171,20 @@ We report the values of $\beta$ for each bead in each case
 \end{figure}
 \end{frame}
 
+\begin{frame}
+\framesubtitle{TAD D and E}
+\begin{figure}[H]
+\includegraphics[scale=0.1]{meanDataFitTADD}
+\includegraphics[scale=0.1]{fittedExpValuesWithSplineAverageTADD}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[scale=0.1]{meanDataFitTADE}
+\includegraphics[scale=0.1]{fittedExpValuesWithSplineAverageTADE}
+\end{figure}
+
+
+\end{frame}
 \section{Theoretical model}\label{section_theoreticalModel}
 \begin{frame}{Theoretical model}
 \framesubtitle{The Rouse model}
@@ -189,46 +203,32 @@ $f_n$- white Gaussian noise
 \end{itemize}
 \end{frame}
 
-\section{Simulations}
+\section{Simulation Results}\label{section_simulationResults}
 %simulation section order:
 % 1. normal Rouse 
 % 2. normal rouse with peaks
-% 3. 
+% 3. rouse with random loops one TAD with tails 
+% 4. rouse with random fixed loops in two TADs
+
 \subsection{Simulations with a simple rouse chain}
 \begin{frame}{Simulation with simple rouse chain}
 \begin{itemize}
-\item we first check whether a simple model can produce the TADs. 
-\item we examine the results of simulating  chain of 64 beads
+\item A simple Rouse model cannot reproduce the TAD, as expected.
+\item placing loops corresponding to the peaks of the encounter data does not reproduce the TADs. 
 \end{itemize}
-
+\begin{figure}[H]
+\includegraphics[scale=0.15]{encounterMatrix64Beads}
+\includegraphics[scale=0.08]{meanEncounterMatrixOfSimulatingTADEandDWithLoops}
+\end{figure}
 \end{frame}
 
-\subsection{Loops corresponding to the peaks of the encounter data}
-\begin{frame}{Loops corresponding to the peaks of the encounter data}
-
-\end{frame}
-
-\subsection{Dynamic loops model}
-\begin{frame}{Dynamic Loop Model}
+\subsection{Random loops model}
+\begin{frame}{Random Loop Model}
 \begin{itemize}
 \item some beads in the same TAD have affinity toward one another
 \item affine beads located within a distance less than $\epsilon$ (the encounter distance) are connected
 \item the rate of disconnection between beads is $k_{off}$
 \end{itemize}
-\end{frame}
-
-\subsection{Dynamic loops model with beads' affinity}
-\begin{frame}{Dynamic loops model with beads affinity}
-\end{frame}
-
-\subsection{Enlarging the encounter distance}
-\begin{frame}{Enlarging the encounter distance}
-\end{frame}
-
-\subsection{3C experiment with stiff connectors}
-\begin{frame}{3C experiment with stiff connectors}
-Next, we simulate 64 bead chains with stiff connectors.\\
-Stiff connectors are Rouse spring that stay fixed.\\
 \end{frame}
 
 \section{Future Perspectives}
