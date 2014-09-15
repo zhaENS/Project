@@ -1,0 +1,16 @@
+\beamer@slide {section_introduction}{2}
+\beamer@slide {section_theExperimentalSetting}{4}
+\beamer@slide {subsection_chromosomeConformationCaptureExperiments}{4}
+\beamer@slide {subsection_theExperimentalData}{5}
+\beamer@slide {fig:TADsOfTheXChromosome_NoraEtAl2012}{6}
+\beamer@slide {section_analysisOfTheData}{7}
+\beamer@slide {subsection_tadDAndE}{8}
+\beamer@slide {TADDAndEencounterProb}{8}
+\beamer@slide {nonNeighborBeadEncounterTable}{9}
+\beamer@slide {subsection_theEncounterProbability}{10}
+\beamer@slide {section_theoreticalModel}{12}
+\beamer@slide {section_simulationResults}{13}
+\beamer@slide {subsection_randomLoopsModel}{14}
+\beamer@slide {subsection_peaksInThePeripheryOfTADs}{17}
+\beamer@slide {subsection_betaAsAFunctionOfTheNumberOfLoops}{19}
+\beamer@slide {section_summaryAndFutureWork}{21}
