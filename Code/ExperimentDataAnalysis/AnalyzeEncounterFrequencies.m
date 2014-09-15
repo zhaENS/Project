@@ -19,6 +19,7 @@ classdef AnalyzeEncounterFrequencies<handle
         beadSizeInbp = 3000;
         fitModel     = fittype(@(slope,x)(1./(sum(x.^(-slope)))).*x.^(-slope))
         %         fitModel     = fittype(@(slope,bias,x)(bias.*x.^(-slope)))
+        creationDate = date;% class creation date
     end
     
     events
@@ -29,16 +30,29 @@ classdef AnalyzeEncounterFrequencies<handle
             % Class constructor
         end
         
+        function LoadDefaultParams(obj)
+            % loads default parameters
+            % default location of xls file
+            obj.params.xlsFilePath = fullfile(pwd,'..','Data','Luca','MC_TAD_DE_E14d0_rep2+3_true.xlsx');
+            obj.params.fillGapsBy   = 'sameValuesAsBoundary'; % when the dat is  missing (i.e, the segment takes the position of few beads,
+            obj.params.beadRangeToAnalyze = [1 307]; % if empty, analyze all,
+        end
+        
+        function SetInputParams(obj,params)
+            % load input params. the param input must be a structure with
+            % field names identical to the properties in obj.params
+            fNames = fieldnames(params);
+                for fIdx = 1:numel(fNames)
+                    obj.params.(fNames{fIdx}) = params.(fNames{fIdx});
+                end    
+        end
+        
         function Initialize(obj,params)
-            
-            if nargin<2 % if no params are loaded, load default params
-                % default location of xls file
-                obj.params.xlsFilePath = fullfile(pwd,'..','Data','Luca','MC_TAD_DE_E14d0_rep2+3_true.xlsx');
-                obj.params.fillGapsBy   = 'sameValuesAsBoundary'; % when the dat is  missing (i.e, the segment takes the position of few beads,
-                obj.params.beadRangeToAnalyze = [1 307]; % if empty, analyze all,
-            else
-                obj.params.xlsFilePath = params.xlsFilePath;
-            end
+                        
+            obj.LoadDefaultParams
+            if exist('params','var')
+                obj.SetInputParams(params)
+            end                        
             
             obj.ReadData;% load data from xls
             obj.CreateEncounterFrequencyMatrices;
@@ -740,22 +754,22 @@ classdef AnalyzeEncounterFrequencies<handle
             % The encounter data of 'left' and 'right' are compared by
             % taking the difference of the minimal number of beads of both
             % sides.
-            fNames = {'rep1','rep2','average'};
+            fNames = {'Rep1','Rep2','Average'};
             d = zeros(obj.beadData.numBeads,numel(fNames));
             meanDiff = zeros(1,numel(fNames));
             for fIdx = 1:numel(fNames)
-                for bIdx = 1:numel(obj.beadData.encounterData.twoSides.(fNames{fIdx})(:,1))
+                for bIdx = 1:numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx}))(:,1))
                     % find the end with the least number of beads
-                    [~,m] = min([numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1}),...
-                        numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2})]);
-                    numPoints = numel(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,m});
+                    [~,m] = min([numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
+                        numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2})]);
+                    numPoints = numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,m});
                     
-                    if ~isempty(obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1})
+                    if ~isempty(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1})
                         
-                        pLeft = obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1}(1:numPoints);
+                        pLeft = obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}(1:numPoints);
                         pLeft = pLeft./sum(pLeft);
                         
-                        pRight = obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2}(1:numPoints);
+                        pRight = obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}(1:numPoints);
                         pRight = pRight./sum(pRight);% get prob by normalizeing
                         
                         d(bIdx,fIdx) = mean(pLeft-pRight);
@@ -771,7 +785,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 
                 % plot the mean prob difference of the two sides for each bead
                 line('XData',1:obj.beadData.numBeads,...
-                    'YData',d(:,fIdx),'Linewidth',3,...
+                    'YData',d(:,fIdx),'Linewidth',6,...
                     'Parent',ax(fIdx),...
                     'DisplayName','two-sided encounter Prob diff.',...
                     'Color','b')
@@ -779,14 +793,14 @@ classdef AnalyzeEncounterFrequencies<handle
                 line('XData',[1,numel(d(:,fIdx))],...
                     'YData',meanDiff(fIdx)*ones(1,2),...
                     'Color','r',...
-                    'LineWidth',3,...
+                    'LineWidth',6,...
                     'Parent',ax(fIdx),...
                     'DisplayName','mean prob diff')
                 
-                xlabel('Bead number','FontSize',16);
-                ylabel('mean encounter prob. difference','FontSize',16);
-                title(fNames{fIdx},'Fontsize',16)
-                set(gca,'Fontsize',16)
+                xlabel('Bead number','FontSize',40);
+                ylabel('mean encounter prob. difference','FontSize',40);
+                title(fNames{fIdx},'Fontsize',40)
+                set(gca,'Fontsize',40)
                 legend(get(ax(fIdx),'Children'));
             end
             

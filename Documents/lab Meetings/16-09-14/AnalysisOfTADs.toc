@@ -1,15 +1,18 @@
 \beamer@endinputifotherversion {3.33pt}
-\beamer@sectionintoc {1}{The experimental setting}{2}{0}{1}
-\beamer@sectionintoc {2}{The data}{4}{0}{2}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{The experimental setting}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Chromosome Conformation Capture Experiments}{4}{0}{2}
+\beamer@subsectionintoc {2}{2}{The experimental Data}{5}{0}{2}
 \beamer@sectionintoc {3}{Analysis of the data}{7}{0}{3}
-\beamer@subsectionintoc {3}{1}{TAD D and E}{7}{0}{3}
-\beamer@subsectionintoc {3}{2}{Peaks of the encounter data}{8}{0}{3}
-\beamer@sectionintoc {4}{Theoretical model}{9}{0}{4}
-\beamer@sectionintoc {5}{Simulations}{10}{0}{5}
-\beamer@subsectionintoc {5}{1}{Simulations with a simple rouse chain}{10}{0}{5}
-\beamer@subsectionintoc {5}{2}{Loops corresponding to the peaks of the encounter data}{11}{0}{5}
-\beamer@subsectionintoc {5}{3}{Dynamic loops model}{12}{0}{5}
-\beamer@subsectionintoc {5}{4}{Dynamic loops model with beads' affinity}{13}{0}{5}
-\beamer@subsectionintoc {5}{5}{Enlarging the encounter distance}{14}{0}{5}
-\beamer@subsectionintoc {5}{6}{3C experiment with stiff connectors}{15}{0}{5}
-\beamer@sectionintoc {6}{Future Perspectives}{16}{0}{6}
+\beamer@subsectionintoc {3}{1}{TAD D and E}{8}{0}{3}
+\beamer@subsectionintoc {3}{2}{Peaks of the encounter data}{9}{0}{3}
+\beamer@subsectionintoc {3}{3}{The encounter probability}{10}{0}{3}
+\beamer@sectionintoc {4}{Theoretical model}{11}{0}{4}
+\beamer@sectionintoc {5}{Simulations}{12}{0}{5}
+\beamer@subsectionintoc {5}{1}{Simulations with a simple rouse chain}{12}{0}{5}
+\beamer@subsectionintoc {5}{2}{Loops corresponding to the peaks of the encounter data}{13}{0}{5}
+\beamer@subsectionintoc {5}{3}{Dynamic loops model}{14}{0}{5}
+\beamer@subsectionintoc {5}{4}{Dynamic loops model with beads' affinity}{15}{0}{5}
+\beamer@subsectionintoc {5}{5}{Enlarging the encounter distance}{16}{0}{5}
+\beamer@subsectionintoc {5}{6}{3C experiment with stiff connectors}{17}{0}{5}
+\beamer@sectionintoc {6}{Future Perspectives}{18}{0}{6}

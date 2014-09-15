@@ -7,68 +7,88 @@
 \usepackage{float}
 \usepackage{subfig}
 
-\title{Exploring polymer models to explain the appearance of TADs}
+
+%\usepackage{sidecap}
+\title{Random loops model can explain the appearance of Topologically Associating Domains (TADs)}
 \author{Ofir Shukron}
-\institute{Ecole Normale Superieure}
 \usetheme{Madrid}
 \usecolortheme{dolphin}
 
 \begin{document}
 
-\begin{frame}{Stochastic Simulation of Topologically Associating Domains}
+\begin{frame} %{Stochastic Simulation of Topologically Associating Domains}
 \titlepage
 \end{frame}
+
+\section{Introduction}\label{section_introduction}
+\begin{frame}{Introduction}
+\begin{enumerate}
+\item The spatio-temporal organization of the chromatin has significant implication of  cellular activities, such as gene expression and regulation. 
+\item however, the spatial organization of the chromatin is not entirely known.
+\item DNA looping has shown to be a mechanism for long range gene regulation.
+\item here we show that using  random polymer looping model and fitting it to the  experimental chromatin looping data we can explain the appearance of conserved structures in chromatin called TADs.
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Agenda}
 \tableofcontents
+\end{frame}
 
-\section{The experimental setting}
-\begin{frame}{Chromosome Conformation Capture (3C) and its relatives}
-A method to simultaneously record millions of looping events occurring within the genome. 
 
-The 4C/5C/HiC are all derived from the 3C method and uses a 3C segment library for subsequent steps.
+\section{The experimental setting}\label{section_theExperimentalSetting}
+\subsection{Chromosome Conformation Capture Experiments}\label{subsection_chromosomeConformationCaptureExperiments}
+\begin{frame}{Chromosome Conformation Capture Experiments}
+A set of methods to simultaneously record millions of looping events occurring within the genome (specific or unspecific). 
 
-The general 3C steps are:
+The general steps are:
 \begin{enumerate}
 \item intact nuclei are extracted from millions of cells 
 \item Formaldehyde induces protein-DNA and protein-protein cross-links
 \item restriction enzymes digest the cross-linked DNA
-\item DNA is diluted and ligated
+\item cross-linked DNA is purified, diluted and ligated
 \item cross-links are reversed
 \item PCR to amplify ligation junctions
 \item histogram of segment encounter is produced
 \end{enumerate}
-\begin{figure}{H}
+\begin{figure}[H]
 \includegraphics[scale=0.3]{3Cschematic}
 \end{figure}
- 
 \end{frame}
 
-\section{The data}
-\begin{frame}{The data}
+\subsection{The experimental Data}\label{subsection_theExperimentalData}
+\begin{frame}{The experimental data}
 \begin{itemize}
-\item 5C experiments were conducted by Nora et. al 2012. 
-\item A subset of the data, showing X-chromosome self interactions in mouse embryonic stem cells, will be analyzed here. 
-\item The focus is on regions harboring the Xist enhancer and Tisx promoter, related to X inactivation mechanism. 
-\item A total length of 920,432 bp.
-\item Two replicates of the experiment were made. 
-\item we have the encounter matrix of different segments.
+\item Two replicate of the CC experiments were conducted by Nora et. al 2012. 
+\item we focus on a 920,432 bp subset of the data, around the X inactivation center of the X chromosome in mouse embryonic stem cells. 
+\item the region harbors the Xist enhancer and Tisx promoter.
+\item we have the segments' encounter frequencies from the two experimental replicates.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Topologically Associating Domains (TADs)}
+Conserved structures of chromosome interactions on the Mb scale, with higher inter than intra-segment interactions
+It is believed that the TAD forms a 'regulatory unit' for regulating gene expression, as can be seen by the correlation of gene expression located on the same TAD
 \centering
-\begin{figure}\label{fig:TADsOfTheXChromosome_NoraEtAl2012}
+\begin{figure}[H]
+
 \includegraphics[scale=0.2]{TADsOfTheXChromosome_NoraEtAl2012}
-\includegraphics[scale=0.3]{TadDandENoraEtAl2012}
-\caption{The 4.5 Mb region analyzed by Nora et al, and TAD D and E regions. Displayed median count in a 30kb window every 6kb}
+\quad
+\includegraphics[scale=0.25]{TadDandENoraEtAl2012} 
+\quad
+\includegraphics[scale=0.27]{transcriptionCorrelationTadDandENoraEtAl2012}
+\caption{\tiny{The 4.5 Mb region (left), enlargement of TAD D and E (center). Displayed median count in a 30kb window every 6kb, gene expression correlation (right)}}
+\label{fig:TADsOfTheXChromosome_NoraEtAl2012}
 \end{figure}
 \end{frame}
 
-
+\section{Analysis of the data}\label{section_analysisOfTheData}
 \begin{frame}{From restriction segments to beads}
 \begin{itemize}
-\item To coarse-grain the data, Luca et. al. chose a bead-length of 3000 bp, corresponding to the mean restriction segment length of EcoRIII enzyme. 
+\item To coarse-grain the data, we choose a bead-size of 3000 bp, corresponding to the mean segment length resulted from the digestion of EcoRIII enzyme. 
+
 \begin{figure}[H]
-\includegraphics[scale=0.45]{restrictionSegmentLengthDistributionLucaetal}
+\includegraphics[scale=0.55]{restrictionSegmentLengthDistributionLucaetal}
 \end{figure}
 \item the genomic section was evenly partitioned by 3000 bp beads. Each segment receives a start and end index according to the beads it covers. 
 \item for example, 
@@ -84,29 +104,30 @@ bp range & start ind & end ind\\
 \end{itemize}
 \end{frame}
 
-\section{Analysis of the data}
-\subsection{TAD D and E}
-\begin{frame}{Analysis of the data}
+
+\subsection{TAD D and E}\label{subsection_tadDAndE}
+\begin{frame}{Bead encounter frequecy}
 \framesubtitle{TAD D and E}
 \begin{itemize}
-\item A total length of 920,432 bp - resulting in 307 beads
-\item We calculate the 'one-sided' encounter probability vs distance (bead units) for each bead
+\item We work with the average of the two experimental replicates
+\item a total length of 920,432 bp - resulting in 307 beads (TAD D 107 beads, TAD E 200 beads)
+\item We calculate the 'one-sided' encounter probability vs. distance (bead units) for each bead
 \item the mean encounter probability difference, shows that the data is left-right symmetric
+
 \begin{figure}[H]
-\includegraphics[scale=0.1]{symmetryOftheEncounterProbTADDAverage}
+\includegraphics[scale=0.05]{symmetryOfTheEncounterProbability307BeadsAverage}
+\includegraphics[scale=0.05]{symmetryOfTheEncounterProbabilityTADDAverage}
+\includegraphics[scale=0.05]{symmetryOfTheEncounterProbabilityTADEAverage}
 \end{figure}
-\item the encounter data showed 
+\item TAD E has several strong specific interactions. TAD D has almost no specific interactions. Strong inter-TAD specific interactions
 \end{itemize}
 
 \begin{figure}[H]\label{TADDAndEencounterProb}
-\includegraphics[scale=0.1]{encounterProbabilityTADDAndE}
-\includegraphics[scale=0.1]{encounterProbabilityTADD}
-\includegraphics[scale=0.13]{encounterProbabilityTADE}
+\centering
+\includegraphics[scale=0.078]{encounterProbabilityTADDAndE}
+\includegraphics[scale=0.075]{encounterProbabilityTADD}
+\includegraphics[scale=0.075]{encounterProbabilityTADE}
 \end{figure}
-\begin{itemize}
-\item TAD E has several strong specific interactions.
-\item TAD D has almost no specific interactions. 
-\end{itemize}
 \end{frame}
 
 \subsection{Peaks of the encounter data}
@@ -120,7 +141,6 @@ bp range & start ind & end ind\\
 \begin{tabular}{l l l}
 Bead numbers & Encountered beads & TAD\\
 \hline
-
 23-26   & 280-290 & \textcolor{red}{$D\leftrightarrow E$}\\
 49-53   & 148-155 & \textcolor{red}{$D\leftrightarrow E$}\\
 56-59   & 80-90   & $D\leftrightarrow D$\\
@@ -137,8 +157,18 @@ Bead numbers & Encountered beads & TAD\\
 \end{table} 
 \end{frame}
 
-\section{Theoretical model}
-\begin{frame}{Theoretical models}
+\subsection{The encounter probability}\label{subsection_theEncounterProbability}
+\begin{frame}{The enconter probability}
+For the case of TAD D, TAD E, and the two together, we estimate the bead encounter probability, $p$, and fit it with a function of the form 
+\begin{equation*}
+p_n(d)=\alpha d^{-\beta}
+\end{equation*}
+where, $d$ is the distance in bead units, $\alpha=\frac{1}{\sum_{j=1}^{d_{max}}j^{-\beta}}$ and $\beta$ is a parameter to be estimated.
+We report the values of $\beta$ for each bead in each case
+\end{frame}
+
+\section{Theoretical model}\label{section_theoreticalModel}
+\begin{frame}{Theoretical model}
 \framesubtitle{The Rouse model}
 We start with the classical and most simple model, the Rouse chain.
 \begin{itemize}
@@ -156,6 +186,10 @@ $f_n$- white Gaussian noise
 \end{frame}
 
 \section{Simulations}
+%simulation section order:
+% 1. normal Rouse 
+% 2. normal rouse with peaks
+% 3. 
 \subsection{Simulations with a simple rouse chain}
 \begin{frame}{Simulation with simple rouse chain}
 \begin{itemize}
