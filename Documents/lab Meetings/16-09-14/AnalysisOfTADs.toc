@@ -11,5 +11,7 @@
 \beamer@sectionintoc {5}{Simulation Results}{13}{0}{5}
 \beamer@subsectionintoc {5}{1}{Simulations with a simple rouse chain}{13}{0}{5}
 \beamer@subsectionintoc {5}{2}{Random loops model}{14}{0}{5}
-\beamer@subsectionintoc {5}{3}{Peaks in the periphery of TADs}{16}{0}{5}
-\beamer@sectionintoc {6}{Future Perspectives}{18}{0}{6}
+\beamer@subsectionintoc {5}{3}{Peaks in the periphery of TADs}{17}{0}{5}
+\beamer@subsectionintoc {5}{4}{$\beta $ as a function of the number of loops}{19}{0}{5}
+\beamer@subsectionintoc {5}{5}{Literature on random loops}{20}{0}{5}
+\beamer@sectionintoc {6}{Summary and future work}{21}{0}{6}

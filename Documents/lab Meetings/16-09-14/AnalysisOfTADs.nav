@@ -51,18 +51,26 @@
 \headcommand {\beamer@framepages {14}{14}}
 \headcommand {\slideentry {5}{2}{2}{15/15}{Random loops model}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\beamer@subsectionentry {0}{5}{3}{16}{Peaks in the periphery of TADs}}\headcommand {\beamer@subsectionpages {14}{15}}
-\headcommand {\slideentry {5}{3}{1}{16/16}{Peaks in the periphery of TADs}{0}}
+\headcommand {\slideentry {5}{2}{3}{16/16}{Random loops model}{0}}
 \headcommand {\beamer@framepages {16}{16}}
-\headcommand {\slideentry {5}{3}{2}{17/17}{Peaks in the periphery of TADs}{0}}
+\headcommand {\beamer@subsectionentry {0}{5}{3}{17}{Peaks in the periphery of TADs}}\headcommand {\beamer@subsectionpages {14}{16}}
+\headcommand {\slideentry {5}{3}{1}{17/17}{Peaks in the periphery of TADs}{0}}
 \headcommand {\beamer@framepages {17}{17}}
-\headcommand {\sectionentry {6}{Future Perspectives}{18}{Future Perspectives}{0}}
-\headcommand {\beamer@sectionpages {13}{17}}
-\headcommand {\beamer@subsectionpages {16}{17}}
-\headcommand {\slideentry {6}{0}{3}{18/18}{}{0}}
+\headcommand {\slideentry {5}{3}{2}{18/18}{Peaks in the periphery of TADs}{0}}
 \headcommand {\beamer@framepages {18}{18}}
-\headcommand {\beamer@partpages {1}{18}}
-\headcommand {\beamer@subsectionpages {18}{18}}
-\headcommand {\beamer@sectionpages {18}{18}}
-\headcommand {\beamer@documentpages {18}}
-\headcommand {\def \inserttotalframenumber {18}}
+\headcommand {\beamer@subsectionentry {0}{5}{4}{19}{$\beta $ as a function of the number of loops}}\headcommand {\beamer@subsectionpages {17}{18}}
+\headcommand {\slideentry {5}{4}{1}{19/19}{$\beta $ as a function of the number of loops}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\beamer@subsectionentry {0}{5}{5}{20}{Literature on random loops}}\headcommand {\beamer@subsectionpages {19}{19}}
+\headcommand {\slideentry {5}{5}{1}{20/20}{Literature on random loops}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\sectionentry {6}{Summary and future work}{21}{Summary and future work}{0}}
+\headcommand {\beamer@sectionpages {13}{20}}
+\headcommand {\beamer@subsectionpages {20}{20}}
+\headcommand {\slideentry {6}{0}{2}{21/21}{}{0}}
+\headcommand {\beamer@framepages {21}{21}}
+\headcommand {\beamer@partpages {1}{21}}
+\headcommand {\beamer@subsectionpages {21}{21}}
+\headcommand {\beamer@sectionpages {21}{21}}
+\headcommand {\beamer@documentpages {21}}
+\headcommand {\def \inserttotalframenumber {21}}

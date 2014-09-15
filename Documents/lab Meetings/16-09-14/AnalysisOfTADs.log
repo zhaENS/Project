@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  15 SEP 2014 21:48
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  15 SEP 2014 22:26
 entering extended mode
 **AnalysisOfTADs.tex
 
@@ -997,14 +997,30 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
 ]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\16-09-14\Analy
-sisOfTADs.toc")
+sisOfTADs.toc"
+LaTeX Font Info:    Try loading font information for U+msa on input line 15.
+ ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 15.
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input 
+line 15.
+
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\sansmathaccent\ot1mathkerncmss.fd
+"
+File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/ma
+thkerncmss.
+))
 Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [3
 
-] <3Cschematic.jpg, id=180, 465.23813pt x 298.11375pt>
+] <3Cschematic.jpg, id=193, 465.23813pt x 298.11375pt>
 File: 3Cschematic.jpg Graphic file (type jpg)
  <use 3Cschematic.jpg>
 Package pdftex.def Info: 3Cschematic.jpg used on input line 57.
@@ -1024,7 +1040,7 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
 [5
 
-] <TADsOfTheXChromosome_NoraEtAl2012.jpg, id=235, 529.22719pt x 517.18219pt>
+] <TADsOfTheXChromosome_NoraEtAl2012.jpg, id=248, 529.22719pt x 517.18219pt>
 File: TADsOfTheXChromosome_NoraEtAl2012.jpg Graphic file (type jpg)
 
 <use TADsOfTheXChromosome_NoraEtAl2012.jpg>
@@ -1032,14 +1048,14 @@ Package pdftex.def Info: TADsOfTheXChromosome_NoraEtAl2012.jpg used on input li
 ne 83.
 (pdftex.def)             Requested size: 105.84355pt x 103.4346pt.
 
-<TadDandENoraEtAl2012.jpg, id=236, 234.1247pt x 252.19218pt>
+<TadDandENoraEtAl2012.jpg, id=249, 234.1247pt x 252.19218pt>
 File: TadDandENoraEtAl2012.jpg Graphic file (type jpg)
 
 <use TadDandENoraEtAl2012.jpg>
 Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 83.
 (pdftex.def)             Requested size: 58.53102pt x 63.04788pt.
 
-<transcriptionCorrelationTadDandENoraEtAl2012.jpg, id=237, 422.32782pt x 289.08
+<transcriptionCorrelationTadDandENoraEtAl2012.jpg, id=250, 422.32782pt x 289.08
 pt>
 File: transcriptionCorrelationTadDandENoraEtAl2012.jpg Graphic file (type jpg)
  <use transcriptionCorrelationTadDandENoraEtAl2012.jpg>
@@ -1058,31 +1074,14 @@ fTheXChromosome_NoraEtAl2012.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Docu
 ments/lab Meetings/16-09-14/TadDandENoraEtAl2012.jpg> <D:/Ofir/Work/ENS/Polymer
  Chain Dynamics/Documents/lab Meetings/16-09-14/transcriptionCorrelationTadDand
 ENoraEtAl2012.jpg>]
-<restrictionSegmentLengthDistributionLucaetal.jpg, id=264, 255.20343pt x 143.03
+<restrictionSegmentLengthDistributionLucaetal.jpg, id=277, 255.20343pt x 143.03
 438pt>
 File: restrictionSegmentLengthDistributionLucaetal.jpg Graphic file (type jpg)
  <use restrictionSegmentLengthDistributionLucaetal.jpg>
 Package pdftex.def Info: restrictionSegmentLengthDistributionLucaetal.jpg used 
 on input line 105.
 (pdftex.def)             Requested size: 140.36232pt x 78.66913pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 105.
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 105.
-
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input 
-line 105.
-
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\sansmathaccent\ot1mathkerncmss.fd
-"
-File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/ma
-thkerncmss.
-)
 Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  [][][][]  
  []
@@ -1091,7 +1090,7 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
  <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/restr
 ictionSegmentLengthDistributionLucaetal.jpg>]
-<symmetryOfTheEncounterProbability307BeadsAverage.jpg, id=293, 1686.3pt x 937.5
+<symmetryOfTheEncounterProbability307BeadsAverage.jpg, id=306, 1686.3pt x 937.5
 025pt>
 File: symmetryOfTheEncounterProbability307BeadsAverage.jpg Graphic file (type j
 pg)
@@ -1100,7 +1099,7 @@ Package pdftex.def Info: symmetryOfTheEncounterProbability307BeadsAverage.jpg u
 sed on input line 131.
 (pdftex.def)             Requested size: 84.31993pt x 46.87787pt.
 
-<symmetryOfTheEncounterProbabilityTADDAverage.jpg, id=294, 1686.3pt x 890.32625
+<symmetryOfTheEncounterProbabilityTADDAverage.jpg, id=307, 1686.3pt x 890.32625
 pt>
 File: symmetryOfTheEncounterProbabilityTADDAverage.jpg Graphic file (type jpg)
  <use symmetryOfTheEncounterProbabilityTADDAverage.jpg>
@@ -1108,7 +1107,7 @@ Package pdftex.def Info: symmetryOfTheEncounterProbabilityTADDAverage.jpg used
 on input line 131.
 (pdftex.def)             Requested size: 84.31993pt x 44.51892pt.
 
-<symmetryOfTheEncounterProbabilityTADEAverage.jpg, id=295, 1686.3pt x 890.32625
+<symmetryOfTheEncounterProbabilityTADEAverage.jpg, id=308, 1686.3pt x 890.32625
 pt>
 File: symmetryOfTheEncounterProbabilityTADEAverage.jpg Graphic file (type jpg)
  <use symmetryOfTheEncounterProbabilityTADEAverage.jpg>
@@ -1116,7 +1115,7 @@ Package pdftex.def Info: symmetryOfTheEncounterProbabilityTADEAverage.jpg used
 on input line 131.
 (pdftex.def)             Requested size: 84.31993pt x 44.51892pt.
 
-<encounterProbabilityTADDAndE.jpg, id=296, 1686.3pt x 890.32625pt>
+<encounterProbabilityTADDAndE.jpg, id=309, 1686.3pt x 890.32625pt>
 File: encounterProbabilityTADDAndE.jpg Graphic file (type jpg)
 
 <use encounterProbabilityTADDAndE.jpg>
@@ -1124,14 +1123,14 @@ Package pdftex.def Info: encounterProbabilityTADDAndE.jpg used on input line 13
 1.
 (pdftex.def)             Requested size: 131.53601pt x 69.44788pt.
 
-<encounterProbabilityTADD.jpg, id=297, 1686.3pt x 890.32625pt>
+<encounterProbabilityTADD.jpg, id=310, 1686.3pt x 890.32625pt>
 File: encounterProbabilityTADD.jpg Graphic file (type jpg)
 
 <use encounterProbabilityTADD.jpg>
 Package pdftex.def Info: encounterProbabilityTADD.jpg used on input line 131.
 (pdftex.def)             Requested size: 126.46704pt x 66.77158pt.
 
-<encounterProbabilityTADE.jpg, id=298, 1686.3pt x 890.32625pt>
+<encounterProbabilityTADE.jpg, id=311, 1686.3pt x 890.32625pt>
 File: encounterProbabilityTADE.jpg Graphic file (type jpg)
 
 <use encounterProbabilityTADE.jpg>
@@ -1164,14 +1163,14 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
 [9
 
-] <meanDataFitTADDAndE.jpg, id=354, 1686.3pt x 890.32625pt>
+] <meanDataFitTADDAndE.jpg, id=367, 1686.3pt x 890.32625pt>
 File: meanDataFitTADDAndE.jpg Graphic file (type jpg)
 
 <use meanDataFitTADDAndE.jpg>
 Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 172.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
-<fittedExpValuesWithSplineAverageTADDAndE.jpg, id=355, 1686.3pt x 890.32625pt>
+<fittedExpValuesWithSplineAverageTADDAndE.jpg, id=368, 1686.3pt x 890.32625pt>
 File: fittedExpValuesWithSplineAverageTADDAndE.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADDAndE.jpg>
@@ -1188,14 +1187,14 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/meanD
 ataFitTADDAndE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meet
 ings/16-09-14/fittedExpValuesWithSplineAverageTADDAndE.jpg>]
-<meanDataFitTADD.jpg, id=388, 1686.3pt x 890.32625pt>
+<meanDataFitTADD.jpg, id=400, 1686.3pt x 890.32625pt>
 File: meanDataFitTADD.jpg Graphic file (type jpg)
 
 <use meanDataFitTADD.jpg>
 Package pdftex.def Info: meanDataFitTADD.jpg used on input line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
-<fittedExpValuesWithSplineAverageTADD.jpg, id=389, 1686.3pt x 890.32625pt>
+<fittedExpValuesWithSplineAverageTADD.jpg, id=401, 1686.3pt x 890.32625pt>
 File: fittedExpValuesWithSplineAverageTADD.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADD.jpg>
@@ -1203,14 +1202,14 @@ Package pdftex.def Info: fittedExpValuesWithSplineAverageTADD.jpg used on input
  line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
-<meanDataFitTADE.jpg, id=390, 1686.3pt x 890.32625pt>
+<meanDataFitTADE.jpg, id=402, 1686.3pt x 890.32625pt>
 File: meanDataFitTADE.jpg Graphic file (type jpg)
 
 <use meanDataFitTADE.jpg>
 Package pdftex.def Info: meanDataFitTADE.jpg used on input line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
-<fittedExpValuesWithSplineAverageTADE.jpg, id=391, 1686.3pt x 890.32625pt>
+<fittedExpValuesWithSplineAverageTADE.jpg, id=403, 1686.3pt x 890.32625pt>
 File: fittedExpValuesWithSplineAverageTADE.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADE.jpg>
@@ -1236,14 +1235,14 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
 [12
 
-] <encounterMatrix64Beads.jpg, id=443, 598.235pt x 475.7775pt>
+] <encounterMatrix64Beads.jpg, id=455, 598.235pt x 475.7775pt>
 File: encounterMatrix64Beads.jpg Graphic file (type jpg)
 
 <use encounterMatrix64Beads.jpg>
 Package pdftex.def Info: encounterMatrix64Beads.jpg used on input line 223.
 (pdftex.def)             Requested size: 101.6986pt x 80.88109pt.
 
-<meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=444, 1687.30376pt x 8
+<meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=456, 1687.30376pt x 8
 94.34125pt>
 File: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg Graphic file (type j
 pg)
@@ -1268,7 +1267,7 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 [14
 
 ]
-<encounterHistogramOneTAD_1to8Loops.jpg, id=500, 1210.5225pt x 739.76375pt>
+<encounterHistogramOneTAD_1to8Loops.jpg, id=512, 1210.5225pt x 739.76375pt>
 File: encounterHistogramOneTAD_1to8Loops.jpg Graphic file (type jpg)
 
 <use encounterHistogramOneTAD_1to8Loops.jpg>
@@ -1276,7 +1275,7 @@ Package pdftex.def Info: encounterHistogramOneTAD_1to8Loops.jpg used on input l
 ine 243.
 (pdftex.def)             Requested size: 157.37344pt x 96.17265pt.
 
-<fittedExpOneTAD1To8Loops.jpg, id=501, 1423.3175pt x 739.76375pt>
+<fittedExpOneTAD1To8Loops.jpg, id=513, 1423.3175pt x 739.76375pt>
 File: fittedExpOneTAD1To8Loops.jpg Graphic file (type jpg)
 
 <use fittedExpOneTAD1To8Loops.jpg>
@@ -1292,12 +1291,21 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/encou
 nterHistogramOneTAD_1to8Loops.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Doc
 uments/lab Meetings/16-09-14/fittedExpOneTAD1To8Loops.jpg>]
-<peaksOfTADDAndEInSurfPlot.jpg, id=527, 1686.3pt x 890.32625pt>
-File: peaksOfTADDAndEInSurfPlot.jpg Graphic file (type jpg)
+<encounterHistogram1To10LoopsInEachTAD.jpg, id=539, 1120.185pt x 739.76375pt>
+File: encounterHistogram1To10LoopsInEachTAD.jpg Graphic file (type jpg)
 
-<use peaksOfTADDAndEInSurfPlot.jpg>
-Package pdftex.def Info: peaksOfTADDAndEInSurfPlot.jpg used on input line 254.
-(pdftex.def)             Requested size: 337.25403pt x 178.06209pt.
+<use encounterHistogram1To10LoopsInEachTAD.jpg>
+Package pdftex.def Info: encounterHistogram1To10LoopsInEachTAD.jpg used on inpu
+t line 253.
+(pdftex.def)             Requested size: 168.0205pt x 110.95976pt.
+
+<fittedExpTwoTADs1To10Loops.jpg, id=540, 1317.92375pt x 739.76375pt>
+File: fittedExpTwoTADs1To10Loops.jpg Graphic file (type jpg)
+
+<use fittedExpTwoTADs1To10Loops.jpg>
+Package pdftex.def Info: fittedExpTwoTADs1To10Loops.jpg used on input line 253.
+
+(pdftex.def)             Requested size: 171.3361pt x 96.17265pt.
 
 Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  [][][][]  
@@ -1305,15 +1313,15 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
 [16
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/peaks
-OfTADDAndEInSurfPlot.jpg>]
-<polymerModelWithLoopAndInternalConnectors.jpg, id=554, 795.72281pt x 477.28313
-pt>
-File: polymerModelWithLoopAndInternalConnectors.jpg Graphic file (type jpg)
- <use polymerModelWithLoopAndInternalConnectors.jpg>
-Package pdftex.def Info: polymerModelWithLoopAndInternalConnectors.jpg used on 
-input line 264.
-(pdftex.def)             Requested size: 79.57693pt x 47.7311pt.
+ <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/encou
+nterHistogram1To10LoopsInEachTAD.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/
+Documents/lab Meetings/16-09-14/fittedExpTwoTADs1To10Loops.jpg>]
+<peaksOfTADDAndEInSurfPlot.jpg, id=566, 1686.3pt x 890.32625pt>
+File: peaksOfTADDAndEInSurfPlot.jpg Graphic file (type jpg)
+
+<use peaksOfTADDAndEInSurfPlot.jpg>
+Package pdftex.def Info: peaksOfTADDAndEInSurfPlot.jpg used on input line 264.
+(pdftex.def)             Requested size: 337.25403pt x 178.06209pt.
 
 Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  [][][][]  
@@ -1321,55 +1329,159 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 
 [17
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/polym
-erModelWithLoopAndInternalConnectors.jpg>]
+ <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/peaks
+OfTADDAndEInSurfPlot.jpg>]
+<polymerModelWithLoopAndInternalConnectors.jpg, id=594, 795.72281pt x 477.28313
+pt>
+File: polymerModelWithLoopAndInternalConnectors.jpg Graphic file (type jpg)
+ <use polymerModelWithLoopAndInternalConnectors.jpg>
+Package pdftex.def Info: polymerModelWithLoopAndInternalConnectors.jpg used on 
+input line 279.
+(pdftex.def)             Requested size: 47.7413pt x 28.63574pt.
+
+<encounterHistogram_randomInternalLoops64BeadChain.jpg, id=595, 1686.3pt x 894.
+34125pt>
+File: encounterHistogram_randomInternalLoops64BeadChain.jpg Graphic file (type 
+jpg)
+ <use encounterHistogram_randomInternalLoops64BeadChain.jpg>
+Package pdftex.def Info: encounterHistogram_randomInternalLoops64BeadChain.jpg 
+used on input line 279.
+(pdftex.def)             Requested size: 134.90675pt x 71.54875pt.
+
+<fittedExpOneTADWithTails64Beads1To11Loops.jpg, id=596, 1686.3pt x 894.34125pt>
+File: fittedExpOneTADWithTails64Beads1To11Loops.jpg Graphic file (type jpg)
+<use fittedExpOneTADWithTails64Beads1To11Loops.jpg>
+Package pdftex.def Info: fittedExpOneTADWithTails64Beads1To11Loops.jpg used on 
+input line 279.
+(pdftex.def)             Requested size: 134.90675pt x 71.54875pt.
+
 Overfull \hbox (90.81935pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [18
 
+ <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/polym
+erModelWithLoopAndInternalConnectors.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynam
+ics/Documents/lab Meetings/16-09-14/encounterHistogram_randomInternalLoops64Bea
+dChain.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-
+09-14/fittedExpOneTADWithTails64Beads1To11Loops.jpg>]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 281.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\beta' on input line 281.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 281.
+
+
+<changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg, id=
+622, 628.3475pt x 483.8075pt>
+File: changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg
+ Graphic file (type jpg)
+
+<use changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg>
+Package pdftex.def Info: changeOfExponentAsAfunctionOfLoopsStableLoopModelVaria
+bleLoops32Beads.jpg used on input line 291.
+(pdftex.def)             Requested size: 125.66727pt x 96.75978pt.
+
+Overfull \hbox (90.81935pt too wide) has occurred while \output is active
+ [][][][]  
+ []
+
+[19
+
+ <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/16-09-14/chang
+eOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads.jpg>]
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no Â in font cmss8!
+Missing character: There is no ´ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+Missing character: There is no â in font cmss8!
+Missing character: There is no € in font cmss8!
+Missing character: There is no “ in font cmss8!
+
+Overfull \hbox (90.81935pt too wide) has occurred while \output is active
+ [][][][]  
+ []
+
+[20
+
+]
+Overfull \hbox (90.81935pt too wide) has occurred while \output is active
+ [][][][]  
+ []
+
+[21
+
 ]
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 276.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 276.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 343.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 343.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\16-09-14\Analy
 sisOfTADs.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 276.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 276.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 343.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 343.
 Package rerunfilecheck Info: File `AnalysisOfTADs.out' has not changed.
-(rerunfilecheck)             Checksum: 19FFC99153F392D75E5FB0E601911FBD;947.
+(rerunfilecheck)             Checksum: D0F011D2CEC80597F565DC1589B3E4BD;1118.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 276.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 343.
  ) 
 Here is how much of TeX's memory you used:
- 18068 strings out of 493921
- 351154 string characters out of 3144879
- 410760 words of memory out of 3000000
- 20863 multiletter control sequences out of 15000+200000
- 9774 words of font info for 36 fonts, out of 3000000 for 9000
+ 18124 strings out of 493921
+ 352934 string characters out of 3144879
+ 413872 words of memory out of 3000000
+ 20903 multiletter control sequences out of 15000+200000
+ 11422 words of font info for 42 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  56i,16n,62p,415b,620s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cmextra/cmex7.
-pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb
-><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><d
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><d:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss8.pfb><d:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi8.pfb><d:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on AnalysisOfTADs.pdf (18 pages, 2481582 bytes).
+pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pf
+b><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><
+d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><d:/
+Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/Pro
+gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><d:/Progr
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss8.pfb><d:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi8.pfb><d:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files (x
+86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on AnalysisOfTADs.pdf (21 pages, 3266257 bytes).
 PDF statistics:
- 653 PDF objects out of 1000 (max. 8388607)
- 65 named destinations out of 1000 (max. 500000)
- 282 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 756 PDF objects out of 1000 (max. 8388607)
+ 75 named destinations out of 1000 (max. 500000)
+ 323 words of extra memory for PDF output out of 10000 (max. 10000000)
 
