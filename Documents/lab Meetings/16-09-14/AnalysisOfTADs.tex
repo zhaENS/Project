@@ -23,13 +23,14 @@
 \section{Introduction}\label{section_introduction}
 \begin{frame}{Introduction}
 \begin{enumerate}
-\item The spatio-temporal organization of the chromatin has significant implication of  cellular activities, such as gene expression and regulation. 
-\item however, the spatial organization of the chromatin is not entirely known.
-\item DNA looping has shown to be a mechanism for long range gene regulation.
-\item here we show that using  random polymer looping model and fitting it to the  experimental chromatin looping data we can explain the appearance of conserved structures in chromatin called TADs.
+\item The spatio-temporal organization of a chromosome has significant implication to cellular activities, such as gene expression and regulation. 
+\item However, the spatial organization of the chromatin is not entirely known.
+\item It is known that packing of the chromatin allows for long range gene regulation.
+\item Furthermore, DNA looping has shown to be a mechanism for long range gene regulation.
+\item Here we show that using random polymer looping model and fitting it to the experimental chromatin looping data we can explain the appearance of conserved structures in chromatin called TADs.
+\item Using this model, we will be able to say 'something' about the mean structure.
 \end{enumerate}
 \end{frame}
-
 
 \begin{frame}{Agenda}
 \tableofcontents
@@ -60,18 +61,20 @@ The general steps are:
 \begin{frame}{The experimental data}
 \begin{itemize}
 \item Two replicate of the CC experiments were conducted by Nora et. al 2012. 
-\item we focus on a 920,432 bp subset of the data, around the X inactivation center of the X chromosome in mouse embryonic stem cells. 
-\item the region harbors the Xist enhancer and Tisx promoter.
-\item we have the segments' encounter frequencies from the two experimental replicates.
+\item Cells taken from undifferentiated mouse embryonic stem cells.
+\item We focus on a 920,432 bp subset of the data, around the X inactivation center of the X chromosome. 
+\item The region harbors the Xist enhancer and Tisx promoter.
+\item We have the segments' encounter frequencies from the two experimental replicates.
+\item The subset of the data contains two Topologically Associating Domains (TADs)
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Topologically Associating Domains (TADs)}
-Conserved structures of chromosome interactions on the Mb scale, with higher inter than intra-segment interactions
-It is believed that the TAD forms a 'regulatory unit' for regulating gene expression, as can be seen by the correlation of gene expression located on the same TAD
+Conserved structures showing chromosome interactions on the Mb scale, with higher intra than inter-region interactions
+It is believed that the TAD forms a 'regulatory unit' for gene expression, as can be seen by the correlation of gene expression located on the same TAD.
+However, it is not yet clear what is its role in a single cell.
 \centering
 \begin{figure}[H]
-
 \includegraphics[scale=0.2]{TADsOfTheXChromosome_NoraEtAl2012}
 \quad
 \includegraphics[scale=0.25]{TadDandENoraEtAl2012} 
@@ -90,7 +93,7 @@ It is believed that the TAD forms a 'regulatory unit' for regulating gene expres
 \begin{figure}[H]
 \includegraphics[scale=0.55]{restrictionSegmentLengthDistributionLucaetal}
 \end{figure}
-\item the genomic section was evenly partitioned by 3000 bp beads. Each segment receives a start and end index according to the beads it covers. 
+\item the genomic section was evenly partitioned. Each bead receives a start and end index according to the segment it covers. 
 \item for example, 
 \begin{tabular}[H]{|l| l| l|}
 \hline
@@ -109,8 +112,8 @@ bp range & start ind & end ind\\
 \begin{frame}{Bead encounter frequecy}
 \framesubtitle{TAD D and E}
 \begin{itemize}
-\item We work with the average of the two experimental replicates
-\item a total length of 920,432 bp - resulting in 307 beads (TAD D 107 beads, TAD E 200 beads)
+\item We work with the average of the two experimental replicates.
+\item A total length of 920,432 bp - resulting in 307 beads (TAD D 107 beads, TAD E 200 beads)
 \item We calculate the 'one-sided' encounter probability vs. distance (bead units) for each bead
 \item the mean encounter probability difference, shows that the data is left-right symmetric
 
@@ -133,9 +136,9 @@ bp range & start ind & end ind\\
 \subsection{Peaks of the encounter data}
 \begin{frame}{Peaks of the encounter data}
 \begin{itemize}
-\item About half of the peaks in the encounter data result from specific interactions \textcolor{red}{between TADs}
+\item About half of the peaks in the encounter data result from specific interactions \textcolor{red}{between TADs}.
 \item The other half comes from specific internal interactions of \textcolor{green}{TAD E}.
-\item To get an impression, a manual marking of the peaks shows 
+\item To get an impression, a manual marking of the peaks shows: 
 \end{itemize}
 \begin{table}[H]\label{nonNeighborBeadEncounterTable}
 \begin{tabular}{l l l}
@@ -163,7 +166,7 @@ For the case of TAD D, TAD E, and the two together, we estimate the bead encount
 \begin{equation*}
 p_n(d)=\alpha d^{-\beta}
 \end{equation*}
-where, $d$ is the distance in bead units, $\alpha=\frac{1}{\sum_{j=1}^{d_{max}}j^{-\beta}}$ and $\beta$ is a parameter to be estimated.
+where, $d$ is the distance in [bead] units, $n$ is the bead number, $\alpha=\frac{1}{\sum_{j=1}^{d_{max}}j^{-\beta}}$ and $\beta$ is a parameter to be estimated.
 We report the values of $\beta$ for each bead in each case
 \begin{figure}[H]
 \includegraphics[scale=0.1]{meanDataFitTADDAndE}
@@ -255,7 +258,7 @@ The same can be done with two bounded regions, where the number of loops is incr
 \subsection{Peaks in the periphery of TADs}\label{subsection_peaksInThePeripheryOfTADs}
 \begin{frame}{Peaks at the edges of TADs}
 At the edges of TADs there are significant peaks of the encounter frequencies.
-The encounter data of Nora et al. was smoothed using a median filter therefore, those peaks where not shown clearly.
+The encounter data of Nora et al. was smoothed using a median filter. Therefore, those peaks where not clearly shown.
 Such peaks might indicate a stable loop in the structure of the genomic region and should be taken into account.
 
 \begin{figure}[H]
@@ -281,9 +284,9 @@ Such peaks might indicate a stable loop in the structure of the genomic region a
 \subsection{$\beta$ as a function of the number of loops}\label{subsection_betaAsAFunctionOfTheNumberOfLoops}
 \begin{frame}{$\beta$ as a function of the number of loops}
 \begin{enumerate}
-\item Through simulation we observe a quadratic relationship between the mean fitted $\beta$ value and the number of random loops
-\item this enables us to say something about the mean structure
-\item the mean number of loops in a given genomic region can be extracted from experimental data
+\item Through simulation we observe a quadratic relationship between the mean fitted $\beta$ value and the number of random loops.
+\item This enables us to say something about the mean structure.
+\item The mean number of loops in a given genomic region can be extracted from experimental data.
 \end{enumerate}
 \begin{figure}[H]
 \includegraphics[scale=0.2]{changeOfExponentAsAfunctionOfLoopsStableLoopModelVariableLoops32Beads}
@@ -330,14 +333,23 @@ science, 326(5950):289–293, 2009.
 etc..
 \end{frame}
 
-\section{Summary and future work}\label{section_summaryAndFutureWork}
+\section{Summary}\label{section_summaryAndFutureWork}
 \begin{frame}{Summary}
 \begin{itemize}
 \item We sowed a plausible and simple model to explain the appearance of the conserved TAD domains 
-\item a relationship between the mean number of loops and the encounter probability was shown 
-\item 
-
+\item A relationship between the mean number of loops and the encounter probability was shown by simulations
+\item The parameter used for our analysis, namely $\beta$, can easily calculated by experimentalists. 
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Work in progress}
+\begin{enumerate}
+\item Calculation of the mean first encounter time between beads in the Rouse ring
+\item Showing analytically the relationship between number of loops and decrease in $\beta$
+\item Put in more rigorous form the relationship between the pattern of $beta$ and the mean observed chromatin structure.
+\item Calculating the equilibrium distribution of the random loop model
+\item Simulating a model with random dynamic loops, in which loops can form and dissociate.
+\end{enumerate}
 \end{frame}
 
 \end{document}

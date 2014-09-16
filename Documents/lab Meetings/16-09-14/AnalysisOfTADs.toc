@@ -14,4 +14,4 @@
 \beamer@subsectionintoc {5}{3}{Peaks in the periphery of TADs}{17}{0}{5}
 \beamer@subsectionintoc {5}{4}{$\beta $ as a function of the number of loops}{19}{0}{5}
 \beamer@subsectionintoc {5}{5}{Literature on random loops}{20}{0}{5}
-\beamer@sectionintoc {6}{Summary and future work}{21}{0}{6}
+\beamer@sectionintoc {6}{Summary}{21}{0}{6}
