@@ -44,13 +44,13 @@ A set of methods to simultaneously record millions of looping events occurring w
 
 The general steps are:
 \begin{enumerate}
-\item intact nuclei are extracted from millions of cells 
-\item Formaldehyde induces protein-DNA and protein-protein cross-links
-\item restriction enzymes digest the cross-linked DNA
-\item cross-linked DNA is purified, diluted and ligated
-\item cross-links are reversed
-\item PCR to amplify ligation junctions
-\item histogram of segment encounter is produced
+\item Intact nuclei are extracted from millions of cells;
+\item Formaldehyde induces protein-DNA and protein-protein cross-links;
+\item restriction enzymes digest the cross-linked DNA;
+\item cross-linked DNA is purified, diluted and ligated;
+\item cross-links are reversed;
+\item PCR to amplify ligation junctions;
+\item the histogram of segments' encounter is produced.
 \end{enumerate}
 \begin{figure}[H]
 \includegraphics[scale=0.3]{3Cschematic}
@@ -65,7 +65,7 @@ The general steps are:
 \item We focus on a 920,432 bp subset of the data, around the X inactivation center of the X chromosome. 
 \item The region harbors the Xist enhancer and Tisx promoter.
 \item We have the segments' encounter frequencies from the two experimental replicates.
-\item The subset of the data contains two Topologically Associating Domains (TADs)
+\item The subset of the data contains two Topologically Associating Domains (TADs).
 \end{itemize}
 \end{frame}
 
@@ -93,8 +93,8 @@ However, it is not yet clear what is its role in a single cell.
 \begin{figure}[H]
 \includegraphics[scale=0.55]{restrictionSegmentLengthDistributionLucaetal}
 \end{figure}
-\item the genomic section was evenly partitioned. Each bead receives a start and end index according to the segment it covers. 
-\item for example, 
+\item The genomic section was evenly partitioned. Each bead receives a start and end index according to the segment it covers. 
+\item for example: 
 \begin{tabular}[H]{|l| l| l|}
 \hline
 bp range & start ind & end ind\\
@@ -113,9 +113,9 @@ bp range & start ind & end ind\\
 \framesubtitle{TAD D and E}
 \begin{itemize}
 \item We work with the average of the two experimental replicates.
-\item A total length of 920,432 bp - resulting in 307 beads (TAD D 107 beads, TAD E 200 beads)
-\item We calculate the 'one-sided' encounter probability vs. distance (bead units) for each bead
-\item the mean encounter probability difference, shows that the data is left-right symmetric
+\item A total length of 920,432 bp - resulting in 307 beads (TAD D 107 beads, TAD E 200 beads).
+\item We calculate the 'one-sided' encounter probability vs. distance (bead units) for each bead.
+\item The mean encounter probability's difference, shows that the data is left-right symmetric.
 
 \begin{figure}[H]
 \includegraphics[scale=0.05]{symmetryOfTheEncounterProbability307BeadsAverage}
@@ -167,7 +167,7 @@ For the case of TAD D, TAD E, and the two together, we estimate the bead encount
 p_n(d)=\alpha d^{-\beta}
 \end{equation*}
 where, $d$ is the distance in [bead] units, $n$ is the bead number, $\alpha=\frac{1}{\sum_{j=1}^{d_{max}}j^{-\beta}}$ and $\beta$ is a parameter to be estimated.
-We report the values of $\beta$ for each bead in each case
+We report the values of $\beta$ for each bead in each case.
 \begin{figure}[H]
 \includegraphics[scale=0.1]{meanDataFitTADDAndE}
 \includegraphics[scale=0.1]{fittedExpValuesWithSplineAverageTADDAndE}
@@ -217,7 +217,7 @@ $f_n$- white Gaussian noise
 \begin{frame}{Simulation with simple rouse chain}
 \begin{itemize}
 \item A simple Rouse model cannot reproduce the TAD, as expected.
-\item placing loops corresponding to the peaks of the encounter data does not reproduce the TADs. 
+\item Placing loops corresponding to the peaks of the encounter data does not reproduce the TADs. 
 \end{itemize}
 \begin{figure}[H]
 \includegraphics[scale=0.17]{encounterMatrix64Beads}
@@ -228,10 +228,10 @@ $f_n$- white Gaussian noise
 \subsection{Random loops model}\label{subsection_randomLoopsModel}
 \begin{frame}{Random Fixed Loop Model}
 \begin{itemize}
-\item The enhancer-transcription factor elements' encounter motivates the simulation of a chain with randomly placed loops
-\item these encounters might not be as frequent as 'stable' loops in the chromatin and therefore not shown significantly in the encounter maps
-\item simulate a chain of 64 beads, having a random loop in a bounded genomic region
-\item increasing number of loops at random position is simulated 
+\item The enhancer-transcription factor elements' encounter motivates the simulation of a chain with randomly placed loops.
+\item These encounters might not be as frequent as 'stable' loops in the chromatin and therefore not shown significantly in the encounter maps.
+\item Simulate a chain of 64 beads, having a random loop in a bounded region.
+\item Increasing number of loops at random positions. 
 \end{itemize}
 
 \end{frame}
@@ -269,10 +269,10 @@ Such peaks might indicate a stable loop in the structure of the genomic region a
 \begin{frame}{Stable loop with random loops within}
 \framesubtitle{one TAD with 'tails'}
 \begin{enumerate}
-\item Following the peaks observation, we form a mix of 'stable' big loop with internal random loops
-\item in a 64 beads chain, beads 15 and 50 were connected
-\item we iteratively add 11 loops within the stable loop
-\item we can start seeing the emergence of $\beta$ curve pattern as in the experimental data
+\item Following the peaks observation, we form a mix of 'stable' big loop with internal random loops.
+\item In a 64 beads chain, beads 15 and 50 were connected.
+\item We iteratively add 11 loops within the stable loop.
+\item We can start seeing the emergence of $\beta$ curve pattern as in the experimental data.
 \end{enumerate}
 \begin{figure}[H]
 \includegraphics[scale=0.06]{polymerModelWithLoopAndInternalConnectors}
@@ -336,8 +336,8 @@ etc..
 \section{Summary}\label{section_summaryAndFutureWork}
 \begin{frame}{Summary}
 \begin{itemize}
-\item We sowed a plausible and simple model to explain the appearance of the conserved TAD domains 
-\item A relationship between the mean number of loops and the encounter probability was shown by simulations
+\item We sowed a plausible and simple model to explain the appearance of the conserved TAD domains. 
+\item A relationship between the mean number of loops and the encounter probability was shown by simulations.
 \item The parameter used for our analysis, namely $\beta$, can easily calculated by experimentalists. 
 \end{itemize}
 \end{frame}
@@ -349,6 +349,7 @@ etc..
 \item Put in more rigorous form the relationship between the pattern of $beta$ and the mean observed chromatin structure.
 \item Calculating the equilibrium distribution of the random loop model
 \item Simulating a model with random dynamic loops, in which loops can form and dissociate.
+\item Experiment with more realistic polymer models.
 \end{enumerate}
 \end{frame}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  16 SEP 2014 10:36
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  16 SEP 2014 10:46
 entering extended mode
 **AnalysisOfTADs.tex
 
@@ -1023,7 +1023,7 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 ] <3Cschematic.jpg, id=194, 465.23813pt x 298.11375pt>
 File: 3Cschematic.jpg Graphic file (type jpg)
  <use 3Cschematic.jpg>
-Package pdftex.def Info: 3Cschematic.jpg used on input line 59.
+Package pdftex.def Info: 3Cschematic.jpg used on input line 58.
 (pdftex.def)             Requested size: 139.57251pt x 89.43481pt.
 
 Overfull \hbox (90.81935pt too wide) has occurred while \output is active
@@ -1451,13 +1451,13 @@ Overfull \hbox (90.81935pt too wide) has occurred while \output is active
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 355.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 355.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 356.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 356.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\16-09-14\Analy
 sisOfTADs.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 355.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 355.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 356.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 356.
 Package rerunfilecheck Info: File `AnalysisOfTADs.out' has not changed.
 (rerunfilecheck)             Checksum: 73BC1223AC9DCBA5249F8905A760DB19;1102.
 
@@ -1465,7 +1465,7 @@ Package rerunfilecheck Info: File `AnalysisOfTADs.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 355.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 356.
  ) 
 Here is how much of TeX's memory you used:
  18128 strings out of 493921
@@ -1486,7 +1486,7 @@ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi8.pfb><d:/Program Fi
 les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files (x
 86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on AnalysisOfTADs.pdf (22 pages, 3273481 bytes).
+Output written on AnalysisOfTADs.pdf (22 pages, 3273684 bytes).
 PDF statistics:
  782 PDF objects out of 1000 (max. 8388607)
  77 named destinations out of 1000 (max. 500000)
