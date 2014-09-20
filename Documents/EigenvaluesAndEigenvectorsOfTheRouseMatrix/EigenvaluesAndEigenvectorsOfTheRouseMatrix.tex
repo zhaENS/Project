@@ -272,39 +272,37 @@ Af(\theta)=-Bf(-\theta)
 \end{equation*}
 notice that 
 \begin{equation*}
-f(\theta)=\left<[4\cos^2(\theta)-1,2\cos(\theta),1],-[e^{i\theta},e^{2i\theta},1] \right>
+f(\theta)=\left<[4\cos^2(\theta)-1,-2\cos(\theta),-1],[e^{i\theta},e^{2i\theta},e^{(N-1)\theta}] \right>
 \end{equation*}
 and 
 \begin{equation*}
-f(-\theta)=\left<[4\cos^2(\theta)-1,2\cos(\theta),1],-[e^{-i\theta},e^{-2i\theta},1] \right>
+f(-\theta)=\left<[4\cos^2(\theta)-1,-2\cos(\theta),-1],[e^{-i\theta},e^{-2i\theta},e^{-i(N-1)\theta}] \right>
 \end{equation*}
-The vectors $[e^{-i\theta},e^{-2i\theta},1]$ and $[e^{i\theta},e^{2i\theta},1]$ are opposite in directions but otherwise equal. Indeed 
+The vectors $[e^{-i\theta},e^{-2i\theta},e^{-i(N-1)\theta}]$ and $[e^{i\theta},e^{2i\theta},e^{i(N-1)\theta}]$ are opposite in directions but otherwise equal. Indeed 
 \begin{equation*}
- cos(\phi)=\frac{\left<[e^{-i\theta},e^{-2i\theta},1],[e^{i\theta},e^{2i\theta},1]\right>}{\sqrt{3}\sqrt{3}}=\frac{3}{\sqrt{3}\sqrt{3}}\Rightarrow \phi = k\pi \qquad k=0,1,2,....
+ cos(\phi)=\frac{\left<[e^{-i\theta},e^{-2i\theta},e^{-i(N-1)\theta}],[e^{i\theta},e^{2i\theta},e^{i(N-1)\theta}]\right>}{\sqrt{3}\sqrt{3}}=\frac{3}{\sqrt{3}\sqrt{3}}\Rightarrow \phi = k\pi \qquad k=0,1,2,....
 \end{equation*}
-with $\phi$ the angle between vectors. Hence, we conclude $f(\theta)=-f(-\theta)$ and therefore 
+with $\phi$ the angle between vectors. Using the fact theat $\theta=\frac{2p\pi}{N}$ Hence, we conclude $f(\theta)=-f(-\theta)$ and therefore 
 \begin{equation*}
 A=B
 \end{equation*}
 and the general solution becomes 
 \begin{equation*}
-v_j = A(e^{ij\theta}+e^{-ij\theta})=2A\cos(j\theta)
+v_j = A(e^{ij\theta}+e^{-ij\theta})=2A\cos(j\theta) \qquad j=2,..,N-1
 \end{equation*}
 The values of $v_1$ and $v_N$ can be written as 
 \begin{equation*}
 v_1 = \frac{2A[2\cos(2\theta)\cos(\theta)+\cos((N-1)\theta)]}{4\cos^2(\theta)-1} \qquad v_N = \frac{2A[\cos(2\theta)+2\cos(\theta)\cos((N-1)\theta)]}{4\cos^2(\theta)-1}
 \end{equation*}
 
-Using the normalization conditions, namely $\sum_{j=1}^{N}v_j^2 =1$, we write 
+Using the normalization conditions, $\sum_{j=1}^{N}v_j^2 =1$, we write 
 \begin{equation*}
-\sum_{j=2}^{N-1}A^2\cos^2(j\theta) +v_1^2+v_N^2=1
+\sum_{j=2}^{N-1}4A^2\cos^2(j\theta) +v_1^2+v_N^2=1
 \end{equation*}
 and therefore 
 
-
-
 \begin{eqnarray*}
-A &=& (\sum_{j=2}^{N-1}\cos^2(j\theta) +\left(\frac{2[2\cos(2\theta)\cos(\theta)+\cos((N-1)\theta)]}{4\cos^2(\theta)-1}\right)^2\\   &+&\left(\frac{2[\cos(2\theta)+2\cos(\theta)\cos((N-1)\theta)]}{4\cos^2(\theta)-1}\right)^2 )^{-0.5} = B
+A &=& \sqrt{\frac{1}{\left(\frac{2[2\cos(2\theta)\cos(\theta)+\cos((N-1)\theta)]}{4\cos^2(\theta)-1}\right)^2 +\left(\frac{2[\cos(2\theta)+2\cos(\theta)\cos((N-1)\theta)]}{4\cos^2(\theta)-1}\right)^2+\sum_{j=2}^{N-1}4\cos^2(j\theta)}}
 \end{eqnarray*}
   
  \subsection{eigenvectors with multiplicity 2}\label{subsection_eigenvaluesWithMultiplicity2} 
