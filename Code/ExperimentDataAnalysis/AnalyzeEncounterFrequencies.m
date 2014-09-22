@@ -8,8 +8,7 @@ classdef AnalyzeEncounterFrequencies<handle
     % recognized the site AAGCTT and cleaves it between the AA, leaving a
     % sticky end
     
-    properties
-        data
+    properties        
         allData
         beadData
         segmentData
@@ -59,6 +58,7 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.ProcessEncounters;
             obj.FitData;
             obj.FitMeanModel;
+            obj.FindPeaks
             %            obj.DisplayEncounterMatrices;
         end
         
@@ -312,6 +312,27 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.results.fit.allData.exp   = fitObject.slope;
             obj.results.fit.allData.gof   = gof;
             obj.results.fit.allData.model = model;
+            
+        end
+        
+        
+        function FindPeaks(obj)
+            % Find peaks in the two sided encounter data by the method
+            % propused by nora et al 2012.
+            
+            %0. only interactions within the same TAD are used 
+            
+            %1. smooth the data using the loess weighted average
+            %(alpha=0.01) and a loess weighted std 
+            
+            %2. each observed interaction is transformed into a Z score by
+            %(obs-exp)/std
+            
+            %3. the z score distribution is fited with a Weibull dist. to
+            %obtain p values
+            
+            %4. p-values are converted to q values to apply false detection
+            %rate of 0.01
             
         end
         

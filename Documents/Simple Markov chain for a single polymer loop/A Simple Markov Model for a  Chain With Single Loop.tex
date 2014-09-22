@@ -5,9 +5,10 @@
 \usepackage{hyperref}
 \usepackage{color}
 \begin{document}
-\section{The Model}
-\title{A Simple Markov Model Of A Chain with A Single Loop}
+\title{A Simple Markov Model Of A Chain With A Single Loop}
+\author{Ofir Shukron}
 \maketitle
+\section{The Model}\label{section_theModel}
 In this document we summarize a simple Markov chain describing a chain having N monomers (beads) and one occasion of a loop. Only the first monomer can create a loop with all other $j=2,3,..,N$. We consider bead $N$ to be fixed. 
 There are several states for the model. Assuming a loop $[1,j]$, indicating bead 1 is connected to bead $j$, we can form the loops $[1,j+1],[1,j-1]$, or detach, indicated by $[1,0]$. 
 
@@ -67,7 +68,7 @@ the solution to the equation above is given by
 \end{equation*}
 where $\left[P(0)\right]$ is the initial distribution of states, $U$ is a matrix of the eigenvectors in its columns, and D is a diagonal matrix with the corresponding  eigenvalues in the diagonal entries.
 
-\section{Simulations}
+\section{Simulations}\label{section_simulations}
 Setting $\beta=\mu=\lambda=x$ we get 
 \begin{equation*}
 \left[M\right]=

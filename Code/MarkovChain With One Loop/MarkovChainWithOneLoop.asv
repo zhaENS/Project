@@ -103,6 +103,8 @@ classdef MarkovChainWithOneLoop<handle
             M(2:end,1) = (1./sum((1:obj.params.numBeads-1).^(-1.5)))*(1:obj.params.numBeads-1)'.^(-1.5);% set first row
             M(1,2:end) = obj.params.beta;% set first row;
             
+%             make a loop between bead 10 and 50 
+            M(40,:) = M(24,:);
             obj.transitionMatrix = M;
         end
         
