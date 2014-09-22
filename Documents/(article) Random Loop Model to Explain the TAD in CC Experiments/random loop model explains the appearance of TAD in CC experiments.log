@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  22 SEP 2014 11:54
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  22 SEP 2014 14:58
 entering extended mode
 **random*loop*model*explains*the*appearance*of*TAD*in*CC*experiments.tex
 
@@ -198,21 +198,53 @@ LaTeX Warning: No \author given.
 [1
 
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
+<meanDataFitTADDAndE.jpg, id=24, 1686.3pt x 894.34125pt>
+File: meanDataFitTADDAndE.jpg Graphic file (type jpg)
+
+<use meanDataFitTADDAndE.jpg>
+Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 122.
+(pdftex.def)             Requested size: 505.8939pt x 268.30444pt.
+
+<fittedExpValuesWithSplineAverageTADDAndE.jpg, id=25, 1686.3pt x 890.32625pt>
+File: fittedExpValuesWithSplineAverageTADDAndE.jpg Graphic file (type jpg)
+
+<use fittedExpValuesWithSplineAverageTADDAndE.jpg>
+Package pdftex.def Info: fittedExpValuesWithSplineAverageTADDAndE.jpg used on i
+nput line 123.
+(pdftex.def)             Requested size: 505.8939pt x 267.09993pt.
+
+Overfull \hbox (115.8939pt too wide) in paragraph at lines 122--124
+[][]
+ []
+
+
+Overfull \hbox (115.8939pt too wide) in paragraph at lines 122--124
+[] 
+ []
+
+
+LaTeX Warning: Float too large for page by 14.73769pt on input line 125.
+
+
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.bbl" [3]) [4]
+ of TAD in CC experiments.bbl") [4] [5 <D:/Ofir/Work/ENS/Polymer Chain Dynamics
+/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments/mea
+nDataFitTADDAndE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(artic
+le) Random Loop Model to Explain the TAD in CC Experiments/fittedExpValuesWithS
+plineAverageTADDAndE.jpg>]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
  of TAD in CC experiments.aux") ) 
 Here is how much of TeX's memory you used:
- 2303 strings out of 493921
- 30140 string characters out of 3144879
- 82306 words of memory out of 3000000
- 5587 multiletter control sequences out of 15000+200000
- 13653 words of font info for 51 fonts, out of 3000000 for 9000
+ 2321 strings out of 493921
+ 30654 string characters out of 3144879
+ 82332 words of memory out of 3000000
+ 5601 multiletter control sequences out of 15000+200000
+ 13960 words of font info for 52 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,8n,26p,686b,285s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,8n,26p,686b,229s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cmextra/cmex8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/typ
 e1/public/amsfonts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
@@ -223,15 +255,15 @@ msfonts/cm/cmr12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
 onts/cm/cmr6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
 cmss10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-ssbx10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
-6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.p
-fb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb
->
+ss12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss
+bx10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.
+pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
 Output written on "random loop model explains the appearance of TAD in CC exper
-iments.pdf" (4 pages, 154618 bytes).
+iments.pdf" (5 pages, 409748 bytes).
 PDF statistics:
- 71 PDF objects out of 1000 (max. 8388607)
+ 80 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
