@@ -50,19 +50,29 @@ To explore the different polymer conformations that can explain the appearance o
 \begin{equation}
 \frac{dR}{dt}=-\frac{3D}{b^2}KR +\sqrt{2D}\frac{dW}{dt}
 \end{equation}
-where, $R(t)=[R_1(t),R_2(t),..,R_N(t)]^T$ describes the 3D coordinates of the $N$ beads at time $t$, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads of the chain, $W$ is an independent $N\times3$ Brownian motion with mean 0 and variance 1 in each component, and $K$ is the Kirchhoff bead connectivity matrix, which reflects different chain connectivities. 
+where, $R(t)=[R_1(t),R_2(t),..,R_N(t)]^T$ describes the 3D coordinates of $N$ beads at time $t$, $D$ is the diffusion constant, $b$ is the standard-deviation of the distance between adjacent beads of the chain, $W$ is an independent $N\times3$ Brownian motion with mean 0 and variance 1 in each component, and $K$ is the Kirchhoff bead connectivity matrix, which reflects different chain connectivities. 
+
+%> polymer with random loops were tested to give rise to the TADs
+We have constructed our polymer model to have $L$ loops of random sizes. To form each loops, we have randomly chosen 2 non-neighboring beads and altered the connectivity in the Kirchhoff matrix, with the condition that no bead can participate in the formation of more than one loop. 
 
 \subsection{Simulations}\label{subsection_simulations}
+%> for each number of loops of variable size, 
+Throughout simulations, for each fixed number of loops, the chosen beads to connect varied randomly. Such a choice was made to refer to the heterogeneity if the spatial organization inside TAD between cells, even in the same cell phase \cite{Nora2012}.
+
+%> simulation is done until relaxation time 
 Simulations were always carried out until the chain's relaxation time, in which point any two beads were determined to have encountered if their distance at the end of the simulation satisfied $|R_j-R_k|<\epsilon<b,\quad  (j\ne k)$. 
 The chain's relaxation time is given by the slowest mode of the linear chain 
 \begin{equation*}
 \tau =\frac{b^2}{12D\sin(\frac{\pi}{2N})} 
 \end{equation*}  
-for which the number of simulation steps performed is $\frac{\tau}{\Delta t} $. The time step, $\Delta t$ was set so to prevent simulation 'blow-ups' by demanding that the quotient of the norms of beads position at two subsequent steps would be smaller that unity, which resulted in $\Delta t < \frac{b^2}{12D}$. 
+for which the number of simulation steps performed is $\frac{\tau}{\Delta t} $. The time step, $\Delta t$ was set so to prevent simulation 'blow-ups' by demanding that the quotient of the norms of beads position at two subsequent time steps would be smaller that unity, which resulted in $\Delta t < \frac{b^2}{12D}$. 
 
 %> fitting the simulation data and comparing to the theory to experimental data
-For each tested polymer connectivity we summed up the bead encounter frequencies histogram and derived the bead encounter probability. The bead encounter probability was then fitted similarly to the fitting in eq. \ref{equation_encounterProbabilityModel}. For a linear Rouse chain with nearest neighbor interactions, the expected value of $\beta$ is $1.5$. We interpret $\beta<1.5$ as long range interaction resulting from non nearest-neighbor bead connections.
- 
+For each tested polymer connectivity we constructed the bead encounter frequencies histogram and derived the bead encounter probability from it. The bead encounter probability was then fitted similarly to the fitting in eq. \ref{equation_encounterProbabilityModel}. 
+
+%> interpertation of the mean beta value 
+For a linear Rouse chain with nearest neighbor interactions, the expected value of $\beta$ is $1.5$ \cite{doi1986theory}. We interpret $\beta<1.5$ as long range interaction resulting from non nearest-neighbor bead connections.
+Since adding non-neighboring connections to the linear chain can only increase the long range encounter probability, we have focused on interpreting the fitted values in the range $\beta<1.5$. 
 
 %> transfroming to normal coordinates
 
