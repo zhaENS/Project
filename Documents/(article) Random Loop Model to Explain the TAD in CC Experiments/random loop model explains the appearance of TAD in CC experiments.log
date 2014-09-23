@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  22 SEP 2014 17:36
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  23 SEP 2014 16:46
 entering extended mode
 **random*loop*model*explains*the*appearance*of*TAD*in*CC*experiments.tex
 
@@ -16,101 +16,29 @@ german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
 ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
 an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
 ishmax, welsh, loaded.
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\paper\paper.cls"
-Document Class: paper 2008/05/30 1.0l LaTeX document class (wm).
-\hours=\count79
-\minutes=\count80
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\size12.clo"
 File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
-\beforetitlespace=\skip41
-\c@part=\count81
-\c@section=\count82
-\c@subsection=\count83
-\c@subsubsection=\count84
-\c@paragraph=\count85
-\c@subparagraph=\count86
-\exampleindent=\skip42
-\c@figure=\count87
-\c@table=\count88
-\abovecaptionskip=\skip43
-\belowcaptionskip=\skip44
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip45
-
-For additional information on amsmath, use the `?' option.
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
-Package: amstext 2000/06/29 v2.01
-
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks14
-\ex@=\dimen103
-))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen104
-)
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count89
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count90
-\leftroot@=\count91
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count92
-\DOTSCASE@=\count93
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen105
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count94
-\c@MaxMatrixCols=\count95
-\dotsspace@=\muskip10
-\c@parentequation=\count96
-\dspbrk@lvl=\count97
-\tag@help=\toks15
-\row@=\count98
-\column@=\count99
-\maxfields@=\count100
-\andhelp@=\toks16
-\eqnshift@=\dimen106
-\alignsep@=\dimen107
-\tagshift@=\dimen108
-\tagwidth@=\dimen109
-\totwidth@=\dimen110
-\lineht@=\dimen111
-\@envbody=\toks17
-\multlinegap=\skip46
-\multlinetaggap=\skip47
-\mathdisplay@stack=\toks18
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
-)
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
-Package: amssymb 2013/01/14 v3.01 AMS font symbols
-
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
-Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\symAMSa=\mathgroup4
-\symAMSb=\mathgroup5
-LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
-(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
-\KV@toks@=\toks19
+\KV@toks@=\toks14
 )
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
@@ -132,280 +60,364 @@ Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
-\Gread@gobject=\count101
+\Gread@gobject=\count87
 ))
-\Gin@req@height=\dimen112
-\Gin@req@width=\dimen113
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\color.sty"
-Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip43
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
-File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+For additional information on amsmath, use the `?' option.
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
+Package: amstext 2000/06/29 v2.01
+
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen105
+))
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen106
 )
-Package color Info: Driver file: pdftex.def on input line 130.
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
+Package: amsopn 1999/12/14 v2.01 operator names
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\float\float.sty"
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count102
-\float@exts=\toks20
-\float@box=\box28
-\@float@everytoks=\toks21
-\@floatcapt=\box29
+\inf@bad=\count88
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count89
+\leftroot@=\count90
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count91
+\DOTSCASE@=\count92
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen107
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count93
+\c@MaxMatrixCols=\count94
+\dotsspace@=\muskip10
+\c@parentequation=\count95
+\dspbrk@lvl=\count96
+\tag@help=\toks16
+\row@=\count97
+\column@=\count98
+\maxfields@=\count99
+\andhelp@=\toks17
+\eqnshift@=\dimen108
+\alignsep@=\dimen109
+\tagshift@=\dimen110
+\tagwidth@=\dimen111
+\totwidth@=\dimen112
+\lineht@=\dimen113
+\@envbody=\toks18
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
 )
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\latexsym.sty"
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
+)
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\array.sty"
+Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen114
+\extrarowheight=\dimen115
+\NC@list=\toks20
+\extratabsurround=\skip46
+\backup@length=\skip47
+)
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
+\bigstrutjot=\dimen116
+)
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\oberdiek\stackrel.sty"
+Package: stackrel 2007/11/11 v1.2 Adding subscript option to stackrel (HO)
+
+("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+
+("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty"
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)
+("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+))
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen117
+\captionmargin@=\dimen118
+\captionwidth=\dimen119
+\caption@tempdima=\dimen120
+\caption@indent=\dimen121
+\caption@parindent=\dimen122
+\caption@hangindent=\dimen123
+)
+\c@ContinuedFloat=\count100
+)
+("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
+\c@subfigure=\count101
+\c@subtable=\count102
+)
+\c@proposition=\count103
+\c@lemma=\count104
+\c@theorem=\count105
+\c@corollary=\count106
+
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
  of TAD in CC experiments.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count103
-\scratchdimen=\dimen114
-\scratchbox=\box30
-\nofMPsegments=\count104
-\nofMParguments=\count105
-\everyMPshowfont=\toks22
-\MPscratchCnt=\count106
-\MPscratchDim=\dimen115
-\MPnumerator=\count107
-\makeMPintoPDFobject=\count108
-\everyMPtoPDFconversion=\toks23
+\scratchcounter=\count107
+\scratchdimen=\dimen124
+\scratchbox=\box28
+\nofMPsegments=\count108
+\nofMParguments=\count109
+\everyMPshowfont=\toks21
+\MPscratchCnt=\count110
+\MPscratchDim=\dimen125
+\MPnumerator=\count111
+\makeMPintoPDFobject=\count112
+\everyMPtoPDFconversion=\toks22
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 10.
- ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 46.
+ ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ulasy.fd"
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 10.
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: No \author given.
+ []
 
 [1
 
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3] [4]
-<TadDandENoraEtAl2012.jpg, id=27, 234.1247pt x 252.19218pt>
+LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
+ge 4 undefined on input line 141.
+
+
+LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
+ge 4 undefined on input line 141.
+
+
+LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
+ge 4 undefined on input line 141.
+
+
+LaTeX Warning: Reference `figure_encounterProbabilityTADD+fittedBeta' on page 4
+ undefined on input line 144.
+
+
+LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
+ge 4 undefined on input line 145.
+
+[4]
+
+LaTeX Warning: Reference `figure_randomLoopsOneTAD' on page 5 undefined on inpu
+t line 164.
+
+<TadDandENoraEtAl2012.jpg, id=30, 234.1247pt x 252.19218pt>
 File: TadDandENoraEtAl2012.jpg Graphic file (type jpg)
 
 <use TadDandENoraEtAl2012.jpg>
-Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 146.
+Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 185.
 (pdftex.def)             Requested size: 187.3pt x 201.75401pt.
 
-<meanDataFitTADDAndE.jpg, id=28, 1686.3pt x 894.34125pt>
+<meanDataFitTADDAndE.jpg, id=31, 1686.3pt x 894.34125pt>
 File: meanDataFitTADDAndE.jpg Graphic file (type jpg)
 
 <use meanDataFitTADDAndE.jpg>
-Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 152.
-(pdftex.def)             Requested size: 505.8939pt x 268.30444pt.
+Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 186.
+(pdftex.def)             Requested size: 337.25403pt x 178.86508pt.
 
-<fittedExpValuesWithSplineAverageTADDAndE.jpg, id=29, 1686.3pt x 890.32625pt>
+<fittedExpValuesWithSplineAverageTADDAndE.jpg, id=32, 1686.3pt x 890.32625pt>
 File: fittedExpValuesWithSplineAverageTADDAndE.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADDAndE.jpg>
 Package pdftex.def Info: fittedExpValuesWithSplineAverageTADDAndE.jpg used on i
-nput line 153.
-(pdftex.def)             Requested size: 505.8939pt x 267.09993pt.
+nput line 187.
+(pdftex.def)             Requested size: 337.25403pt x 178.06209pt.
 
-Overfull \hbox (115.8939pt too wide) in paragraph at lines 152--154
-[][]
+Overfull \hbox (137.16512pt too wide) in paragraph at lines 185--188
+[][] []
  []
 
 
-Overfull \hbox (115.8939pt too wide) in paragraph at lines 152--154
-[] 
- []
-
-[5 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
-el to Explain the TAD in CC Experiments/TadDandENoraEtAl2012.jpg>]
-Overfull \vbox (26.90437pt too high) has occurred while \output is active []
-
-
-[6 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
-el to Explain the TAD in CC Experiments/meanDataFitTADDAndE.jpg> <D:/Ofir/Work/
-ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the
- TAD in CC Experiments/fittedExpValuesWithSplineAverageTADDAndE.jpg>]
-<meanDataFitTADD.jpg, id=37, 1686.3pt x 890.32625pt>
-File: meanDataFitTADD.jpg Graphic file (type jpg)
- <use meanDataFitTADD.jpg>
-Package pdftex.def Info: meanDataFitTADD.jpg used on input line 158.
-(pdftex.def)             Requested size: 505.8939pt x 267.09993pt.
-
-<fittedExpValuesWithSplineAverageTADD.jpg, id=38, 1686.3pt x 890.32625pt>
-File: fittedExpValuesWithSplineAverageTADD.jpg Graphic file (type jpg)
-
-<use fittedExpValuesWithSplineAverageTADD.jpg>
-Package pdftex.def Info: fittedExpValuesWithSplineAverageTADD.jpg used on input
- line 159.
-(pdftex.def)             Requested size: 505.8939pt x 267.09993pt.
-
-Overfull \hbox (115.8939pt too wide) in paragraph at lines 158--160
-[][]
- []
-
-
-Overfull \hbox (115.8939pt too wide) in paragraph at lines 158--160
-[] 
- []
-
-
-Overfull \vbox (13.53317pt too high) has occurred while \output is active []
-
-
-[7 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
-el to Explain the TAD in CC Experiments/meanDataFitTADD.jpg> <D:/Ofir/Work/ENS/
-Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the TAD
- in CC Experiments/fittedExpValuesWithSplineAverageTADD.jpg>]
-<meanDataFitTADE.jpg, id=43, 1686.3pt x 890.32625pt>
-File: meanDataFitTADE.jpg Graphic file (type jpg)
- <use meanDataFitTADE.jpg>
-Package pdftex.def Info: meanDataFitTADE.jpg used on input line 165.
-(pdftex.def)             Requested size: 505.8939pt x 267.09993pt.
-
-<fittedExpValuesWithSplineAverageTADE.jpg, id=44, 1686.3pt x 890.32625pt>
-File: fittedExpValuesWithSplineAverageTADE.jpg Graphic file (type jpg)
-
-<use fittedExpValuesWithSplineAverageTADE.jpg>
-Package pdftex.def Info: fittedExpValuesWithSplineAverageTADE.jpg used on input
- line 166.
-(pdftex.def)             Requested size: 505.8939pt x 267.09993pt.
-
-Overfull \hbox (115.8939pt too wide) in paragraph at lines 165--167
-[][]
- []
-
-
-Overfull \hbox (115.8939pt too wide) in paragraph at lines 165--167
-[] 
- []
-
-
-Overfull \vbox (13.53317pt too high) has occurred while \output is active []
-
-
-[8 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
-el to Explain the TAD in CC Experiments/meanDataFitTADE.jpg> <D:/Ofir/Work/ENS/
-Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the TAD
- in CC Experiments/fittedExpValuesWithSplineAverageTADE.jpg>]
-<meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=48, 1687.30376pt x 89
+<meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=33, 1687.30376pt x 89
 4.34125pt>
 File: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg Graphic file (type j
 pg)
  <use meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg>
 Package pdftex.def Info: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg u
-sed on input line 172.
+sed on input line 195.
 (pdftex.def)             Requested size: 337.45477pt x 178.86508pt.
 
-<polymerModelWithLoopAndInternalConnectors.jpg, id=49, 795.72281pt x 477.28313p
+<polymerModelWithLoopAndInternalConnectors.jpg, id=34, 795.72281pt x 477.28313p
 t>
 File: polymerModelWithLoopAndInternalConnectors.jpg Graphic file (type jpg)
  <use polymerModelWithLoopAndInternalConnectors.jpg>
 Package pdftex.def Info: polymerModelWithLoopAndInternalConnectors.jpg used on 
-input line 178.
-(pdftex.def)             Requested size: 238.71867pt x 143.18604pt.
+input line 202.
+(pdftex.def)             Requested size: 159.14174pt x 95.45493pt.
 
-<encounterHistogram_randomInternalLoops64BeadChain.jpg, id=50, 1686.3pt x 894.3
+Overfull \hbox (42.14055pt too wide) in paragraph at lines 202--203
+[][] 
+ []
+
+
+<encounterHistogram_randomInternalLoops64BeadChain.jpg, id=35, 1686.3pt x 894.3
 4125pt>
 File: encounterHistogram_randomInternalLoops64BeadChain.jpg Graphic file (type 
 jpg)
  <use encounterHistogram_randomInternalLoops64BeadChain.jpg>
 Package pdftex.def Info: encounterHistogram_randomInternalLoops64BeadChain.jpg 
-used on input line 185.
+used on input line 207.
 (pdftex.def)             Requested size: 337.25403pt x 178.86508pt.
 
-<fittedExpOneTADWithTails64Beads1To11Loops.jpg, id=51, 1686.3pt x 894.34125pt>
+Overfull \hbox (220.25284pt too wide) in paragraph at lines 207--208
+[][] 
+ []
+
+
+<fittedExpOneTADWithTails64Beads1To11Loops.jpg, id=36, 1686.3pt x 894.34125pt>
 File: fittedExpOneTADWithTails64Beads1To11Loops.jpg Graphic file (type jpg)
 
 <use fittedExpOneTADWithTails64Beads1To11Loops.jpg>
 Package pdftex.def Info: fittedExpOneTADWithTails64Beads1To11Loops.jpg used on 
-input line 186.
+input line 212.
 (pdftex.def)             Requested size: 337.25403pt x 178.86508pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 185--187
-[][]
+Overfull \hbox (220.25284pt too wide) in paragraph at lines 212--213
+[][] 
  []
 
-[9 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
-el to Explain the TAD in CC Experiments/polymerModelWithLoopAndInternalConnecto
-rs.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loo
-p Model to Explain the TAD in CC Experiments/meanEncounterMatrixOfSimulatingTAD
-EandDWithLoops.jpg>]
-<encounterHistogram1To10LoopsInEachTAD.jpg, id=55, 1120.185pt x 739.76375pt>
+
+LaTeX Warning: Float too large for page by 33.48505pt on input line 218.
+
+<encounterHistogram1To10LoopsInEachTAD.jpg, id=37, 1120.185pt x 739.76375pt>
 File: encounterHistogram1To10LoopsInEachTAD.jpg Graphic file (type jpg)
 
 <use encounterHistogram1To10LoopsInEachTAD.jpg>
 Package pdftex.def Info: encounterHistogram1To10LoopsInEachTAD.jpg used on inpu
-t line 192.
+t line 223.
 (pdftex.def)             Requested size: 224.03302pt x 147.95012pt.
 
-<fittedExpTwoTADs1To10Loops.jpg, id=56, 1317.92375pt x 739.76375pt>
+<fittedExpTwoTADs1To10Loops.jpg, id=38, 1317.92375pt x 739.76375pt>
 File: fittedExpTwoTADs1To10Loops.jpg Graphic file (type jpg)
 
 <use fittedExpTwoTADs1To10Loops.jpg>
-Package pdftex.def Info: fittedExpTwoTADs1To10Loops.jpg used on input line 193.
+Package pdftex.def Info: fittedExpTwoTADs1To10Loops.jpg used on input line 224.
 
 (pdftex.def)             Requested size: 263.58008pt x 147.95012pt.
 
-Overfull \hbox (100.22418pt too wide) in paragraph at lines 192--194
+Overfull \hbox (100.22418pt too wide) in paragraph at lines 223--225
 [][] [] 
  []
 
-[10 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mo
-del to Explain the TAD in CC Experiments/encounterHistogram_randomInternalLoops
-64BeadChain.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) R
-andom Loop Model to Explain the TAD in CC Experiments/fittedExpOneTADWithTails6
-4Beads1To11Loops.jpg>]
+
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.bbl" [11 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Doc
-uments/(article) Random Loop Model to Explain the TAD in CC Experiments/encount
-erHistogram1To10LoopsInEachTAD.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Do
-cuments/(article) Random Loop Model to Explain the TAD in CC Experiments/fitted
-ExpTwoTADs1To10Loops.jpg>]) [12]
+ of TAD in CC experiments.bbl" [5]) [6] [7 <D:/Ofir/Work/ENS/Polymer Chain Dyna
+mics/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments
+/TadDandENoraEtAl2012.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(
+article) Random Loop Model to Explain the TAD in CC Experiments/meanDataFitTADD
+AndE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random L
+oop Model to Explain the TAD in CC Experiments/fittedExpValuesWithSplineAverage
+TADDAndE.jpg>] [8 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) 
+Random Loop Model to Explain the TAD in CC Experiments/meanEncounterMatrixOfSim
+ulatingTADEandDWithLoops.jpg>] [9 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Docu
+ments/(article) Random Loop Model to Explain the TAD in CC Experiments/polymerM
+odelWithLoopAndInternalConnectors.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics
+/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments/enc
+ounterHistogram_randomInternalLoops64BeadChain.jpg> <D:/Ofir/Work/ENS/Polymer C
+hain Dynamics/Documents/(article) Random Loop Model to Explain the TAD in CC Ex
+periments/fittedExpOneTADWithTails64Beads1To11Loops.jpg>] [10 <D:/Ofir/Work/ENS
+/Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the TA
+D in CC Experiments/encounterHistogram1To10LoopsInEachTAD.jpg> <D:/Ofir/Work/EN
+S/Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the T
+AD in CC Experiments/fittedExpTwoTADs1To10Loops.jpg>]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.aux") ) 
+ of TAD in CC experiments.aux")
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2385 strings out of 493921
- 33181 string characters out of 3144879
- 82393 words of memory out of 3000000
- 5654 multiletter control sequences out of 15000+200000
- 13960 words of font info for 52 fonts, out of 3000000 for 9000
+ 3128 strings out of 493921
+ 49525 string characters out of 3144879
+ 107877 words of memory out of 3000000
+ 6389 multiletter control sequences out of 15000+200000
+ 12060 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,8n,26p,686b,285s stack positions out of 5000i,500n,10000p,200000b,50000s
-<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cmextra/cmex8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmmi6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
-blic/amsfonts/cm/cmmi8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
-c/amsfonts/cm/cmr10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmr6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
-/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmss10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-ss12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss
-bx10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.
-pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb
-><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+ 36i,13n,38p,720b,424s stack positions out of 5000i,500n,10000p,200000b,50000s
+<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
+<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cmextra/cmex8.pfb>
+<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><d
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><d:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/Prog
+ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/Program
+ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><d:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><d:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><d:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmti12.pfb>
 Output written on "random loop model explains the appearance of TAD in CC exper
-iments.pdf" (12 pages, 1819691 bytes).
+iments.pdf" (10 pages, 1410525 bytes).
 PDF statistics:
- 114 PDF objects out of 1000 (max. 8388607)
+ 112 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

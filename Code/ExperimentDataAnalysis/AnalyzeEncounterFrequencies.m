@@ -323,8 +323,41 @@ classdef AnalyzeEncounterFrequencies<handle
             %0. only interactions within the same TAD are used 
             
             %1. smooth the data using the loess weighted average
-            %(alpha=0.01) and a loess weighted std 
+            %(alpha=0.01) and a loess weighted std for each genomic
+            % distance
+            wModel = fittype(@(a, b, x) (b/a).*((x/a).^(b-1)).*exp(-(x./a).^b));
             
+            if obj.params.beadRangeToAnalyze(1)==1 && obj.params.beadRangeToAnalyze(2)==307
+                
+                % for the two TADs, smooth the encounter frequencies using loess smoothing  
+                % for TAD D
+                encounterMatTADD = obj.encounterMatrix.rep1(1:107,1:107);
+                zScore = zeros(107,1);
+                for bIdx = 1:106% for each bead   
+                  d1                 = diag(ones(1,106-bIdx),-bIdx)==1;                    
+                  objEncounterByDist = obj.encounterMatrix.rep1(d1);
+                  encounterSmooth    = obj.LoessSmooth(objEncounterByDist);
+                  stdEncounter       = std(objEncounterByDist);
+                  zScore             = ((objEncounterByDist-encounterSmooth).^2 /stdEncounter);                                                  
+                  zScore             = zScore(~isnan(zScore));% remove NaN                 
+                  zScore             = zScore(zScore~=0);% remove zeros
+                  [zScoreHist,bins]  = hist(zScore,ceil(numel(zScore)/10));
+                  zScoreEpdf         = zScoreHist/sum(zScoreHist);% empirical pdf
+                % fit a Weibull distribution to get the q score 
+                if ~isempty(bins)
+                [fitObj,gof]= fit(bins',zScoreEpdf',wModel,...                                 
+                                  'StartPoint',[1 1],...
+                                  'Lower',[1e-19 1e-19],...
+                                  'Upper',[100 100],...
+                                  'Robust','LAR');
+                 figure, plot(bins,wModel(fitObj.a,fitObj.b,bins),'b',bins,zScoreEpdf,'r') 
+                end
+                 end  
+                 % if the sse follows a chi2 distribution with (num fitting
+                 % Points) degree of freesom, then the p-value for the fit
+                 % is 
+               
+            end
             %2. each observed interaction is transformed into a Z score by
             %(obs-exp)/std
             
@@ -873,5 +906,15 @@ classdef AnalyzeEncounterFrequencies<handle
             valEq       = sum(exp(x(1)-x(2)*logBeadDist))-1;% *numel(includedBeads)-x(2)*sum((includedBeads))-1;
             valInEq     = valEq;
         end
+        
+        function sigOut=LoessSmooth(sigIn)
+            % smooth the signal in sigIn with a loess filter 
+            sigOut = smooth(sigIn,10,'loess');
+        end
+    end
+    
+    % private methods 
+    methods (Access=private)
+        
     end
 end
