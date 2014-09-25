@@ -1,0 +1,49 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amstext}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\title{Three-Dimensional Reconstruction Using the Encounter Probabilities}
+\begin{document}
+\maketitle
+Given an encounter probability profile of the first bead in a Rouse chain of $N$ bead, we use the expected encounter model in the Rouse chain to give estimate on the 3D organization of the chain. Given the encounter profile $e$, we minimize the goal function of the form
+\begin{eqnarray}
+&& min\{f(d)\}\\
+&& Ad\leq b\\
+&& A_{eq}d=b_{eq}\\
+&& l_b\leq d\leq u_b\\
+&& c(d)\leq0\\
+&& c_{eq}(d)=0
+\end{eqnarray}
+where $d$ is a vector of the distances of bead from bead 1, $f=\sum{d_j}$, $A\in M_{[N\times N]}$ is a matrix such that
+\begin{equation}
+A_{ii} =
+\left\{
+	\begin{array}{ll}
+		 -1 & \mbox{if } \exists j \quad ;\|e_j-e_i\|\leq \epsilon \\
+		 0 & \mbox{else} 
+	\end{array}
+\right.
+\end{equation}
+\begin{equation}
+A_{ij} =
+\left\{
+	\begin{array}{ll}
+		1/|J|  & \mbox{if } \|e_j-e_i\|\leq \epsilon \\
+		0 & \mbox{else } 
+	\end{array}
+\right.
+\end{equation}
+for small $\epsilon$ of choice, and $J$ is the group of all indices $j$ such that $\|e_j-e_i\|\leq \epsilon$ for each $i$. The vector $b$ is the zero vector,  $b=0$, $l_b$ is the lower bound, set to be a vector of all ones, $u_b$ is the upper bound set to be a vector of all $N$. The non linear constraint 
+\begin{equation}
+c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^2
+\end{equation}
+
+
+
+\end{document}
