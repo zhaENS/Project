@@ -58,7 +58,7 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.ProcessEncounters;
             obj.FitData;
             obj.FitMeanModel;
-            obj.FindPeaks
+            obj.PeakCalling
             %            obj.DisplayEncounterMatrices;
         end
         
@@ -316,7 +316,7 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         
-        function FindPeaks(obj)
+        function PeakCalling(obj)
             % Find peaks in the two sided encounter data by the method
             % propused by nora et al 2012.
             
@@ -333,14 +333,27 @@ classdef AnalyzeEncounterFrequencies<handle
                 % for TAD D
                 encounterMatTADD = obj.encounterMatrix.rep1(1:107,1:107);
                 zScore = zeros(107,1);
+                
+                % the expected signal 
+                for mIdx = 1:307
+                   m(mIdx,:) = obj.beadData.encounterData.oneSide.rep1{mIdx};
+                end
+                expectedEncounters = mean(m);
                 for bIdx = 1:106% for each bead   
-                  d1                 = diag(ones(1,106-bIdx),-bIdx)==1;                    
-                  objEncounterByDist = obj.encounterMatrix.rep1(d1);
-                  encounterSmooth    = obj.LoessSmooth(objEncounterByDist);
+                  d1                 = diag(ones(1,106-bIdx),bIdx)==1;                    
+                  objEncounterByDist = m(:,1);%obj.encounterMatrix.rep1(d1);
+%                   encounterSmooth    = obj.LoessSmooth(objEncounterByDist);
                   stdEncounter       = std(objEncounterByDist);
-                  zScore             = ((objEncounterByDist-encounterSmooth).^2 /stdEncounter);                                                  
+                  zScore             = ((objEncounterByDist-expectedEncounters(bIdx)) /stdEncounter);  
+                  mzScore = min(zScore);
+                  zScore  = zScore-min(mzScore);                  
+                  % fit a Weibull distribution to the Z scores in each
+                  % distance                 
+                  [wParams, wErr] = wblfit(zScore+eps);
+                  
                   zScore             = zScore(~isnan(zScore));% remove NaN                 
                   zScore             = zScore(zScore~=0);% remove zeros
+                  [paramHat, paramCI] = wblfit(zScore)
                   [zScoreHist,bins]  = hist(zScore,ceil(numel(zScore)/10));
                   zScoreEpdf         = zScoreHist/sum(zScoreHist);% empirical pdf
                 % fit a Weibull distribution to get the q score 
@@ -909,7 +922,7 @@ classdef AnalyzeEncounterFrequencies<handle
         
         function sigOut=LoessSmooth(sigIn)
             % smooth the signal in sigIn with a loess filter 
-            sigOut = smooth(sigIn,10,'loess');
+            sigOut = smooth(sigIn',11,'loess');
         end
     end
     
