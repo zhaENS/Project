@@ -320,7 +320,7 @@ classdef SimpleRouseFramework<handle
                % plot mean beta value
                
             line('XData',[1 obj.params.numBeads],...
-                'YData',[
+                'YData',[srf.fitResults.mean{rIdx},srf.fitResults.mean{rIdx}])
             end
            
             xlabel(a,'Bead','FontSize',40);
