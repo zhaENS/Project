@@ -212,7 +212,7 @@ classdef ChainDynamicsPlayer<handle
         end
         
         function MoveSlider(obj,sliderHandle,varargin)
-            sv  = round(get(sliderHandle,'Value'));
+            sv  = ceil(get(sliderHandle,'Value'));
             obj.Display(sv);
             obj.prevStep = sv;
         end

@@ -1,24 +1,28 @@
-<description> In this simulation we form two big loops defining the TADs, and seqientially add random internal loops in each one </description>
+<description> In this simulation we form two big loops defining the TADs,...
+ and seqientially add random internal loops in each one,...
+ starting with zero internal loops </description>
+
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
 obj.params.numBeads = 307; 
-obj.params.connnectedBeads = [1 107; 108 307]; % connect the two end in each TAD 
+obj.params.connectedBeads = [1 107; 108 307]; % connect the two end in each TAD 
 
 <func> PreSimulationBatchActions </func>
+
 <func> PreRunActions </func>
-obj.params.connnectedBeads = [1 107; 108 307]; % connect the two end in each TAD 
+obj.params.connectedBeads = [1 107; 108 307]; % connect the two ends in each TAD 
 beadRangeTAD1 = 2:106;
 beadRangeTAD2 = 109:306;
-r = randperm(numel(beadRangeTAD1));
-
+r1 = randperm(numel(beadRangeTAD1));
+r2 = randperm(numel(beadRangeTAD2));
 % define random connection for the first TAD
-for rIdx = 1:obj.round
-obj.params.connectedBeads(end+1,1:2) = beadRangeTAD1(r(2*rIdx-1:2*rIdx));
+for rIdx = 1:obj.round-1
+obj.params.connectedBeads(end+1,1:2) = beadRangeTAD1(r1(2*rIdx-1:2*rIdx));
 end
 
 % define random connections for the second TAD
-for rIdx =1:obj.round
-obj.params.connectedBeads(end+1,1:2) = beadRangeTAD2(r(2*rIdx-1:2*rIdx));
+for rIdx =1:obj.round-1
+obj.params.connectedBeads(end+1,1:2) = beadRangeTAD2(r2(2*rIdx-1:2*rIdx));
 end
 
 <func> PreStepActions </func>

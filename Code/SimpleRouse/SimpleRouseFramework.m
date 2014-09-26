@@ -63,7 +63,7 @@ classdef SimpleRouseFramework<handle
             obj.fitResults.mean           = cell(1,obj.params.numRounds);
             obj.fitResults.bead.fittedExp = zeros(obj.params.numBeads,obj.params.numRounds);
             obj.fitResults.bead.gof       = cell(obj.params.numBeads,obj.params.numRounds);
-            obj.beadDistance              = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numSimulations,obj.params.numRounds);
+%             obj.beadDistance              = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numSimulations,obj.params.numRounds);
             obj.beadEncounterHistogram    = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
             obj.encounterHistogram        = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numRounds);
             obj.beadEncounterHistogram    = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
@@ -137,7 +137,11 @@ classdef SimpleRouseFramework<handle
                         obj.handles.classes.rouseChain.Step;
                         obj.PostStepActions
                     end
-                    obj.beadDistance(:,:,sIdx,rIdx) = obj.handles.classes.rouseChain.beadDist(:,:,end);% take the last recorded bead distances
+                    % imediatly add to the encounter histogram 
+                      obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)+double(obj.handles.classes.rouseChain.beadDist(:,:,end)<obj.params.encounterDist);
+                       obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)-diag(diag(obj.encounterHistogram(:,:,rIdx)));
+                       
+%                     obj.beadDistance(:,:,sIdx,rIdx) = obj.handles.classes.rouseChain.beadDist(:,:,end);% take the last recorded bead distances
                     
                     obj.simulationData(obj.round).simulation(sIdx).time         = toc;
                     obj.simulationData(obj.round).simulation(sIdx).numSteps     = obj.handles.classes.rouseChain.params.numSteps;
@@ -177,7 +181,7 @@ classdef SimpleRouseFramework<handle
         
         function AnalyzeResults(obj)
             if obj.params.analyzeResults
-                obj.CalculateEncounterHistogram;
+%                 obj.CalculateEncounterHistogram;
                 obj.CalculateBeadEncounterHistogram;
                 obj.CalculateBeadEncounterProbability;
                 obj.CalculateMeanEncounterProbability;
@@ -195,7 +199,7 @@ classdef SimpleRouseFramework<handle
             end
         end
         
-        function CalculateEncounterHistogram(obj)
+        function CalculateEncounterHistogram(obj)%unused
             % Calculate the encounter histogram over all rounds
             for rIdx = 1:obj.params.numRounds
                 % Sum over all experiments
@@ -313,6 +317,7 @@ classdef SimpleRouseFramework<handle
              line('XData',1:obj.params.numBeads,...
                   'YData',obj.fitResults.bead.fittedExp(:,rIdx),...
                   'Marker','.',...
+                  'MarkerSize',8,...                 
                   'LineWidth',7,...
                   'Color',cColor,...
                   'Parent',a,...
@@ -320,7 +325,10 @@ classdef SimpleRouseFramework<handle
                % plot mean beta value
                
             line('XData',[1 obj.params.numBeads],...
-                'YData',[srf.fitResults.mean{rIdx},srf.fitResults.mean{rIdx}])
+                'YData',[obj.fitResults.mean{rIdx}.beta,obj.fitResults.mean{rIdx}.beta],...                
+                'Color',cColor,...
+                'Parent',a,...
+                'LineWidth',4);
             end
            
             xlabel(a,'Bead','FontSize',40);
