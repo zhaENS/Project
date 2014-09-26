@@ -1,9 +1,14 @@
-<description> Describe the simulation here... </description>
+<description> In this simulation we form two big loops defining the TADs, and seqientially add random internal loops in each one </description>
+<func> SetRecipeParams </func>
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+obj.params.numBeads = 307; 
+obj.params.connnectedBeads = [1 107; 108 307]; % connect the two end in each TAD 
+
 <func> PreSimulationBatchActions </func>
 <func> PreRunActions </func>
-obj.params.connectedBeads=[];
-beadRangeTAD1 = 1:32;
-beadRangeTAD2 = 33:64;
+obj.params.connnectedBeads = [1 107; 108 307]; % connect the two end in each TAD 
+beadRangeTAD1 = 2:106;
+beadRangeTAD2 = 109:306;
 r = randperm(numel(beadRangeTAD1));
 
 % define random connection for the first TAD
@@ -15,7 +20,6 @@ end
 for rIdx =1:obj.round
 obj.params.connectedBeads(end+1,1:2) = beadRangeTAD2(r(2*rIdx-1:2*rIdx));
 end
-
 
 <func> PreStepActions </func>
 <func> PostStepActions </func>
