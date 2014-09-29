@@ -278,7 +278,7 @@ classdef SimpleRouseFramework<handle
                 f =@(b)sum(((1/sum((dists).^(-b)))*(dists).^(-b)-obj.meanEncounterProbability(1,:,rIdx)').^2);
                 % set zero weights to points with no data 
                 
-                [obj.fitResults.mean{rIdx}.beta] = fminbnd(f,0.2,2.2,obj.fOptions);
+                [obj.fitResults.mean{rIdx}.beta] = fminbnd(f,0,2.2,obj.fOptions);
                 %                 obj.fOptions.Weights = [];
             end            
         end
@@ -297,7 +297,7 @@ classdef SimpleRouseFramework<handle
                     
                     %                 [beadFit, gof] = fit(dists,obj.beadEncounterProbability(bIdx,:,pIdx)',obj.fitModel,obj.fOptions);
                     f = @(b)sum((((1/sum((dists(1:numPts)).^(-b)))*(dists(1:numPts)).^(-b))-obj.beadEncounterProbability(bIdx,1:numPts,pIdx)').^2);
-                    e = fminbnd(f,0.2,2.2,obj.fOptions);
+                    e = fminbnd(f,0,2.2,obj.fOptions);
                     
                     obj.fitResults.bead.fittedExp(bIdx,pIdx) = e;%beadFit.b;
                     %                 obj.fitResults.bead.fittedBias(bIdx,pIdx) = beadFit.a;

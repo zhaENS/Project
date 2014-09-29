@@ -349,7 +349,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 
                 % build the encounter matrix on the left and right
                 
-                threshCurve = expectedEncounters+3.5*expectedEncountersStd; % find outliers
+                threshCurve = expectedEncounters+4*expectedEncountersStd; % find outliers
                 for bIdx = 1:numBeads-1% for each bead
                     leftObs  = obj.beadData.encounterData.twoSides.rep1{bIdx,1};
                     rightObs = obj.beadData.encounterData.twoSides.rep1{bIdx,2};

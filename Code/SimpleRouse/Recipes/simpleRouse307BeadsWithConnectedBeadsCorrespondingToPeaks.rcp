@@ -3,14 +3,19 @@ to the peaks found by the PeakCalling method in the class AnalyzeEncounterFreque
 the list of peaks is found for TAD D and E seperately , but is combined in the...
 307 beads chain simulated here
 </description>
+
 <func> SetRecipeParams </func>
-obj.params.connectedBeads = 
+% take the average replicant peaks as connections 
+load('peakListTADDAndE');
+obj.params.connectedBeads = peakList.average;
+
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
+
 <func> PreSimulationBatchActions </func>
 %Actions performed before each simulation batch
 <func> PreRunActions </func>
 %Actions performed before each simulation run.
-Note that Simplerouse class is initialized before each simulation
+% Note that SimpleRouse class is initialized before each simulation
 <func> PreStepActions </func>
 %Actions performed before each step of the Rouse chain.
 <func> PostStepActions </func>
