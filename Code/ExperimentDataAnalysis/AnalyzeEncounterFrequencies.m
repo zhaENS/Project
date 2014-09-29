@@ -316,7 +316,7 @@ classdef AnalyzeEncounterFrequencies<handle
             
         end
                 
-        function PeakCalling(obj)            
+        function PeakCalling(obj)
             % Find peaks in the two sided encounter data
             % for TAD D            
             %             if obj.params.beadRangeToAnalyze(1)==1 && obj.params.beadRangeToAnalyze(2)== 108
@@ -366,15 +366,15 @@ classdef AnalyzeEncounterFrequencies<handle
                 end
                 
                 % Remove nearest neighbor interactions
-                pMatLeft(diag(ones(107,1),-1)~=0)= 0;
-                pMatRight(diag(ones(107,1),1)~=0)= 0;
+                pMatLeft(diag(ones(numBeads-1,1),-1)~=0)= 0;
+                pMatRight(diag(ones(numBeads-1,1),1)~=0)= 0;
                 
                 % combine left-right encounters
                 combPeaks = (pMatLeft+pMatRight')~=0;
                 [peakList(:,1), peakList(:,2)] = find(combPeaks);
                 
                 peakList = sortrows(peakList,1);
-                obj.peaks.(lower(fNames{fIdx})) =  peakList;
+                obj.peaks.(lower(fNames{fIdx})) =  peakList+obj.params.beadRangeToAnalyze(1)-1;
             end
         end
         
