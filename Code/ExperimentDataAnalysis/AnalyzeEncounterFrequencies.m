@@ -8,11 +8,12 @@ classdef AnalyzeEncounterFrequencies<handle
     % recognized the site AAGCTT and cleaves it between the AA, leaving a
     % sticky end
     
-    properties        
+    properties
         allData
         beadData
         segmentData
         encounterMatrix
+        peaks
         results
         params
         beadSizeInbp = 3000;
@@ -147,9 +148,9 @@ classdef AnalyzeEncounterFrequencies<handle
                 allFreq     = obj.encounterMatrix.(expNames{eIdx});
                 eMatrix     = cell(obj.beadData.numBeads,1);
                 
-                for sIdx = 1:size(allFreq,1)
-                    before = allFreq(sIdx,sIdx-1:-1:1);% flipped
-                    after  = allFreq(sIdx,sIdx+1:1:end);
+                for bIdx = 1:size(allFreq,1)% for each bead
+                    before = allFreq(bIdx,bIdx-1:-1:1);% flipped
+                    after  = allFreq(bIdx,bIdx+1:1:end);
                     freq   = zeros(2,obj.beadData.numBeads-1);
                     freq(1,1:numel(before)) = before;
                     freq(2,1:numel(after))  = after;
@@ -159,9 +160,9 @@ classdef AnalyzeEncounterFrequencies<handle
                     
                     % record the 'before' and 'after' encounter frequency.
                     % where 'before' and 'after' mean in terms of index
-                    obj.beadData.encounterData.twoSides.(expNames{eIdx}){sIdx,1} = before;
-                    obj.beadData.encounterData.twoSides.(expNames{eIdx}){sIdx,2} = after;
-                    eMatrix{sIdx} = freq;
+                    obj.beadData.encounterData.twoSides.(expNames{eIdx}){bIdx,1} = before;
+                    obj.beadData.encounterData.twoSides.(expNames{eIdx}){bIdx,2} = after;
+                    eMatrix{bIdx} = freq;
                 end
                 obj.beadData.encounterData.oneSide.(expNames{eIdx}) = eMatrix;
             end
@@ -314,133 +315,68 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.results.fit.allData.model = model;
             
         end
-        
-        
-        function PeakCalling(obj)
-            % Find peaks in the two sided encounter data by the method
-            % propused by nora et al 2012.
-            
-            %0. only interactions within the same TAD are used 
-            
-            %1. smooth the data using the loess weighted average
-            %(alpha=0.01) and a loess weighted std for each genomic
-            % distance
-%             wModel = fittype(@(a, b, x) (b/a).*((x/a).^(b-1)).*exp(-(x./a).^b));
-            % for TAD D
-            if obj.params.beadRangeToAnalyze(1)==1 && obj.params.beadRangeToAnalyze(2)== 108
                 
-                % for the two TADs, smooth the encounter frequencies using loess smoothing  
-                % for TAD D
-%                 encounterMatTADD = obj.encounterMatrix.rep1(1:107,1:107);
-
-                pMatLeft  = zeros(107);
-                pMatRight = zeros(107);
-                oneSided  = zeros(107);
-                % the expected signal 
-                for bIdx = 1:107
-                    oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.rep1{bIdx}(1:107);                                        
+        function PeakCalling(obj)            
+            % Find peaks in the two sided encounter data
+            % for TAD D            
+            %             if obj.params.beadRangeToAnalyze(1)==1 && obj.params.beadRangeToAnalyze(2)== 108
+            fNames = {'Rep1','Rep2','Average'};
+            for fIdx=1:numel(fNames)
+                numBeads           = obj.params.beadRangeToAnalyze(2)-obj.params.beadRangeToAnalyze(1)+1;
+                oneSided           = zeros(numBeads-1);
+                encounterLeft      = zeros(numBeads-1);
+                encounterRight     = zeros(numBeads-1);
+                pMatLeft           = zeros(numBeads);
+                pMatRight          = zeros(numBeads);
+                peakList           = [];
+                
+                expectedEncountersStd = zeros(1,numBeads-1);
+                
+                % The expected signal
+                for bIdx = 1:numBeads-1
+                    oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.(lower(fNames{fIdx})){bIdx};%(obj.params.beadRangeToAnalyze(1):obj.params.beadRangeToAnalyze(2)-1);
                 end
-                pMat = zeros(107);
-                tr                 = tril(ones(107));
+                
+                tr                 = tril(ones(numBeads-1));
                 tr                 = tr+fliplr(tr');
-                tr                 = double(tr~=0);                
+                tr                 = double(tr~=0);
                 numValidObs        = sum(tr);% the number of available observations for each genomic distance
                 expectedEncounters = sum(oneSided)./numValidObs;% divide to get the expected mean signal
-                expectedEncountersStd = zeros(1,107);
-                for bIdx = 1:107
-                 expectedEncountersStd(bIdx) = std(oneSided(tr(:,bIdx)~=0));
+                
+                for bIdx = 1:numBeads-1
+                    expectedEncountersStd(bIdx) = std(oneSided(tr(:,bIdx)~=0,bIdx));
                 end
-                expectedEncounters = obj.LoessSmooth(expectedEncounters);
-                % place NaN in positions where there is no data 
-%                 oneSided(~tr) = NaN;
                 
                 % build the encounter matrix on the left and right
-                encounterLeft  = zeros(107);
-                encounterRight = zeros(107);
-                for bIdx = 1:107 % for each bead
+                
+                threshCurve = expectedEncounters+3.5*expectedEncountersStd; % find outliers
+                for bIdx = 1:numBeads-1% for each bead
                     leftObs  = obj.beadData.encounterData.twoSides.rep1{bIdx,1};
                     rightObs = obj.beadData.encounterData.twoSides.rep1{bIdx,2};
                     encounterLeft(bIdx,1:numel(leftObs))   = leftObs;
                     encounterRight(bIdx,1:numel(rightObs)) = (rightObs);
+                    tLeft  = leftObs>threshCurve(1:numel(leftObs));
+                    tRight = rightObs>threshCurve(1:numel(rightObs));
+                    if~isempty(tLeft)
+                        pMatLeft(bIdx,bIdx-1:-1:bIdx-numel(tLeft)) = tLeft;
+                    end
+                    if ~isempty(tRight)
+                        pMatRight(bIdx,bIdx+1:bIdx+numel(tRight)) = tRight;
+                    end
                 end
-                % build indices matrices for valid observations on the left
-                % and right for the calculation of the std
-                validPlacesLeft  = tril(ones(size(encounterLeft)))==1;
-                validPlacesRight = fliplr(validPlacesLeft');
-                % create a matrix of the peaks 
-                for dIdx = 1:107% for each genomic distance   
-                  % create z score for the left encounters 
-                  obsEncounterLeft   = (encounterLeft(:,dIdx));
-                  stdEncounterLeft   = std(encounterLeft(flipud(validPlacesLeft(:,dIdx))));
-                  zScoreLeft         = ((obsEncounterLeft-expectedEncounters(dIdx)) /expectedEncountersStd(dIdx));  
-                  
-                  % create z score for the right encounters 
-                  obsEncounterRight   = encounterRight(:,dIdx);%for each genomic distance
-                  stdEncounterRight   = std(encounterRight(validPlacesRight(:,dIdx)));
-                  zScoreRight         = ((obsEncounterRight-expectedEncounters(dIdx)) /expectedEncountersStd(dIdx));  
-                  
-             
-                  % now the std of the zScore is 1.
-                  % th expected value of the difference should be 0.                   
-                  % find peaks larger than 0 +2*std = 2
-                  
-%                   % fit a Weibull distribution to the Z scores in each
-%                   % distance                 
-%                   [wParams, wErr] = wblfit(zScore+eps);
-% find bead indices which their encounter at the genomic distance dIdx is higher than expected
-                zPeaksLeft  = find(zScoreLeft>4*std(zScoreLeft));
-                zPeaksRight = find(zScoreRight>4*std(zScoreRight));
-                if ~isempty(zPeaksLeft)
-                    zPeaksLeft = zPeaksLeft-1;
-                end
-                pMat(zPeaksLeft,zPeaksLeft-dIdx+1) = 1;
-                pMat(zPeaksRight,zPeaksRight+dIdx-1) = 1;
-                pMatList{dIdx} = find(pMat(:,dIdx));
-%                 pMatLeft(zPeaksLeft,dIdx)   = 1;  
-%                 pMatRight(zPeaksRight,dIdx) = 1;
-%                 peakList{zPeakLeft,1} = zPeaksLeft;
-%                 peakList{dIdx,2} = zPeaksRight;
-%                   zScore             = zScore(~isnan(zScore));% remove NaN                 
-% %                   zScore             = zScore(zScore~=0);% remove zeros
-%                   [paramHat, paramCI] = wblfit(zScore);
-%                   [ec,vc] = ecdf(zScore);
-%                   [zScoreHist,bins]  = hist(zScore,ceil(numel(zScore)/10));
-%                   zScoreEpdf         = zScoreHist/sum(zScoreHist);% empirical pdf
-                % fit a Weibull distribution to get the q score 
-%                 if ~isempty(bins)
-%                 [fitObj,gof]= fit(bins',zScoreEpdf',wModel,...                                 
-%                                   'StartPoint',[1 1],...
-%                                   'Lower',[1e-19 1e-19],...
-%                                   'Upper',[100 100],...
-%                                   'Robust','LAR');
-%                  figure, plot(bins,wModel(fitObj.a,fitObj.b,bins),'b',bins,zScoreEpdf,'r') 
-%                 end
-                 end  
-                 % if the sse follows a chi2 distribution with (num fitting
-                 % Points) degree of freesom, then the p-value for the fit
-                 % is 
-                  %2. each observed interaction is transformed into a Z score by
-            %(obs-exp)/std
-            
-            %3. the z scoare distribution is fited with a Weibull dist. to
-            %obtain p values
-            
-            %4. p-values are converted to q values to apply false detection
-            %rate of 0.01
-                p= zeros(107);
-                for pIdx = 1:107
-                 p(pIdx,pMatList{pIdx}) = 1;
-                 p(pMatList{pIdx},pIdx) = 1;
-                end
-                p = p-eye(size(p)); % remove main diagonal 
-                % remove nearest neighbor interactions 
-                p = p- diag(ones(1,106),1);
-                figure, imshow(triu(p));
-                disp(['total long range interactions ' num2str(sum(p(:)))])
                 
+                % Remove nearest neighbor interactions
+                pMatLeft(diag(ones(107,1),-1)~=0)= 0;
+                pMatRight(diag(ones(107,1),1)~=0)= 0;
+                
+                % combine left-right encounters
+                combPeaks = (pMatLeft+pMatRight')~=0;
+                [peakList(:,1), peakList(:,2)] = find(combPeaks);
+                
+                peakList = sortrows(peakList,1);
+                obj.peaks.(lower(fNames{fIdx})) =  peakList;
             end
         end
-         
         
         function DisplayAllDataFit(obj,dispScale)
             % display mean encounter data fit
@@ -846,33 +782,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 
                 legend(get(a,'Children'))
             end
-        end
-        
-        function FindHigherEncountersThanAverage(obj)%Obsolete
-            nums  = 1:obj.beadData.numBeads;
-            nums  = repmat(nums,obj.beadData.numBeads,1);
-            dists = abs(nums-nums');
-            exp   = obj.results.fit.allData.exp;
-            model = obj.results.fit.allData.model(exp,dists);
-            hrep1 = obj.encounterMatrix.rep1;
-            hrep2 = obj.encounterMatrix.rep2;
-            for vIdx = 1:size(hrep1,1)
-                sRow1 = hrep1(vIdx,:);
-                sRow1 = sRow1(~isnan(sRow1));
-                sRow2 = hrep2(vIdx,:);
-                sRow2 = sRow2(~isnan(sRow2));
-                hrep1(vIdx,:) = hrep1(vIdx,:)./trapz(sRow1);
-                hrep2(vIdx,:) = hrep2(vIdx,:)./trapz(sRow2);
-                if (trapz(hrep1(vIdx,:))-1)>1e-10
-                    disp('norm')
-                end
-            end
-            hrep1 = hrep1>model;
-            hrep2 = hrep2>model;
-            figure, imshow(hrep1); title(sprintf('%s%s','rep1 ',num2str(exp)));
-            %             figure, imshow(hrep2); title('rep2');
-            
-        end
+        end        
         
         function CheckEncounterDataSymmetry(obj)
             % Check the two-sided encounter data for each bead.
