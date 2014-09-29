@@ -1,12 +1,20 @@
-<description> Describe the simulation here... </description>
+<description> In this simulation we simulate a 307 bead chain with one big loop in its middle. ...
+We sequantially add 10 inner loops in random location </description>
+
+<func> SetRecipeParams </func>
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+obj.params.numBeads = 307; 
+obj.params.connectedBeads = [107 207]; % connect the two end in each TAD 
+
 <func> PreSimulationBatchActions </func>
 <func> PreRunActions </func>
-tadLimits = [1 32];
-r = randperm(32);
+obj.params.connectedBeads = [107 207]; % connect the two end in each TAD 
+tadLimits  = [107 207];
+tadIndices = tadLimits(1)+1:tadLimits(2)-1;
+r          = randperm(numel(tadIndices));
 % randomly connect beads
-obj.params.connectedBeads = [];
-for rIdx = 1:obj.round
-obj.params.connectedBeads(end+1,1:2) = [r(2*rIdx-1:2*rIdx)];
+for rIdx = 1:obj.round-1
+ obj.params.connectedBeads(end+1,1:2) = [tadIndices(r(2*rIdx-1:2*rIdx))];
 end
 
 <func> PreStepActions </func>

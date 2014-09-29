@@ -1,0 +1,32 @@
+% a script to run the simple rouse class. The exact procedure is described
+% int the recipe file attached to each simulation. 
+
+% load simulation parameters
+rp = SimpleRouseParams;
+
+% create the class
+srf = SimpleRouseFramework; 
+
+% start the simualtion
+srf.Initialize(rp);
+
+% save the class
+d      = date;
+c      = clock;
+hour   = num2str(c(4));
+minute = num2str(c(5));
+resultsFolder = fullfile(pwd,'..','..','PolymerChainDynamicsResults');
+saveName = sprintf('%s',['simpleRouse_',rp.recipeFileName,'_',hour,'_', minute,'_',d,'.mat']);
+resultsStruct = struct;
+
+beadDistance             = srf.beadDistance;
+resultsStruct.encounterHistogram       = srf.encounterHistogram;
+resultsStruct.beadEncounterHistogram   = srf.beadEncounterHistogram;
+resultsStruct.beadEncounterProbability = srf.beadEncounterProbability;
+resultsStruct.meanEncounterProbability = srf.meanEncounterProbability;
+resultsStruct.fitResults               = srf.fitResults;
+resultsStruct.simulationData           = srf.simulationData;
+resultsStruct.userData                 = srf.userData;
+save(fullfile(resultsFolder,saveName),'resultsStruct');
+
+% save(fullfile(resultsFolder,saveName),'srf')
