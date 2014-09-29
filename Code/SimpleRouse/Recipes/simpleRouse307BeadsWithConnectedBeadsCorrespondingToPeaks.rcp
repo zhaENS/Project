@@ -1,0 +1,21 @@
+<description>In this simulation we connect bead in positions corresponding... 
+to the peaks found by the PeakCalling method in the class AnalyzeEncounterFrequencies...
+the list of peaks is found for TAD D and E seperately , but is combined in the...
+307 beads chain simulated here
+</description>
+<func> SetRecipeParams </func>
+obj.params.connectedBeads = 
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+<func> PreSimulationBatchActions </func>
+%Actions performed before each simulation batch
+<func> PreRunActions </func>
+%Actions performed before each simulation run.
+Note that Simplerouse class is initialized before each simulation
+<func> PreStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostRunActions </func>
+%Actions performed sfter each simulation run.
+<func> PostSimulationBatchActions </func>
+%Actions performed before each simulation batch.
