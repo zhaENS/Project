@@ -388,8 +388,8 @@ classdef AnalyzeEncounterFrequencies<handle
 %                   % distance                 
 %                   [wParams, wErr] = wblfit(zScore+eps);
 % find bead indices which their encounter at the genomic distance dIdx is higher than expected
-                zPeaksLeft  = find(zScoreLeft>2.5*std(zScoreLeft));
-                zPeaksRight = find(zScoreRight>2.5*std(zScoreRight));
+                zPeaksLeft  = find(zScoreLeft>4*std(zScoreLeft));
+                zPeaksRight = find(zScoreRight>4*std(zScoreRight));
                 if ~isempty(zPeaksLeft)
                     zPeaksLeft = zPeaksLeft-1;
                 end
