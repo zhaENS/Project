@@ -320,7 +320,7 @@ classdef AnalyzeEncounterFrequencies<handle
             % Find peaks in the two sided encounter data
             % for TAD D            
             %             if obj.params.beadRangeToAnalyze(1)==1 && obj.params.beadRangeToAnalyze(2)== 108
-            fNames = {'Rep1','Rep2','Average'};
+            fNames = {'Rep1','Rep2','Average'};            
             for fIdx=1:numel(fNames)
                 numBeads           = obj.params.beadRangeToAnalyze(2)-obj.params.beadRangeToAnalyze(1)+1;
                 oneSided           = zeros(numBeads-1);
@@ -329,24 +329,50 @@ classdef AnalyzeEncounterFrequencies<handle
                 pMatLeft           = zeros(numBeads);
                 pMatRight          = zeros(numBeads);
                 peakList           = [];
-                
+                          
+                tr                 = tril(ones(numBeads-1));
+                tr                 = (tr+fliplr(tr'))~=0;    
                 expectedEncountersStd = zeros(1,numBeads-1);
+                
+                meanSignal = obj.results.fit.allData.bias*(1:numBeads-1).^(-obj.results.fit.allData.exp);
+               
                 
                 % The expected signal
                 for bIdx = 1:numBeads-1
-                    oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.(lower(fNames{fIdx})){bIdx};%(obj.params.beadRangeToAnalyze(1):obj.params.beadRangeToAnalyze(2)-1);
+                    oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.(lower(fNames{fIdx})){bIdx};
+                    s = sum(oneSided(bIdx,:));% convert to probability ;
+                    if s~=0
+                       oneSided(bIdx,:) = oneSided(bIdx,:)./s;
+                    end                       
+                end
+                     
+%              numValidObs        = sum(double(tr));% the number of available observations for each genomic distance                
+               for dIdx = 1:numBeads-1                   
+                   expectedEncountersStd(dIdx) = std(oneSided(tr(:,dIdx),dIdx));
+                   dists(tr(:,dIdx),dIdx)                =  (oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx))./expectedEncountersStd(dIdx);
+                   
+                   % Shift the values to be positive  
+                   dists(tr(:,dIdx),dIdx) = dists(tr(:,dIdx),dIdx)-min(dists(tr(:,dIdx),dIdx))+eps;
+                   p(dIdx,1:2) = mle(dists(:,dIdx),'distribution','logn');
+               end
+                
+                for dIdx = 1:numBeads-1
+                     % assume the distances from the expected curve are log-
+                    % normal with mean exp(\mu +std^2/2)
+                    tot(:,dIdx)= lognpdf(dists(:,dIdx),meanSignal(dIdx),expectedEncountersStd(dIdx));
+                    f{dIdx} = find(oneSided(dIdx,:)>meanSignal+expectedEncountersStd); 
                 end
                 
-                tr                 = tril(ones(numBeads-1));
-                tr                 = tr+fliplr(tr');
-                tr                 = double(tr~=0);
-                numValidObs        = sum(tr);% the number of available observations for each genomic distance
-                expectedEncounters = sum(oneSided)./numValidObs;% divide to get the expected mean signal
-                
-                for bIdx = 1:numBeads-1
-                    expectedEncountersStd(bIdx) = std(oneSided(tr(:,bIdx)~=0,bIdx));
-                end
-                
+                b=47; figure, subplot(3,1,1),plot(1:numel(meanSignal),meanSignal,'r',1:numel(meanSignal),meanSignal+expectedEncountersStd,'g-.',f{b},oneSided(b,f{b}),'or'),
+                hold on, plot(oneSided(b,:),'b'),
+                subplot(3,1,2), plot(tot(b,:)),title('tot lognrompdf')
+                subplot(3,1,3),plot(sort(dists(:,b)),lognpdf(sort(dists(:,b)),meanSignal(b), expectedEncountersStd(b))), 
+
+%                 tr= tr~=0;
+%                 l = cell(1,numBeads);
+%                 for lIdx = 1:numBeads
+%                     l{lIdx} = obj.LoessSmooth(lIdx*ones(sum(tr(:,1)),1),oneSided(tr(:,lIdx)),expectedEncountersStd(lIdx)/(max(oneSided(tr(:,lIdx),lIdx))-min(oneSided(tr(:,lIdx),lIdx))));
+%                 end
                 % build the encounter matrix on the left and right
                 
                 threshCurve = expectedEncounters+4*expectedEncountersStd; % find outliers
@@ -888,9 +914,9 @@ classdef AnalyzeEncounterFrequencies<handle
             valInEq     = valEq;
         end
         
-        function sigOut=LoessSmooth(sigIn)
+        function sigOut=LoessSmooth(x,y,span)
             % smooth the signal in sigIn with a loess filter 
-            sigOut = smooth(sigIn',11,'loess');
+            sigOut = smooth(x,y,span,'loess');
         end
     end
     
