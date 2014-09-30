@@ -1,7 +1,7 @@
 function rouseParams        = SimpleRouseParams
 % parameters for the SimpleRouse class and simulations
 rouseParams.numRounds       = 1;% number of simulation rounds 
-rouseParams.numSimulations  = 550;% number of simulations in each round
+rouseParams.numSimulations  = 10000;% number of simulations in each round
 rouseParams.dimension       = 3;
 rouseParams.numBeads        = 307;
 rouseParams.b               = 1;
