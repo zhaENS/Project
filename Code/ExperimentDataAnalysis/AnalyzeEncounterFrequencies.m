@@ -345,16 +345,30 @@ classdef AnalyzeEncounterFrequencies<handle
                        oneSided(bIdx,:) = oneSided(bIdx,:)./s;
                     end                       
                 end
-                     
+                
+                stOptions= statset('Robust','on');
 %              numValidObs        = sum(double(tr));% the number of available observations for each genomic distance                
+                proThresh = 0.99;              
+                pMat = zeros(numBeads);
                for dIdx = 1:numBeads-1                   
                    expectedEncountersStd(dIdx) = std(oneSided(tr(:,dIdx),dIdx));
-                   dists(tr(:,dIdx),dIdx)                =  (oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx))./expectedEncountersStd(dIdx);
+                   dists(tr(:,dIdx),dIdx)      =  ((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)).^2)./meanSignal(dIdx);
                    
                    % Shift the values to be positive  
+                   
                    dists(tr(:,dIdx),dIdx) = dists(tr(:,dIdx),dIdx)-min(dists(tr(:,dIdx),dIdx))+eps;
-                   p(dIdx,1:2) = mle(dists(:,dIdx),'distribution','logn');
-               end
+                   p(dIdx) = fitdist(dists(tr(:,dIdx),dIdx),'wbl','options',stOptions);                   
+                   f{dIdx} = find(p(dIdx).cdf(dists(:,dIdx))>proThresh);    
+                   for fIdx = 1:numel(f{dIdx})        
+                       if f{dIdx}(fIdx)+dIdx<numBeads
+                           pMat(f{dIdx}(fIdx),f{dIdx}(fIdx)+dIdx) = 1;
+                           pMat(f{dIdx}(fIdx)+dIdx,f{dIdx}(fIdx)) = 1;
+                       else 
+                           pMat(f{dIdx}(fIdx),f{dIdx}(fIdx)-dIdx) = 1;
+                           pMat(f{dIdx}(fIdx)-dIdx,f{dIdx}(fIdx)) = 1;
+                       end
+                   end
+                end
                 
                 for dIdx = 1:numBeads-1
                      % assume the distances from the expected curve are log-
@@ -363,7 +377,8 @@ classdef AnalyzeEncounterFrequencies<handle
                     f{dIdx} = find(oneSided(dIdx,:)>meanSignal+expectedEncountersStd); 
                 end
                 
-                b=47; figure, subplot(3,1,1),plot(1:numel(meanSignal),meanSignal,'r',1:numel(meanSignal),meanSignal+expectedEncountersStd,'g-.',f{b},oneSided(b,f{b}),'or'),
+                b=47;
+                figure, subplot(3,1,1),plot(1:numel(meanSignal),meanSignal,'r',1:numel(meanSignal),meanSignal+expectedEncountersStd,'g-.',f{b},oneSided(b,f{b}),'or'),
                 hold on, plot(oneSided(b,:),'b'),
                 subplot(3,1,2), plot(tot(b,:)),title('tot lognrompdf')
                 subplot(3,1,3),plot(sort(dists(:,b)),lognpdf(sort(dists(:,b)),meanSignal(b), expectedEncountersStd(b))), 
