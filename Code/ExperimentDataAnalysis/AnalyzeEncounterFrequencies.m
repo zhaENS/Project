@@ -346,10 +346,11 @@ classdef AnalyzeEncounterFrequencies<handle
                     end                       
                 end
                 
-                stOptions= statset('Robust','on');
+                stOptions = statset('Robust','on');
 %              numValidObs        = sum(double(tr));% the number of available observations for each genomic distance                
                 proThresh = 0.99;              
-                pMat = zeros(numBeads);
+                pMat      = false(numBeads);
+                dists     = zeros(numBeads-1);                
                for dIdx = 1:numBeads-1                   
                    expectedEncountersStd(dIdx) = std(oneSided(tr(:,dIdx),dIdx));
                    dists(tr(:,dIdx),dIdx)      =  ((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)).^2)./meanSignal(dIdx);
@@ -357,31 +358,27 @@ classdef AnalyzeEncounterFrequencies<handle
                    % Shift the values to be positive  
                    
                    dists(tr(:,dIdx),dIdx) = dists(tr(:,dIdx),dIdx)-min(dists(tr(:,dIdx),dIdx))+eps;
-                   p(dIdx) = fitdist(dists(tr(:,dIdx),dIdx),'wbl','options',stOptions);                   
-                   f{dIdx} = find(p(dIdx).cdf(dists(:,dIdx))>proThresh);    
-                   for fIdx = 1:numel(f{dIdx})        
-                       if f{dIdx}(fIdx)+dIdx<numBeads
-                           pMat(f{dIdx}(fIdx),f{dIdx}(fIdx)+dIdx) = 1;
-                           pMat(f{dIdx}(fIdx)+dIdx,f{dIdx}(fIdx)) = 1;
+                   p(dIdx)         = fitdist(dists(tr(:,dIdx),dIdx),'wbl','options',stOptions);                   
+                   peaksD{dIdx}    = find(p(dIdx).cdf(dists(:,dIdx))>proThresh);  
+                   peakDists{dIdx} = dists(tr(peaksD{dIdx}),dIdx); 
+                   for peakIdx = 1:numel(peaksD{dIdx})        
+                       if peaksD{dIdx}(peakIdx)+dIdx<numBeads
+                           pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)+dIdx) = true;
+                           pMat(peaksD{dIdx}(peakIdx)+dIdx,peaksD{dIdx}(peakIdx)) = true;
                        else 
-                           pMat(f{dIdx}(fIdx),f{dIdx}(fIdx)-dIdx) = 1;
-                           pMat(f{dIdx}(fIdx)-dIdx,f{dIdx}(fIdx)) = 1;
+                           pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)-dIdx) = true;
+                           pMat(peaksD{dIdx}(peakIdx)-dIdx,peaksD{dIdx}(peakIdx)) = true;
                        end
                    end
                 end
-                
-                for dIdx = 1:numBeads-1
-                     % assume the distances from the expected curve are log-
-                    % normal with mean exp(\mu +std^2/2)
-                    tot(:,dIdx)= lognpdf(dists(:,dIdx),meanSignal(dIdx),expectedEncountersStd(dIdx));
-                    f{dIdx} = find(oneSided(dIdx,:)>meanSignal+expectedEncountersStd); 
-                end
+               
                 
                 b=47;
-                figure, subplot(3,1,1),plot(1:numel(meanSignal),meanSignal,'r',1:numel(meanSignal),meanSignal+expectedEncountersStd,'g-.',f{b},oneSided(b,f{b}),'or'),
-                hold on, plot(oneSided(b,:),'b'),
-                subplot(3,1,2), plot(tot(b,:)),title('tot lognrompdf')
-                subplot(3,1,3),plot(sort(dists(:,b)),lognpdf(sort(dists(:,b)),meanSignal(b), expectedEncountersStd(b))), 
+                figure, subplot(3,1,1),plot(1:numel(meanSignal),meanSignal,'r',...
+                                            1:numel(meanSignal),meanSignal+expectedEncountersStd,'g-.',...
+                                            peaksD{b},oneSided(b,pMat(b,:)),'or');
+                                        
+                hold on, plot(oneSided(b,:),'b'),              
 
 %                 tr= tr~=0;
 %                 l = cell(1,numBeads);
