@@ -208,7 +208,7 @@ classdef AnalyzeEncounterFrequencies<handle
             fOptions.MaxFunEvals = 1e3;
             fOptions.MaxIter     = 1e3;
             fOptions.StartPoint  = 1.5; % [slope]
-            fOptions.Lower       = 0.2; % [slope]
+            fOptions.Lower       = 0.05; % [slope]
             fOptions.Robust      = 'Bisquare';
             %             fOptions.Display     = 'iter';
             for fIdx = 1:numel(fNames);
@@ -686,13 +686,13 @@ classdef AnalyzeEncounterFrequencies<handle
                         %                         freq = obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).encounterNumber;
                         %                         freq(freq==0)=NaN;
                         % indicate in the legend if the bead is missing
-                        if obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).existInDb
+                        if obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).existInDb
                             dispName = sprintf('%s%s','Bead',num2str(beadNumbers(bIdx)));
                         else
                             dispName = sprintf('%s%s','Bead',num2str(beadNumbers(bIdx)),' (missing)');
                         end
-                        line('XData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).beadDist,...
-                            'YData',obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).encounterProb,...
+                        line('XData',obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).beadDist,...
+                            'YData',obj.beadData.bead(beadNumbers(bIdx)).fitResults.(fNames{fIdx}).encounterProb,...
                             'Color',lineC(bIdx,:),...
                             'Marker','none',...
                             'MarkerSize',2,...
