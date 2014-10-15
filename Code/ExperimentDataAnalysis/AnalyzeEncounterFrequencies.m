@@ -102,7 +102,7 @@ classdef AnalyzeEncounterFrequencies<handle
             allBeads2                     = unique([obj.allData.beadStart2,obj.allData.beadEnd2],'rows','stable'); % unique segment 2
             allBeads                      = unique([allBeads1;allBeads2],'rows');% uniqe segment encounter pairs
             obj.beadData.allBeads         = allBeads;
-            obj.beadData.numBeads         = min([obj.params.beadRangeToAnalyze(2),307])- obj.params.beadRangeToAnalyze(1)+1;
+            obj.beadData.numBeads         = min([obj.params.beadRangeToAnalyze(2),307])- max([obj.params.beadRangeToAnalyze(1),1])+1;
             % the first index is the number of bead in which the restriction segment
             % starts. The second index (column) is the bead in which the
             % segment ends
@@ -210,11 +210,11 @@ classdef AnalyzeEncounterFrequencies<handle
             fOptions.StartPoint  = 1.5; % [slope]
             fOptions.Lower       = 0.05; % [slope]
             fOptions.Robust      = 'Bisquare';
-            %             fOptions.Display     = 'iter';
+            
             for fIdx = 1:numel(fNames);
-                prevMissing = false;% indicateor of whether the previous bead is missing.
+                prevMissing = false;% indicator of whether the previous bead is missing.
                 missingIdx  = [];% missing beads indices
-                for bIdx = 1:size(obj.beadData.encounterData.oneSide.(fNames{fIdx}),1)
+                for bIdx = 1:obj.beadData.numBeads
                     
                     freq = obj.beadData.encounterData.oneSide.(fNames{fIdx})(bIdx,1);% raw data
                     if ~all(freq{:}==0)% if it is present in the database
@@ -247,12 +247,19 @@ classdef AnalyzeEncounterFrequencies<handle
                             if strcmpi(obj.params.fillGapsBy,'sameValuesAsBoundary')% options [sameValueAsBoundary/Interp]
                                 % fill-in the gaps with fit values obtained at
                                 % the boundary of the gap
-                                bStart  = (obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).bias);
-                                bEnd    = (obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias);
-                                bValues = linspace(bStart,bEnd,numel(missingIdx));% linear interpolation of the bias values
-                                eStart  = obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).exp;
-                                eEnd    = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp;
-                                eValues = linspace(eStart,eEnd,numel(missingIdx));% linear interpolation of the exp values
+                                if missingIdx(1)~=1
+                                      bStart  = (obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).bias);
+                                      bEnd    = (obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias);
+                                      bValues = linspace(bStart,bEnd,numel(missingIdx));% linear interpolation of the bias values
+                                      eStart  = obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).exp;
+                                      eEnd    = obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp;
+                                      eValues = linspace(eStart,eEnd,numel(missingIdx));% linear interpolation of the exp values
+                                else 
+                                    % if the first data points are empty 
+                                   bValues = ones(1,numel(missingIdx))*(obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).bias);
+                                   eValues = ones(1,numel(missingIdx))*(obj.beadData.bead(bIdx).fitResults.(fNames{fIdx}).exp);
+                                end
+                                
                                 for mIdx = 1:numel(missingIdx)
                                     obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx})              = obj.NewFitResultsStruct;
                                     obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias     = bValues(mIdx);
@@ -271,12 +278,29 @@ classdef AnalyzeEncounterFrequencies<handle
                             end
                         else
                             obj.results.fit.(fNames{fIdx}).exp(bIdx)  = fitObject.slope;
-                            obj.results.fit.(fNames{fIdx}).bias(bIdx) = fitObject.slope-1;
+                            obj.results.fit.(fNames{fIdx}).bias(bIdx) = (1/sum((1:obj.beadData.numBeads-1).^(-fitObject.slope)));% fitObject.slope-1;
                         end
                     else
                         prevMissing = true;
                         missingIdx(end+1) = bIdx;% record the indices of the missing beads in the block
                     end
+                end
+                % fill in the missing data of beads on the edge by the last
+                % good observation 
+                
+                
+                for mIdx = 1:numel(missingIdx)
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx})          = obj.NewFitResultsStruct;
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias     = (obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).bias);
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp      = obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).exp;
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).gof      = 'missing bead- data interpolated from last observation';
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).beadDist = obj.beadData.bead(missingIdx(1)-1).fitResults.(fNames{fIdx}).beadDist;
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterNumber = [];
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).encounterProb   = [];
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).functionValues  = [];
+                    obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).existInDb       = false;
+                    obj.results.fit.(fNames{fIdx}).exp(missingIdx(mIdx))  = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).exp;
+                    obj.results.fit.(fNames{fIdx}).bias(missingIdx(mIdx)) = obj.beadData.bead(missingIdx(mIdx)).fitResults.(fNames{fIdx}).bias;
                 end
             end
         end
@@ -324,20 +348,24 @@ classdef AnalyzeEncounterFrequencies<handle
             for fIdx=1:numel(fNames)
                 numBeads           = obj.params.beadRangeToAnalyze(2)-obj.params.beadRangeToAnalyze(1)+1;
                 oneSided           = zeros(numBeads-1);
-                encounterLeft      = zeros(numBeads-1);
-                encounterRight     = zeros(numBeads-1);
-                pMatLeft           = zeros(numBeads);
-                pMatRight          = zeros(numBeads);
-                peakList           = [];
+
                           
                 tr                 = tril(ones(numBeads-1));
                 tr                 = (tr+fliplr(tr'))~=0;    
-                expectedEncountersStd = zeros(1,numBeads-1);
+%                 expectedEncountersStd = zeros(1,numBeads-1);
                 
-                meanSignal = obj.results.fit.allData.bias*(1:numBeads-1).^(-obj.results.fit.allData.exp);
-               
+                meanSignal = obj.results.fit.allData.bias*(1:numBeads-1).^(-obj.results.fit.allData.exp);               
+                % estimate std of the mean signal 
+                k = zeros(numBeads,numBeads-1);
+                for kIdx = 1:numBeads-1
+                 k(kIdx,1:numBeads-1) = obj.results.fit.average.bias(kIdx).*(1:(numBeads-1)).^(-obj.results.fit.average.exp(kIdx)); 
+                end
                 
-                % The expected signal
+                % mean signal Std at each distance 
+                meanSignalStd = std(k);
+                                
+              
+                % The expected signal probability
                 for bIdx = 1:numBeads-1
                     oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.(lower(fNames{fIdx})){bIdx};
                     s = sum(oneSided(bIdx,:));% convert to probability ;
@@ -347,72 +375,37 @@ classdef AnalyzeEncounterFrequencies<handle
                 end
                 
                 stOptions = statset('Robust','on');
-%              numValidObs        = sum(double(tr));% the number of available observations for each genomic distance                
-                proThresh = 0.99;              
+                fdrThresh = 0.01; % false discovery rate threshold 
                 pMat      = false(numBeads);
-                dists     = zeros(numBeads-1);                
-               for dIdx = 1:numBeads-1                   
-                   expectedEncountersStd(dIdx) = std(oneSided(tr(:,dIdx),dIdx));
-                   dists(tr(:,dIdx),dIdx)      =  ((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)).^2)./meanSignal(dIdx);
+                pValues   = nan(numBeads,numBeads-1);
+                qValues   = pValues;
+               for dIdx = 1:numBeads-1 
                    
-                   % Shift the values to be positive  
-                   
-                   dists(tr(:,dIdx),dIdx) = dists(tr(:,dIdx),dIdx)-min(dists(tr(:,dIdx),dIdx))+eps;
-                   p(dIdx)         = fitdist(dists(tr(:,dIdx),dIdx),'wbl','options',stOptions);                   
-                   peaksD{dIdx}    = find(p(dIdx).cdf(dists(:,dIdx))>proThresh);  
-                   peakDists{dIdx} = dists(tr(peaksD{dIdx}),dIdx); 
+                   if ~all(oneSided(tr(:,dIdx),dIdx)==0)
+                   zScore =  abs((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)))./meanSignalStd(dIdx);                   
+                   % fit a Weibull distribution and ignore negative values 
+                   distrib(dIdx) = fitdist(zScore,'wbl','options',stOptions,'Censoring', zScore<0);
+                   % calculate the pvalues for each z score 
+                   pValues(tr(:,dIdx),dIdx) = 1-distrib(dIdx).cdf(zScore);
+                   % calculate the corresponding q values 
+                   qValues(tr(:,dIdx),dIdx) = mafdr(pValues(tr(:,dIdx),dIdx));
+                   % threshold the data to find peaks 
+                   peaksD{dIdx} =  find(qValues(:,dIdx)<fdrThresh);
+                                      
                    for peakIdx = 1:numel(peaksD{dIdx})        
-                       if peaksD{dIdx}(peakIdx)+dIdx<numBeads
+                       
+                       if peaksD{dIdx}(peakIdx)+dIdx<=numBeads
                            pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)+dIdx) = true;
                            pMat(peaksD{dIdx}(peakIdx)+dIdx,peaksD{dIdx}(peakIdx)) = true;
                        else 
-                           pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)-dIdx) = true;
-                           pMat(peaksD{dIdx}(peakIdx)-dIdx,peaksD{dIdx}(peakIdx)) = true;
+                           pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)-dIdx+1) = true;
+                           pMat(peaksD{dIdx}(peakIdx)-dIdx+1,peaksD{dIdx}(peakIdx)) = true;
                        end
                    end
-                end
-               
-                
-                b=47;
-                figure, subplot(3,1,1),plot(1:numel(meanSignal),meanSignal,'r',...
-                                            1:numel(meanSignal),meanSignal+expectedEncountersStd,'g-.',...
-                                            peaksD{b},oneSided(b,pMat(b,:)),'or');
-                                        
-                hold on, plot(oneSided(b,:),'b'),              
-
-%                 tr= tr~=0;
-%                 l = cell(1,numBeads);
-%                 for lIdx = 1:numBeads
-%                     l{lIdx} = obj.LoessSmooth(lIdx*ones(sum(tr(:,1)),1),oneSided(tr(:,lIdx)),expectedEncountersStd(lIdx)/(max(oneSided(tr(:,lIdx),lIdx))-min(oneSided(tr(:,lIdx),lIdx))));
-%                 end
-                % build the encounter matrix on the left and right
-                
-                threshCurve = expectedEncounters+4*expectedEncountersStd; % find outliers
-                for bIdx = 1:numBeads-1% for each bead
-                    leftObs  = obj.beadData.encounterData.twoSides.rep1{bIdx,1};
-                    rightObs = obj.beadData.encounterData.twoSides.rep1{bIdx,2};
-                    encounterLeft(bIdx,1:numel(leftObs))   = leftObs;
-                    encounterRight(bIdx,1:numel(rightObs)) = (rightObs);
-                    tLeft  = leftObs>threshCurve(1:numel(leftObs));
-                    tRight = rightObs>threshCurve(1:numel(rightObs));
-                    if~isempty(tLeft)
-                        pMatLeft(bIdx,bIdx-1:-1:bIdx-numel(tLeft)) = tLeft;
-                    end
-                    if ~isempty(tRight)
-                        pMatRight(bIdx,bIdx+1:bIdx+numel(tRight)) = tRight;
-                    end
-                end
-                
-                % Remove nearest neighbor interactions
-                pMatLeft(diag(ones(numBeads-1,1),-1)~=0)= 0;
-                pMatRight(diag(ones(numBeads-1,1),1)~=0)= 0;
-                
-                % combine left-right encounters
-                combPeaks = (pMatLeft+pMatRight')~=0;
-                [peakList(:,1), peakList(:,2)] = find(combPeaks);
-                
-                peakList = sortrows(peakList,1);
-                obj.peaks.(lower(fNames{fIdx})) =  peakList+obj.params.beadRangeToAnalyze(1)-1;
+                   end
+               end
+                % save peak list 
+                  [obj.peaks.(lower(fNames{fIdx}))(:,1),obj.peaks.(lower(fNames{fIdx}))(:,2)] = find(triu(pMat));
             end
         end
         
