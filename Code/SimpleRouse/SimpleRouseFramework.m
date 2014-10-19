@@ -21,6 +21,7 @@ classdef SimpleRouseFramework<handle
         step       = 0;
         simulationData
         stepExitFlag = false;
+        polymerModel %string 'betaChain' or 'RouseChain'
         userData% various user data needed for passing between functions
     end
     
@@ -35,10 +36,16 @@ classdef SimpleRouseFramework<handle
             % set input parameters
             obj.params  = rouseParams;
             obj.round   = 0; % start with zero index, the values increases in PreRoundActions function
-                                                         
+
+            
             % Initialize sequence
             obj.ReadRecipeFile;   % read recipe file 
             obj.SetRecipeParams;  % load the parameters defined in the recipe file 
+            if obj.params.beta~=2
+                obj.polymerModel = 'betaChain';
+            else 
+                obj.polymerModel = 'rouseChain';
+            end
             obj.DataPreallocation % preallocate data structures           
             obj.SetFitOptions;    % set fit options
             
@@ -112,11 +119,14 @@ classdef SimpleRouseFramework<handle
         function PreRunActions(obj)
             % actions performed before each simulation run
             obj.simulation = obj.simulation+1;
-            eval(obj.recipe.PreRunActions);
-            
+            eval(obj.recipe.PreRunActions);            
             % initialize a new chain 
-            obj.handles.classes.rouseChain = SimpleRouse(obj.params);
-            obj.handles.classes.rouseChain.Initialize
+            if strcmpi(obj.polymerModel,'rouseChain')
+             obj.handles.classes.chain = SimpleRouse(obj.params);           
+            else 
+                obj.handles.classes.chain = BetaPolymer(obj.params);
+            end
+              obj.handles.classes.chain.Initialize
         end
         
         function PreStepActions(obj)
@@ -134,18 +144,18 @@ classdef SimpleRouseFramework<handle
                     obj.PreRunActions                    
                     while obj.step<obj.params.numSteps && ~obj.stepExitFlag
                         obj.PreStepActions
-                        obj.handles.classes.rouseChain.Step;
+                        obj.handles.classes.chain.Step;
                         obj.PostStepActions
                     end
                     % imediatly add to the encounter histogram 
-                      obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)+double(obj.handles.classes.rouseChain.beadDist(:,:,end)<obj.params.encounterDist);
+                      obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)+double(obj.handles.classes.chain.beadDist(:,:,end)<obj.params.encounterDist);
                        obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)-diag(diag(obj.encounterHistogram(:,:,rIdx)));
                        
-%                     obj.beadDistance(:,:,sIdx,rIdx) = obj.handles.classes.rouseChain.beadDist(:,:,end);% take the last recorded bead distances
+%                     obj.beadDistance(:,:,sIdx,rIdx) = obj.handles.classes.chain.beadDist(:,:,end);% take the last recorded bead distances
                     
                     obj.simulationData(obj.round).simulation(sIdx).time         = toc;
-                    obj.simulationData(obj.round).simulation(sIdx).numSteps     = obj.handles.classes.rouseChain.params.numSteps;
-                    obj.simulationData(obj.round).simulation(sIdx).meanStepTime = obj.handles.classes.rouseChain.simulationTime/obj.handles.classes.rouseChain.params.numSteps;
+                    obj.simulationData(obj.round).simulation(sIdx).numSteps     = obj.handles.classes.chain.params.numSteps;
+                    obj.simulationData(obj.round).simulation(sIdx).meanStepTime = obj.handles.classes.chain.simulationTime/obj.handles.classes.chain.params.numSteps;
                     obj.simulationData(obj.round).simulation(sIdx).params       = obj.params;
                     
                     obj.PostRunActions;% perform post run actions
@@ -370,10 +380,10 @@ classdef SimpleRouseFramework<handle
                 end
                     % display expected model
                 line('XData',dists,...
-                    'YData',(1/sum(dists.^(-1.5)))*dists.^(-1.5),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
+                    'YData',(1/sum(dists.^(-1.5*(mean(obj.params.beta)-1))))*dists.^(-1.5*(mean(obj.params.beta)-1)),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
                     'Color','r',...
                     'Parent',a(rIdx),...
-                    'DisplayName','Theoretical encounter \beta=1.5',...
+                    'DisplayName',['Theoretical encounter \beta=' num2str(1.5*(mean(obj.params.beta)-1))],...
                     'LineWidth',5)
                 
                 title(a(rIdx),sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx)),'FontSize',40)
@@ -387,7 +397,7 @@ classdef SimpleRouseFramework<handle
                        'FileName','meanEncounterProbability') ;
             a = axes('Parent',f,'NextPlot','Add','FontSize',40);
             
-            title(a,'Mean Encounter Prob','FontSize',40);
+            title(a,'Mean Encounter Prob.','FontSize',40);
             xlabel(a,'Distance [bead]','FontSize',40);
             ylabel(a,'Encounter Prob.','FontSize',40);
             
@@ -409,13 +419,14 @@ classdef SimpleRouseFramework<handle
                     'LineWidth',5)
                 %                 m(rIdx) = obj.fitResults.mean{rIdx}.a;
             end
-            % add the theoretical model
+            % add the theoretical model (temporary)
+            
             line('XData',dists,...
-                'YData',(1/sum(dists.^(-1.5)))*dists.^(-1.5),...
+                'YData',(1/sum(dists.^(-1.5*(mean(obj.params.beta)-1))))*dists.^(-1.5*(mean(obj.params.beta)-1)),...
                 'Color','r',...
                 'Parent',a,...
                 'LineWidth',5,...
-                'DisplayName','Theoretical encounter \beta=1.5')
+                'DisplayName',['Theoretical encounter \beta=', num2str(1.5*(mean(obj.params.beta)-1))])
            l= legend(flipud(get(a,'Children')));
            set(l,'FontSize',18);
 
