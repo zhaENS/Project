@@ -6,8 +6,13 @@ the list of peaks is found for TAD D and E seperately , but is combined in the..
 
 <func> SetRecipeParams </func>
 % take the average replicant peaks as connections 
-load('peakListTADDAndE');
+sprintf('%s\n','loading peak list TAD D')
+load('peakListTADD');
 obj.params.connectedBeads = peakList.average;
+sprintf('%s\n','loading peak list TAD E')
+load('peakListTADE')
+peakList.average = peakList.average+107*ones(size(peakList.average));
+obj.params.connectedBeads = [obj.params.connectedBeads; peakList.average];
 
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
 

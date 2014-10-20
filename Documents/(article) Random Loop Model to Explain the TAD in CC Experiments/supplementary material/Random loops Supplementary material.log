@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  23 SEP 2014 16:42
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  17 OCT 2014 13:26
 entering extended mode
 **Random*loops*Supplementary*material.tex
 
@@ -242,35 +242,44 @@ Overfull \hbox (220.25284pt too wide) in paragraph at lines 41--42
 [][] 
  []
 
-[1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <D:/Ofir/Work/ENS/Polyme
-r Chain Dynamics/Documents/(article) Random Loop Model to Explain the TAD in CC
- Experiments/supplementary material/meanDataFitTADD.jpg> <D:/Ofir/Work/ENS/Poly
+[1
+
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2 <D:/Ofir/Work/ENS/Poly
 mer Chain Dynamics/Documents/(article) Random Loop Model to Explain the TAD in 
-CC Experiments/supplementary material/fittedExpValuesWithSplineAverageTADD.jpg>
-] [2 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop M
-odel to Explain the TAD in CC Experiments/supplementary material/meanDataFitTAD
-E.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop
- Model to Explain the TAD in CC Experiments/supplementary material/fittedExpVal
-uesWithSplineAverageTADE.jpg>]
+CC Experiments/supplementary material/meanDataFitTADD.jpg> <D:/Ofir/Work/ENS/Po
+lymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the TAD i
+n CC Experiments/supplementary material/fittedExpValuesWithSplineAverageTADD.jp
+g>] [3 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop
+ Model to Explain the TAD in CC Experiments/supplementary material/meanDataFitT
+ADE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Lo
+op Model to Explain the TAD in CC Experiments/supplementary material/fittedExpV
+aluesWithSplineAverageTADE.jpg>]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\supplementary material\Random loops Suppl
 ementary material.aux") ) 
 Here is how much of TeX's memory you used:
- 2919 strings out of 493921
- 44531 string characters out of 3144879
- 102433 words of memory out of 3000000
- 6210 multiletter control sequences out of 15000+200000
- 7668 words of font info for 30 fonts, out of 3000000 for 9000
+ 2923 strings out of 493921
+ 44576 string characters out of 3144879
+ 103433 words of memory out of 3000000
+ 6213 multiletter control sequences out of 15000+200000
+ 8273 words of font info for 32 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,8n,38p,267b,428s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,8n,38p,409b,428s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/
-amsfonts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmr10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmr12.pfb>
-Output written on "Random loops Supplementary material.pdf" (2 pages, 464161 by
+amsfonts/cm/cmbx12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmex10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmmi6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmmi8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmr10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr
+12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.p
+fb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on "Random loops Supplementary material.pdf" (3 pages, 539497 by
 tes).
 PDF statistics:
- 25 PDF objects out of 1000 (max. 8388607)
+ 60 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
