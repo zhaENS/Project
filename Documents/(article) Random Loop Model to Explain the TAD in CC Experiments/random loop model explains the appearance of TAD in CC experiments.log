@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  1 OCT 2014 10:40
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.6.2)  2 OCT 2014 02:49
 entering extended mode
 **random*loop*model*explains*the*appearance*of*TAD*in*CC*experiments.tex
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
- to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.tex"
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\(article) Random Loop Model to Exp
+lain the TAD in CC Experiments\random loop model explains the appearance of TAD
+ in CC experiments.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -168,10 +168,10 @@ Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
 Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
 \captionmargin=\dimen117
@@ -184,7 +184,7 @@ Package caption3 Info: TeX engine: e-TeX on input line 57.
 )
 \c@ContinuedFloat=\count100
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\subcaption.sty
 Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
 \c@subfigure=\count101
 \c@subtable=\count102
@@ -194,9 +194,9 @@ Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
 \c@theorem=\count105
 \c@corollary=\count106
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
- to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.aux")
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\(article) Random Loop Model to Exp
+lain the TAD in CC Experiments\random loop model explains the appearance of TAD
+ in CC experiments.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
@@ -210,7 +210,7 @@ LaTeX Font Info:    ... okay on input line 41.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count107
 \scratchdimen=\dimen124
@@ -236,35 +236,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
 [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
+{C:/Users/Ofir/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+Overfull \hbox (0.61816pt too wide) in paragraph at lines 79--80
+[]\OT1/cmr/m/n/12 The coarse-grained bead en-counter fre-quen-cies in-cludes 14
+,509 data points
+ []
+
+[2] [3]
 
 LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
 ge 4 undefined on input line 141.
-
-
-LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
-ge 4 undefined on input line 141.
-
-
-LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
-ge 4 undefined on input line 141.
-
-
-LaTeX Warning: Reference `figure_encounterProbabilityTADD+fittedBeta' on page 4
- undefined on input line 144.
-
-
-LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
-ge 4 undefined on input line 145.
 
 [4] <TadDandENoraEtAl2012.jpg, id=30, 283.81032pt x 307.90031pt>
 File: TadDandENoraEtAl2012.jpg Graphic file (type jpg)
 
 <use TadDandENoraEtAl2012.jpg>
-Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 186.
+Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 185.
 (pdftex.def)             Requested size: 116.36298pt x 126.23993pt.
 
-Overfull \hbox (77.3606pt too wide) in paragraph at lines 186--187
+Overfull \hbox (77.3606pt too wide) in paragraph at lines 185--186
 [][] 
  []
 
@@ -272,10 +262,10 @@ Overfull \hbox (77.3606pt too wide) in paragraph at lines 186--187
 File: meanDataFitTADDAndE.jpg Graphic file (type jpg)
 
 <use meanDataFitTADDAndE.jpg>
-Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 191.
+Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 190.
 (pdftex.def)             Requested size: 269.8135pt x 139.56424pt.
 
-Overfull \hbox (230.81113pt too wide) in paragraph at lines 191--192
+Overfull \hbox (230.81113pt too wide) in paragraph at lines 190--191
 [][] 
  []
 
@@ -284,15 +274,15 @@ File: fittedExpValuesWithSplineAverageTADDAndE.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADDAndE.jpg>
 Package pdftex.def Info: fittedExpValuesWithSplineAverageTADDAndE.jpg used on i
-nput line 196.
+nput line 195.
 (pdftex.def)             Requested size: 269.8135pt x 139.56424pt.
 
-Overfull \hbox (230.81113pt too wide) in paragraph at lines 196--197
+Overfull \hbox (230.81113pt too wide) in paragraph at lines 195--196
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 58.16837pt on input line 202.
+LaTeX Warning: Float too large for page by 58.16837pt on input line 201.
 
 
 <meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg, id=33, 1687.30376pt x 89
@@ -301,7 +291,7 @@ File: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg Graphic file (type j
 pg)
  <use meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg>
 Package pdftex.def Info: meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg u
-sed on input line 207.
+sed on input line 206.
 (pdftex.def)             Requested size: 337.45477pt x 178.86508pt.
 
 <polymerModelWithOneFixedLoopAndInternalConnections.jpg, id=34, 963.6pt x 542.0
@@ -310,10 +300,10 @@ File: polymerModelWithOneFixedLoopAndInternalConnections.jpg Graphic file (type
  jpg)
  <use polymerModelWithOneFixedLoopAndInternalConnections.jpg>
 Package pdftex.def Info: polymerModelWithOneFixedLoopAndInternalConnections.jpg
- used on input line 214.
+ used on input line 213.
 (pdftex.def)             Requested size: 144.53375pt x 81.30023pt.
 
-Overfull \hbox (105.53137pt too wide) in paragraph at lines 214--215
+Overfull \hbox (105.53137pt too wide) in paragraph at lines 213--214
 [][] 
  []
 
@@ -324,10 +314,10 @@ File: encounterHistogramOneFixedLoop1To10RandomLoops307Beads.jpg Graphic file (
 type jpg)
  <use encounterHistogramOneFixedLoop1To10RandomLoops307Beads.jpg>
 Package pdftex.def Info: encounterHistogramOneFixedLoop1To10RandomLoops307Beads
-.jpg used on input line 219.
+.jpg used on input line 218.
 (pdftex.def)             Requested size: 337.25403pt x 178.86508pt.
 
-Overfull \hbox (259.25522pt too wide) in paragraph at lines 219--220
+Overfull \hbox (259.25522pt too wide) in paragraph at lines 218--219
 [][] 
  []
 
@@ -338,15 +328,15 @@ File: fittedExpOneFixedLoop1To10RandomLoops307Beads.jpg Graphic file (type jpg)
 
  <use fittedExpOneFixedLoop1To10RandomLoops307Beads.jpg>
 Package pdftex.def Info: fittedExpOneFixedLoop1To10RandomLoops307Beads.jpg used
- on input line 224.
+ on input line 223.
 (pdftex.def)             Requested size: 337.25403pt x 178.86508pt.
 
-Overfull \hbox (259.25522pt too wide) in paragraph at lines 224--225
+Overfull \hbox (259.25522pt too wide) in paragraph at lines 223--224
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 4.43013pt on input line 230.
+LaTeX Warning: Float too large for page by 4.43013pt on input line 229.
 
 
 <polymerModelWithTwofixedLoopsAndInternalConnections.jpg, id=37, 963.6pt x 542.
@@ -355,15 +345,15 @@ File: polymerModelWithTwofixedLoopsAndInternalConnections.jpg Graphic file (typ
 e jpg)
  <use polymerModelWithTwofixedLoopsAndInternalConnections.jpg>
 Package pdftex.def Info: polymerModelWithTwofixedLoopsAndInternalConnections.jp
-g used on input line 234.
+g used on input line 233.
 (pdftex.def)             Requested size: 96.36565pt x 54.20567pt.
 
-Overfull \hbox (92.46779pt too wide) in paragraph at lines 234--235
+Overfull \hbox (92.46779pt too wide) in paragraph at lines 233--234
 [][] 
  []
 
 
-Overfull \hbox (10.09384pt too wide) in paragraph at lines 235--235
+Overfull \hbox (10.09384pt too wide) in paragraph at lines 234--234
 []\OT1/cmr/m/n/10.95 (a)|| 
  []
 
@@ -375,10 +365,10 @@ File: EncounterHistogramsTwoFixedLoops0To10RandomLoops307Beads.jpg Graphic file
 
 <use EncounterHistogramsTwoFixedLoops0To10RandomLoops307Beads.jpg>
 Package pdftex.def Info: EncounterHistogramsTwoFixedLoops0To10RandomLoops307Bea
-ds.jpg used on input line 239.
+ds.jpg used on input line 238.
 (pdftex.def)             Requested size: 274.62811pt x 189.25851pt.
 
-Overfull \hbox (79.62811pt too wide) in paragraph at lines 239--240
+Overfull \hbox (79.62811pt too wide) in paragraph at lines 238--239
 [][] 
  []
 
@@ -389,53 +379,52 @@ File: fittedExpTwoFixedLoop1To10RandomLoops307Beads.jpg Graphic file (type jpg)
 
  <use fittedExpTwoFixedLoop1To10RandomLoops307Beads.jpg>
 Package pdftex.def Info: fittedExpTwoFixedLoop1To10RandomLoops307Beads.jpg used
- on input line 244.
+ on input line 243.
 (pdftex.def)             Requested size: 316.3764pt x 174.44865pt.
 
-Overfull \hbox (269.57831pt too wide) in paragraph at lines 244--245
+Overfull \hbox (269.57831pt too wide) in paragraph at lines 243--244
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 53.90714pt on input line 250.
+LaTeX Warning: Float too large for page by 53.90714pt on input line 249.
 
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
- to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.bbl" [5]) [6] [7 <D:/Ofir/Work/ENS/Polymer Chain Dyna
-mics/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments
-/TadDandENoraEtAl2012.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(
-article) Random Loop Model to Explain the TAD in CC Experiments/meanDataFitTADD
-AndE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random L
-oop Model to Explain the TAD in CC Experiments/fittedExpValuesWithSplineAverage
-TADDAndE.jpg>] [8 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) 
-Random Loop Model to Explain the TAD in CC Experiments/meanEncounterMatrixOfSim
-ulatingTADEandDWithLoops.jpg>] [9 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Docu
-ments/(article) Random Loop Model to Explain the TAD in CC Experiments/polymerM
-odelWithOneFixedLoopAndInternalConnections.jpg> <D:/Ofir/Work/ENS/Polymer Chain
- Dynamics/Documents/(article) Random Loop Model to Explain the TAD in CC Experi
-ments/encounterHistogramOneFixedLoop1To10RandomLoops307Beads.jpg> <D:/Ofir/Work
-/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain th
-e TAD in CC Experiments/fittedExpOneFixedLoop1To10RandomLoops307Beads.jpg>]
-[10 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mo
-del to Explain the TAD in CC Experiments/polymerModelWithTwofixedLoopsAndIntern
-alConnections.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article)
- Random Loop Model to Explain the TAD in CC Experiments/EncounterHistogramsTwoF
-ixedLoops0To10RandomLoops307Beads.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics
-/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments/fit
-tedExpTwoFixedLoop1To10RandomLoops307Beads.jpg>]
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
- to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.aux")
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\(article) Random Loop Model to Exp
+lain the TAD in CC Experiments\random loop model explains the appearance of TAD
+ in CC experiments.bbl" [5]) [6] [7 <D:/Ofir/ENS/PolymerChainDynamics/Documents
+/(article) Random Loop Model to Explain the TAD in CC Experiments/TadDandENoraE
+tAl2012.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/(article) Random Loop 
+Model to Explain the TAD in CC Experiments/meanDataFitTADDAndE.jpg> <D:/Ofir/EN
+S/PolymerChainDynamics/Documents/(article) Random Loop Model to Explain the TAD
+ in CC Experiments/fittedExpValuesWithSplineAverageTADDAndE.jpg>] [8 <D:/Ofir/E
+NS/PolymerChainDynamics/Documents/(article) Random Loop Model to Explain the TA
+D in CC Experiments/meanEncounterMatrixOfSimulatingTADEandDWithLoops.jpg>]
+[9 <D:/Ofir/ENS/PolymerChainDynamics/Documents/(article) Random Loop Model to E
+xplain the TAD in CC Experiments/polymerModelWithOneFixedLoopAndInternalConnect
+ions.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/(article) Random Loop Mod
+el to Explain the TAD in CC Experiments/encounterHistogramOneFixedLoop1To10Rand
+omLoops307Beads.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/(article) Rand
+om Loop Model to Explain the TAD in CC Experiments/fittedExpOneFixedLoop1To10Ra
+ndomLoops307Beads.jpg>] [10 <D:/Ofir/ENS/PolymerChainDynamics/Documents/(articl
+e) Random Loop Model to Explain the TAD in CC Experiments/polymerModelWithTwofi
+xedLoopsAndInternalConnections.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents
+/(article) Random Loop Model to Explain the TAD in CC Experiments/EncounterHist
+ogramsTwoFixedLoops0To10RandomLoops307Beads.jpg> <D:/Ofir/ENS/PolymerChainDynam
+ics/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments/
+fittedExpTwoFixedLoop1To10RandomLoops307Beads.jpg>]
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\(article) Random Loop Model to Exp
+lain the TAD in CC Experiments\random loop model explains the appearance of TAD
+ in CC experiments.aux")
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3132 strings out of 493921
- 50093 string characters out of 3144879
- 112877 words of memory out of 3000000
- 6392 multiletter control sequences out of 15000+200000
+ 3131 strings out of 493921
+ 50056 string characters out of 3144880
+ 111877 words of memory out of 3000000
+ 6391 multiletter control sequences out of 15000+200000
  12060 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  36i,13n,38p,1109b,424s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -457,7 +446,7 @@ X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX
 nts/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts
 /type1/public/amsfonts/cm/cmti12.pfb>
 Output written on "random loop model explains the appearance of TAD in CC exper
-iments.pdf" (10 pages, 1524455 bytes).
+iments.pdf" (10 pages, 1524371 bytes).
 PDF statistics:
  113 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
