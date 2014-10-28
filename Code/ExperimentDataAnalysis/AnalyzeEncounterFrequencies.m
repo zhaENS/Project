@@ -35,7 +35,7 @@ classdef AnalyzeEncounterFrequencies<handle
             % loads default parameters
             % default location of xls file
             obj.params.xlsFilePath = fullfile(pwd,'..','Data','Luca','MC_TAD_DE_E14d0_rep2+3_true.xlsx');
-            obj.params.fillGapsBy   = 'sameValuesAsBoundary'; % when the dat is  missing (i.e, the segment takes the position of few beads,
+            obj.params.fillGapsBy   = 'sameValuesAsBoundary'; % when the data is  missing (i.e, the segment takes the position of few beads,
             obj.params.beadRangeToAnalyze = [1 307]; % if empty, analyze all,
         end
         
@@ -49,12 +49,12 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         function Initialize(obj,params)
-            
+            % Initialization sequence             
             obj.LoadDefaultParams
             if exist('params','var')
                 obj.SetInputParams(params)
             end
-            
+            obj.SetAnalysisRange;
             obj.ReadData;% load data from xls
             obj.CreateEncounterFrequencyMatrices;
             obj.ProcessEncounters;
@@ -62,6 +62,39 @@ classdef AnalyzeEncounterFrequencies<handle
             obj.FitMeanModel;
             obj.PeakCalling
             %            obj.DisplayEncounterMatrices;
+        end
+        
+        function SetAnalysisRange(obj)
+            % Set the analysis range in beads units. 
+            if obj.params.beadRangeToAnalyze(2)==307 && obj.params.beadRangeToAnalyze(1)==1;
+                % TAD D
+                obj.params.analysisRange(1).info     = 'TAD D';
+                obj.params.analysisRange(1).rowStart = 1;
+                obj.params.analysisRange(1).rowEnd   = 107;
+                obj.params.analysisRange(1).colStart = 1;
+                obj.params.analysisRange(1).colEnd   = 107;
+                
+                % TAD E
+                obj.params.analysisRange(2).info     = 'TAD E';
+                obj.params.analysisRange(2).rowStart = 108;
+                obj.params.analysisRange(2).rowEnd   = 307;
+                obj.params.analysisRange(2).colStart = 108;
+                obj.params.analysisRange(2).colEnd   = 307;
+                
+                % between TADs
+                obj.params.analysisRange(3).info     = 'Between TADs';
+                obj.params.analysisRange(3).rowStart = 1;
+                obj.params.analysisRange(3).rowEnd   = 107;
+                obj.params.analysisRange(3).colStart = 108;
+                obj.params.analysisRange(3).colEnd   = 307;
+                
+            else
+                obj.params.analysisRange(1).info = 'User defined';
+                obj.params.analysisRange(1).rowStart = obj.params.beadRangeToAnalyze(1);
+                obj.params.analysisRange(1).rowEnd   = obj.params.beadRangeToAnalyze(2);
+                obj.params.analysisRange(1).colStart = obj.params.beadRangeToAnalyze(1);
+                obj.params.analysisRange(1).colEnd   = obj.params.beadRangeToAnalyze(2);
+            end
         end
         
         function ReadData(obj)
@@ -103,7 +136,7 @@ classdef AnalyzeEncounterFrequencies<handle
             allBeads2                     = unique([obj.allData.beadStart2,obj.allData.beadEnd2],'rows','stable'); % unique segment 2
             allBeads                      = unique([allBeads1;allBeads2],'rows');% uniqe segment encounter pairs
             obj.beadData.allBeads         = allBeads;
-            obj.beadData.numBeads         = min([obj.params.beadRangeToAnalyze(2),307])- max([obj.params.beadRangeToAnalyze(1),1])+1;
+            obj.beadData.numBeads         = obj.params.analysisRangemin([obj.params.beadRangeToAnalyze(2),307])- max([obj.params.beadRangeToAnalyze(1),1])+1;
             % the first index is the number of bead in which the restriction segment
             % starts. The second index (column) is the bead in which the
             % segment ends
@@ -142,14 +175,16 @@ classdef AnalyzeEncounterFrequencies<handle
             %            obj.PlotSegments
         end
         
-        function ProcessEncounters(obj)
+        function [oneSide, twoSides] = ProcessEncounters(obj)
             % Process encounters by bead
-            expNames = {'rep1','rep2','average'};
-            for eIdx = 1:3
-                allFreq     = obj.encounterMatrix.(expNames{eIdx});
+            fNames   = {'rep1','rep2','average'};
+            oneSide  = [];
+            twoSides = [];                        
+            for fIdx = 1:numel(fNames)
+                allFreq     = obj.encounterMatrix.(fNames{fIdx});
                 eMatrix     = cell(obj.beadData.numBeads,1);
                 
-                for bIdx = 1:size(allFreq,1)% for each bead
+                for bIdx = 1:obj.params.numBeads% for each bead
                     before = allFreq(bIdx,bIdx-1:-1:1);% flipped
                     after  = allFreq(bIdx,bIdx+1:1:end);
                     freq   = zeros(2,obj.beadData.numBeads-1);
@@ -161,11 +196,14 @@ classdef AnalyzeEncounterFrequencies<handle
                     
                     % record the 'before' and 'after' encounter frequency.
                     % where 'before' and 'after' mean in terms of index
-                    obj.beadData.encounterData.twoSides.(expNames{eIdx}){bIdx,1} = before;
-                    obj.beadData.encounterData.twoSides.(expNames{eIdx}){bIdx,2} = after;
+                    obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,1} = before;
+                    obj.beadData.encounterData.twoSides.(fNames{fIdx}){bIdx,2} = after;
+                    twoSides.(fNames{fIdx}){bIdx,1} = before; 
+                    twoSides.(fNames{fIdx}){bIdx,2} = after;
                     eMatrix{bIdx} = freq;
                 end
-                obj.beadData.encounterData.oneSide.(expNames{eIdx}) = eMatrix;
+                obj.beadData.encounterData.oneSide.(fNames{fIdx}) = eMatrix;
+                oneSide.(fNames{fIdx}) = eMatrix;
             end
         end
         
@@ -198,7 +236,7 @@ classdef AnalyzeEncounterFrequencies<handle
             end
         end
         
-        function FitData(obj)
+        function FitData(obj)%TODO: move the fitoptions to params
             % Fit a function of the form y = a*x^-b to each monomer
             % encounter frequency data
             fNames = {'rep1','rep2','average'};
@@ -306,7 +344,7 @@ classdef AnalyzeEncounterFrequencies<handle
             end
         end
         
-        function FitMeanModel(obj)
+        function FitMeanModel(obj)%TODO: use fitOptions from params
             % Calculate the mean of the mean data
             %             n = zeros(1,obj.beadData.numBeads-1);
             n     = zeros(1,obj.beadData.numBeads-1);
@@ -341,7 +379,8 @@ classdef AnalyzeEncounterFrequencies<handle
             
         end
         
-        function PeakCalling(obj)
+        function PeakCalling(obj)%TODO: move stoptions to params, change input to function to accept analysis range  
+            
             % Find peaks in the one-sided encounter data
             % for TAD D and E seperately, and them analyze peaks between
             % TADs
@@ -350,72 +389,99 @@ classdef AnalyzeEncounterFrequencies<handle
             fNames     = {'Rep1','Rep2','Average'};
             % for the case of 2 TADs , analyze each one seperately
           
-            stOptions  = statset('Robust','on');         
-                                    
+            stOptions  = statset('Robust','on');
+            
+            
             for fIdx=1:numel(fNames)
-                if obj.params.beadRangeToAnalyze(2)==307 && obj.params.beadRangeToAnalyze(1)==1;
-                      analysisRange =  [1 107; 108 307];
-                else
-                      analysisRange  = [obj.params.beadRangeToAnalyze(1) obj.params.beadRangeToAnalyze(2)];
-                end
-                
-                    for tIdx = 1:size(analysisRange,1) % analyze each TAD                        
-                        numBeads = analysisRange(tIdx,2)-analysisRange(tIdx,1)+1;
+                    for tIdx = 1:size(obj.params.analysisRange) % analyze each TAD                        
+                        numBeads = obj.params.analysisRange(tIdx,2)-obj.params.analysisRange(tIdx,1)+1;
                         % estimate std of the mean signal
                         obj.peaks.(lower(fNames{fIdx})) = [];
                         
                         [meanSignal,meanSignalStd,tr]   = obj.GetMeanSignal(numBeads,lower(fNames{fIdx}));
-                        [oneSided]                      = obj.GetOneSidedEncounterProbability(analysisRange(tIdx,:),lower(fNames{fIdx}));
+                        [oneSided]                      = obj.GetOneSidedEncounterProbability(obj.params.analysisRange(tIdx,:),lower(fNames{fIdx}));
                         
                         pMat      = false(numBeads);
+                        pMat1     = pMat;
                         pValues   = nan(numBeads,numBeads-1);
+                        pValues1  = pValues;
                         qValues   = pValues;
-                        peaksD    = cell(1,numBeads-1);
+                        qValues1  = qValues;
+%                         peaksD    = cell(1,numBeads-1);
+                        peaksD   = cell(1,numBeads-1);
+                        zScore    = [];
+                        
+                        % Calculate the z-score based on all the data
+                        % (assuming deviation from the expected value
+                        % behaves similarily [in distribution] throughout
+                        % all genomic distances) 
                         for dIdx = 1:numBeads-1
-                            
+                            if any(oneSided(tr(:,dIdx),dIdx))
+                                zTemp     = ((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)))./std(oneSided(tr(:,dIdx),dIdx));
+                                zScore    =  [zScore;zTemp];
+                            end
+                        end
+                        % evaluate the distribution of the zScores across
+                        % all distances as a shifted Weibull distribution
+                        mz         = min(zScore);
+%                         zDist      = fitdist(zScore1-mz+eps,'wbl','options',stOptions);
+%                         outlierVal = zDist.icdf(1-obj.fdrThresh);
+                        % calculate pValues for each observation  according
+                        % to the distribution fitted                         
+                        for dIdx = 1:numBeads-1
                             if ~all(oneSided(tr(:,dIdx),dIdx)==0)
-                                % calculate z-score
-                                zScore       =  ((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)))./meanSignalStd(dIdx);
-                                cens         = zScore<0;
-                                zScore(cens) = eps;
-                                % fit a Weibull distribution and ignore negative values
-                                distrib = fitdist(zScore,'wbl','Censoring',cens,'options',stOptions);
-                                % calculate the pvalues for each z score
-                                pValues(tr(:,dIdx),dIdx) = 1-distrib.cdf(zScore);% the survival function for the z-score
-                                % calculate the corresponding q values
-                                qValues(tr(:,dIdx),dIdx) = mafdr(pValues(tr(:,dIdx),dIdx));
-                                % threshold the data to find peaks
-                                peaksD{dIdx} =  find(qValues(:,dIdx)<obj.fdrThresh);
+                                zScored =  (((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)))./std(oneSided(tr(:,dIdx),dIdx)));%meanSignalStd(dIdx);
+                                % Shifted zScores accoding to the global
+                                % minimal value
+                                zScored      = zScored-mz+eps;% shift by the global min
+                                dDist        = fitdist(zScored,'wbl','options',stOptions);
                                 
+                                pValues1(tr(:,dIdx),dIdx) = 1-dDist.cdf(zScored);% the cdf for the z-score given the null (Wbl)
+                                % the null hypothesis is that the data
+                                % comes from the Weibull distribution near
+                                % its estimated expectation. 
+                                % calculate the corresponding q values
+                                try
+                                 [~,qValues1(tr(:,dIdx),dIdx)] = mafdr(pValues1(tr(:,dIdx),dIdx),...
+                                              'Method','polynomial',...
+                                              'showPlot',false);
+                                catch
+                                 [~,qValues1(tr(:,dIdx),dIdx)] = mafdr(pValues1(tr(:,dIdx),dIdx),...
+                                              'Method','bootstrap',...
+                                              'showPlot',false);    
+                                end
+                                inds  = find(tr(:,dIdx));
+                                % threshold the data to find peaks
+                                peaksD{dIdx} =  inds((qValues1(tr(:,dIdx),dIdx)<(obj.fdrThresh)));
                                 % fill in the matrix for peaks and make it symmetric
                                 for peakIdx = 1:numel(peaksD{dIdx})
                                     if peaksD{dIdx}(peakIdx)+dIdx<=numBeads
-                                        pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)+dIdx) = true;
-                                        pMat(peaksD{dIdx}(peakIdx)+dIdx,peaksD{dIdx}(peakIdx)) = true;
+                                        pMat1(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)+dIdx) = true;
+                                        pMat1(peaksD{dIdx}(peakIdx)+dIdx,peaksD{dIdx}(peakIdx)) = true;
                                     else
-                                        pMat(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)-dIdx+1) = true;
-                                        pMat(peaksD{dIdx}(peakIdx)-dIdx+1,peaksD{dIdx}(peakIdx)) = true;
+                                        pMat1(peaksD{dIdx}(peakIdx),peaksD{dIdx}(peakIdx)-dIdx+1) = true;
+                                        pMat1(peaksD{dIdx}(peakIdx)-dIdx+1,peaksD{dIdx}(peakIdx)) = true;
                                     end
                                 end
                             end
                         end
-                        
-                        % save peak list
-                        [pr,pc] = find(triu(pMat));
-                        pr      = pr+analysisRange(tIdx,1)-1;
-                        pc      = pc+analysisRange(tIdx,1)-1;
-                        obj.peaks.(lower(fNames{fIdx})) = [obj.peaks.(lower(fNames{fIdx}));[pr,pc]];
+                        [obj.peaks.(lower(fNames{fIdx}))(:,1),obj.peaks.(lower(fNames{fIdx}))(:,2)] =...
+                            sortrows(find(triu(pMat1)),1);
                     end
             end
             obj.FindPeaksBetweenTADs;
         end
         
-        function FindPeaksBetweenTADs(obj)
+        function encounterProb = TransformEncounterMatrixToEncounterProbability(encounterMat,beadRange)%TODO: finish
+            encounterProb = [];
+        end
+        
+        function FindPeaksBetweenTADs(obj)%TODO: change to fit the new peakfinding scheme
             % Find peaks between TADs
             fNames= {'Rep1','Rep2','Average'};
             for fIdx = 1:numel(fNames)
                 if obj.params.beadRangeToAnalyze(2)==307 && obj.params.beadRangeToAnalyze(1)==1;
-                    numBeads = 307;
+                    numBeads             = 307;
                     [expectedOffTADs, ~] = obj.GetMeanSignal(numBeads,lower(fNames{fIdx}));
                     
                     e        = obj.encounterMatrix.(lower(fNames{fIdx}));
@@ -493,8 +559,12 @@ classdef AnalyzeEncounterFrequencies<handle
             end
         end
         
+        function [eSignal,eSignalSTD] = GetEstimateBackgroundSignal(obj,numBeads,fName)%TODO: finish
+        end
+        
         function [oneSided] = GetOneSidedEncounterProbability(obj,analysisRange,fName)
-            oneSided = zeros(numBeads,numBeads-1);            
+            numBeads = analysisRange(2)-analysisRange(1)+1;
+            oneSided = zeros(numBeads,numBeads-1);                 
             % The encounter signal probability
             for bIdx = 1:numBeads
                 oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.(lower(fName)){bIdx}(analysisRange(1):analysisRange(2)-1);
@@ -994,7 +1064,7 @@ classdef AnalyzeEncounterFrequencies<handle
         end
         
         function valsOut = model(x,encounterData)%unused
-            % this si the SSD of the fitted parameters
+            % this ia the SSD of the fitted parameters
             % encounterData is a two column vector. the first column is the
             % encounter frequencies, the second is the index of included
             % beads.
@@ -1025,4 +1095,5 @@ classdef AnalyzeEncounterFrequencies<handle
     methods (Access=private)
         
     end
+    
 end
