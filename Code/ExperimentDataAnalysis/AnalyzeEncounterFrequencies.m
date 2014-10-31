@@ -455,24 +455,28 @@ classdef AnalyzeEncounterFrequencies<handle
                                 end
                             end
                         end
-                        
+                       
                         % Evaluate the distribution of the zScores across
                         % all distances as a shifted Weibull distribution
                         mz  = min(zScore);
-
+                        totalZDist = fitdist(zScore-mz+eps,'wbl','options',obj.params.stOptions);
                         % Calculate pValues for each observation according
-                        % to the distribution fitted                         
+                        % to the distribution fitted     
+                        tVals = zeros(numBeads-1,1);
+                        rejectionThresh = zeros(numBeads-1,1);
                         for dIdx = 1:numBeads-1
                             if ~all(oneSided(tr(:,dIdx),dIdx)==0)
                                 s = std(oneSided(tr(:,dIdx),dIdx));
                                 if s~=0
-                                zScored =  (((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)))./s);%meanSignalStd(dIdx);
+                                zScored{dIdx} =  (((oneSided(tr(:,dIdx),dIdx)-meanSignal(dIdx)))./s);%meanSignalStd(dIdx);
                                 % Shifted zScores accoding to the global
                                 % minimal value
-                                zScored      = zScored-mz+eps;% shift by the global min
-                                dDist        = fitdist(zScored,'wbl','options',obj.params.stOptions);
+                                zScored{dIdx}      = zScored{dIdx}-mz+eps;% shift by the global min
+                                dDist(dIdx)        = fitdist(zScored{dIdx},'wbl','options',obj.params.stOptions);
                                 
-                                pValues(tr(:,dIdx),dIdx) = 1-dDist.cdf(zScored);% the cdf for the z-score given the null (Wbl)
+                                pValues(tr(:,dIdx),dIdx) = 1-dDist(dIdx).cdf(zScored{dIdx});% the cdf for the z-score given the null (Wbl)
+                                rejectionThresh(dIdx) = dDist(dIdx).icdf(1-obj.params.fdrThresh);
+                                tVals(dIdx) = rejectionThresh(dIdx)-totalZDist.icdf(1-obj.params.fdrThresh); 
                                 % the null hypothesis is that the data
                                 % comes from the Weibull distribution near
                                 % its estimated expectation. 
@@ -503,7 +507,13 @@ classdef AnalyzeEncounterFrequencies<handle
                                 end
                                end
                             end
-                        end                   
+                        end  
+                        % fit a normal distribution to the tValues 
+                        tVals = tVals./std(tVals);
+                        tDist = fitdist(tVals,'normal','options',obj.params.stOptions);
+                        % Re-examine the rejections according to the tDist
+                        % distribution 
+                        
                         [pList(:,1), pList(:,2)]        = (find((pMat)));
                         obj.peaks.(lower(fNames{fIdx})) = [obj.peaks.(lower(fNames{fIdx}));sortrows(pList,1)];                        
                     end
@@ -516,19 +526,24 @@ classdef AnalyzeEncounterFrequencies<handle
             % Collect all fits 
             k = zeros(obj.beadData.numBeads,obj.beadData.numBeads-1);            
             for kIdx = 1:obj.beadData.numBeads-1
-%                 if obj.beadData.bead(kIdx).beadInRange
+                if obj.beadData.bead(kIdx).beadInRange
                 k(kIdx,1:obj.beadData.numBeads-1) = obj.results.fit.(lower(fName)).bias(kIdx).*(1:(obj.beadData.numBeads-1)).^(-obj.results.fit.(lower(fName)).exp(kIdx));
-%                 end
+                end
             end
             
             % Construct the valid index matrix 
              tr = false(obj.beadData.numBeads,obj.beadData.numBeads-1);
             for b1Idx = analysisRange.bead1;
-                for b2Idx = analysisRange.bead2
-                    tr(b1Idx, max(abs(b1Idx-b2Idx),1)) = true;
-                    tr(b2Idx,max(abs(b1Idx-b2Idx),1)) = true;
+                 if obj.beadData.bead(b1Idx).beadInRange
+                  for b2Idx = analysisRange.bead2
+                     if obj.beadData.bead(b2Idx).beadInRange
+                      tr(b1Idx, max(abs(b1Idx-b2Idx),1)) = true;
+                      tr(b2Idx,max(abs(b1Idx-b2Idx),1)) = true;
+                     end
+                 end
                 end
             end
+            
             if analysisRange.bead1(1)==(1) && analysisRange.bead1(end)== 107 && (analysisRange.bead2(1)==108) && (analysisRange.bead2(end)==307)
                 % truncate the lower part of the index matix 
                 tr(analysisRange.bead2,:) = false;
@@ -840,6 +855,26 @@ classdef AnalyzeEncounterFrequencies<handle
                         sprintf('%s%s%a', sprintf('%s%s','Bead',num2str(beadNumbers(bIdx))),'is empty');
                     end
                 end
+            end
+        end
+        
+        function DisplayPeaks(obj)
+            % Display binary matrix of peaks             
+            fNames = lower(obj.params.replicateName);
+            for fIdx = 1:numel(fNames)
+                peakMat = zeros(obj.beadData.numBeads);
+                for pIdx = 1:size(obj.peaks.(fNames{fIdx}),1)
+                    peakMat(obj.peaks.(fNames{fIdx})(pIdx,1),obj.peaks.(fNames{fIdx})(pIdx,2)) = 1;
+                    peakMat(obj.peaks.(fNames{fIdx})(pIdx,2),obj.peaks.(fNames{fIdx})(pIdx,1)) = 1;
+                    
+                end
+                f = figure('Name',sprintf('%s%s', 'Peak List ' , fNames{fIdx}),...
+                              'FileName',sprintf('%s%s', 'Peak List' , fNames{fIdx}));
+%                     a = axes('Parent',f,...
+%                              'Fontsize',40);
+                     imshow(peakMat);
+                     set(gca,'FontSize',40);
+                     title(fNames{fIdx});
             end
         end
         
