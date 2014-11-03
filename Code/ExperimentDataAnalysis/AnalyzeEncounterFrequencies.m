@@ -458,8 +458,9 @@ classdef AnalyzeEncounterFrequencies<handle
                        
                         % Evaluate the distribution of the zScores across
                         % all distances as a shifted Weibull distribution
-                        mz  = min(zScore);
+                        mz         = min(zScore);
                         totalZDist = fitdist(zScore-mz+eps,'wbl','options',obj.params.stOptions);
+                        tReject    = totalZDist.icdf(1-obj.params.fdrThresh);
                         % Calculate pValues for each observation according
                         % to the distribution fitted     
                         tVals = zeros(numBeads-1,1);
@@ -476,7 +477,7 @@ classdef AnalyzeEncounterFrequencies<handle
                                 
                                 pValues(tr(:,dIdx),dIdx) = 1-dDist(dIdx).cdf(zScored{dIdx});% the cdf for the z-score given the null (Wbl)
                                 rejectionThresh(dIdx) = dDist(dIdx).icdf(1-obj.params.fdrThresh);
-                                tVals(dIdx) = rejectionThresh(dIdx)-totalZDist.icdf(1-obj.params.fdrThresh); 
+                                tVals(dIdx) = rejectionThresh(dIdx)-tReject; 
                                 % the null hypothesis is that the data
                                 % comes from the Weibull distribution near
                                 % its estimated expectation. 
