@@ -13,6 +13,7 @@ classdef AnalyzeEncounterFrequencies<handle
         beadData
         segmentData
         encounterMatrix
+        classes
         peaks
         results
         params        
@@ -35,7 +36,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 obj.SetInputParams(params)
             end
             obj.params.numBeads = numel(unique([obj.params.beadRangeToAnalyze.bead1,obj.params.beadRangeToAnalyze.bead2]));
-            
+            obj.classes.peakFinder = PeakCalling;
             obj.ReadData;% load data from xls
             
             obj.AnalyzeData
@@ -406,8 +407,34 @@ classdef AnalyzeEncounterFrequencies<handle
             analysisRange(2).bead1 = 108:307;
             analysisRange(2).bead2 = 108:307;
             analysisRange(3).bead1 = 1:107;
-            analysisRange(3).bead2 = 108:307;
+            analysisRange(3).bead2 = 120:307;
             
+            for fIdx = 1:numel(fNames)
+                obj.peaks.(lower(fNames{fIdx})) = [];
+                for tIdx = 1:3
+                    % construct the one sided encounter matrix 
+                   [oneSide, ~] = obj.ProcessEncounters(analysisRange(tIdx),fNames{fIdx});
+                   [~,~,tr]     = obj.GetMeanSignal(analysisRange(tIdx),lower(fNames{fIdx}));
+                   oneSided     = zeros(obj.beadData.numBeads, obj.beadData.numBeads-1);
+                        for bIdx = 1:obj.beadData.numBeads
+                            s = sum(oneSide.(fNames{fIdx}){bIdx});
+                            if s~=0
+                              oneSided(bIdx,:) = oneSide.(fNames{fIdx}){bIdx}./s;
+                            end
+                        end
+                        tr(all(oneSided'==0),:)=false;
+                        oneSided = oneSided.*double(tr);
+                        oneSided(~tr) = NaN;
+                        % crop to match the bead range                         
+                       oneSided = oneSided(analysisRange(tIdx).bead1(1):analysisRange(tIdx).bead1(end),...
+                           analysisRange(tIdx).bead2(1)-analysisRange(tIdx).bead1(1)+1:analysisRange(tIdx).bead2(end)-analysisRange(tIdx).bead1(1));
+                       obj.classes.peakFinder = PeakCalling;
+                       obj.classes.peakFinder.FindPeaks(oneSided);
+                       p{fIdx,tIdx} = obj.classes.peakFinder.peakList;
+                       
+                end                
+            end
+                                    
             for fIdx = 1:numel(fNames)
                    obj.peaks.(lower(fNames{fIdx})) = [];
                     for tIdx = 1:3 % analyze each TAD                        
@@ -429,8 +456,9 @@ classdef AnalyzeEncounterFrequencies<handle
                               oneSided(bIdx,:) = oneSide.(fNames{fIdx}){bIdx}./s;
                             end
                         end
+                        tr(all(oneSided'==0),:)=false;
                         oneSided = oneSided.*double(tr);
-                        
+                        oneSided(~tr) = NaN;
                         if tIdx ==3 % for the region between TADs
                             for dIdx = 1:obj.beadData.numBeads-1
                                 meanSignal(dIdx) = mean(oneSided(tr(:,dIdx),dIdx));                                
@@ -544,6 +572,8 @@ classdef AnalyzeEncounterFrequencies<handle
                  end
                 end
             end
+            
+%             tr = false(obj.beadData.numBeads,obj.beadData.numBeads-1);
             
             if analysisRange.bead1(1)==(1) && analysisRange.bead1(end)== 107 && (analysisRange.bead2(1)==108) && (analysisRange.bead2(end)==307)
                 % truncate the lower part of the index matix 
