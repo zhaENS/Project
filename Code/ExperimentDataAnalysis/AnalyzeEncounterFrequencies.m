@@ -99,8 +99,8 @@ classdef AnalyzeEncounterFrequencies<handle
             fNames = lower(obj.params.replicateName);
             for fIdx = 1:numel(fNames)
              [oneSide, twoSides] = obj.ProcessEncounters(obj.params.beadRangeToAnalyze,fNames{fIdx});
-              obj.beadData.encounterData.twoSides.(fNames{fIdx})= twoSides.(fNames{fIdx});
-              obj.beadData.encounterData.oneSide.(fNames{fIdx}) = oneSide.(fNames{fIdx});
+              obj.beadData.encounterData.twoSides.(fNames{fIdx})= twoSides;
+              obj.beadData.encounterData.oneSide.(fNames{fIdx}) = oneSide;
             end
             obj.FitData;
             
@@ -415,24 +415,27 @@ classdef AnalyzeEncounterFrequencies<handle
                     % construct the one sided encounter matrix 
                   [oneSide, twoSides] = obj.ProcessEncounters(analysisRange(tIdx),fNames{fIdx});
 %                    [~,~,tr]  = obj.GetMeanSignal(analysisRange(tIdx),lower(fNames{fIdx}));
-                   oneSided  = zeros(numel(analysisRange(tIdx).bead1),numel(analysisRange(tIdx).bead2)-1);
                         for bIdx = 1:numel(analysisRange(tIdx).bead1)
                             sig = oneSide{bIdx};
                             s = sum(sig);
                             % normalize to get prob.
                             if s~=0
                               oneSided(bIdx,1:numel(sig))=sig./s;
+                              
+                            end
+                            
                             end
                         end
+                        
                         tr = oneSided~=0;                       
                         oneSided(~tr) = NaN;                        
                        obj.classes.peakFinder = PeakCalling;
+                       obj.classes.peakFinder.params.fitType = 'loess';
                        obj.classes.peakFinder.FindPeaks(oneSided);
+                       
                        p{fIdx,tIdx} = obj.classes.peakFinder.peakList;
                        
-                end                
-            end
-                                            
+                end                                                                     
         end        
     
         function [meanSignal,meanSignalStd,tr] = GetMeanSignal(obj,analysisRange,fName)
