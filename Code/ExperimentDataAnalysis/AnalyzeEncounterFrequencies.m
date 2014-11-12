@@ -182,22 +182,83 @@ classdef AnalyzeEncounterFrequencies<handle
             %            obj.PlotSegments
         end
         
-        function [oneSide, twoSides] = ProcessEncounters(obj,beadRangeToAnalyze,replicateName)
+        function [oneSide, twoSides,encounterOneSide] = ProcessEncounters(obj,beadRangeToAnalyze,replicateName)
             % Process encounters             
             % Get encoutner matrix in the range specified by analysisRange
             allFreq   = obj.GetEncounterMatrix(beadRangeToAnalyze,replicateName);
             eMatrix   = cell(numel(beadRangeToAnalyze.bead1),1);
             twoSides  = cell(numel(beadRangeToAnalyze.bead1),2);
             inds1     = beadRangeToAnalyze.bead1;
-            inds2     = beadRangeToAnalyze.bead2;
-            count     = 1;
-            for bIdx = inds2
-                encounterSignal = allFreq(inds1(count),inds2);
-                before          = encounterSignal(count-1:-1:1);% flipped
-                after           = encounterSignal(count+1:1:end);
+            inds2     = beadRangeToAnalyze.bead2;  
+%             twoSideTr = zeros(obj.beadData.numBeads);
+            encounterOneSide         = nan(obj.beadData.numBeads,obj.beadData.numBeads-1);
+            
+            % Compute one sided encounter probability 
+            count = 1;
+            for b1Idx = inds1                
+                for b2Idx = inds2
+                    if b1Idx~=b2Idx % avoid self counts
+                        after  = allFreq(b1Idx,b2Idx);
+                        if (b1Idx-b2Idx)>0
+                            before = allFreq(b1Idx,b1Idx-abs(b1Idx-b2Idx));
+                        else
+                            before = 0;
+                        end
+                        twoSides{count,1}(abs(b1Idx-b2Idx)+1) = before;
+                        twoSides{count,2}(abs(b1Idx-b2Idx)+1) = after;
+                        if after*before==0
+                            val = after+before;
+                        else
+                            val = (after+before)/2;
+                        end
+                        encounterOneSide(b1Idx,abs(b1Idx-b2Idx)) = val;
+                    end
+                end
+                % normalize two sides 
+                s = sum([twoSides{count,1},twoSides{count,2}]);
+                twoSides{count,1} =twoSides{count,1}/s;
+                twoSides{count,2} =twoSides{count,2}/s;
+                
+                count = count+1;
+            end
+            
+            % Define valid indices 
+            oneSideTr=~isnan(encounterOneSide);            
+            oneSide = cell(beadRangeToAnalyze.bead1(end)-beadRangeToAnalyze.bead1(1)+1,1);
+%             aRange = beadRangeToAnalyze.bead2(1)-beadRangeToAnalyze.bead1(1) +1: beadRangeToAnalyze.bead2(end)-beadRangeToAnalyze.bead1(1);
+%             e       = e(beadRangeToAnalyze.bead1,aRange);
+            count = 1;
+            for b1Idx=1:numel(inds1)
+                encounterOneSide(b1Idx,oneSideTr(b1Idx,:)) = encounterOneSide(b1Idx,oneSideTr(b1Idx,:))/sum(encounterOneSide(b1Idx,oneSideTr(b1Idx,:)));
+                oneSide{count,1} = nan(1,beadRangeToAnalyze.bead2(end)-beadRangeToAnalyze.bead2(1));
+                oneSide{count,1}(1:numel(encounterOneSide(b1Idx,oneSideTr(b1Idx,:)))) = encounterOneSide(b1Idx,oneSideTr(b1Idx,:));
+                count = count+1;
+            end
+%           truncate e and oneSideTr
+           
+
+
+%             % Set limits 
+%             maxDist   = max(beadRangeToAnalyze.bead2(end)-beadRangeToAnalyze.bead1(1),beadRangeToAnalyze.bead1(end)-beadRangeToAnalyze.bead2(1));
+%             minDist   = max(min([beadRangeToAnalyze.bead2(end)-beadRangeToAnalyze.bead1(1),...
+%                                 beadRangeToAnalyze.bead1(end)-beadRangeToAnalyze.bead2(1),...
+%                                 -(beadRangeToAnalyze.bead2(end)-beadRangeToAnalyze.bead1(1)),...
+%                                 -(beadRangeToAnalyze.bead1(end)-beadRangeToAnalyze.bead2(1))]) ,0);
+%             
+%             for dIdx = minDist:maxDist              
+%               twoSideTr = twoSideTr+diag(ones(1,obj.beadData.numBeads-dIdx),dIdx);% diag(ones(1,obj.beadData.numBeads-beadRangeToAnalyze.bead2(dIdx)+1),beadRangeToAnalyze.bead2(dIdx)-1);
+%               twoSideTr = twoSideTr+diag(ones(1,obj.beadData.numBeads-dIdx),-dIdx);% diag(ones(1,obj.beadData.numBeads-beadRangeToAnalyze.bead2(dIdx)+1),-beadRangeToAnalyze.bead2(dIdx)+1);
+%             end
+            
+            for bIdx = 1:numel(inds1)
+                encounterSignal = allFreq(inds1(bIdx),inds2);
+%                 before          = allFreq(inds1(bIdx),inds2(bIdx)-1:-1:1);
+%                 after           = allFreq(inds1(bIdx),inds2(bIdx)+1:end);
+                before          = encounterSignal(bIdx-1:-1:1);% flipped
+                after           = encounterSignal(bIdx+1:1:end);
                 freq            = zeros(2,inds2(end)-inds2(1));
                 % Align before and after according to distances
-                freq(1,1:bIdx-1)       = before;
+                freq(1,1:numel(before))= before;
                 freq(2,1:numel(after)) = after;
                 normFac                = ones(1,size(freq,2));
                 nanBefore              = isnan(freq(1,:));
@@ -208,14 +269,14 @@ classdef AnalyzeEncounterFrequencies<handle
                 normFac(nanAfter)  = 1;
                 freq(isnan(freq))  = 0;
                 freq = sum(freq)./normFac; % this becomes the average of before and after;
-                eMatrix{count} = freq;
+                eMatrix{bIdx} = freq;
                 
                 % Record the 'before' and 'after' encounter frequency.
                 % where 'before' and 'after' are in terms of index
                 
-                twoSides{count,1} = before;
-                twoSides{count,2} = after;
-                count = count+1;
+                twoSides{bIdx,1} = before;
+                twoSides{bIdx,2} = after;
+%                 count = count+1;
             end
             oneSide = eMatrix;
         end
@@ -407,36 +468,39 @@ classdef AnalyzeEncounterFrequencies<handle
             analysisRange(2).bead1 = 108:307;
             analysisRange(2).bead2 = 108:307;
             analysisRange(3).bead1 = 1:107;
-            analysisRange(3).bead2 = 120:307;
+            analysisRange(3).bead2 = 107:307;
             
             for fIdx = 1:numel(fNames)
                 obj.peaks.(lower(fNames{fIdx})) = [];
                 for tIdx = 1:3
-                    % construct the one sided encounter matrix 
-                  [oneSide, twoSides] = obj.ProcessEncounters(analysisRange(tIdx),fNames{fIdx});
-%                    [~,~,tr]  = obj.GetMeanSignal(analysisRange(tIdx),lower(fNames{fIdx}));
-                        for bIdx = 1:numel(analysisRange(tIdx).bead1)
-                            sig = oneSide{bIdx};
-                            s = sum(sig);
-                            % normalize to get prob.
-                            if s~=0
-                              oneSided(bIdx,1:numel(sig))=sig./s;
-                              
-                            end
-                            
-                            end
-                        end
-                        
-                        tr = oneSided~=0;                       
-                        oneSided(~tr) = NaN;                        
-                       obj.classes.peakFinder = PeakCalling;
-                       obj.classes.peakFinder.params.fitType = 'loess';
-                       obj.classes.peakFinder.FindPeaks(oneSided);
-                       
-                       p{fIdx,tIdx} = obj.classes.peakFinder.peakList;
-                       
-                end                                                                     
-        end        
+                    % Construct the one sided encounter matrix
+                    [oneSide, twoSides] = obj.ProcessEncounters(analysisRange(tIdx),fNames{fIdx});
+                    oneSided  = zeros(analysisRange(tIdx).bead1(end)-analysisRange(tIdx).bead1(1)+1,analysisRange(tIdx).bead2(end)-analysisRange(tIdx).bead1(1));
+%                     oneSided  = zeros(obj.beadData.numBeads,obj.beadData.numBeads-1);%   zeros(analysisRange(tIdx).bead1(end)-analysisRange(tIdx).bead1(1)+1,obj.beadData.numBeads-1);
+                    [~,~,tr]  = obj.GetMeanSignal(analysisRange(tIdx),lower(fNames{fIdx}));
+                    startInd  = max(min(analysisRange(tIdx).bead2(1)-analysisRange(tIdx).bead1),1);
+                    endInd    = max(analysisRange(tIdx).bead2(end)-analysisRange(tIdx).bead1);
+                    tr        = tr(analysisRange(tIdx).bead1,startInd:endInd);
+                    for bIdx = 1:numel(analysisRange(tIdx).bead1)
+                        sig = oneSide{bIdx};
+                        s   = sum(sig);
+                        % normalize to get prob.
+                        if s~=0
+                            f = find(tr(bIdx,:),1,'first');
+                            oneSided(bIdx,f:f+numel(sig)-1) = sig./s;
+                            numel(f:f+numel(sig)-1)
+                        end                        
+                    end
+                                                         
+                    oneSided(~tr) = eps;
+                    obj.classes.peakFinder = PeakCalling;
+                    obj.classes.peakFinder.params.fitType = 'loess';
+                    obj.classes.peakFinder.FindPeaks(oneSided);
+                    
+                    p{fIdx,tIdx} = obj.classes.peakFinder.peakList;
+                end
+            end
+        end
     
         function [meanSignal,meanSignalStd,tr] = GetMeanSignal(obj,analysisRange,fName)
             % tr are the valid index list when encounter data is sorte
@@ -455,6 +519,7 @@ classdef AnalyzeEncounterFrequencies<handle
                  if obj.beadData.bead(b1Idx).beadInRange
                   for b2Idx = analysisRange.bead2
                      if obj.beadData.bead(b2Idx).beadInRange
+       
                       tr(b1Idx, max(abs(b1Idx-b2Idx),1)) = true;
                       tr(b2Idx,max(abs(b1Idx-b2Idx),1)) = true;
                      end
