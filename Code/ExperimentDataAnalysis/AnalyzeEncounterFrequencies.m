@@ -407,7 +407,7 @@ classdef AnalyzeEncounterFrequencies<handle
             analysisRange(2).bead1 = 108:307;
             analysisRange(2).bead2 = 108:307;
             analysisRange(3).bead1 = 1:107;
-            analysisRange(3).bead2 = 115:307;
+            analysisRange(3).bead2 = 108:307;
             p = cell(numel(fNames), numel(analysisRange));
             for fIdx = 1:numel(fNames)
                 obj.peaks.(lower(fNames{fIdx})) = [];
@@ -426,25 +426,47 @@ classdef AnalyzeEncounterFrequencies<handle
                     % need to change peaks position according to analysis
                     % range 
                     
-                    p{fIdx,tIdx} = obj.classes.peakFinder.peakList;
-                    tempPeakList = [];
-                    for pIdx = 1:size(p{fIdx,tIdx},1)
-                        tempPeakList(end+1,:) = p{fIdx,tIdx}(pIdx,:);
-                        
-                        tempPeakList(end,1) = tempPeakList(end,1)+analysisRange(tIdx).bead1(1)-1;
-                        % add peaks in both sides 
-                        d =  tempPeakList(end,2);
-                        if (tempPeakList(end,1)+d)<=(obj.beadData.numBeads)
-                          tempPeakList(end,2)  =  tempPeakList(end,1)+d;                          
-                        end
-                        
-                        if ( tempPeakList(end,1)-d)>=1
-                             tempPeakList(end+1,1) = tempPeakList(end,1);
-                             tempPeakList(end,2) = tempPeakList(end,1)-d;
-                        end
-                        
+                    p{fIdx,tIdx} = obj.classes.peakFinder.peakList;       
+%                      tempPeakList = p{fIdx,tIdx};
+                    if ~isempty( p{fIdx,tIdx})
+                     p{fIdx,tIdx}(:,1) =  p{fIdx,tIdx}(:,1)+analysisRange(tIdx).bead1(1)-1;
+                     d =   p{fIdx,tIdx}(:,2);% all distances
+                     peaksHigh = [p{fIdx,tIdx}(:,1), p{fIdx,tIdx}(:,1)+d];
+                     indsHigh  = peaksHigh(:,2)>analysisRange(tIdx).bead2(end);
+                             % eliminate peaks over the max range
+                     peaksHigh = peaksHigh(~indsHigh,:); 
+                     peaksLow = [];
+%                      if tIdx~=3
+%                       peaksLow = [p{fIdx,tIdx}(:,1), p{fIdx,tIdx}(:,1)-d];
+%                       indsLow  = peaksLow(:,2)<analysisRange(tIdx).bead2(1);
+%                      % eliminate peaks over the min range
+%                       peaksLow = peaksLow(~indsLow,:);
+%                      else
+%                          peaksLow = [];
+%                      end
+                                 
+                     peaksTotal= [peaksLow;peaksHigh];
+                     
+                     p{fIdx,tIdx} = peaksTotal;                                       
                     end
-                    p{fIdx,tIdx}= tempPeakList;
+                    
+%                     for pIdx = 1:size(p{fIdx,tIdx},1)
+%                         tempPeakList(end+1,:) = p{fIdx,tIdx}(pIdx,:);
+%                         
+%                         tempPeakList(end,1) = tempPeakList(end,1)+analysisRange(tIdx).bead1(1)-1;
+%                         % add peaks in both sides 
+%                         d =  tempPeakList(end,2);
+%                         if (tempPeakList(end,1)+d)<=(analysisRange(tIdx).bead2(end))
+%                           tempPeakList(end,2)  =  tempPeakList(end,1)+d;                          
+%                         end
+%                         
+%                         if ( tempPeakList(end,1)-d)>=analysisRange(tIdx).bead2(1) && tIdx~=3
+%                              tempPeakList(end+1,1)   = tempPeakList(end,1);
+%                              tempPeakList(end,2)     = tempPeakList(end,1)-d;
+%                         end
+%                         
+%                     end
+%                     p{fIdx,tIdx}= tempPeakList;
                 end
                 
                 % keep only peaks in the analysis range 
@@ -809,19 +831,23 @@ classdef AnalyzeEncounterFrequencies<handle
             % Display binary matrix of peaks             
             fNames = lower(obj.params.replicateName);
             for fIdx = 1:numel(fNames)
-                peakMat = zeros(obj.beadData.numBeads);
-                for pIdx = 1:size(obj.peaks.(fNames{fIdx}),1)
-                    peakMat(obj.peaks.(fNames{fIdx})(pIdx,1),obj.peaks.(fNames{fIdx})(pIdx,2)) = 1;
-                    peakMat(obj.peaks.(fNames{fIdx})(pIdx,2),obj.peaks.(fNames{fIdx})(pIdx,1)) = 1;
-                    
-                end
+                
                 f = figure('Name',sprintf('%s%s', 'Peak List ' , fNames{fIdx}),...
-                              'FileName',sprintf('%s%s', 'Peak List' , fNames{fIdx}));
+                           'FileName',sprintf('%s%s', 'Peak List' , fNames{fIdx}));
 %                     a = axes('Parent',f,...
 %                              'Fontsize',40);
-                 [oneSide, twoSides,encounterOneSide,oneSideTr] = obj.ProcessEncounters(obj.params.beadRangeToAnalyze,fNames{fIdx});
-                     imshow(peakMat);
-                     set(gca,'FontSize',40);
+%                  [oneSide, twoSides,encounterOneSide,oneSideTr] = obj.ProcessEncounters(obj.params.beadRangeToAnalyze,fNames{fIdx});
+                  surf(obj.encounterMatrix.(fNames{fIdx})), hold on ;
+                  plot3(obj.peaks.(fNames{fIdx})(:,1),obj.peaks.(fNames{fIdx})(:,2),...
+                        obj.encounterMatrix.(fNames{fIdx})(obj.peaks.(fNames{fIdx})(:,1),...
+                        obj.peaks.(fNames{fIdx})(:,2)),'or','MarkerSize',8)
+%                   peakMat = zeros(obj.beadData.numBeads);
+%                 for pIdx = 1:size(obj.peaks.(fNames{fIdx}),1)
+%                     peakMat(obj.peaks.(fNames{fIdx})(pIdx,1),obj.peaks.(fNames{fIdx})(pIdx,2)) = 1;
+%                     peakMat(obj.peaks.(fNames{fIdx})(pIdx,2),obj.peaks.(fNames{fIdx})(pIdx,1)) = 1;                    
+%                 end
+%                      imshow(peakMat);
+%                      set(gca,'FontSize',40);
                      title(fNames{fIdx});
             end
         end

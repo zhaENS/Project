@@ -44,14 +44,13 @@
 \caption{The encounter probability and the fitted $\beta$ values for TAD E.}
 \end{figure}
 \subsection{Peak Calling}
-To accurately identify pair of beads that interact more frequently than expected, we ran a peak calling procedure on the 5C probability data of each TAD separately. For each bead $i=1..N$ of the chain, we fit an encounter probability curve of the form 
-$\alpha_i d^{-\beta_i}$. We then use the values of the fitted curves at each distance $d=1..(N-1)$  to estimate the expected encounter probability, $\mu(d) = E[\alpha_i d^{-\beta_i}]$, and the expected standard-deviation, $\sigma(d)=\sqrt{E[(\mu(d)-\alpha_i d^{-\beta_i})^2]}$, for each $d$, and $i=1...N$. 
 
-For each observation $i$ at distance $d$ we calculate a z-score by $z_i(d)=\frac{|\alpha_i d^{-\beta_i}-\mu(d)|}{\sigma(d)}$ and fit a Weibull distribution to it. For each z-score a p-value is calculated based on the fitted Weibull CDF and then transformed into a q-value to obtain false discovery rate. We then threshold the data using false discovery rate of 0.01.
+To accurately identify pair of beads that interact more frequently than expected, we ran a peak calling procedure on the 5C probability data of each TAD separately and for the region between TADs. We smooth the encounter frequency signal, taken from all genomic distances, using loess smoothing technique to represent the expected background encounter signal,$E(d)$, and calculate its standard deviation $\sigma_E$. The background Z-score distribution is calculated using all data by $z_B=\frac{O_{i(d)}(d)-E(d)}{\sigma_E}$, for each $i(d)=1,..,N(d)$, with $N(d)$ the number of observations available for genomic distance $d$. A Weibull distribution is fitted to the background signal, where negative values $Z_B$ are treated as censored observations. We then estimate the threshold value, $T_B$, above which z-scores are considered as global outliers of the data, as the 0.99 percent of this distribution. The value of $T_B$ will be used in judging observations in particular genomic distances for being peaks.
 
-The automated procedure resulted in 62 peaks in TAD E, and 
+For each genomic distance $d$, we calculate a z-score for all available observations at that distance by $z({\{i\}_d})=\frac{O({\{i\}_d})-E(d)}{\sigma_{O}(d)}$ and fit a Weibull distribution to it, truncating negative values. The Weibuul CDF is used to calculate a rejection value $T_d$ above which observation at genomic distance $d$ are considered peaks. 
 
+We estimate a new global rejection value based on the distribution of rejection values obtained for $d$ and the back ground, by calculating the $T = \frac{T_d-T_B}{\sigma_T}$ and fitting it with a Weibull distribution. We then threshold the data with $T_{global}$ as the 0.99 percent of the $T$  distribution. 
 
-
-
+For each peak we find after thresholding, we examine the peak strength in its neighborhood of 5, 10, and 15 genomoic distances. The peak it considered true peak if it is a peak in 2 out of 3 neighborhoods. 
+ 
 \end{document}
