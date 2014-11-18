@@ -617,7 +617,13 @@ classdef AnalyzeEncounterFrequencies<handle
 
         end
         
-        function DisplayEncounterProbabilityByBead(obj,beads,dispScale,sides)
+        function DisplayEncounterProbabilityByBead(obj,beads,dispScale,sides,distance)
+            % Plot the encounter probability curves for the beads indicated
+            % in the numerical array beads
+            % with a display scale dispScale ='linear'/'log'
+            % display sides= 'oneSided'/'twoSides'
+            % at a distance indicated by the numerical array distance
+            
             if ~exist('beads','var')
                 beads = obj.params.beadRangeToAnalyze.bead1;% 1:numel(obj.beadData.bead);
             end
@@ -629,6 +635,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 sides = 'oneSide';
             end
             
+
             fNames = obj.params.replicateName;
             for fIdx = 1:numel(fNames)
                 % create main figure
@@ -636,9 +643,9 @@ classdef AnalyzeEncounterFrequencies<handle
                     'Name',['encounterProbabilityByDistance',fNames{fIdx}]);
                 [minDist,maxDist] = obj.GetDistanceRange;
                 if strcmpi(sides,'oneSide')
-                    xLim =  [minDist,maxDist]; 
+                    xLim = [minDist,maxDist]; 
                 elseif strcmpi(sides,'twoSides')
-                    xLim =  [-maxDist,maxDist];
+                    xLim = [-maxDist,maxDist];
                 end
                 % create main axes
                 a = axes('Parent',f,...
@@ -662,10 +669,15 @@ classdef AnalyzeEncounterFrequencies<handle
                         else
                             dispName = sprintf('%s%s%s','Bead',num2str(bIdx),' (missing)');
                         end
+                        
+                        % plot one side encounter prob
                         if strcmpi(sides,'oneSide')
-                            % plot the encoutner data and fit
-                            line('XData',fResults.beadDist,...
-                                'YData',fResults.encounterProb,...
+                          if ~exist('distance','var')
+                              distance = fResults.beadDist; % at what distance to display the encounter probability 
+                          end
+                            inds = distance(distance<=numel(fResults.encounterProb));
+                            line('XData',inds,...
+                                'YData',fResults.encounterProb(inds),...
                                 'Color',rand(1,3),...
                                 'Marker','.',...
                                 'MarkerSize',7,...
@@ -673,11 +685,24 @@ classdef AnalyzeEncounterFrequencies<handle
                                 'LineWidth',3,...
                                 'DisplayName',dispName,...
                                 'Parent',a);
+                            
+                           
                         elseif strcmpi(sides,'twoSides')
-                            eData = [fliplr(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
-                                obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}];
+%                               eData = [fliplr(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
+%                                      obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}];                                 
+                            if ~exist('distance','var')
+                              distance = (1:numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2})); % at what distance to display the encounter probability 
+                              indsLeft  = distance;
+                              indsRight = distance;
+                            else
+                               indsLeft  = distance;
+                               indsRight = distance;
+                            end
+                           
+                            eData     = [fliplr(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}(indsLeft)),...
+                                         obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}(indsRight)];
                                                 
-                            line('XData',(1:numel(eData))-bIdx,...
+                            line('XData',[-fliplr(indsLeft) indsRight],...
                                 'YData',eData,...
                                 'Color',rand(1,3),...
                                 'Marker','.',...
@@ -685,11 +710,13 @@ classdef AnalyzeEncounterFrequencies<handle
                                 'LineStyle','-',...
                                 'LineWidth',3,...
                                 'DisplayName',dispName,...
-                                'Parent',a);
+                                'Parent',a);            
+                             clear distance
                         end
                     else
                         % do nothing
                     end
+                    
                 end
             end
         end

@@ -352,14 +352,13 @@ classdef SimpleRouseFramework<handle
             if ~exist('beadRange','var')
                 beadRange = 1:obj.params.numBeads;
             end
-            
-            
-            
+                                    
             for rIdx = 1:obj.params.numRounds
+                
                 figName = sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx));
-                f = figure('Name',figName,'FileName',figName);
-                a(rIdx)= axes('NextPlot','Add','FontSize', 40,'Parent',f);% create axes                
-                dists = 1:obj.params.numBeads-1;
+                f       = figure('Name',figName,'FileName',figName);
+                a(rIdx) = axes('NextPlot','Add','FontSize', 40,'Parent',f);% create axes                
+                dists   = 1:obj.params.numBeads-1;
                 for bIdx = 1:numel(beadRange)
                     lineColor = rand(1,3);
                     % plot the Encounter probability from simulation
@@ -380,11 +379,11 @@ classdef SimpleRouseFramework<handle
                 end
                     % display expected model
                 line('XData',dists,...
-                    'YData',(1/sum(dists.^(-1.5*(mean(obj.params.beta)-1))))*dists.^(-1.5*(mean(obj.params.beta)-1)),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
-                    'Color','r',...
-                    'Parent',a(rIdx),...
-                    'DisplayName',['Theoretical encounter \beta=' num2str(1.5*(mean(obj.params.beta)-1))],...
-                    'LineWidth',5)
+                     'YData',(1/sum(dists.^(-1.5*(mean(obj.params.beta)-1))))*dists.^(-1.5*(mean(obj.params.beta)-1)),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
+                     'Color','r',...
+                     'Parent',a(rIdx),...
+                     'DisplayName',['Theoretical encounter \beta=' num2str(1.5*(mean(obj.params.beta)-1))],...
+                     'LineWidth',5)
                 
                 title(a(rIdx),sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx)),'FontSize',40)
                 xlabel(a(rIdx),'Bead distance','FontSize',40);
@@ -436,7 +435,8 @@ classdef SimpleRouseFramework<handle
             
             for rIdx = 1:obj.params.numRounds
                 figure('Name',['Experiment',num2str(rIdx)],'FileName',['EncounterHistogramExperiment',num2str(rIdx)]);
-                imagesc(obj.encounterHistogram(:,:,rIdx)), colormap hot
+                windowSize = 2;
+                imagesc(medfilt2(obj.encounterHistogram(:,:,rIdx),[windowSize,windowSize])), colormap hot
                 title(sprintf('%s%d','Experiment ', rIdx),'FontSize',40); 
                 xlabel('Bead number','FontSize',40);
                 ylabel('BeadNumber','FontSize', 40);
