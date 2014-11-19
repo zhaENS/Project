@@ -16,6 +16,7 @@ classdef ReconstructPolymer<handle
         
         function Initialize(obj)
             load('savedAnalysisTADDAndE');
+            % this class relies on the presence of the saved analysis 
             obj.encounterData = a.beadData.encounterData.twoSides.average;
             obj.EstimateClosestNeighborEncounterProbability;
         end
