@@ -435,12 +435,13 @@ classdef SimpleRouseFramework<handle
             
             for rIdx = 1:obj.params.numRounds
                 figure('Name',['Experiment',num2str(rIdx)],'FileName',['EncounterHistogramExperiment',num2str(rIdx)]);
-                windowSize = 2;
+                windowSize = 5;
                 imagesc(medfilt2(obj.encounterHistogram(:,:,rIdx),[windowSize,windowSize])), colormap hot
                 title(sprintf('%s%d','Experiment ', rIdx),'FontSize',40); 
                 xlabel('Bead number','FontSize',40);
                 ylabel('BeadNumber','FontSize', 40);
                 set(gca,'FontSize',40);
+                daspect([1 1 1])
             end
             
         end

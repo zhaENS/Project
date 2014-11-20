@@ -860,22 +860,34 @@ classdef AnalyzeEncounterFrequencies<handle
             for fIdx = 1:numel(fNames)
                 
                 f = figure('Name',sprintf('%s%s', 'Peak List ' , fNames{fIdx}),...
-                           'FileName',sprintf('%s%s', 'Peak List' , fNames{fIdx}));
-%                     a = axes('Parent',f,...
-%                              'Fontsize',40);
-%                  [oneSide, twoSides,encounterOneSide,oneSideTr] = obj.ProcessEncounters(obj.params.beadRangeToAnalyze,fNames{fIdx});
-                  surf(obj.encounterMatrix.(fNames{fIdx})), hold on ;
-                  plot3(obj.peaks.(fNames{fIdx})(:,1),obj.peaks.(fNames{fIdx})(:,2),...
-                        obj.encounterMatrix.(fNames{fIdx})(obj.peaks.(fNames{fIdx})(:,1),...
-                        obj.peaks.(fNames{fIdx})(:,2)),'or','MarkerSize',8)
-%                   peakMat = zeros(obj.beadData.numBeads);
-%                 for pIdx = 1:size(obj.peaks.(fNames{fIdx}),1)
-%                     peakMat(obj.peaks.(fNames{fIdx})(pIdx,1),obj.peaks.(fNames{fIdx})(pIdx,2)) = 1;
-%                     peakMat(obj.peaks.(fNames{fIdx})(pIdx,2),obj.peaks.(fNames{fIdx})(pIdx,1)) = 1;                    
-%                 end
-%                      imshow(peakMat);
-%                      set(gca,'FontSize',40);
-                     title(fNames{fIdx});
+                           'FileName',sprintf('%s%s', 'Peak List' , fNames{fIdx}),...
+                           'Units','norm');
+                a = axes('Parent',f,...
+                         'Units','norm',...
+                         'NextPlot','Add',...
+                         'FontSize',40,...
+                         'LineWidth',4);
+                 
+                 
+                 e = obj.encounterMatrix.(fNames{fIdx});
+                 e = e./max(e(:));                                  
+                 s = surface(e,'EdgeColor','none',...
+                               'FaceLighting','phong',...
+                               'FaceColor','interp');
+                 % add light 
+                 l = light('Parent',a,...
+                           'Position',[-0.2 0.1 1],...
+                           'HandleVisibility','off');
+                 camlight left
+                  plot3(a,obj.peaks.(fNames{fIdx})(:,1),obj.peaks.(fNames{fIdx})(:,2),...
+                        e(obj.peaks.(fNames{fIdx})(:,1),...
+                          obj.peaks.(fNames{fIdx})(:,2)),'or','MarkerSize',8)
+
+                     title(a,fNames{fIdx});
+                     xlabel(a,'Bead');
+                     ylabel(a,'Bead');
+                     colormap summer
+                     
             end
         end
         
