@@ -10,6 +10,7 @@
 \usepackage{subcaption}
 \title{Three-Dimensional Reconstruction Using the Encounter Probabilities}
 \begin{document}
+\section{Using optimization methods}
 \maketitle
 Given an encounter probability profile of the first bead in a Rouse chain of $N$ bead, we use the expected encounter model in the Rouse chain to give estimate on the 3D organization of the chain. Given the encounter profile $e$, we minimize the goal function of the form
 \begin{eqnarray}
@@ -44,6 +45,7 @@ for small $\epsilon$ of choice, and $J$ is the group of all indices $j$ such tha
 c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^2
 \end{equation}
 
-
+\section{Using inverted probabilities assuming a Rouse chain}
+The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the linear distance on the chain. 
 
 \end{document}
