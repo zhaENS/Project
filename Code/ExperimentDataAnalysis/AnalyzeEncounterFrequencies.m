@@ -402,16 +402,16 @@ classdef AnalyzeEncounterFrequencies<handle
             % expeected probability curve
             fNames     = lower(obj.params.replicateName);
             % for the case of 2 TADs , analyze each one seperately
-            analysisRange(1).bead1 = 1:107;
-            analysisRange(1).bead2 = 1:107;
-            analysisRange(2).bead1 = 108:307;
+            analysisRange(1).bead1 = 1:107;% analyze TAD D and the region between TADs 
+            analysisRange(1).bead2 = 1:307;
+            analysisRange(2).bead1 = 108:307;% analyze TAD E
             analysisRange(2).bead2 = 108:307;
-            analysisRange(3).bead1 = 1:107;
-            analysisRange(3).bead2 = 108:307;
+%             analysisRange(3).bead1 = 1:107;
+%             analysisRange(3).bead2 = 108:307;
             p = cell(numel(fNames), numel(analysisRange));
             for fIdx = 1:numel(fNames)
                 obj.peaks.(lower(fNames{fIdx})) = [];
-                for tIdx = 1:3
+                for tIdx = 1:numel(analysisRange)
                     % Construct the one sided encounter matrix
                     [~, ~,encounterMat,~] = obj.ProcessEncounters(analysisRange(tIdx),fNames{fIdx});
                     % truncate the matrices 
@@ -421,7 +421,7 @@ classdef AnalyzeEncounterFrequencies<handle
                     encounterMat = encounterMat(analysisRange(tIdx).bead1,startInd:endInd);
 
                     obj.classes.peakFinder                = PeakCalling;
-                    obj.classes.peakFinder.params.fitType = 'loess';
+                    obj.classes.peakFinder.params.fitType = 'median';
                     obj.classes.peakFinder.FindPeaks(encounterMat);
                     % need to change peaks position according to analysis
                     % range 
@@ -430,22 +430,13 @@ classdef AnalyzeEncounterFrequencies<handle
 %                      tempPeakList = p{fIdx,tIdx};
                     if ~isempty( p{fIdx,tIdx})
                      p{fIdx,tIdx}(:,1) =  p{fIdx,tIdx}(:,1)+analysisRange(tIdx).bead1(1)-1;
-                     d =   p{fIdx,tIdx}(:,2);% all distances
-                     peaksHigh = [p{fIdx,tIdx}(:,1), p{fIdx,tIdx}(:,1)+d];
-                     indsHigh  = peaksHigh(:,2)>analysisRange(tIdx).bead2(end);
-                             % eliminate peaks over the max range
-                     peaksHigh = peaksHigh(~indsHigh,:); 
-                     peaksLow = [];
-%                      if tIdx~=3
-%                       peaksLow = [p{fIdx,tIdx}(:,1), p{fIdx,tIdx}(:,1)-d];
-%                       indsLow  = peaksLow(:,2)<analysisRange(tIdx).bead2(1);
-%                      % eliminate peaks over the min range
-%                       peaksLow = peaksLow(~indsLow,:);
-%                      else
-%                          peaksLow = [];
-%                      end
-                                 
-                     peaksTotal= [peaksLow;peaksHigh];
+                     d          =   p{fIdx,tIdx}(:,2);% all distances
+                     peaksHigh  = [p{fIdx,tIdx}(:,1), p{fIdx,tIdx}(:,1)+d];
+                     indsHigh   = peaksHigh(:,2)>analysisRange(tIdx).bead2(end);
+                     % Eliminate peaks over the max range
+                     peaksHigh  = peaksHigh(~indsHigh,:); 
+                     peaksLow   = [];                                 
+                     peaksTotal = [peaksLow;peaksHigh];
                      
                      p{fIdx,tIdx} = peaksTotal;                                       
                     end
@@ -470,7 +461,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 end
                 
                 % keep only peaks in the analysis range 
-                peaksList = [p{fIdx,1};p{fIdx,2};p{fIdx,3}];
+                peaksList = cat(1,p{fIdx,:});
                 r1    = obj.params.beadRangeToAnalyze.bead1;
                 r2    = obj.params.beadRangeToAnalyze.bead2;
                 pInds = (peaksList(:,1)>=r1(1) &  peaksList(:,2)<=r1(end)) & (peaksList(:,1)>=r2(1) &  peaksList(:,2)<=r2(end));

@@ -11,6 +11,7 @@ classdef SimpleRouse<handle
         savedPosition
         simulationTime 
         encounterHist
+        msd
     end
     
     properties (Access=private)
@@ -18,6 +19,7 @@ classdef SimpleRouse<handle
     end
     
     methods
+        
         function obj = SimpleRouse(params)
 %             obj.SetDefaultParams;
             if exist('params','var')
@@ -88,6 +90,7 @@ classdef SimpleRouse<handle
             for bIdx = 2:obj.params.numBeads
                 obj.position.prev(bIdx,:) = obj.position.prev(bIdx-1,:)+ r(bIdx,:)*0.7*obj.params.b./norm(r(bIdx,:));
             end
+            obj.msd = zeros(obj.params.numBeads,1);
 %             obj.CreateLoopsByBrownianBridge;
             
             obj.savedPosition(:,:,obj.step) = obj.position.prev;
@@ -150,7 +153,7 @@ classdef SimpleRouse<handle
         
         function Step(obj)
                 % advance one step 
-                tic
+                 tic;
 %                 springConst = -(obj.params.dimension*obj.params.diffusionConst*obj.params.dt/(obj.params.b^2));
 %                 obj.GetNoise;
                 obj.GetBeadsDist;
@@ -158,17 +161,18 @@ classdef SimpleRouse<handle
                 obj.position.cur = obj.rouseMatrix*obj.position.prev+...
                                      obj.position.prev+...                                     
                                      randn(obj.params.numBeads,obj.params.dimension)*obj.params.noiseSTD;
-%                                  obj.noise;
-%                                      
-                                     %
-                
+                ms = [obj.position.cur(:,1)-obj.savedPosition(:,1,1),...
+                      obj.position.cur(:,2)-obj.savedPosition(:,2,1),...
+                      obj.position.cur(:,3)-obj.savedPosition(:,3,1)];
+                obj.msd = sum((ms).^2,2);% msd for present location 
                 obj.position.prev = obj.position.cur;
-% %                 obj.Plot
+                
                 obj.step = obj.step+1;
                 if  obj.params.recordPath 
                    obj.savedPosition(:,:,obj.step) = obj.position.prev;
                 end
-                obj.simulationTime = toc;
+%                 t2  = clock; 
+                obj.simulationTime = toc;% etime(t2,t1);
         end
         
         function GetBeadsDist(obj)
