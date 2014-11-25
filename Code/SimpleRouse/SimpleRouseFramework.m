@@ -6,6 +6,7 @@ classdef SimpleRouseFramework<handle
     properties
         params
         beadDistance
+        msd % values of <|x(t)-x(0)|^2> with x(t) the position of each bead
         encounterHistogram
         beadEncounterHistogram
         beadEncounterProbability
@@ -21,6 +22,7 @@ classdef SimpleRouseFramework<handle
         step       = 0;
         simulationData
         stepExitFlag = false;
+        polymerModel %string 'betaChain' or 'RouseChain'
         userData% various user data needed for passing between functions
     end
     
@@ -35,10 +37,16 @@ classdef SimpleRouseFramework<handle
             % set input parameters
             obj.params  = rouseParams;
             obj.round   = 0; % start with zero index, the values increases in PreRoundActions function
-                                                         
+
+            
             % Initialize sequence
             obj.ReadRecipeFile;   % read recipe file 
             obj.SetRecipeParams;  % load the parameters defined in the recipe file 
+            if obj.params.beta~=2
+                obj.polymerModel = 'betaChain';
+            else 
+                obj.polymerModel = 'rouseChain';
+            end
             obj.DataPreallocation % preallocate data structures           
             obj.SetFitOptions;    % set fit options
             
@@ -112,11 +120,14 @@ classdef SimpleRouseFramework<handle
         function PreRunActions(obj)
             % actions performed before each simulation run
             obj.simulation = obj.simulation+1;
-            eval(obj.recipe.PreRunActions);
-            
+            eval(obj.recipe.PreRunActions);            
             % initialize a new chain 
-            obj.handles.classes.rouseChain = SimpleRouse(obj.params);
-            obj.handles.classes.rouseChain.Initialize
+            if strcmpi(obj.polymerModel,'rouseChain')
+                obj.handles.classes.chain = SimpleRouse(obj.params);           
+            else 
+                obj.handles.classes.chain = BetaPolymer(obj.params);
+            end
+              obj.handles.classes.chain.Initialize
         end
         
         function PreStepActions(obj)
@@ -128,24 +139,26 @@ classdef SimpleRouseFramework<handle
         function Run(obj)
             % Run simulations                        
             for rIdx = 1:obj.params.numRounds
+                t1Round = clock;
                 obj.PreRoundActions;                
                 for sIdx = 1:obj.params.numSimulations
-                    tic
+                    t1Simulation= clock;
                     obj.PreRunActions                    
                     while obj.step<obj.params.numSteps && ~obj.stepExitFlag
                         obj.PreStepActions
-                        obj.handles.classes.rouseChain.Step;
+                        obj.handles.classes.chain.Step;
                         obj.PostStepActions
-                    end
-                    % imediatly add to the encounter histogram 
-                      obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)+double(obj.handles.classes.rouseChain.beadDist(:,:,end)<obj.params.encounterDist);
-                       obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)-diag(diag(obj.encounterHistogram(:,:,rIdx)));
-                       
-%                     obj.beadDistance(:,:,sIdx,rIdx) = obj.handles.classes.rouseChain.beadDist(:,:,end);% take the last recorded bead distances
+                    end                                        
                     
-                    obj.simulationData(obj.round).simulation(sIdx).time         = toc;
-                    obj.simulationData(obj.round).simulation(sIdx).numSteps     = obj.handles.classes.rouseChain.params.numSteps;
-                    obj.simulationData(obj.round).simulation(sIdx).meanStepTime = obj.handles.classes.rouseChain.simulationTime/obj.handles.classes.rouseChain.params.numSteps;
+                    % imediatly add to the encounter histogram 
+                      obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)+double(obj.handles.classes.chain.beadDist(:,:,end)<obj.params.encounterDist);
+                      obj.encounterHistogram(:,:,rIdx) = obj.encounterHistogram(:,:,rIdx)-diag(diag(obj.encounterHistogram(:,:,rIdx)));
+                       
+%                     obj.beadDistance(:,:,sIdx,rIdx) = obj.handles.classes.chain.beadDist(:,:,end);% take the last recorded bead distances
+                    t2Simulation = clock;
+                    obj.simulationData(obj.round).simulation(sIdx).time         = etime(t2Simulation,t1Simulation);
+                    obj.simulationData(obj.round).simulation(sIdx).numSteps     = obj.handles.classes.chain.params.numSteps;
+                    obj.simulationData(obj.round).simulation(sIdx).meanStepTime = obj.handles.classes.chain.simulationTime/obj.handles.classes.chain.params.numSteps;
                     obj.simulationData(obj.round).simulation(sIdx).params       = obj.params;
                     
                     obj.PostRunActions;% perform post run actions
@@ -153,7 +166,8 @@ classdef SimpleRouseFramework<handle
                 end
                 
                 % record simulation data
-                obj.simulationData(obj.round).round.time = toc;% record round time
+                t2Round = clock;
+                obj.simulationData(obj.round).round.time = etime(t2Round,t1Round);% record round time
                 obj.simulationData(obj.round).params     = obj.params;% save round parameters
                 
                 % perform user defined actions at the end of each round
@@ -164,12 +178,17 @@ classdef SimpleRouseFramework<handle
         function PostStepActions(obj)
             % actions performed after each step
             eval(obj.recipe.PostStepActions);
+            if obj.params.calculateMSD
+               obj.msd(:,obj.step,obj.simulation) = obj.handles.classes.chain.msd;
+            end
         end
         
         function PostRunActions(obj)
             % actions performed after each simulation
             eval(obj.recipe.PostRunActions)
-            
+            if obj.params.calculateMSD
+                obj.msd = mean(obj.msd,3);
+            end
             obj.step =0; % restart step index;
         end
         
@@ -187,6 +206,7 @@ classdef SimpleRouseFramework<handle
                 obj.CalculateMeanEncounterProbability;
                 obj.FitMeanEncounterProbability
                 obj.FitBeadEncounterProbability;
+                obj.FitMSD
             end            
         end
         
@@ -196,6 +216,8 @@ classdef SimpleRouseFramework<handle
                 obj.DisplayMeanEncounterProbability
                 obj.DisplayBeadDataFit
                 obj.DisplayEncounterHistograms
+                obj.DisplayFittedAlphasOfMSD
+%                 obj.DisplayMSD
             end
         end
         
@@ -305,6 +327,22 @@ classdef SimpleRouseFramework<handle
             end
         end
         
+        function FitMSD(obj)
+            % estimate the exponent value for the msd of each bead                        
+            if obj.params.calculateMSD
+                f = fittype('A*x.^alpha');
+%                 f = @(alpha) sum(
+                opt = fitoptions(f);
+                set(opt,'StartPoint',[0.5,0.5],...
+                                 'Lower',[0 0]);
+                for bIdx = 1:obj.params.numBeads
+                    [fObj] = fit((1:numel(obj.msd(bIdx,:)))',obj.msd(bIdx,:)',f,opt);
+                    obj.fitResults.bead.fittedAlphas(bIdx,obj.round) = fObj.alpha;
+                    obj.fitResults.bead.fittedAForMSD(bIdx,obj.round) = fObj.A;
+                end
+            end
+        end
+        
         function DisplayFittedExponents(obj)
             % Display the values of beta obtained for each bead in each
             % round
@@ -342,14 +380,13 @@ classdef SimpleRouseFramework<handle
             if ~exist('beadRange','var')
                 beadRange = 1:obj.params.numBeads;
             end
-            
-            
-            
+                                    
             for rIdx = 1:obj.params.numRounds
+                
                 figName = sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx));
-                f = figure('Name',figName,'FileName',figName);
-                a(rIdx)= axes('NextPlot','Add','FontSize', 40,'Parent',f);% create axes                
-                dists = 1:obj.params.numBeads-1;
+                f       = figure('Name',figName,'FileName',figName);
+                a(rIdx) = axes('NextPlot','Add','FontSize', 40,'Parent',f);% create axes                
+                dists   = 1:obj.params.numBeads-1;
                 for bIdx = 1:numel(beadRange)
                     lineColor = rand(1,3);
                     % plot the Encounter probability from simulation
@@ -370,11 +407,11 @@ classdef SimpleRouseFramework<handle
                 end
                     % display expected model
                 line('XData',dists,...
-                    'YData',(1/sum(dists.^(-1.5)))*dists.^(-1.5),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
-                    'Color','r',...
-                    'Parent',a(rIdx),...
-                    'DisplayName','Theoretical encounter \beta=1.5',...
-                    'LineWidth',5)
+                     'YData',(1/sum(dists.^(-1.5*(mean(obj.params.beta)-1))))*dists.^(-1.5*(mean(obj.params.beta)-1)),...%obj.fitModel(-0.5/(-1+obj.params.numBeads^-0.5),1.5,dists),...
+                     'Color','r',...
+                     'Parent',a(rIdx),...
+                     'DisplayName',['Theoretical encounter \beta=' num2str(1.5*(mean(obj.params.beta)-1))],...
+                     'LineWidth',5)
                 
                 title(a(rIdx),sprintf('%s%s','BeadDataFitExperiment',num2str(rIdx)),'FontSize',40)
                 xlabel(a(rIdx),'Bead distance','FontSize',40);
@@ -387,7 +424,7 @@ classdef SimpleRouseFramework<handle
                        'FileName','meanEncounterProbability') ;
             a = axes('Parent',f,'NextPlot','Add','FontSize',40);
             
-            title(a,'Mean Encounter Prob','FontSize',40);
+            title(a,'Mean Encounter Prob.','FontSize',40);
             xlabel(a,'Distance [bead]','FontSize',40);
             ylabel(a,'Encounter Prob.','FontSize',40);
             
@@ -409,13 +446,14 @@ classdef SimpleRouseFramework<handle
                     'LineWidth',5)
                 %                 m(rIdx) = obj.fitResults.mean{rIdx}.a;
             end
-            % add the theoretical model
+            % add the theoretical model (temporary)
+            
             line('XData',dists,...
-                'YData',(1/sum(dists.^(-1.5)))*dists.^(-1.5),...
+                'YData',(1/sum(dists.^(-1.5*(mean(obj.params.beta)-1))))*dists.^(-1.5*(mean(obj.params.beta)-1)),...
                 'Color','r',...
                 'Parent',a,...
                 'LineWidth',5,...
-                'DisplayName','Theoretical encounter \beta=1.5')
+                'DisplayName',['Theoretical encounter \beta=', num2str(1.5*(mean(obj.params.beta)-1))])
            l= legend(flipud(get(a,'Children')));
            set(l,'FontSize',18);
 
@@ -425,13 +463,72 @@ classdef SimpleRouseFramework<handle
             
             for rIdx = 1:obj.params.numRounds
                 figure('Name',['Experiment',num2str(rIdx)],'FileName',['EncounterHistogramExperiment',num2str(rIdx)]);
-                imagesc(obj.encounterHistogram(:,:,rIdx)), colormap hot
+                windowSize = 10;
+                imagesc(medfilt2(obj.encounterHistogram(:,:,rIdx),[windowSize,windowSize])), colormap hot
                 title(sprintf('%s%d','Experiment ', rIdx),'FontSize',40); 
                 xlabel('Bead number','FontSize',40);
                 ylabel('BeadNumber','FontSize', 40);
                 set(gca,'FontSize',40);
+                daspect([1 1 1])
             end
             
         end
+        
+        function DisplayFittedAlphasOfMSD(obj)
+            
+            for rIdx = 1:obj.params.numRounds
+                f = figure('Units','norm',...
+                    'Name',['\alpha values experiment' num2str(rIdx)],...
+                    'FileName',['AlphaValuesOfMSDExperiment' num2str(rIdx)]);
+                a= axes('Parent',f,'FontSize',40,'LineWidth',4,'NextPlot','Add');
+                line('XData',1:obj.params.numBeads,...
+                    'YData',obj.fitResults.bead.fittedAlphas(:,rIdx),...
+                    'Marker','o',...
+                    'MarkerSize',7,...
+                    'MarkerFaceColor','b',...
+                    'MarkerEdgeColor',[0.5 0.1 0.2],...
+                    'LineWidth',4,...
+                    'Parent',a);
+                title(a,'Fitted alpha','FontSize',40);
+                xlabel(a,'bead','FontSize',40),
+                ylabel(a,'\alpha','FontSize',40,'Rotation',0);   
+                
+                % Add the mean line 
+                m = mean(obj.fitResults.bead.fittedAlphas(:,rIdx));
+                line('XData',[1 obj.params.numBeads],...
+                     'YData',[m m],...
+                     'LineWidth',4,...
+                     'LineStyle','-.',...
+                     'Color','g',...
+                     'Parent',a,...
+                     'DisplayName','mean \alpha')
+                
+            end
+        end
+        
+        function DisplayMSD(obj)
+            if obj.params.calculateMSD
+             for rIdx = 1:obj.params.numRounds
+                 f = figure('Units','norm','Name','MSD','FileName',['MsdExperiment', num2str(rIdx)]);
+                 a = axes('Parent',f,'fontSize',40,...
+                     'NextPlot','Add');
+                 t = 1:numel(obj.msd(1,:,1));
+                 for bIdx = 1:obj.params.numBeads
+                  c = rand(1,3);
+                  line('XData',t,...
+                      'YData',obj.msd(bIdx,:,rIdx),...
+                      'LineWidth',3,...
+                      'Color',c,...
+                      'Parent',a,...
+                      'DisplayName',['bead ' num2str(bIdx)])
+                  line('XData',t,...
+                       'YData',obj.fitResults.bead.fittedAForMSD(bIdx,rIdx)*t.^obj.fitResults.bead.fittedAlphas(bIdx,rIdx),...
+                       'Color','r',...
+                       'DisplayName',['\alpha = ' num2str(obj.fitResults.bead.fittedAlphas(bIdx,rIdx))])
+                 end            
+             end
+            end
+        end
+        
     end
 end

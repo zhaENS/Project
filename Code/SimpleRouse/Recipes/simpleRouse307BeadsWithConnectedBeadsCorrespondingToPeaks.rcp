@@ -1,15 +1,18 @@
 <description>In this simulation we connect bead in positions corresponding... 
 to the peaks found by the PeakCalling method in the class AnalyzeEncounterFrequencies...
-the list of peaks is found for TAD D and E seperately , but is combined in the...
+the list of peaks is found for TAD D and E seperately and between TADs , but is combined in the...
 307 beads chain simulated here
 </description>
 
 <func> SetRecipeParams </func>
-% take the average replicant peaks as connections 
-load('peakListTADDAndE');
-obj.params.connectedBeads = peakList.average;
-
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
+% make sure the polymer is a Rouse polymer 
+obj.params.beta = 2; 
+% take the average replicant peaks as connections 
+sprintf('%s\n','loading peak list TAD D and E')
+load('savedAnalysisTADDAndE');
+% load the peaks from the average of the data 
+obj.params.connectedBeads = a.peaks.average;
 
 <func> PreSimulationBatchActions </func>
 %Actions performed before each simulation batch
