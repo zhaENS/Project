@@ -1,7 +1,7 @@
 function rouseParams        = SimpleRouseParams
 % Parameters for the SimpleRouse class and simulations
 rouseParams.numRounds       = 1; % number of simulation rounds 
-rouseParams.numSimulations  = 10000; % number of simulations in each round
+rouseParams.numSimulations  = 5000; % number of simulations in each round
 rouseParams.dimension       = 3;
 rouseParams.numBeads        = 307;
 rouseParams.b               = 1;
@@ -20,7 +20,7 @@ rouseParams.affineBeadsNum  = [];    % a fixed pair indices of affine beads
 rouseParams.kOff            = 0.1;   % the detachment rate of affine beads
 rouseParams.beta            = 2;     % ~~!!for beta~=2 the polymer is a beta polymer!!~~to set all betas to the same value insert one value only
 rouseParams.recipeFolder    = fullfile(pwd,'SimpleRouse','Recipes');
-rouseParams.recipeFileName  = 'simpleRouseSimulateTwoTADs';%'simpleRouseSimulateMeanFirstEncounterEndToEnd';
+rouseParams.recipeFileName  = 'simpleRouseSimulateOneTADwithTail';%'simpleRouseSimulateMeanFirstEncounterEndToEnd';
 rouseParams.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 rouseParams.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
 rouseParams.calculateMSD    = false;  % indicate whether to calculate the MSD for each bead (slows down simulations)

@@ -5,6 +5,8 @@ We sequantially add 10 inner loops in random location </description>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
 obj.params.numRounds = 30;
 obj.params.numBeads  = 307; 
+obj.params.calculateMSD = true;
+
 obj.params.connectedBeads = [107 207]; % connect the two end in each TAD 
 
 <func> PreSimulationBatchActions </func>
