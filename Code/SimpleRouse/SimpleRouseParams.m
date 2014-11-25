@@ -1,6 +1,6 @@
 function rouseParams        = SimpleRouseParams
 % Parameters for the SimpleRouse class and simulations
-rouseParams.numRounds       = 1; % number of simulation rounds 
+rouseParams.numRounds       = 30; % number of simulation rounds 
 rouseParams.numSimulations  = 5000; % number of simulations in each round
 rouseParams.dimension       = 3;
 rouseParams.numBeads        = 307;
@@ -23,7 +23,7 @@ rouseParams.recipeFolder    = fullfile(pwd,'SimpleRouse','Recipes');
 rouseParams.recipeFileName  = 'simpleRouseSimulateOneTADwithTail';%'simpleRouseSimulateMeanFirstEncounterEndToEnd';
 rouseParams.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 rouseParams.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
-rouseParams.calculateMSD    = false;  % indicate whether to calculate the MSD for each bead (slows down simulations)
+rouseParams.calculateMSD    = true;  % indicate whether to calculate the MSD for each bead (slows down simulations)
 rouseParams.plot            = false;  % TODO: should call the plotter  [obsolete]
 rouseParams.recordPath      = false;  % record bead position (slows down simulations)
 rouseParams.analyzeResults  = false;  % perform analysis post simulations 

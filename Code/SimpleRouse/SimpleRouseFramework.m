@@ -162,7 +162,7 @@ classdef SimpleRouseFramework<handle
                     obj.simulationData(obj.round).simulation(sIdx).params       = obj.params;
                     
                     obj.PostRunActions;% perform post run actions
-                    fprintf('%s%d%s%d%s\n', 'round ', rIdx,' simulation ', sIdx, ' is done')
+                    fprintf('%s%d%s%d%s%s\n', 'round ', rIdx,' simulation ', sIdx, ' is done. Time ', num2str( obj.simulationData(obj.round).simulation(sIdx).time))
                 end
                 
                 % record simulation data
