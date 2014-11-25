@@ -4,10 +4,11 @@
 
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
-obj.params.numBeads = 307; 
+obj.params.numBeads  = 307; 
+obj.params.numRounds = 30;
 obj.params.connectedBeads = [1 107; 108 307]; % connect the two end in each TAD 
 
-<func> PreSimulationBatchActions </func>
+<func> PreSimulationBatchActions </func>v 
 
 <func> PreRunActions </func>
 obj.params.connectedBeads = [1 107; 108 307]; % connect the two ends in each TAD 
