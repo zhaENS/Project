@@ -26,6 +26,9 @@ classdef SimpleRouseFramework<handle
         userData% various user data needed for passing between functions
     end
     
+     properties (Access = private)   
+     end     
+     
     events
     end
     
@@ -77,6 +80,7 @@ classdef SimpleRouseFramework<handle
             obj.beadEncounterHistogram    = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
             obj.beadEncounterProbability  = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
             obj.meanEncounterProbability  = zeros(1,obj.params.numBeads-1,obj.params.numRounds);
+            obj.msd                       = zeros(obj.params.numBeads,obj.params.numSteps,obj.params.numRounds);
         end
                
         function ReadRecipeFile(obj)
@@ -178,23 +182,18 @@ classdef SimpleRouseFramework<handle
         function PostStepActions(obj)
             % actions performed after each step
             eval(obj.recipe.PostStepActions);
-            if obj.params.calculateMSD
-               obj.msd(:,obj.step,obj.simulation) = obj.handles.classes.chain.msd;
-            end
+            obj.msd(:,obj.step,obj.round) = (obj.msd(:,obj.step,obj.round)*(obj.simulation-1) + obj.handles.classes.chain.msd)/obj.simulation;
         end
         
         function PostRunActions(obj)
             % actions performed after each simulation
-            eval(obj.recipe.PostRunActions)
-            if obj.params.calculateMSD
-                obj.msd = mean(obj.msd,3);
-            end
+            eval(obj.recipe.PostRunActions)                       
             obj.step =0; % restart step index;
         end
         
         function PostRoundActions(obj)
             % perform an action after the simulation round is over
-            eval(obj.recipe.PostSimulationBatchActions);
+            eval(obj.recipe.PostSimulationBatchActions);            
             obj.simulation = 0; % reset the simulation counter
         end
         
@@ -335,11 +334,13 @@ classdef SimpleRouseFramework<handle
                 opt = fitoptions(f);
                 set(opt,'StartPoint',[0.5,0.5],...
                                  'Lower',[0 0]);
+             for rIdx = 1:obj.params.numRounds
                 for bIdx = 1:obj.params.numBeads
-                    [fObj] = fit((1:numel(obj.msd(bIdx,:)))',obj.msd(bIdx,:)',f,opt);
-                    obj.fitResults.bead.fittedAlphas(bIdx,obj.round) = fObj.alpha;
-                    obj.fitResults.bead.fittedAForMSD(bIdx,obj.round) = fObj.A;
+                    [fObj] = fit((1:numel(obj.msd(bIdx,:,rIdx)))',obj.msd(bIdx,:,rIdx)',f,opt);
+                    obj.fitResults.bead.fittedAlphas(bIdx,rIdx)  = fObj.alpha;
+                    obj.fitResults.bead.fittedAForMSD(bIdx,rIdx) = fObj.A;
                 end
+             end
             end
         end
         
