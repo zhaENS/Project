@@ -12,7 +12,7 @@ rouseParams.noiseSTD        = sqrt(2*rouseParams.diffusionConst*rouseParams.dt);
 rouseParams.noiseCycle      = 10000; % after how many steps we need to recalculate noise [unused]
 rouseParams.springConst     = -rouseParams.dimension*rouseParams.diffusionConst*rouseParams.dt/rouseParams.b^2;
 d                           = sqrt(2*rouseParams.diffusionConst*rouseParams.dt);
-numSteps                    = (0.008)*(rouseParams.b^2)/(6*(d^2)*sin(pi/(2*rouseParams.numBeads))^2); % n times the number of steps until relaxation of the chain 
+numSteps                    = (0.005)*(rouseParams.b^2)/(6*(d^2)*sin(pi/(2*rouseParams.numBeads))^2); % n times the number of steps until relaxation of the chain 
 rouseParams.numSteps        = round(numSteps);
 rouseParams.stiffConnectors = [];    % fixed bead indices pairs for the number of loops
 rouseParams.connectedBeads  = [];    % the beads connected other than the trivial connections. given by bead pairs
@@ -20,7 +20,7 @@ rouseParams.affineBeadsNum  = [];    % a fixed pair indices of affine beads
 rouseParams.kOff            = 0.1;   % the detachment rate of affine beads
 rouseParams.beta            = 2;     % ~~!!for beta~=2 the polymer is a beta polymer!!~~to set all betas to the same value insert one value only
 rouseParams.recipeFolder    = fullfile(pwd,'SimpleRouse','Recipes');
-rouseParams.recipeFileName  = 'simpleRouseSimulateOneTADwithTail';%'simpleRouseSimulateMeanFirstEncounterEndToEnd';
+rouseParams.recipeFileName  = 'simpleRouseSimulateTwoTADs';
 rouseParams.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 rouseParams.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
 rouseParams.calculateMSD    = true;  % indicate whether to calculate the MSD for each bead (slows down simulations)
