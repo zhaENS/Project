@@ -11,6 +11,7 @@ classdef BetaPolymer<handle
         savedPosition
         simulationTime 
         encounterHist
+        msd
     end
     
     properties (Access=private)
@@ -152,7 +153,10 @@ classdef BetaPolymer<handle
                                      obj.position.prev+...                                     
                                      randn(obj.params.numBeads,obj.params.dimension)*obj.params.noiseSTD;
 %                                  obj.noise;
-
+                ms = [obj.position.cur(:,1)-obj.savedPosition(:,1,1),...
+                      obj.position.cur(:,2)-obj.savedPosition(:,2,1),...
+                      obj.position.cur(:,3)-obj.savedPosition(:,3,1)];
+                obj.msd = sum((ms).^2,2);% msd for present location 
                 
                 obj.position.prev = obj.position.cur;
                 obj.step = obj.step+1;
