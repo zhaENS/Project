@@ -1,13 +1,14 @@
-<description> Describe the simulation here... </description>
+<description> simulation ogf beta polymer with loops corresponding to peaks of the experimental data. the mean beta is set to be the mean of the beta found in the experimental data </description>
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
-obj.params.beta     = 0.89; 
+obj.params.beta     = 0.89; % take the mean of the experimental data
 obj.params.numBeads = 307;
+obj.params.calculateMSD = true;
 obj.params.analyzeResults = false;
 
 % load peaks 
 load('savedAnalysisTADDAndE');
-obj.params.connectedBeads = a.peakList.average;
+obj.params.connectedBeads = a.peaks.average;
 
 <func> PreSimulationBatchActions </func>
 %Actions performed before each simulation batch

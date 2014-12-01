@@ -76,18 +76,28 @@ classdef BetaPolymer<handle
         end
         
         function CreateBetaMatrix(obj)
-            warning off
+%             warning off
             % construct the beta matrix 
-            B = zeros(obj.params.numBeads);
-            p = 1:obj.params.numBeads-1;
-            for lIdx = 1:obj.params.numBeads
-                for mIdx = 1:obj.params.numBeads
-                    B(mIdx,lIdx) = (4*obj.params.springConst*2/obj.params.numBeads)*...
-                        sum((sin(p*pi./(2*obj.params.numBeads)).^obj.params.beta(lIdx)).*cos((lIdx-0.5)*p*pi./...
-                        obj.params.numBeads).*cos((mIdx-0.5)*p*pi./obj.params.numBeads));
-                end
+%             B = zeros(obj.params.numBeads);
+%             p = 1:obj.params.numBeads-1;
+%             for lIdx = 1:obj.params.numBeads
+%                 for mIdx = 1:obj.params.numBeads
+%                     B(mIdx,lIdx) = (4*obj.params.springConst*2/obj.params.numBeads)*...
+%                         sum((sin(p*pi./(2*obj.params.numBeads)).^obj.params.beta(lIdx)).*cos((lIdx-0.5).*p*pi./...
+%                         obj.params.numBeads).*cos((mIdx-0.5)*p*pi./obj.params.numBeads));
+%                 end
+%             end
+            p=0:obj.params.numBeads-1;
+            lambda = zeros(1,obj.params.numBeads);
+            for bIdx = 1:numel(p)
+                lambda(bIdx) = 4*obj.params.springConst*sin(p(bIdx)*pi/(2*obj.params.numBeads)).^obj.params.beta(bIdx);
             end
-            
+            v = zeros(obj.params.numBeads);
+            v(:,1) = sqrt(1/obj.params.numBeads);
+            for vIdx = 2:obj.params.numBeads
+                v(:,vIdx) = sqrt(2/obj.params.numBeads)*cos(((1:obj.params.numBeads) - 0.5).*p(vIdx)*pi/obj.params.numBeads);
+            end
+            B = v'*diag(lambda)*v;
             % Construct the connectivity graph for the polymer 
             gc = diag(ones(1,obj.params.numBeads-1),1)+diag(ones(1,obj.params.numBeads-1),-1);
              for bIdx= 1:size(obj.params.connectedBeads)
@@ -110,7 +120,7 @@ classdef BetaPolymer<handle
                 else
                     vals = bTemp(rIdx,rIdx:-1:1);
                 end
-                B(rIdx,:) = vals(sPaths(rIdx,:));               
+                    B(rIdx,:) = vals(sPaths(rIdx,:));               
             end
             
             % Change the diagonal elements such that the sum of each row is
