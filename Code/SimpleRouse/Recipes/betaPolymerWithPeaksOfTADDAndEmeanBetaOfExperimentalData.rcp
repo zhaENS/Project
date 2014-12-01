@@ -1,7 +1,7 @@
 <description> Describe the simulation here... </description>
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
-obj.params.beta     = 0.89;
+obj.params.beta     = 0.89; 
 obj.params.numBeads = 307;
 obj.params.analyzeResults = false;
 
