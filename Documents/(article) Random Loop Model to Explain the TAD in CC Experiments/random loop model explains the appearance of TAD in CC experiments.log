@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  27 NOV 2014 16:29
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  2 DEC 2014 10:44
 entering extended mode
 **random*loop*model*explains*the*appearance*of*TAD*in*CC*experiments.tex
 
@@ -254,24 +254,14 @@ File: Figure01_AnalysisOfTheExperimentalData.jpg Graphic file (type jpg)
 <use Figure01_AnalysisOfTheExperimentalData.jpg>
 Package pdftex.def Info: Figure01_AnalysisOfTheExperimentalData.jpg used on inp
 ut line 184.
-(pdftex.def)             Requested size: 418.36816pt x 288.8612pt.
-
-Overfull \hbox (28.36816pt too wide) in paragraph at lines 184--185
-[][] 
- []
-
+(pdftex.def)             Requested size: 298.83571pt x 206.33034pt.
 
 <Figure02_LoopsCorrespondingToPeaks307Beads.jpg, id=31, 597.432pt x 483.7272pt>
 File: Figure02_LoopsCorrespondingToPeaks307Beads.jpg Graphic file (type jpg)
 <use Figure02_LoopsCorrespondingToPeaks307Beads.jpg>
 Package pdftex.def Info: Figure02_LoopsCorrespondingToPeaks307Beads.jpg used on
  input line 190.
-(pdftex.def)             Requested size: 418.19955pt x 338.60672pt.
-
-Overfull \hbox (28.19955pt too wide) in paragraph at lines 190--191
-[][] 
- []
-
+(pdftex.def)             Requested size: 298.71527pt x 241.863pt.
 
 <Figure03_OneTADWithTails0To30RandomLoops.jpg, id=32, 597.6729pt x 412.6617pt>
 File: Figure03_OneTADWithTails0To30RandomLoops.jpg Graphic file (type jpg)
@@ -279,12 +269,7 @@ File: Figure03_OneTADWithTails0To30RandomLoops.jpg Graphic file (type jpg)
 <use Figure03_OneTADWithTails0To30RandomLoops.jpg>
 Package pdftex.def Info: Figure03_OneTADWithTails0To30RandomLoops.jpg used on i
 nput line 196.
-(pdftex.def)             Requested size: 418.36816pt x 288.8612pt.
-
-Overfull \hbox (28.36816pt too wide) in paragraph at lines 196--197
-[][] 
- []
-
+(pdftex.def)             Requested size: 298.83571pt x 206.33034pt.
 
 <Figure04_TwoTADs0To30RandomLoops307Beads.jpg, id=33, 597.81744pt x 718.07472pt
 >
@@ -292,21 +277,17 @@ File: Figure04_TwoTADs0To30RandomLoops307Beads.jpg Graphic file (type jpg)
  <use Figure04_TwoTADs0To30RandomLoops307Beads.jpg>
 Package pdftex.def Info: Figure04_TwoTADs0To30RandomLoops307Beads.jpg used on i
 nput line 202.
-(pdftex.def)             Requested size: 418.46936pt x 502.64888pt.
-
-Overfull \hbox (28.46936pt too wide) in paragraph at lines 202--203
-[][] 
- []
+(pdftex.def)             Requested size: 298.90799pt x 359.03648pt.
 
 
-LaTeX Warning: Float too large for page by 239.64886pt on input line 205.
+LaTeX Warning: Float too large for page by 96.03647pt on input line 205.
 
 <Figure05_betaModelWeights.jpg, id=34, 597.432pt x 483.7272pt>
 File: Figure05_betaModelWeights.jpg Graphic file (type jpg)
 
 <use Figure05_betaModelWeights.jpg>
 Package pdftex.def Info: Figure05_betaModelWeights.jpg used on input line 209.
-(pdftex.def)             Requested size: 358.46196pt x 290.23856pt.
+(pdftex.def)             Requested size: 298.71527pt x 241.863pt.
 
 <Figure06_betaModelWithPeaks.jpg, id=35, 597.432pt x 483.7272pt>
 File: Figure06_betaModelWithPeaks.jpg Graphic file (type jpg)
@@ -314,11 +295,7 @@ File: Figure06_betaModelWithPeaks.jpg Graphic file (type jpg)
 <use Figure06_betaModelWithPeaks.jpg>
 Package pdftex.def Info: Figure06_betaModelWithPeaks.jpg used on input line 215
 .
-(pdftex.def)             Requested size: 418.19955pt x 338.60672pt.
-
-Overfull \hbox (28.19955pt too wide) in paragraph at lines 215--216
-[][] 
- []
+(pdftex.def)             Requested size: 298.71527pt x 241.863pt.
 
 <Figure07_betaModelWithPeaksVariableBeta.jpg, id=36, 597.432pt x 483.7272pt>
 File: Figure07_betaModelWithPeaksVariableBeta.jpg Graphic file (type jpg)
@@ -326,12 +303,7 @@ File: Figure07_betaModelWithPeaksVariableBeta.jpg Graphic file (type jpg)
 <use Figure07_betaModelWithPeaksVariableBeta.jpg>
 Package pdftex.def Info: Figure07_betaModelWithPeaksVariableBeta.jpg used on in
 put line 222.
-(pdftex.def)             Requested size: 418.19955pt x 338.60672pt.
-
-Overfull \hbox (28.19955pt too wide) in paragraph at lines 222--223
-[][] 
- []
-
+(pdftex.def)             Requested size: 298.71527pt x 241.863pt.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
@@ -365,7 +337,7 @@ Here is how much of TeX's memory you used:
  6376 multiletter control sequences out of 15000+200000
  12060 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,13n,38p,1546b,283s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,13n,38p,1547b,283s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
 <d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d
 :/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/
@@ -385,7 +357,7 @@ onts/type1/public/amsfonts/cm/cmsy7.pfb><d:/Program Files (x86)/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/t
 ype1/public/amsfonts/cm/cmti12.pfb>
 Output written on "random loop model explains the appearance of TAD in CC exper
-iments.pdf" (13 pages, 7773106 bytes).
+iments.pdf" (13 pages, 7558836 bytes).
 PDF statistics:
  124 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
