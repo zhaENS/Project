@@ -1,0 +1,85 @@
+\documentclass[8pt]{beamer}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{float}
+\usepackage{subfig}
+
+\title{A method to extract peaks in chromosome conformation capture data}
+\author{Ofir Shukron}
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Motivation}
+\begin{enumerate}
+\item Large amount of biological data can be produced in each experiment. 
+\item Multiple hypotheses are being conducted on it.
+\item The is a growing need for methods to control the error rate of multiple hypotheses tests.
+\item One would like to avoid type I error while performing multiple tests. 
+\item Traditional methods which reduces the probability of at least one type I error in multiple tests, were shown to be too restrictive.
+\item New method of controlling the error called positive false detection rate (pFDR) was developed. 
+\item We want to apply this method to find significant looping event in the chromosomes using chromosome capture (CC) data.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Background}
+\begin{enumerate}
+\item CC experiment capture millions of encounter events between different parts of the chromosome. 
+\item 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Mathematical derivation}
+Conducting $m$ hypothesis tests, using p-values, $P$, as our test statistics.\\
+We fix a rejection region $\gamma$, and we reject the null hypothesis $H$ is $P\leq\gamma$. $(\gamma>0)$\\
+Let $V$ be the number of type I errors, out of $R$ total rejections.\\
+The pFDR is defined as: 
+\begin{equation*}
+pFDR=E\left(\frac{V}{R}| R>0 \right)
+\end{equation*}
+
+We assume that the null hypothesis $H$ is true ($H=0$) with an a priori probability $\pi_0$ and false ($H=1$) with probability $\pi_1$. We write (Storey 2001, Theorem 1)\\
+\begin{equation*}
+pFDR=\frac{\pi_0 Pr(P\leq\gamma|H=0)}{Pr(P\leq\gamma)}
+\end{equation*}
+By the Bayes rule 
+\begin{equation*}
+pFDR = Pr(H=0|P\leq\gamma)
+\end{equation*}
+
+Under the null hypothesis, the p-values are uniformly distributed. 
+\begin{equation*}
+pFDR=\frac{\pi_0\gamma}{Pr(P\leq\gamma)}
+\end{equation*} 
+\end{frame}
+
+\begin{frame}{Mathematical derivation}
+We now need an estimate of $\pi_0$ and $Pr(P\leq\gamma)$.\\ 
+Let $R$ be the total rejected hypotheses, and $W$ the total accepted hypotheses. 
+
+\begin{equation*}
+\hat{\pi_0}==\frac{\#(P_i>\lambda)}{(1-\lambda)m}=\frac{W(\lambda)}{(1-\lambda)m} \qquad 0\leq\lambda< 1
+\end{equation*}
+We treat $\lambda$ as fixed in the following. 
+\begin{equation*}
+\hat{Pr}(P\leq\gamma)=\frac{R(\gamma)}{m}
+\end{equation*}
+Plugging in these estimates and remembering that the pFDR is a conditional probability measure, we have 
+\begin{equation*}
+p\hat{FDR}_\lambda (\gamma)=\frac{W(\lambda)\gamma}{(1-\lambda)R(\gamma)(1-(1-\gamma)^m)}
+\end{equation*}
+The equivalent of the p-values for this statistics is called the q-value.\\
+q-values are the minimum pFDR that can occur when rejecting a statistics with $t$ value. 
+\end{frame}
+
+\begin{frame}
+
+\end{frame}
+\end{document}
