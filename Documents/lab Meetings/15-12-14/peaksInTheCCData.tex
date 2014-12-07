@@ -32,14 +32,13 @@
 \begin{frame}{Background}
 \begin{enumerate}
 \item CC experiment capture millions of encounter events between different parts of the chromosome. 
-\item 
 \end{enumerate}
 \end{frame}
 
 \begin{frame}{Mathematical derivation}
 Conducting $m$ hypothesis tests, using p-values, $P$, as our test statistics.\\
-We fix a rejection region $\gamma$, and we reject the null hypothesis $H$ is $P\leq\gamma$. $(\gamma>0)$\\
-Let $V$ be the number of type I errors, out of $R$ total rejections.\\
+We fix a rejection region $\gamma=[0, \gamma]$, and we reject the null hypothesis $H$ is $P\leq\gamma$. $(\gamma>0)$\\
+Let $V$ be the number of type I errors and $R$ the total number of rejections.\\
 The pFDR is defined as: 
 \begin{equation*}
 pFDR=E\left(\frac{V}{R}| R>0 \right)
@@ -62,10 +61,10 @@ pFDR=\frac{\pi_0\gamma}{Pr(P\leq\gamma)}
 
 \begin{frame}{Mathematical derivation}
 We now need an estimate of $\pi_0$ and $Pr(P\leq\gamma)$.\\ 
-Let $R$ be the total rejected hypotheses, and $W$ the total accepted hypotheses. 
+Let $R$ be the total rejected null hypotheses, and $W$ the total accepted hypotheses. 
 
 \begin{equation*}
-\hat{\pi_0}==\frac{\#(P_i>\lambda)}{(1-\lambda)m}=\frac{W(\lambda)}{(1-\lambda)m} \qquad 0\leq\lambda< 1
+\hat{\pi_0}=\frac{\#(P_i>\lambda)}{(1-\lambda)m}=\frac{W(\lambda)}{(1-\lambda)m}, \qquad 0\leq\lambda< 1
 \end{equation*}
 We treat $\lambda$ as fixed in the following. 
 \begin{equation*}
@@ -75,11 +74,32 @@ Plugging in these estimates and remembering that the pFDR is a conditional proba
 \begin{equation*}
 p\hat{FDR}_\lambda (\gamma)=\frac{W(\lambda)\gamma}{(1-\lambda)R(\gamma)(1-(1-\gamma)^m)}
 \end{equation*}
-The equivalent of the p-values for this statistics is called the q-value.\\
-q-values are the minimum pFDR that can occur when rejecting a statistics with $t$ value. 
+The equivalent of the p-values for the pFDR is called the q-value.\\
+q-values are the minimum pFDR that can occur when rejecting a statistics with a value $t$. 
+\begin{equation*}
+q = \inf_{\{\gamma; t\in\Gamma\}}pFDR(\gamma)
+\end{equation*}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{How do we do it in practice}
+
+\begin{enumerate}
+\item For the 5C data of $N$ encounter signals, $s_i(d)$, $i=1...N$. 
+\item Calculate the background (expected) signal, $\mu(d)=\frac{1}{N_d}\sum_{i_d=1}^{N_d}(s_{i_d}(d))$, with $i_d$ the index of available observation in position $d$.
+\item Calculate the background distribution $F_B(d)$. 
+\item For each $d$ calculate the distribution, $F_d(z)$ of the z-score, $z_d(i_d)=\frac{s_{i_d}(d)-\mu(d)}{\sigma_d}$
+\item Remark: if we are interested in the peaks, truncate the negative values of the z-scores.
+\item For the rejection value $\gamma$ of the null distribution, calculate $P_d = F_d(F_B^{-1}(\gamma))$
+\item Calculate the pFDR and the associated q-values, and set a threshold $\alpha$.
+\item set the new threshold at $F_B^{-1}(\max\{P_d| q(P_d)<\alpha\})$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{The 5C data}
+\begin{figure}[H]
+\includegraphics[scale=0.3]{tadDandENoraEtAl2012}
+
+\end{figure}
 
 \end{frame}
 \end{document}
