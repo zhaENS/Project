@@ -19,13 +19,12 @@
 
 \begin{frame}{Motivation}
 \begin{enumerate}
-\item Large amount of biological data can be produced in each experiment. 
-\item Multiple hypotheses are being conducted on it.
-\item The is a growing need for methods to control the error rate of multiple hypotheses tests.
-\item One would like to avoid type I error while performing multiple tests. 
-\item Traditional methods which reduces the probability of at least one type I error in multiple tests, were shown to be too restrictive.
-\item New method of controlling the error called positive false detection rate (pFDR) was developed. 
-\item We want to apply this method to find significant looping event in the chromosomes using chromosome capture (CC) data.
+\item Multiple hypotheses are being tested on large amount of experimental data. 
+\item A criteria to control the error rate is needed.
+\item To control the error, one would like to reduce type I error. 
+\item Traditional methods controlled the probability of at least one type I error, but were too restrictive.
+\item New method of controlling the error called positive False Discovery Rate (pFDR) was developed\footnote{Storey JD. A direct approach to false discovery rates. J. R. Statist. Soc. B (2002)64, Part 3, pp. 479–498}. 
+\item We want to apply this method to find frequent specific looping events in the chromosomes using chromosome capture (CC) data.
 \end{enumerate}
 \end{frame}
 
@@ -98,7 +97,7 @@ q = \inf_{\{\gamma; t\in\Gamma\}}pFDR(\gamma)
 \begin{frame}{The 5C data}
 \begin{figure}[H]
 \includegraphics[scale=0.3]{tadDandENoraEtAl2012}
-
+place image of 5c data-> encounter probability vs. distance-> image of signals -> 
 \end{figure}
 
 \end{frame}
