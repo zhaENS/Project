@@ -22,17 +22,17 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end
         
         function SetDefaultParams(obj)
-            obj.beadRange      = struct('bead1',1:64,...
-                                        'bead2',1:64);
+            obj.beadRange      = struct('bead1',1:70,...
+                                        'bead2',1:70);
             obj.smoothingSpan  = 1;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
-            obj.numDistances   = 3;       % for how many distances to perform analysis for connectivity
-            obj.distToAnalyze  = 3;       % can be a vector of integers, for what disance to show the analysis
-            obj.beadsToAnalyze = 1;   % for what beads to show the connectivity graphs
+            obj.numDistances   = 20;       % for how many distances to perform analysis for connectivity
+            obj.distToAnalyze  = 4;       % can be a vector of integers, for what disance to show the analysis
+            obj.beadsToAnalyze = 5;   % for what beads to show the connectivity graphs
             obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)');
             obj.fitOpt         = fitoptions(obj.model);
             set(obj.fitOpt,'Lower',0,'Upper',1.5,'StartPoint',1,'Robust','off');
-            obj.dataFolder     = 'D:\Ofir\ENS\PolymerChainDynamics\Code\ExperimentDataAnalysis';
+            obj.dataFolder     = 'D:\Ofir\Work\ENS\Polymer Chain Dynamics\Code\ExperimentDataAnalysis';
             obj.dataFileName   = 'savedAnalysisTADDAndE';
         end
         
@@ -64,11 +64,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % Divide the probabilites into distances according to a division given by the
                     % expected model
                     inds        = find(~isnan(observedProb));
-                    %  [fitStruct] = fit(inds',observedProb(inds)',model,fitOpt);
-                    beta(bIdx)  = 1.5;%fitStruct.beta;
+                     [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
+                    beta(bIdx)  = fitStruct.beta;
                     k           =  obj.model(beta(bIdx),inds);
                     % normalize to match the nearest neighbor encounter probability
-                    if mod(bIdx,105)==0
+                    if mod(bIdx,5)==0
                         obj.PlotBeadClusteringByDistance(observedProb,inds,k);
                         title(num2str(bIdx))
                     end
@@ -150,7 +150,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 set(obj.graph.Nodes(aIdx),'Label',['Bead ' num2str(aIdx)]);
                 for a1Idx = 1:numel(above{aIdx})
                     sourceNode = ['Node ' num2str(aIdx)];
-                    if (aIdx +a1Idx)<=numel(br.bead2)
+                    if (aIdx +a1Idx)<=numel(obj.beadRange.bead2)
                         sinkNode =  ['Node ' num2str(aIdx+a1Idx)];
                     else
                         sinkNode = ['Node ' num2str(aIdx-a1Idx)];
@@ -200,7 +200,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         
         function PlotBeadClusteringByDistance(observedProb,inds, k)
             figure,
-            plot(inds,observedProb,'bo',1:numel(k),k,'r','Linewidth',4,'MarkerSize',6),
+            plot(inds,observedProb,'bo-',1:numel(k),k,'r','Linewidth',4,'MarkerSize',6),
             set(gca,'FontSize',35,'NextPlot','Add');%,'XScale','log','YScale','log'),
             xlabel('Distance [beads]'),
             ylabel('encoutner Prob.')
