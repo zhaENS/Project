@@ -22,12 +22,12 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end
         
         function SetDefaultParams(obj)
-            obj.beadRange      = struct('bead1',1:70,...
-                                        'bead2',1:70);
-            obj.smoothingSpan  = 1;
+            obj.beadRange      = struct('bead1',1:107,...
+                                        'bead2',1:107);
+            obj.smoothingSpan  = 5;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
             obj.numDistances   = 20;       % for how many distances to perform analysis for connectivity
-            obj.distToAnalyze  = 4;       % can be a vector of integers, for what disance to show the analysis
+            obj.distToAnalyze  = [1];       % can be a vector of integers, for what disance to show the analysis
             obj.beadsToAnalyze = 5;   % for what beads to show the connectivity graphs
             obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)');
             obj.fitOpt         = fitoptions(obj.model);
@@ -52,7 +52,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
             eMat = false(numel(obj.beadRange.bead1),numel(obj.beadRange.bead2),obj.numDistances);
             di   = eMat(:,:,1);%diag(ones(1,size(eMat,2)-1),1)+diag(ones(1,size(eMat,2)-1),-1);% include nearest neighbors by default
             
-            
+            % get expected signal 
+            expectedSignal = obj.MeanIgnoreNaN(obj.encounterMat);
+            expectedSignal  = obj.SmoothSignal(expectedSignal',obj.smoothingSpan,obj.smoothingMethod);
+            expectedSignal = expectedSignal./sum(expectedSignal);
+             [fitStruct] = fit((1:numel(expectedSignal))',expectedSignal,obj.model,obj.fitOpt);
             for bIdx = 1:size(obj.encounterMat,1);
                 
                 observedProb = obj.SmoothSignal(obj.encounterMat(bIdx,~isnan(obj.encounterMat(bIdx,:))),obj.smoothingSpan,obj.smoothingMethod)';
@@ -64,11 +68,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % Divide the probabilites into distances according to a division given by the
                     % expected model
                     inds        = find(~isnan(observedProb));
-                     [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
-                    beta(bIdx)  = fitStruct.beta;
+%                      [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
+                    beta(bIdx)  = 1.5;%fitStruct.beta;
                     k           =  obj.model(beta(bIdx),inds);
                     % normalize to match the nearest neighbor encounter probability
-                    if mod(bIdx,5)==0
+                    if mod(bIdx,50)==0
                         obj.PlotBeadClusteringByDistance(observedProb,inds,k);
                         title(num2str(bIdx))
                     end
@@ -137,8 +141,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
             
             obj.connectivityMat         = triu(eMat(:,:,distToAnalyze));
-            inds                        = setdiff(1:size(eMat,1),beadToAnalyze);
-            obj.connectivityMat(inds,:) = false;
+%             inds                        = setdiff(1:size(eMat,1),beadToAnalyze);
+%             obj.connectivityMat(inds,:) = false;
             % add nearest neighbor connectivity 
             obj.connectivityMat = obj.connectivityMat | diag(true(1,size(eMat,1)-1),1);
             obj.graph                   = biograph(obj.connectivityMat);

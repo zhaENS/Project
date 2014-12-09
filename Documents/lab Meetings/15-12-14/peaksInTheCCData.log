@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  9 DEC 2014 00:08
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  9 DEC 2014 11:01
 entering extended mode
 **peaksInTheCCData.tex
 
@@ -973,7 +973,7 @@ Package caption Info: End \AtBeginDocument code.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\15-12-14\peaks
 InTheCCData.nav")
-Overfull \hbox (85.15614pt too wide) in paragraph at lines 15--15
+Overfull \hbox (186.46634pt too wide) in paragraph at lines 15--15
  [][][][]  
  []
 
@@ -982,7 +982,7 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 (Font)              size <5> substituted on input line 19.
 
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1011,7 +1011,7 @@ Missing character: There is no â in font cmss8!
 Missing character: There is no € in font cmss8!
 Missing character: There is no “ in font cmss8!
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1042,7 +1042,7 @@ Overfull \hbox (3.72305pt too wide) in paragraph at lines 52--52
  []
 
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1060,7 +1060,7 @@ Package pdftex.def Info: rejectionValueAdjastmentScheme.jpg used on input line
 65.
 (pdftex.def)             Requested size: 202.49782pt x 130.23094pt.
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1068,7 +1068,7 @@ Overfull \hbox (85.15614pt too wide) has occurred while \output is active
 
  <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/15-12-14/rejec
 tionValueAdjastmentScheme.jpg>]
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1079,14 +1079,14 @@ Missing character: There is no â in font cmss8!
 Missing character: There is no € in font cmss8!
 Missing character: There is no “ in font cmss8!
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [6
 
 ]
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1173,7 +1173,7 @@ Overfull \hbox (6.96405pt too wide) in paragraph at lines 147--147
  []
 
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1214,7 +1214,7 @@ Package pdftex.def Info: tadEZScoreDistributionWithThresh.jpg used on input lin
 e 158.
 (pdftex.def)             Requested size: 118.05305pt x 65.63187pt.
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1229,7 +1229,7 @@ File: connectBeadsCorrespondingToPeaks.jpg Graphic file (type jpg)
 
 <use connectBeadsCorrespondingToPeaks.jpg>
 Package pdftex.def Info: connectBeadsCorrespondingToPeaks.jpg used on input lin
-e 172.
+e 173.
 (pdftex.def)             Requested size: 144.53375pt x 81.30023pt.
 
 <EncounterHistogramLoopsCorrespondingToPeaksExperimentalData.jpg, id=281, 1090.
@@ -1239,10 +1239,10 @@ ile (type jpg)
 
 <use EncounterHistogramLoopsCorrespondingToPeaksExperimentalData.jpg>
 Package pdftex.def Info: EncounterHistogramLoopsCorrespondingToPeaksExperimenta
-lData.jpg used on input line 172.
+lData.jpg used on input line 173.
 (pdftex.def)             Requested size: 76.31287pt x 61.20488pt.
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1257,10 +1257,10 @@ File: connectedBeadsAndDistanceAlongTheChain.jpg Graphic file (type jpg)
 
 <use connectedBeadsAndDistanceAlongTheChain.jpg>
 Package pdftex.def Info: connectedBeadsAndDistanceAlongTheChain.jpg used on inp
-ut line 184.
+ut line 185.
 (pdftex.def)             Requested size: 144.53375pt x 81.30023pt.
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1268,30 +1268,49 @@ Overfull \hbox (85.15614pt too wide) has occurred while \output is active
 
  <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/15-12-14/conne
 ctedBeadsAndDistanceAlongTheChain.jpg>]
-<encounterProbProjectedDist33.jpg, id=335, 1686.3pt x 937.5025pt>
-File: encounterProbProjectedDist33.jpg Graphic file (type jpg)
+<encounterProbProjectedBead8.jpg, id=335, 1686.3pt x 890.32625pt>
+File: encounterProbProjectedBead8.jpg Graphic file (type jpg)
 
-<use encounterProbProjectedDist33.jpg>
-Package pdftex.def Info: encounterProbProjectedDist33.jpg used on input line 19
-4.
-(pdftex.def)             Requested size: 252.93408pt x 140.61931pt.
+<use encounterProbProjectedBead8.jpg>
+Package pdftex.def Info: encounterProbProjectedBead8.jpg used on input line 201
+.
+(pdftex.def)             Requested size: 118.05305pt x 62.3292pt.
 
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+<connectivityGraph30BeadsDistance1.jpg, id=336, 251.43938pt x 704.6325pt>
+File: connectivityGraph30BeadsDistance1.jpg Graphic file (type jpg)
+
+<use connectivityGraph30BeadsDistance1.jpg>
+Package pdftex.def Info: connectivityGraph30BeadsDistance1.jpg used on input li
+ne 201.
+(pdftex.def)             Requested size: 37.71426pt x 105.6903pt.
+
+<connectivityGraph30BeadsDistance2.jpg, id=337, 361.35pt x 704.6325pt>
+File: connectivityGraph30BeadsDistance2.jpg Graphic file (type jpg)
+
+<use connectivityGraph30BeadsDistance2.jpg>
+Package pdftex.def Info: connectivityGraph30BeadsDistance2.jpg used on input li
+ne 201.
+(pdftex.def)             Requested size: 54.20015pt x 105.6903pt.
+
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [12
 
  <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/15-12-14/encou
-nterProbProjectedDist33.jpg>]
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+nterProbProjectedBead8.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/
+lab Meetings/15-12-14/connectivityGraph30BeadsDistance1.jpg> <D:/Ofir/Work/ENS/
+Polymer Chain Dynamics/Documents/lab Meetings/15-12-14/connectivityGraph30Beads
+Distance2.jpg>]
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [13
 
 ]
-Overfull \hbox (85.15614pt too wide) has occurred while \output is active
+Overfull \hbox (186.46634pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1301,13 +1320,13 @@ Overfull \hbox (85.15614pt too wide) has occurred while \output is active
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 219.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 219.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 228.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 228.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\15-12-14\peaks
 InTheCCData.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 219.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 219.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 228.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 228.
 Package rerunfilecheck Info: File `peaksInTheCCData.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1315,13 +1334,13 @@ Package rerunfilecheck Info: File `peaksInTheCCData.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 219.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 228.
  ) 
 Here is how much of TeX's memory you used:
- 17884 strings out of 493921
- 347028 string characters out of 3144879
- 414740 words of memory out of 3000000
- 20719 multiletter control sequences out of 15000+200000
+ 17894 strings out of 493921
+ 347431 string characters out of 3144879
+ 415877 words of memory out of 3000000
+ 20727 multiletter control sequences out of 15000+200000
  9825 words of font info for 36 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  56i,16n,55p,417b,620s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1336,9 +1355,9 @@ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/Program Fil
 es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files 
 (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x8
 6)/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on peaksInTheCCData.pdf (14 pages, 2418414 bytes).
+Output written on peaksInTheCCData.pdf (14 pages, 2527608 bytes).
 PDF statistics:
- 457 PDF objects out of 1000 (max. 8388607)
+ 459 PDF objects out of 1000 (max. 8388607)
  29 named destinations out of 1000 (max. 500000)
- 149 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 159 words of extra memory for PDF output out of 10000 (max. 10000000)
 

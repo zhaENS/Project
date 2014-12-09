@@ -8,7 +8,7 @@
 \usepackage{subfig}
 
 \title{Peak detection using positive False Discovery Rate\\
-Applications in chromosome capture data}
+Applications for polymer structure reconstruction using from chromosome capture data}
 \author{Ofir Shukron}
 \usetheme{Madrid}
 \usecolortheme{dolphin}
@@ -73,7 +73,7 @@ The pFDR is defined as:
 pFDR=E\left(\frac{V}{R}| R>0 \right)
 \end{equation*}
 
-We assume that the null hypothesis $H$ is true ($H=0$) with an a priori probability $\pi_0$ and false ($H=1$) with probability $\pi_1$. We write (Storey 2001, Theorem 1)\\
+We assume that null hypotheses $H$ are true ($H=0$) with an a priori probability $\pi_0$ and false ($H=1$) with probability $\pi_1$. We write (Storey 2001, Theorem 1)\\
 \begin{equation*}
 pFDR=\frac{\pi_0 Pr(P\leq\gamma|H=0)}{Pr(P\leq\gamma)}
 \end{equation*}
@@ -106,7 +106,7 @@ p\hat{FDR}_\lambda (\gamma)=\frac{W(\lambda)\gamma}{(1-\lambda)R(\gamma)(1-(1-\g
 The equivalent of the p-values for the pFDR is called the q-value.\\
 q-values are the minimum pFDR that can occur when rejecting a statistics with a value $t$. 
 \begin{equation*}
-q = \inf_{\{\gamma; t\in\Gamma\}}pFDR(\gamma)
+q = \inf_{\{\Gamma; t\in\Gamma\}}pFDR(\gamma)
 \end{equation*}
 The optimal $\lambda$ is determined by minimizing the MSE of the bootsrap version of the pFDR\footnote{Storey JD. A direct approach to false discovery rates. J. R. Statist. Soc. B (2002)64, Part 3, pp. 479–498}. 
 \end{frame}
@@ -168,6 +168,7 @@ In the following examples we use $\alpha=0.01$.
 \end{figure}
 \item The encounter histogram on the right does not look like the experimental data. 
 \item The hight of the peak has to be taken into account. 
+\item Different spring constants should be considered.
 \end{enumerate}
 \end{frame}
 
@@ -177,19 +178,25 @@ In the following examples we use $\alpha=0.01$.
 \begin{figure}[H]
 \includegraphics[scale=0.15]{connectedBeadsAndDistanceAlongTheChain}
 \end{figure}
-\item In the figure, distance along the chain from bead 1. Added connections marked in orange
+\item In the figure, distance along the chain from bead 1 are marked on edges. Added connections are marked in orange
 \item The encounter probability should carry information about the distances between beads. 
-\item Assuming a Rouse model, we know that $Pr(encounter(i,l))\sim dist(i,l)^{-1.5}$ in 3D. 
+\item As a simple starting point, we assume a polymer model for which $Pr(encounter(i,l))\sim dist(i,l)^{-\beta}$ in 3D, $\beta>0$. 
 \end{enumerate}
 \end{frame}
 
 \begin{frame}{Projecting encounter Probabilities onto the encounter curve}
 \begin{figure}[H]
-\includegraphics[scale=0.15]{encounterProbProjectedDist33}
+\includegraphics[scale=0.07]{encounterProbProjectedBead8}
+\includegraphics[scale=0.15]{connectivityGraph30BeadsDistance1}
+\includegraphics[scale=0.15]{connectivityGraph30BeadsDistance2}
 \end{figure}
-we see that the encounter probability at distance 7 for bead 33 corresponds to distance 3 under the assumption of the Rouse model.\\
-
-We have enough data to discover the distances between beads under the assumption of a polymer model (data not shown)
+\begin{enumerate}
+\item Example of the first 30 beads from the experimental encounter data.
+\item The expected curve was estimated for the Rouse chain with $\beta=1.5$
+\item Each encounter probability curve was projected onto it and distances were determined.
+\item The encounter probability at distance 7 for bead 8 (left) corresponds to distance 2 under the model assumed.
+\item Connectivity graphs for nearest neighbor, dist=1 and dist=2 are shown. 
+\end{enumerate}
 
 \end{frame}
 
@@ -198,13 +205,14 @@ We have enough data to discover the distances between beads under the assumption
 What shall we do if the encounter probability is higher than the expected probability of the nearest neighbor?
 \begin{enumerate}
 \item For a Rouse chain the spring constant is $k=\frac{3k_BT}{b^2}$
+\item $k_B$- Boltzman constant, $T$- temperature, $b$- std of monomer distance. 
 \item We need to distinguish nearest neighbors encounter probability from encounter probability stemming from different spring constants.
 \item The bead distance probability in 3D is $P(r)=\left(\frac{3}{2\pi b^2}\right)^{1.5}\exp\left(-\frac{3r^2}{2b^2} \right)$
-\item setting $r=b$ for nearest neighbor, we get in steady state $P(b)=\left(\frac{3}{2\pi e b^2}\right)^{1.5}$.
-\item estimating nearest neighbor probability, $\hat{P}(b)$ from the data \textit{without peaks}, and equating to $P(b)$, we get $ b^2 = \left(\frac{3}{2\pi e}\right)\hat{P}(b)^{1.5}$
+\item Setting $r=b$ for nearest neighbors, we get in steady state $P(b)=\left(\frac{3}{2\pi e b^2}\right)^{1.5}$.
+\item Estimating $\hat{P}(b)$ from the data \textit{without peaks}, and equating to $P(b)$, we get $ b^2 = \left(\frac{3}{2\pi e}\right)\hat{P}(b)^{1.5}$
 \item Using the relation for the spring constant $k=\frac{k_BT}{b^2}$, we get $k=\frac{2\pi e k_BT}{3\hat{P}(b)^{1.5}}$
-\item since $D=\frac{k_BT}{\xi}=\frac{k_BT}{6\pi\eta_s a}$, we get $k=\frac{4\pi eD \eta_s a}{\hat{P}(b)^{1.5}}$, if we have access to these parameters, otherwise
-\item assuming we observe $P_{il}>\hat{P}(b)$ in the encounter probability signal, then the peak correspond to nearest neighbor and the estimation for $k$ is $ \frac{2k_BT\pi e}{3P_{il}}$
+\item Since $D=\frac{k_BT}{\xi}=\frac{k_BT}{6\pi\eta_s a}$, we get $k=\frac{4\pi eD \eta_s a}{\hat{P}(b)^{1.5}}$, if we have access to these parameters, ($\eta_s$-viscosity, $a$- monomer radius) otherwise
+\item Assuming we observe $P_{il}>\hat{P}(b)$ in the encounter probability signal, then the peak correspond to nearest neighbor and the estimation for $k$ is $ \frac{2k_BT\pi e}{3P_{il}}$
 \end{enumerate}
 \end{frame}
 
@@ -212,8 +220,9 @@ What shall we do if the encounter probability is higher than the expected probab
 \begin{enumerate}
 \item I have presented the pFDR as means of controlling the error when searching for peaks in signals
 \item The pFDR was applied on the CC data to eliminate false positive peaks. 
-\item location of the peaks will be used when identifying parameters of the chain (spring constant)
-\item future work will include incorporation of different spring constant and simulations with heterogeneous polymer.  
+\item Location of the peaks will be used when identifying parameters of the chain (spring constant)
+\item 
+\item Future work will include incorporation of different spring constant and simulations with heterogeneous polymer.  
 \end{enumerate}
 \end{frame}
 \end{document}
