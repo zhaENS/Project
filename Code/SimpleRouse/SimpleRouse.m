@@ -1,5 +1,5 @@
 classdef SimpleRouse<handle
-    
+    %%% Simple Rouse class
     properties
         params
         rouseMatrix
@@ -21,6 +21,7 @@ classdef SimpleRouse<handle
     methods
         
         function obj = SimpleRouse(params)
+            %%% Class constructor
 %             obj.SetDefaultParams;
             if exist('params','var')
                 f = fieldnames(params);
@@ -38,6 +39,7 @@ classdef SimpleRouse<handle
         end
         
         function SetDefaultParams(obj)
+            %%% Default class parameters
             obj.params.numBeads        = 10;
             obj.params.b               = 0.1;
             obj.params.diffusionConst  = 1;

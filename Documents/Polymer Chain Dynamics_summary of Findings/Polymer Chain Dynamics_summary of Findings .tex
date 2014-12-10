@@ -82,6 +82,7 @@ The encounter data includes 14,508 pairwise encounters of genomic loci. Each gen
 
 \section{Analysis of the experimental data}\label{section_AnalysisOfTheExperimentalData}
 
+
 \subsection{Coarse-graining of the data}\label{subsection_coarseGrainingOfEncounterData}
 The following paragraphs are an adapted version of the text in from Giorgetti et al. \cite{giorgetti2014predictive} supplementary material.
 
@@ -153,7 +154,7 @@ We can therefore treat the right and left data in the same manner and 'fold' the
 
 \subsection{Peaks of the encounter data}\label{subsection_peaksOfTheEncounterData}
 For some beads the encounter data shows peaks at some distance from the origin (Figure \ref{figure_peaksOfTheEncounterProbabiltity307Beads}). 
-These peaks represent a frequent encounter with a distal part of the chain. The list of bead numbers and the frequent encounter they have with the distal chain parts (represented by bead numbers) is summarized in Table \ref{table_peaksOfTheEncounterDataOneSided}
+These peaks represent a frequent encounter with a distal part of the chain. 
 
 %TODO: the figure below should be replaced
 \begin{figure}[H]
@@ -162,57 +163,24 @@ These peaks represent a frequent encounter with a distal part of the chain. The 
 \label{figure_peaksOfTheEncounterProbabiltity307Beads}
 \end{figure}
 
-% One Sided prominant encounters
-\begin{table}[H]\label{table_peaksOfTheEncounterDataOneSided}
-\begin{tabular}{l l l}
-bead numbers & encountered beads & TAD\\
-\hline
-23-26   & 280-290 & $D\leftrightarrow E$\\
-49-53   & 148-155 & $D\leftrightarrow E$\\
-56-59   & 80-90   & $D\leftrightarrow D$\\
-115-117 & 165-170 & $E\leftrightarrow E$\\
-161-162 & 187 190 & $E\leftrightarrow E$\\
-182-184 & 260-264 & $E\leftrightarrow E$\\
-185-186 & 253-255 & $E\leftrightarrow E$\\
-234-236 & 184-189 & $E\leftrightarrow E$\\
-234-236 & 4-11    & $E\leftrightarrow D$\\
-243     & 88      & $E\leftrightarrow D$\\
-264     & 89-90   & $E\leftrightarrow D$\\
-274-277 & 113-120 & $E\leftrightarrow D(?)$
-\end{tabular}
-\end{table}
+To accurately identify pair of beads that interact more frequently than expected, we employ a peak calling procedure on the 5C probability data. We analyze TAD D and the region between TADs separately from TAD E to avoid peak bias. We average all encounter frequency signals, taken from all genomic distances, and smooth the resulting mean signal using loess smoothing technique to represent the expected background encounter signal,$E(d)$, and calculate its standard deviation $\sigma_E$. The background Z-score distribution, $F_b(z)$, is calculated using all data by $z_B=\frac{O_{i(d)}(d)-E(d)}{\sigma_E}$, for each $i(d)=1,..,N(d)$, with $N(d)$ the number of observations available for genomic distance $d$. A Weibull distribution is fitted to the background signal, where negative values $Z_B$ are discarded, because we are only interested in peak values. We then estimate the threshold value, $T_B$, above which z-scores are considered as peaks of the data, as the 0.99 percent of this distribution. The value of $T_B$ will be used for judging observations in a particular genomic distances for being peaks.
 
-% two sided prominant encounters 
-\begin{table}[H]\label{table_peaksOfTheEncounterDataTwoSided}
-\begin{tabular}{l l l l}
-bead numbers & encountered beads & TAD & rep\\
-\hline
-1       & 86      & $D\leftrightarrow D$& 1 \\
-6       & 81      & $D\leftrightarrow D$& 1 \\
-6       & 227-229 & $D\leftrightarrow E$& 1 \\
-6       & 243     & $D\leftrightarrow E$& 1 \\
-7       & 81      & $D\leftrightarrow D$& 1 \\
-7       & 226-229 & $D\leftrightarrow E$& 1 \\
-7       & 247     & $D\leftrightarrow E$& 1 \\
-10      & 77      & $D\leftrightarrow D$& 1 \\
-10      & 77      & $D\leftrightarrow D$& 1 \\
-23      & 293     & $D\leftrightarrow E$& 1 \\
-24      & 264     & $D\leftrightarrow E$& 1 \\
-25      & 285     & $D\leftrightarrow E$& 1 \\
-26      & 285     & $D\leftrightarrow E$& 1 \\
-26      & 86      & $D\leftrightarrow D$& 1 \\
-26      & 59-74   & $D\leftrightarrow D$& 1 \\
-49-53   & 150     & $D\leftrightarrow E$& 1 \\
-64-66   & 287     & $D\leftrightarrow E$& 1 \\
-65-66   & 34      & $D\leftrightarrow D$& 1 \\ 
-64,67-69& 26      & $D\leftrightarrow D$& 1 \\       
-71      & 24      & $D\leftrightarrow D$& 1 \\
-72-75   & 26      & $D\leftrightarrow D$& 1 \\
+For each genomic distance $d$, we calculate a z-score for all available observations at that distance by $z({\{i\}_d})=\frac{O({\{i\}_d})-E(d)}{\sigma_{O}(d)}$ and fit a Weibull distribution to it, $F_d(z)$, discarding negative z-scores. For each $d$, we calculate a rejection value $T_d$ of $F_d(z)$, above which observation at genomic distance $d$ are considered peaks. We use the threshold values as our test statistics for multiple hypothesis tests.
 
-\end{tabular}
-\end{table}
+Using the background distribution we calculate the p-values for $T_d$ on the background distribution, namely, $p(d)=F_B(F_d^{-1}(0.99))$, calculate the positive False Discovery Rate\cite{storey2002direct} to get $q-values$, $q(p)$. As a new the global threshold of the data we choose $T_G = max_d (p(d); q(p(d))<0.01)$.
 
-The question arises as to whether these frequent encounter represent a loop in the polymer chain or is it the results of the 3D structure of the folded polymer? Since the 5C data is essentially taken over millions of cells it remains to show that these encounters (or loops) are indeed conserved elements of the Xic region in cells and not a result of averaging in the population level.
+\subsection{Interpretation of the peaks}\label{subsection_interpretationOfThePeaks}
+The bead distance pdf of the Gaussioan chain has the distribution of 
+\begin{equation*}
+\Phi(|R_n-R_m|)=\left(\frac{3}{2\pi b^2 |n-m|}\right)^{1.5}\exp(-\frac{3|R_n-R_m|^2}{2|n-m|b^2})
+\end{equation*} 
+For an encounter between beads we set $R_n=R_m$, hence 
+\begin{equation*}
+\Phi(|R_n-R_m|)=\left(\frac{3}{2\pi b^2 |n-m|}\right)^{1.5}
+\end{equation*}
+Therefore, in fitting the encounter data by a function of the  form $\alpha |n-m|^{-1.5}$, we can set $\alpha = \left(\frac{3}{2\pi b^2}\right)^{1.5}$ 
+
+\subsection{Determining The spring constant for peaks} 
 
 \subsection{Fitting the encounter data}\label{subsection_fittingTheEncounterData}
 In this and subsequent sections we work with the first replicate of the data.
@@ -234,31 +202,9 @@ The fitted exponent ($\beta$) value obtained by minimizing the error in the mode
 In Figure \ref{figure_fittedExpExperimentalData307Beads}, we see that the fitted exponent curve is somewhat tri-modal. With one peak located in roughly at bead 54, one at 125, and the left most at 200. The first and the last places correspond the mid points of the two TADs of the encounter. 
 
 
-\subsection{Heterogeneity of the parameters over the beads}
-The question arises as to whether the beads behave in a similar manner in terms of parameter values (i.e obey the same model rules), and if not, would it be possible, just by assuming a model, to identify beads belonging to the same group, and elucidate the similarity or difference between groups of beads. 
-We start by looking at adjacent beads properties according to the resulting parameter fitted.
-To simultaneously see the heterogeneity of the fitted parameters over all beads, we calculate the pairwise difference between parameters of the beads. 
-the resulting matrices take the shape
 
-\begin{figure}[H]
-\includegraphics[scale=0.12]{diffFittedExpRep1}
-\includegraphics[scale=0.12]{diffFittedBiasRep1}
-\includegraphics[scale=0.12]{normDiffFittedExpfittedBiasRep1}
-\caption{\scriptsize{The norm of the difference between the fitted parameters from model \ref{equation_fitModel} in a pairwise manner. the columns and rows represent bead numbers. The pairwise exponent difference norm (top), the pairwise difference norm for bias (middle); the norm of the two difference matrices (bottom)}}
-\label{figure_diffFittedParametersRep1}
-\end{figure}
 
-It is now also apparent from Figure \ref{figure_diffFittedParametersRep1} that beads 35-50 have different bias values then expected. To find beads for which the exponent values agree but the bias values do not, we search for a threshold for the difference of exponents and bias below which it could be said that values are similar. 
-For this end, we can consider the data as having 'low' and 'high' difference values. 
-We search for a values $v_{exp}$ and $v_{bias}$ for which the 'within' group variance is low and the 'between' group variance is the highest. 
-Such approach leads naturally to employ the \href{http://en.wikipedia.org/wiki/Otsu's_method}{Otsu} method. Using this method on the matrix, the value of $v_{exp},v_{bias}$ are found to be 
 
-\begin{equation*}
-v_{exp}= 0.262
-\end{equation*}
-\begin{equation*}
-v_{bias}=0.18
-\end{equation*}
 
 \chapter{Simulations}
 \section{The Simulation Framework}
@@ -289,7 +235,7 @@ The flexibility of our framework enables us to simulate a single or an ensemble 
 \end{equation*}
 and simulate the coupled (coordinate-wise) system of equations it yields.
 
-In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation (see Figure \ref{figure_exampleOfChains} left panel). In the course of simulation (such as in subsection \ref{RandomFixedLoops}), we can randomize the location of these fixed loops, a model we name \textit{random fixed loop model}. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model. In this model only when the affine beads are located within some minimal distance $\epsilon$ to one another they form a loop with association rate $\lambda$ per unit of time. Looped affine beads can dissociate with dissociation rate $1-\lambda$.
+In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation (see Figure \ref{figure_exampleOfChains} left panel). In the course of simulation (such as in subsection \ref{section_RandomFixedLoops}), we can randomize the location of these fixed loops, a model we name \textit{random fixed loop model}. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model. In this model only when the affine beads are located within some minimal distance $\epsilon$ to one another they form a loop with association rate $\lambda$ per unit of time. Looped affine beads can dissociate with dissociation rate $1-\lambda$.
 
 At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
 

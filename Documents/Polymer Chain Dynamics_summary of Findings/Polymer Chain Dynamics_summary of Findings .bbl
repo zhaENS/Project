@@ -106,6 +106,12 @@ Yin Shen, Feng Yue, David~F McCleary, Zhen Ye, Lee Edsall, Samantha Kuan,
 \newblock A map of the cis-regulatory sequences in the mouse genome.
 \newblock {\em Nature}, 488(7409):116--120, 2012.
 
+\bibitem{storey2002direct}
+John~D Storey.
+\newblock A direct approach to false discovery rates.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 64(3):479--498, 2002.
+
 \bibitem{tjong2012physical}
 Harianto Tjong, Ke~Gong, Lin Chen, and Frank Alber.
 \newblock Physical tethering and volume exclusion determine higher-order genome
