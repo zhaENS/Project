@@ -67,22 +67,31 @@ classdef SimpleRouse<handle
         end
         
         function CreateRouseMatrix(obj)
+            % Create a Rouse transport matrix with the spring coefficients
+            % embedded in it 
+            if numel(obj.params.springConst)==1
+              springConstant = repmat(obj.params.springConst,obj.params.numBeads,obj.params.numBeads);
+            else 
+             springConstant = obj.params.springConst;   
+            end
+            
             R = zeros(obj.params.numBeads);
-            R = R+ diag(-1*ones(1,obj.params.numBeads-1),-1) +...
-                diag(-1*ones(1,obj.params.numBeads-1),1);
+            
+            R = R - diag(-1*ones(1,obj.params.numBeads-1),-1).*obj.params.springConst -...
+                    diag(-1*ones(1,obj.params.numBeads-1),1).*obj.params.springConst;
             for bIdx = 1:size(obj.params.connectedBeads,1)
-                R(obj.params.connectedBeads(bIdx,1),obj.params.connectedBeads(bIdx,2)) = -1;
-                R(obj.params.connectedBeads(bIdx,2),obj.params.connectedBeads(bIdx,1)) = -1;
+                R(obj.params.connectedBeads(bIdx,1),obj.params.connectedBeads(bIdx,2)) = 1*springConstant(obj.params.connectedBeads(bIdx,1),obj.params.connectedBeads(bIdx,2));
+                R(obj.params.connectedBeads(bIdx,2),obj.params.connectedBeads(bIdx,1)) = 1*springConstant(obj.params.connectedBeads(bIdx,1),obj.params.connectedBeads(bIdx,2));
             end
             R(obj.params.stiffConnectors,:) = 0;
-            R = R+diag(sum(R==-1,2));
+            R = R-diag(sum(R,2));
             
 % %             if half of the matrix are zeroes, switch to sparse
 % % %             representation
 %             if obj.params.numBeads>20;% numel(find(R==0))/obj.params.numBeads^2>0.5
 %               obj.rouseMatrix = sparse(obj.params.springConst*R);
 %             else
-              obj.rouseMatrix = obj.params.springConst*(R);
+              obj.rouseMatrix = (R);
 %             end
         end
         
@@ -160,7 +169,7 @@ classdef SimpleRouse<handle
 %                 obj.GetNoise;
                 obj.GetBeadsDist;
 %                 obj.LinkCloseBeads
-                obj.position.cur = obj.rouseMatrix*obj.position.prev+...
+                obj.position.cur = -(obj.params.dimension*obj.params.diffusionConst/obj.params.b^2)*obj.rouseMatrix*obj.position.prev+...
                                      obj.position.prev+...                                     
                                      randn(obj.params.numBeads,obj.params.dimension)*obj.params.noiseSTD;
                 ms = [obj.position.cur(:,1)-obj.savedPosition(:,1,1),...
