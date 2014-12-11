@@ -1,0 +1,29 @@
+<description> This is a test for different architecture of the Rouse polymer. ...
+% The encounter probability would later be used to reconstruct the polymer ...
+% architecture using a model to translate probability to distances
+% I test 5 configurations in 128 beads chain: (1) Rouse ring, (2) two loops
+% (3) 3 loops (4) one loop with tail (5) two loops with tail
+</description>
+
+<func> SetRecipeParams </func>
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+obj.params.numRounds = 5;
+obj.params.beta      = 2;% make sure it is pure Rouse
+obj.params.numBeads  = 128;
+
+<func> PreSimulationBatchActions </func>
+%Actions performed before each simulation batch
+cBeads = {[1 128],[1 128; 32 96], [1 128; 16 112; 32 96; 48 80],[64 128],[64 128; 80 112]};
+obj.params.connectedBeads = cBeads{obj.round};% set the connected beads
+
+<func> PreRunActions </func>
+%Actions performed before each simulation run.
+%Note that SimpleRouse class is initialized before each simulation
+<func> PreStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostRunActions </func>
+%Actions performed sfter each simulation run.
+<func> PostSimulationBatchActions </func>
+%Actions performed before each simulation batch.
