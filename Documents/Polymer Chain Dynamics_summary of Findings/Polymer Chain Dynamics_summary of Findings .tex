@@ -76,13 +76,13 @@ Formaldehyde can be polymerized if alcohol is not added to it. Therefore, it is 
 }
 \end{figure}
 
-\section{The Experimental Data}\label{section_theExperimentalData}
-Two replicates of 5C experiments were conducted on the chromosome region encompassing the Xic region. The data was coarse-grained as explained in \ref{subsection_coarseGrainingOfEncounterData}, in accordance with the procedure by \cite{giorgetti2014predictive}\cite{nora2012spatial}.
+
+\chapter{Analysis of the experimental data}\label{chapter_AnalysisOfTheExperimentalData}
+Two replicates of 5C experiments were conducted on the chromosome region encompassing the Xic region. The data was coarse-grained as explained in \ref{section_coarseGrainingOfEncounterData}, in accordance with the procedure by \cite{giorgetti2014predictive}\cite{nora2012spatial}.
 The encounter data includes 14,508 pairwise encounters of genomic loci. Each genomic segments is defined by a start and end-bead index.
 
-\section{Analysis of the experimental data}\label{section_AnalysisOfTheExperimentalData}
 
-\subsection{Coarse-graining of the data}\label{subsection_coarseGrainingOfEncounterData}
+\section{Coarse-graining of the data}\label{section_coarseGrainingOfEncounterData}
 The following paragraphs are an adapted version of the text in from Giorgetti et al. \cite{giorgetti2014predictive} supplementary material.
 
 In the genomic region of the TAD D and E, 124 forward (FOR) and 126 reverse (REV) primers anneal to alternate HindIII restriction fragments of variable size. 
@@ -98,18 +98,18 @@ The uneven sampling of the genomic region, provided by restriction fragments of 
 \item 5C counts of two experimental replicates are averaged for each pair of restriction fragments and their standard deviation is taken as a measure of experimental uncertainty.
 \end{enumerate}
 
-\subsection{The encounter matrix}\label{subsection_theEncounterMatrix}
-The data provided by Giorgetti et al.\cite{giorgetti2014predictive} contains the encounter frequency of beads (not segments!) constructed as explained in \ref{coarseGrainingOfEncounterData}. Sorting the encounter data into a 307 by 307 matrix we can visualize the pair-wise encounter frequencies. Reminder: beads are numbered sequentially from the 5-end to the 3-end of the polymer.
+\section{The encounter matrix}\label{section_theEncounterMatrix}
+The data provided by Giorgetti et al.\cite{giorgetti2014predictive} contains the encounter frequency of beads (not segments!) constructed as explained in \ref{section_coarseGrainingOfEncounterData}. Sorting the encounter data into a 307 by 307 matrix we can visualize the pair-wise encounter frequencies. Reminder: beads are numbered sequentially from the 5-end to the 3-end of the polymer.
 
 
-\subsection{From encounter frequency to encounter probability} \label{subsection_fromEncounterFrequencyToEncounterProbability}
+\section{From encounter frequency to encounter probability} \label{section_fromEncounterFrequencyToEncounterProbability}
 We start by transforming the encounter frequency into encounter probability as follows. Each line of the encounter matrix is divided by the sum of all encounters of the line.
 
-\subsection{Showing the TADs}\label{subsection_showingTheTADs}
+\section{Showing the TADs}\label{section_showingTheTADs}
 TADs are seen by displaying the normalized encounter data, after removing closest beads data from the matrix of encounters. 
 The normalization is done by taking each row $k$ of the encounter matrix, removing the data for the closest neighbors of bead $k$ and dividing by the sum of the row. A median filter of size 30 beads is then applied to the image (see methods in \cite{nora2012spatial}). 
  
-\subsection{Symmetry of encounter frequency data}
+\section{Symmetry of encounter data}\label{section_symmetryOfTheEncounterData}
 We next examine whether the data can be regarded as symmetric in the sense of encounter probabilities for each bead. That is, whether bead $k$ has the same probability to meet its closest neighbors from the right and left in the linear chain, or not.  
 
 The symmetry of encounter frequency data is shown by measuring the left and right encounter frequencies of each one of the beads comprising the chain.
@@ -151,9 +151,9 @@ The red lines in the Figure \ref{figure_resultsOfFrequencyDifference} signify th
 
 We can therefore treat the right and left data in the same manner and 'fold' the encounter data such that from now on we test the encounter data by bead distance. We will refer to the one-sided encounter as the encounter data from now on. 
 
-\subsection{Peaks of the encounter data}\label{subsection_peaksOfTheEncounterData}
+\section{Peaks of the encounter data}\label{section_peaksOfTheEncounterData}
 For some beads the encounter data shows peaks at some distance from the origin (Figure \ref{figure_peaksOfTheEncounterProbabiltity307Beads}). 
-These peaks represent a frequent encounter with a distal part of the chain. The list of bead numbers and the frequent encounter they have with the distal chain parts (represented by bead numbers) is summarized in Table \ref{table_peaksOfTheEncounterDataOneSided}
+These peaks represent a frequent encounter with a distal part of the chain. 
 
 %TODO: the figure below should be replaced
 \begin{figure}[H]
@@ -162,59 +162,67 @@ These peaks represent a frequent encounter with a distal part of the chain. The 
 \label{figure_peaksOfTheEncounterProbabiltity307Beads}
 \end{figure}
 
-% One Sided prominant encounters
-\begin{table}[H]\label{table_peaksOfTheEncounterDataOneSided}
-\begin{tabular}{l l l}
-bead numbers & encountered beads & TAD\\
-\hline
-23-26   & 280-290 & $D\leftrightarrow E$\\
-49-53   & 148-155 & $D\leftrightarrow E$\\
-56-59   & 80-90   & $D\leftrightarrow D$\\
-115-117 & 165-170 & $E\leftrightarrow E$\\
-161-162 & 187 190 & $E\leftrightarrow E$\\
-182-184 & 260-264 & $E\leftrightarrow E$\\
-185-186 & 253-255 & $E\leftrightarrow E$\\
-234-236 & 184-189 & $E\leftrightarrow E$\\
-234-236 & 4-11    & $E\leftrightarrow D$\\
-243     & 88      & $E\leftrightarrow D$\\
-264     & 89-90   & $E\leftrightarrow D$\\
-274-277 & 113-120 & $E\leftrightarrow D(?)$
-\end{tabular}
-\end{table}
+To accurately identify pair of beads that interact more frequently than expected, we employ a peak calling procedure on the 5C probability data. We analyze TAD D and the region between TADs separately from TAD E to avoid peak bias. We average all encounter frequency signals, taken from all genomic distances, and smooth the resulting mean signal using loess smoothing technique to represent the expected background encounter signal,$E(d)$, and calculate its standard deviation $\sigma_E$. The background Z-score distribution, $F_b(z)$, is calculated using all data by $z_B=\frac{O_{i(d)}(d)-E(d)}{\sigma_E}$, for each $i(d)=1,..,N(d)$, with $N(d)$ the number of observations available for genomic distance $d$. A Weibull distribution is fitted to the background signal, where negative values $Z_B$ are discarded, because we are only interested in peak values. We then estimate the threshold value, $T_B$, above which z-scores are considered as peaks of the data, as the 0.99 percent of this distribution. The value of $T_B$ will be used for judging observations in a particular genomic distances for being peaks.
 
-% two sided prominant encounters 
-\begin{table}[H]\label{table_peaksOfTheEncounterDataTwoSided}
-\begin{tabular}{l l l l}
-bead numbers & encountered beads & TAD & rep\\
-\hline
-1       & 86      & $D\leftrightarrow D$& 1 \\
-6       & 81      & $D\leftrightarrow D$& 1 \\
-6       & 227-229 & $D\leftrightarrow E$& 1 \\
-6       & 243     & $D\leftrightarrow E$& 1 \\
-7       & 81      & $D\leftrightarrow D$& 1 \\
-7       & 226-229 & $D\leftrightarrow E$& 1 \\
-7       & 247     & $D\leftrightarrow E$& 1 \\
-10      & 77      & $D\leftrightarrow D$& 1 \\
-10      & 77      & $D\leftrightarrow D$& 1 \\
-23      & 293     & $D\leftrightarrow E$& 1 \\
-24      & 264     & $D\leftrightarrow E$& 1 \\
-25      & 285     & $D\leftrightarrow E$& 1 \\
-26      & 285     & $D\leftrightarrow E$& 1 \\
-26      & 86      & $D\leftrightarrow D$& 1 \\
-26      & 59-74   & $D\leftrightarrow D$& 1 \\
-49-53   & 150     & $D\leftrightarrow E$& 1 \\
-64-66   & 287     & $D\leftrightarrow E$& 1 \\
-65-66   & 34      & $D\leftrightarrow D$& 1 \\ 
-64,67-69& 26      & $D\leftrightarrow D$& 1 \\       
-71      & 24      & $D\leftrightarrow D$& 1 \\
-72-75   & 26      & $D\leftrightarrow D$& 1 \\
+For each genomic distance $d$, we calculate a z-score for all available observations at that distance by $z({\{i\}_d})=\frac{O({\{i\}_d})-E(d)}{\sigma_{O}(d)}$ and fit a Weibull distribution to it, $F_d(z)$, discarding negative z-scores. For each $d$, we calculate a rejection value $T_d$ of $F_d(z)$, above which observation at genomic distance $d$ are considered peaks. We use the threshold values as our test statistics for multiple hypothesis tests.
 
-\end{tabular}
-\end{table}
+Using the background distribution we calculate the p-values for $T_d$ on the background distribution, namely, $p(d)=F_B(F_d^{-1}(0.99))$, calculate the positive False Discovery Rate\cite{storey2002direct} to get $q-values$, $q(p)$. As a new the global threshold of the data we choose $T_G = max_d (p(d); q(p(d))<0.01)$.
 
-The question arises as to whether these frequent encounter represent a loop in the polymer chain or is it the results of the 3D structure of the folded polymer? Since the 5C data is essentially taken over millions of cells it remains to show that these encounters (or loops) are indeed conserved elements of the Xic region in cells and not a result of averaging in the population level.
+\section{Interpretation of the peaks}\label{section_interpretationOfThePeaks}
 
-\subsection{Fitting the encounter data}\label{subsection_fittingTheEncounterData}
+\section{Estimating $b^2$ from the data}\label{section_estimatingb2}
+The bead distance pdf of the Gaussian chain has the distribution of 
+\begin{equation*}
+\Phi(|R_n-R_m|)=\left(\frac{3}{2\pi b^2 |n-m|}\right)^{1.5}\exp(-\frac{3|R_n-R_m|^2}{2|n-m|b^2})
+\end{equation*} 
+For an encounter between beads we set $R_n=R_m$, hence 
+\begin{equation*}
+\Phi(|R_n-R_m|)=\left(\frac{3}{2\pi b^2 |n-m|}\right)^{1.5}
+\end{equation*}
+
+To estimate $b^2$, we calculate the encounter from nearest neighbors (plug $|n-m|=1$ in the equation above)
+\begin{figure}[H]
+\includegraphics[scale=0.1]{encoutnerProbByDist307BeadsAverageData}
+\includegraphics[scale=0.1]{encounterProbHistogramDist1}
+\caption{\scriptsize{Encounter probability of nearest neighbors is used to estimae $b^2$. Left- the nearest-neighbor encounter probability (P(1)) for all 307 beads. Right-the encounter probability histogram for nearest-neighbors, P(1)}}\label{figure_nearestNeighborProb}
+\end{figure}
+Using the estimation of the expected probability of nearest neighbors $E[P(1)]=0.075078$, which is the most reliable since it is least affected by structure, we can calculate
+\begin{equation*}
+b^2 = \left(\frac{1.5}{\pi E[P(1)]}\right)^{1.5}=16.0377
+\end{equation*}
+
+\section{Determining the spring constant for peaks} 
+For peaks which display encounter probability much larger than nearest neighbor probability, we adjust the spring constant to reflect the frequent encounter. The assumption made here is that all beads of the chain are connected with springs of the same spring constants, but exceeding nearest neighbor encounter probability confers a different dynamics between those beads which is reflected in the spring constant.
+
+In the Rouse model the relation between the spring constant and $b^2$ is given by 
+\begin{equation*}
+b^2=\frac{3K_BT}{k} 
+\end{equation*}
+with $K_B$ the Boltzmann constant and $T$ the absolute temperature. According to the estimation done previously, we have 
+\begin{equation*}
+k = \frac{3K_BT}{16.0377}
+\end{equation*}
+ 
+If we observe $\hat{P}>E[P(1)]$ for some beads, we want to estimate the new spring constant $\hat{k}$, and we can write 
+\begin{equation*}
+\hat{P}=\left(\frac{1.5}{\pi b^2}\right)^{1.5} = \left(\frac{k}{2\pi K_BT} \right)^{1.5}
+\end{equation*}
+therefore, the spring constant between those beads is given by 
+\begin{equation*}
+\hat{k} = \frac{2\pi K_BT}{\hat{P}^{1.5}}
+\end{equation*}
+
+the ratio between the spring constants $k$ and $\hat{k}$ is 
+\begin{equation*}
+\frac{k}{\hat{k}}= \frac{1.5\hat{P}^{1.5}}{\pi b^2}=\left(\frac{\hat{P}}{E[P(1)]} \right)^{1.5}
+\end{equation*}
+since $E[P(1)]<\hat{P}$ we get $k>\hat{k}$, so the spring corresponding to the observation $\hat{P}$ is more restrictive. 
+
+The ratio above can also guide us in simulations when assigning spring constants $\hat{k}$ for some observed probability $\hat{P}>E[P(1)]$, that can be written in terms of $P(1)$. 
+
+In simulation we can fix $b^2 = 3 = dim$ (in 3D), $K_BT = 1$ hence we get $k=3K_BT/b^2=1$. We can now estimate $E[P(1)]=(1.5/(\pi b^2))^{1.5}=(2\pi)^{-1.5}$ and plug it into the relation $\hat{k}/k=(\hat{P}/E[P(1)])^{1.5}=(\hat{P}/(2\pi)^{-1.5})^{1.5}= \frac{\hat{P}^{1.5}}{2\pi}=\hat{k}$. The probability $\hat{P}\sim E[P(1)]$ and therefore, $\hat{k}=\gamma E[P(1)]/(2\pi)\quad \gamma=const$
+
+\section{Fitting the encounter data}\label{section_fittingTheEncounterData}
 In this and subsequent sections we work with the first replicate of the data.
 
 To examine the behavior of the polymer as a whole, we fit for each bead's encounter data 
@@ -225,6 +233,7 @@ e_j(d)= \frac{1}{\sum_{i=1}^{N_j}d_i^{-\beta}}d^{-\beta}
 $e_j$ is the normalized encounter frequency of bead $j$, $d$ is the distance in bead units , and $\beta$ is a parameter to be determined by the fitting process. 
 
 The fitted exponent ($\beta$) value obtained by minimizing the error in the model \ref{equation_fitModel} are shown in Figure \ref{figure_fittedExpExperimentalData307Beads}
+%TODO: th figure should be changed. insert calculation of alpha as prviously noted
 \begin{figure}[H]
 \includegraphics[scale=0.15]{fittedExpValuesWithSplineRep1}
 \caption{\scriptsize{The fitted $\beta$ value for each bead 1 to 307. The continuous curve represents a smoothing of the fitted exponent values using a smoothing spline with tolerance of 2 (see Matlab documentation on \href{http://www.mathworks.fr/fr/help/curvefit/spaps.html}{spaps} function)}}
@@ -234,31 +243,6 @@ The fitted exponent ($\beta$) value obtained by minimizing the error in the mode
 In Figure \ref{figure_fittedExpExperimentalData307Beads}, we see that the fitted exponent curve is somewhat tri-modal. With one peak located in roughly at bead 54, one at 125, and the left most at 200. The first and the last places correspond the mid points of the two TADs of the encounter. 
 
 
-\subsection{Heterogeneity of the parameters over the beads}
-The question arises as to whether the beads behave in a similar manner in terms of parameter values (i.e obey the same model rules), and if not, would it be possible, just by assuming a model, to identify beads belonging to the same group, and elucidate the similarity or difference between groups of beads. 
-We start by looking at adjacent beads properties according to the resulting parameter fitted.
-To simultaneously see the heterogeneity of the fitted parameters over all beads, we calculate the pairwise difference between parameters of the beads. 
-the resulting matrices take the shape
-
-\begin{figure}[H]
-\includegraphics[scale=0.12]{diffFittedExpRep1}
-\includegraphics[scale=0.12]{diffFittedBiasRep1}
-\includegraphics[scale=0.12]{normDiffFittedExpfittedBiasRep1}
-\caption{\scriptsize{The norm of the difference between the fitted parameters from model \ref{equation_fitModel} in a pairwise manner. the columns and rows represent bead numbers. The pairwise exponent difference norm (top), the pairwise difference norm for bias (middle); the norm of the two difference matrices (bottom)}}
-\label{figure_diffFittedParametersRep1}
-\end{figure}
-
-It is now also apparent from Figure \ref{figure_diffFittedParametersRep1} that beads 35-50 have different bias values then expected. To find beads for which the exponent values agree but the bias values do not, we search for a threshold for the difference of exponents and bias below which it could be said that values are similar. 
-For this end, we can consider the data as having 'low' and 'high' difference values. 
-We search for a values $v_{exp}$ and $v_{bias}$ for which the 'within' group variance is low and the 'between' group variance is the highest. 
-Such approach leads naturally to employ the \href{http://en.wikipedia.org/wiki/Otsu's_method}{Otsu} method. Using this method on the matrix, the value of $v_{exp},v_{bias}$ are found to be 
-
-\begin{equation*}
-v_{exp}= 0.262
-\end{equation*}
-\begin{equation*}
-v_{bias}=0.18
-\end{equation*}
 
 \chapter{Simulations}
 \section{The Simulation Framework}
@@ -289,7 +273,7 @@ The flexibility of our framework enables us to simulate a single or an ensemble 
 \end{equation*}
 and simulate the coupled (coordinate-wise) system of equations it yields.
 
-In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation (see Figure \ref{figure_exampleOfChains} left panel). In the course of simulation (such as in subsection \ref{RandomFixedLoops}), we can randomize the location of these fixed loops, a model we name \textit{random fixed loop model}. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model. In this model only when the affine beads are located within some minimal distance $\epsilon$ to one another they form a loop with association rate $\lambda$ per unit of time. Looped affine beads can dissociate with dissociation rate $1-\lambda$.
+In addition, non-adjacent beads can be fixed to form stable loops throughout the simulation (see Figure \ref{figure_exampleOfChains} left panel). In the course of simulation (such as in subsection \ref{section_RandomFixedLoops}), we can randomize the location of these fixed loops, a model we name \textit{random fixed loop model}. We extend this idea to allow the formation and dissociation of loops in time, a model termed dynamic loop model. In this model only when the affine beads are located within some minimal distance $\epsilon$ to one another they form a loop with association rate $\lambda$ per unit of time. Looped affine beads can dissociate with dissociation rate $1-\lambda$.
 
 At the end of simulations, an analysis is performed to calculate the encounter probability between beads of the chain, and a report is generated.  
 
@@ -719,16 +703,17 @@ Here we give several key points from articles bearing important principals from 
 \begin{enumerate}
  \itemsep1pt \parsep0pt \parskip1pt 
 \item neighboring chromosomes can overlap considerably 
+\item loci on the same chromosome interact much more frequently than loci on different chromosomes. 
 \item the nuclear envelope (double lipid bilayer) restricts genomic DNA to confined 3D space and provides a solid anchor point that allows for specific chromatin interactions. 
 \item The nuclear lamina is the inner nucleus membrane is associated with inactive heterochromatic chromatin directly or indirectly via lamina associated proteins.
 \item almost half of the genome in a given cell population is composed of lamina associated domains \cite{guelen2008domain}. 
-\item activated genes move to the nuclear interior and inactive genes are found in the lamina associated domains
+\item activated genes move to the nuclear interior and inactive genes are found in the lamina associated domains (how do they move there?)
 \item loci gather near sub-nuclear structures such as the nucleoli, which are sub-nuclear structures dedicated to expression by RNA polymerase I. 
 \item it has been shown that open, gene rich, areas and closed, gene-poor chromosomal domain are generally located in separate sub-nuclear regions \cite{fraser2007nuclear}
 \item sub-chromosomal compartment were detected, named A and B, according to functional compartmentalization of gene activity \cite{lieberman2009comprehensive}. 
 \item this compartmentalization is related to the association of loci to transcription factories and the nuclear lamina.  
 \item loci found clustered in the A compartment are generally gene rich, transcriptionally active and DNase I hypersensitive 
-\item loci found clustered in the B compartment are generally gen poor, transcriptionally silent, and DNase I insensitive \cite{lieberman2009comprehensive}.
+\item loci found clustered in the B compartment are generally gene poor, transcriptionally silent, and DNase I insensitive \cite{lieberman2009comprehensive}.
 \item those compartments are cell type specific, and cannot be predicted according to gene density. 
 \item Chromatin domains preferentially associate with other domains of a comparable activity level.
 \item The actively transcribed genes colocalize at foci called \href{http://en.wikipedia.org/wiki/Transcription_factories}{transcription factories}
@@ -744,6 +729,12 @@ Here we give several key points from articles bearing important principals from 
 \item the mechanism by which long range interactions are mediated is largely unknown
 \item specific long range interactions recruit specific proteins to the gene promoter, and recruit RNA polymerase. 
 \item most specific long range interactions between promoters and enhancers can be found within the boundaries of the TADs. 
+\item there is a striking cell-to-cell diversity of subnuclear positioning of loci. 
+\item at the level of the whole nucleus, the spatial organization of the genome is rather static (chromosomes do not move a lot) 
+\item the positioning of the chromosome varies greatly between cells, but remains stable for any given cell. 
+\item at the scale of few hundreds of kb the chromatin is much more dynamic. 
+\item loci may interact with other loci within a radius of 1Mb or so. 
+\item 
 
 
  

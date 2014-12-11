@@ -505,7 +505,7 @@ classdef AnalyzeEncounterFrequencies<handle
         end           
         
         function [oneSided,twoSided] = GetEncounterProbabilityMatrix(obj,analysisRange,fName)% nfinished
-            numBeads = numel(obj.beadData.numBeads); 
+            numBeads = (obj.beadData.numBeads); 
             oneSided = zeros(numBeads,numBeads-1);             
             twoSided = zeros(numBeads,numBeads-1 +1 +numBeads-1);
             % The encounter signal probability
@@ -515,7 +515,6 @@ classdef AnalyzeEncounterFrequencies<handle
                 twoSided(bIdx,numBeads-numel(t{1}):numBeads-1) = fliplr(t{1});
                 twoSided(bIdx,numBeads+1:numBeads+numel(t{2})) = t{2};
             end
-
         end
         
         function DisplayAllDataFit(obj,dispScale)
@@ -710,6 +709,56 @@ classdef AnalyzeEncounterFrequencies<handle
                     
                 end
             end
+        end
+        
+        function DisplayEncounterProbabilityByPosition(obj,beadRange,pos,fName)
+            %%% Display the encounter probability at a specific position
+            % beadRang is a n integer list (sorted) for the beads for which
+            % to display the encounter probability 
+        [oneSided,~] = obj.GetEncounterProbabilityMatrix(obj.params.beadRangeToAnalyze,fName);
+        f = figure('Name','EncounterProbByDistance',...
+                   'Units','norm');
+        a = axes('Parent',f,...
+                 'Units','norm',...
+                 'FontSize',40,...
+                 'LineWidth',4,...
+                 'NextPlot','Add');
+        title(a,['Encounter Prob by bead, distance ' num2str(pos)],'FontSize',40);
+         ep = oneSided(beadRange,pos);
+         line('XData',beadRange,...
+              'YData',ep,...
+              'LineStyle','none',...
+              'Marker','o',...
+              'MarkerSize',9,...
+              'MarkerFaceColor','b',...
+              'Parent',a,...
+              'DisplayName','Encounter Prob');
+         xlabel(a,'Bead number','FontSize',40);
+         ylabel(a,['P(' num2str(pos) ')'],'FontSize',40);
+         
+         % Insert the mean (ignore nan and zeros)
+         m = obj.MeanIgnoreNaN(ep(ep>0)); % do not include zero observations
+         plot(a,[1 beadRange(end)],[m m],'-.r',...
+             'LineWidth',5,'DisplayName',['Mean=' num2str(m)]);
+         legend(get(a,'Children'))
+        end
+        
+        function DisplayEncounterProbabilityHistogramByPosition(obj,beadRange,pos,fName)
+          [oneSided,~] = obj.GetEncounterProbabilityMatrix(obj.params.beadRangeToAnalyze,fName);
+          ep =  oneSided(beadRange,pos);
+          ep = ep(ep>0);
+          ep = ep(~isnan(ep));
+          [h,b] = hist(ep,floor(numel(beadRange)/2));
+          f = figure('Name','probability histogram');
+          a = axes('Parent',f,...
+                   'Units','norm',...
+                   'FontSize',40,...
+                   'LineWidth',4);
+          bar(a,b,h)
+          xlabel(a,['P(', num2str(pos),')'],'FontSize',40)
+          ylabel(a,'Freq','FontSize',40);
+          
+               
         end
         
         function DisplayFittedParameters(obj)
