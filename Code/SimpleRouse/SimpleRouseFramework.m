@@ -125,13 +125,13 @@ classdef SimpleRouseFramework<handle
             % actions performed before each simulation run
             obj.simulation = obj.simulation+1;
             eval(obj.recipe.PreRunActions);            
-            % initialize a new chain 
+            % initialize a new chain             
             if strcmpi(obj.polymerModel,'rouseChain')
                 obj.handles.classes.chain = SimpleRouse(obj.params);           
             else 
                 obj.handles.classes.chain = BetaPolymer(obj.params);
             end
-              obj.handles.classes.chain.Initialize
+              obj.handles.classes.chain.Initialize              
         end
         
         function PreStepActions(obj)
