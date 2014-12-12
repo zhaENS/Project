@@ -62,7 +62,7 @@ classdef SimpleRouse<handle
             obj.step = 1;
             obj.CreateRouseMatrix
             obj.GetInitialChainPosition;
-            obj.CreateControls
+%             obj.CreateControls
 %             obj.CreateNoise;
         end
         
@@ -128,7 +128,7 @@ classdef SimpleRouse<handle
             end
         end
             
-        function CreateControls(obj)
+        function CreateControls(obj)% should be removed (obsolete)
             if obj.params.plot
                 obj.handles.graphical.mainFigure = figure('Name','RouseSimulation',...
                     'Units','norm');
