@@ -90,7 +90,7 @@ classdef BetaPolymer<handle
             p=0:obj.params.numBeads-1;
             lambda = zeros(1,obj.params.numBeads);
             for bIdx = 1:numel(p)
-                lambda(bIdx) = 4*obj.params.springConst*sin(p(bIdx)*pi/(2*obj.params.numBeads)).^obj.params.beta(bIdx);
+                lambda(bIdx) = 4*obj.params.springConst*obj.params.dt*sin(p(bIdx)*pi/(2*obj.params.numBeads)).^obj.params.beta(bIdx);
             end
             v = zeros(obj.params.numBeads);
             v(:,1) = sqrt(1/obj.params.numBeads);

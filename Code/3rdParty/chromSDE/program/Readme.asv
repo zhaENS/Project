@@ -1,0 +1,31 @@
+***********************************************
+Author: Zhang Zhizhuo (zzz2010@gmail.com)
+
+Comments and bug-reports are higly appreciated.
+***********************************************
+
+MainScript: ChromSDE.m
+
+ChromSDE(trainBin,trainFreq,method_type)
+
+Input data:
+trainBin: the description for each 3d point (chromosome, start, end)
+trainFreq: the normalized frequency matrix
+method_type: 1 for quadratic SDP and 0 for linear SDP
+
+
+Output data:
+XXX.stat.txt: the general statistics of the predicted structures
+XXX.pos:first column is genomice locat chr*10^10+position, column 2-4 are the 3D 
+
+Real data example:
+[binAnno,FreqMat,normFreqMat]=readpipeline_output('data/mESC_Hind3_1000000');
+
+ChromSDE(binAnno,normFreqMat,0)
+
+
+Simuation Demo:
+SimulationDemo.m
+
+
+

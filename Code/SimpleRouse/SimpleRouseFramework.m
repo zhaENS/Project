@@ -75,10 +75,11 @@ classdef SimpleRouseFramework<handle
             obj.fitResults.bead.fittedExp = zeros(obj.params.numBeads,obj.params.numRounds);
             obj.fitResults.bead.gof       = cell(obj.params.numBeads,obj.params.numRounds);
 %             obj.beadDistance              = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numSimulations,obj.params.numRounds);
-            obj.beadEncounterHistogram    = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
-            obj.encounterHistogram        = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numRounds);
-            obj.beadEncounterHistogram    = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
-            obj.beadEncounterProbability  = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
+            obj.beadEncounterHistogram.oneSide    = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
+            obj.beadEncounterHistogram.twoSides   = zeros(obj.params.numBeads,2*(obj.params.numBeads-1)+1,obj.params.numRounds);
+            obj.encounterHistogram                = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numRounds);
+            obj.beadEncounterProbability.oneSide  = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
+            obj.beadEncounterProbability.twoSides = zeros(obj.params.numBeads,2*(obj.params.numBeads-1)+1,obj.params.numRounds);
             obj.meanEncounterProbability  = zeros(1,obj.params.numBeads-1,obj.params.numRounds);
             obj.msd                       = zeros(obj.params.numBeads,obj.params.numSteps,obj.params.numRounds);
         end
@@ -232,23 +233,37 @@ classdef SimpleRouseFramework<handle
         
         function CalculateBeadEncounterHistogram(obj)
             % Calculate the encounter histogram for each bead in each round
+            
+            % One sided
             for rIdx = 1:obj.params.numRounds
+                twoSides= zeros(obj.params.numBeads,2*(obj.params.numBeads-1)+1,1);
+                
                 for bIdx =1:obj.params.numBeads
                     k1 = numel(1:numel(bIdx+1:obj.params.numBeads));
                     k2 = numel(1:numel(1:bIdx-1));
                     
-                    f = zeros(2,obj.params.numBeads-1); % sum 'right' and 'left' encounters
-                    f(1,1:numel(bIdx+1:obj.params.numBeads)) = obj.encounterHistogram(bIdx,bIdx+1:obj.params.numBeads,rIdx);% right side
-                    f(2,1:numel(1:bIdx-1)) = fliplr(obj.encounterHistogram(bIdx,1:bIdx-1,rIdx));% flipped left side
+                    f     = zeros(2,obj.params.numBeads-1); % sum 'right' and 'left' encounters
+                    right = obj.encounterHistogram(bIdx,bIdx+1:obj.params.numBeads,rIdx);
+                    left  = obj.encounterHistogram(bIdx,1:bIdx-1,rIdx);
+                    f(1,1:numel(bIdx+1:obj.params.numBeads)) = right; % right side
+                    f(2,1:numel(1:bIdx-1)) = fliplr(left);% flipped left side
                     f    = sum(f);% sum left and right
                     
                     normFac = ones(1,size(f,2));
                     normFac(1:min([k1,k2]))=2;
                     f = f./normFac;
-                    obj.beadEncounterHistogram(bIdx,:,rIdx)=f;
-                end
-                
+                    obj.beadEncounterHistogram.oneSide(bIdx,:,rIdx)=f;
+                    
+                    % Two sides encounter histogram 
+                    twoSides(bIdx,obj.params.numBeads-numel(left):obj.params.numBeads-1) = left;
+                    twoSides(bIdx,obj.params.numBeads+1:obj.params.numBeads+numel(right)) = right;
+                   
+                end   
+                 obj.beadEncounterHistogram.twoSides(:,:,rIdx) = twoSides;
             end
+            
+            % two sides
+            
         end
         
         function CalculateBeadEncounterProbability(obj)
@@ -258,12 +273,18 @@ classdef SimpleRouseFramework<handle
             % divide by the sum of each row to get the probability
             for pIdx = 1:obj.params.numRounds
                 for bIdx = 1:obj.params.numBeads
-                    if sum(obj.beadEncounterHistogram(bIdx,:,pIdx))~=0
+                    if sum(obj.beadEncounterHistogram.oneSide(bIdx,:,pIdx))~=0
                         % divide by the sum of the histogram row to get
                         % probability
-                        obj.beadEncounterProbability(bIdx,:,pIdx) =obj.beadEncounterHistogram(bIdx,:,pIdx)./sum(obj.beadEncounterHistogram(bIdx,:,pIdx));
+                        obj.beadEncounterProbability.oneSide(bIdx,:,pIdx)  = obj.beadEncounterHistogram.oneSide(bIdx,:,pIdx)./sum(obj.beadEncounterHistogram.oneSide(bIdx,:,pIdx));
+%                         nn= ~isnan(obj.beadEncounterHistogram.twoSides(bIdx,:,pIdx));
+%                         if any(nn)                       
+                        obj.beadEncounterProbability.twoSides(bIdx,:,pIdx) = obj.beadEncounterHistogram.twoSides(bIdx,:,pIdx)/sum(obj.beadEncounterHistogram.twoSides(bIdx,:,pIdx));
+%                         end
+                        
                     else
-                        obj.beadEncounterProbability(bIdx,:,pIdx) =obj.beadEncounterHistogram(bIdx,:,pIdx);
+                        obj.beadEncounterProbability.oneSide(bIdx,:,pIdx) =obj.beadEncounterHistogram.oneSide(bIdx,:,pIdx);
+                        obj.beadEncounterProbability.twoSides(bIdx,:,pIdx) =obj.beadEncounterProbability.twoSides(bIdx,:,pIdx);
                     end
                 end
             end
@@ -280,7 +301,7 @@ classdef SimpleRouseFramework<handle
                 % take any second element of s
                 s= s(1:2:end);
                 normTerm(1,end-numel(s)+1:end)=s;
-                obj.meanEncounterProbability(1,:,rIdx) = sum(obj.beadEncounterHistogram(:,:,rIdx),1)./normTerm;
+                obj.meanEncounterProbability(1,:,rIdx) = sum(obj.beadEncounterHistogram.oneSide(:,:,rIdx),1)./normTerm;
                 obj.meanEncounterProbability(1,:,rIdx) = obj.meanEncounterProbability(1,:,rIdx)./sum(obj.meanEncounterProbability(1,:,rIdx));
             end
         end
@@ -316,7 +337,7 @@ classdef SimpleRouseFramework<handle
                     numPts = obj.params.numBeads-1-minK;% take as many points as there is data available (omit lagging zeros)
                     
                     %                 [beadFit, gof] = fit(dists,obj.beadEncounterProbability(bIdx,:,pIdx)',obj.fitModel,obj.fOptions);
-                    f = @(b)sum((((1/sum((dists(1:numPts)).^(-b)))*(dists(1:numPts)).^(-b))-obj.beadEncounterProbability(bIdx,1:numPts,pIdx)').^2);
+                    f = @(b)sum((((1/sum((dists(1:numPts)).^(-b)))*(dists(1:numPts)).^(-b))-obj.beadEncounterProbability.oneSide(bIdx,1:numPts,pIdx)').^2);
                     e = fminbnd(f,0,2.2,obj.fOptions);
                     
                     obj.fitResults.bead.fittedExp(bIdx,pIdx) = e;%beadFit.b;
@@ -393,7 +414,7 @@ classdef SimpleRouseFramework<handle
                     % plot the Encounter probability from simulation
                     line('Parent',a(rIdx),...
                         'XData',dists,...
-                        'YData',obj.beadEncounterProbability(bIdx,:,rIdx),...
+                        'YData',obj.beadEncounterProbability.oneSide(bIdx,:,rIdx),...
                         'Color',lineColor,...
                         'DisplayName',sprintf('%s%s','Bead',num2str(bIdx)),...
                         'LineWidth',5);

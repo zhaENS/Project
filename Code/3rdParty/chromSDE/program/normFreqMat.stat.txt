@@ -1,0 +1,2 @@
+c,h,r,o,m,	,P,e,a,r,s,o,n,	,S,p,e,a,r,m,a,n,	,C,o,n,s,e,n,s,u,s,I,n,d,e,x,	,A,l,p,h,a
+   20	0.93065	0.94035	0.89402	0.54165
