@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  2 DEC 2014 10:44
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  15 DEC 2014 17:36
 entering extended mode
 **random*loop*model*explains*the*appearance*of*TAD*in*CC*experiments.tex
 
@@ -234,132 +234,101 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
  []
 
-[1
-
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Overfull \hbox (0.61816pt too wide) in paragraph at lines 79--80
-[]\OT1/cmr/m/n/12 The coarse-grained bead en-counter fre-quen-cies in-cludes 14
-,509 data points
- []
-
-[2] [3]
-
-LaTeX Warning: Reference `figure_encounterProbabilityTADDAndE+fittedBeta' on pa
-ge 4 undefined on input line 141.
-
-[4]
-<Figure01_AnalysisOfTheExperimentalData.jpg, id=30, 597.6729pt x 412.6617pt>
+<Figure01_AnalysisOfTheExperimentalData.jpg, id=1, 597.6729pt x 412.6617pt>
 File: Figure01_AnalysisOfTheExperimentalData.jpg Graphic file (type jpg)
 
 <use Figure01_AnalysisOfTheExperimentalData.jpg>
 Package pdftex.def Info: Figure01_AnalysisOfTheExperimentalData.jpg used on inp
-ut line 184.
+ut line 73.
 (pdftex.def)             Requested size: 298.83571pt x 206.33034pt.
+ [1
 
-<Figure02_LoopsCorrespondingToPeaks307Beads.jpg, id=31, 597.432pt x 483.7272pt>
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
+<Figure02_LoopsCorrespondingToPeaks307Beads.jpg, id=14, 597.432pt x 483.7272pt>
 File: Figure02_LoopsCorrespondingToPeaks307Beads.jpg Graphic file (type jpg)
 <use Figure02_LoopsCorrespondingToPeaks307Beads.jpg>
 Package pdftex.def Info: Figure02_LoopsCorrespondingToPeaks307Beads.jpg used on
- input line 190.
+ input line 79.
 (pdftex.def)             Requested size: 298.71527pt x 241.863pt.
 
-<Figure03_OneTADWithTails0To30RandomLoops.jpg, id=32, 597.6729pt x 412.6617pt>
+<Figure03_OneTADWithTails0To30RandomLoops.jpg, id=15, 597.6729pt x 412.6617pt>
 File: Figure03_OneTADWithTails0To30RandomLoops.jpg Graphic file (type jpg)
 
 <use Figure03_OneTADWithTails0To30RandomLoops.jpg>
 Package pdftex.def Info: Figure03_OneTADWithTails0To30RandomLoops.jpg used on i
-nput line 196.
+nput line 85.
 (pdftex.def)             Requested size: 298.83571pt x 206.33034pt.
 
-<Figure04_TwoTADs0To30RandomLoops307Beads.jpg, id=33, 597.81744pt x 718.07472pt
+<Figure04_TwoTADs0To30RandomLoops307Beads.jpg, id=16, 597.81744pt x 718.07472pt
 >
 File: Figure04_TwoTADs0To30RandomLoops307Beads.jpg Graphic file (type jpg)
  <use Figure04_TwoTADs0To30RandomLoops307Beads.jpg>
 Package pdftex.def Info: Figure04_TwoTADs0To30RandomLoops307Beads.jpg used on i
-nput line 202.
-(pdftex.def)             Requested size: 298.90799pt x 359.03648pt.
+nput line 91.
+(pdftex.def)             Requested size: 280.97423pt x 337.49516pt.
 
 
-LaTeX Warning: Float too large for page by 96.03647pt on input line 205.
+LaTeX Warning: Float too large for page by 16.49515pt on input line 94.
 
-<Figure05_betaModelWeights.jpg, id=34, 597.432pt x 483.7272pt>
+<Figure05_betaModelWeights.jpg, id=17, 597.432pt x 483.7272pt>
 File: Figure05_betaModelWeights.jpg Graphic file (type jpg)
 
 <use Figure05_betaModelWeights.jpg>
-Package pdftex.def Info: Figure05_betaModelWeights.jpg used on input line 209.
+Package pdftex.def Info: Figure05_betaModelWeights.jpg used on input line 98.
 (pdftex.def)             Requested size: 298.71527pt x 241.863pt.
 
-<Figure06_betaModelWithPeaks.jpg, id=35, 597.432pt x 483.7272pt>
+<Figure06_betaModelWithPeaks.jpg, id=18, 597.432pt x 628.2672pt>
 File: Figure06_betaModelWithPeaks.jpg Graphic file (type jpg)
 
 <use Figure06_betaModelWithPeaks.jpg>
-Package pdftex.def Info: Figure06_betaModelWithPeaks.jpg used on input line 215
+Package pdftex.def Info: Figure06_betaModelWithPeaks.jpg used on input line 104
 .
-(pdftex.def)             Requested size: 298.71527pt x 241.863pt.
-
-<Figure07_betaModelWithPeaksVariableBeta.jpg, id=36, 597.432pt x 483.7272pt>
-File: Figure07_betaModelWithPeaksVariableBeta.jpg Graphic file (type jpg)
-
-<use Figure07_betaModelWithPeaksVariableBeta.jpg>
-Package pdftex.def Info: Figure07_betaModelWithPeaksVariableBeta.jpg used on in
-put line 222.
-(pdftex.def)             Requested size: 298.71527pt x 241.863pt.
+(pdftex.def)             Requested size: 328.58861pt x 345.54802pt.
 
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.bbl" [5]) [6] [7 <D:/Ofir/Work/ENS/Polymer Chain Dyna
+ of TAD in CC experiments.bbl" [2]) [3] [4 <D:/Ofir/Work/ENS/Polymer Chain Dyna
 mics/Documents/(article) Random Loop Model to Explain the TAD in CC Experiments
-/Figure01_AnalysisOfTheExperimentalData.jpg>] [8 <D:/Ofir/Work/ENS/Polymer Chai
+/Figure01_AnalysisOfTheExperimentalData.jpg>] [5 <D:/Ofir/Work/ENS/Polymer Chai
 n Dynamics/Documents/(article) Random Loop Model to Explain the TAD in CC Exper
-iments/Figure02_LoopsCorrespondingToPeaks307Beads.jpg>] [9 <D:/Ofir/Work/ENS/Po
+iments/Figure02_LoopsCorrespondingToPeaks307Beads.jpg>] [6 <D:/Ofir/Work/ENS/Po
 lymer Chain Dynamics/Documents/(article) Random Loop Model to Explain the TAD i
-n CC Experiments/Figure03_OneTADWithTails0To30RandomLoops.jpg>] [10 <D:/Ofir/Wo
-rk/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain 
-the TAD in CC Experiments/Figure04_TwoTADs0To30RandomLoops307Beads.jpg>]
-[11 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mo
-del to Explain the TAD in CC Experiments/Figure05_betaModelWeights.jpg>]
-[12 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mo
-del to Explain the TAD in CC Experiments/Figure06_betaModelWithPeaks.jpg>]
-[13 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mo
-del to Explain the TAD in CC Experiments/Figure07_betaModelWithPeaksVariableBet
-a.jpg>]
+n CC Experiments/Figure03_OneTADWithTails0To30RandomLoops.jpg>] [7 <D:/Ofir/Wor
+k/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Model to Explain t
+he TAD in CC Experiments/Figure04_TwoTADs0To30RandomLoops307Beads.jpg>]
+[8 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
+el to Explain the TAD in CC Experiments/Figure05_betaModelWeights.jpg>]
+[9 <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/(article) Random Loop Mod
+el to Explain the TAD in CC Experiments/Figure06_betaModelWithPeaks.jpg>]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\(article) Random Loop Model
  to Explain the TAD in CC Experiments\random loop model explains the appearance
- of TAD in CC experiments.aux")
-
-LaTeX Warning: There were undefined references.
-
- ) 
+ of TAD in CC experiments.aux") ) 
 Here is how much of TeX's memory you used:
- 3113 strings out of 493921
- 49035 string characters out of 3144879
- 115877 words of memory out of 3000000
- 6376 multiletter control sequences out of 15000+200000
+ 3105 strings out of 493921
+ 48669 string characters out of 3144879
+ 114877 words of memory out of 3000000
+ 6369 multiletter control sequences out of 15000+200000
  12060 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,13n,38p,1547b,283s stack positions out of 5000i,500n,10000p,200000b,50000s
-<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
-<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><d
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><d:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><d:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/Program F
-iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><d:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><d:/Program Files (
-x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><d:/Program Files (x86)
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program Files (x86)/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmsy7.pfb><d:/Program Files (x86)/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmti12.pfb>
+ 36i,13n,38p,1303b,327s stack positions out of 5000i,500n,10000p,200000b,50000s
+<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmbx10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmbx12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmex10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmmi8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmr10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmr12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmr17.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmr7.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8
+.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.p
+fb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><d:
+/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
 Output written on "random loop model explains the appearance of TAD in CC exper
-iments.pdf" (13 pages, 7558836 bytes).
+iments.pdf" (9 pages, 6757913 bytes).
 PDF statistics:
- 124 PDF objects out of 1000 (max. 8388607)
+ 94 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

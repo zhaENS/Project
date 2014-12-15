@@ -348,7 +348,8 @@ classdef SimpleRouseFramework<handle
         end
         
         function FitMSD(obj)
-            % estimate the exponent value for the msd of each bead                        
+            % estimate the exponent value for the msd of each bead 
+            if isfield(obj.params,'calculateMSD')% support for older versions
             if obj.params.calculateMSD
                 f = fittype('A*x.^alpha');
 %                 f = @(alpha) sum(
@@ -362,6 +363,7 @@ classdef SimpleRouseFramework<handle
                     obj.fitResults.bead.fittedAForMSD(bIdx,rIdx) = fObj.A;
                 end
              end
+            end
             end
         end
         
@@ -497,7 +499,8 @@ classdef SimpleRouseFramework<handle
         end
         
         function DisplayFittedAlphasOfMSD(obj)
-            
+            if isfield(obj.params,'calculateMSD')% support for older version
+                if obj.params.calculateMDS
             for rIdx = 1:obj.params.numRounds
                 f = figure('Units','norm',...
                     'Name',['\alpha values experiment' num2str(rIdx)],...
@@ -523,8 +526,9 @@ classdef SimpleRouseFramework<handle
                      'LineStyle','-.',...
                      'Color','g',...
                      'Parent',a,...
-                     'DisplayName','mean \alpha')
-                
+                     'DisplayName','mean \alpha')                
+            end
+                end
             end
         end
         
