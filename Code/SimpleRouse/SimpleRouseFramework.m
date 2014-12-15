@@ -500,7 +500,7 @@ classdef SimpleRouseFramework<handle
         
         function DisplayFittedAlphasOfMSD(obj)
             if isfield(obj.params,'calculateMSD')% support for older version
-                if obj.params.calculateMDS
+                if obj.params.calculateMSD
             for rIdx = 1:obj.params.numRounds
                 f = figure('Units','norm',...
                     'Name',['\alpha values experiment' num2str(rIdx)],...

@@ -1,0 +1,35 @@
+<description>In this simulation we compare the encounter probability of a rouse ring with a spring constant=x/(N-1), against an open chain N=32 with spring const=x</description>
+<func> SetRecipeParams </func>
+obj.params.numRounds = 2;
+obj.params.beta      = 2;
+
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+<func> PreSimulationBatchActions </func>
+%Actions performed before each simulation batch
+if obj.round ==1
+% start with the ring model 
+obj.params.numBeads = 32
+obj.params.connectedBeads=[1 32]
+obj.params.springConst= -(obj.params.dimension*obj.params.diffusionConst/obj.params.b^2)*ones(obj.params.numBeads);
+% change the spring const between ends
+obj.params.springConst(1,32) = obj.params.springConst(1,1)/(obj.params.numBeads-1);
+obj.params.springConst(32,1) = obj.params.springConst(1,1)/(obj.params.numBeads-1);
+
+elseif obj.round==2
+% simulate a chain 
+obj.params.numBeads = 32;
+obj.params. connectedBeads=[];
+obj.params.springConst= -(obj.params.dimension*obj.params.diffusionConst/obj.params.b^2)*ones(obj.params.numBeads);
+end
+
+<func> PreRunActions </func>
+%Actions performed before each simulation run.
+%Note that SimpleRouse class is initialized before each simulation
+<func> PreStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostRunActions </func>
+%Actions performed sfter each simulation run.
+<func> PostSimulationBatchActions </func>
+%Actions performed before each simulation batch.
