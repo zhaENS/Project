@@ -1,0 +1,22 @@
+<description> Describe the simulation here... </description>
+<func> SetRecipeParams </func>
+%Insert parameters as obj.params.[paramsName]=[paramsValue]
+obj.params.numBeads = 64;
+obj.params.b = 1;
+obj.params.diffusionConst = 1; 
+obj.params.numSimulations = 10000;
+obj.params.connectedBeads=[1 64];
+
+<func> PreSimulationBatchActions </func>
+%Actions performed before each simulation batch
+<func> PreRunActions </func>
+%Actions performed before each simulation run.
+%Note that SimpleRouse class is initialized before each simulation
+<func> PreStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostStepActions </func>
+%Actions performed before each step of the Rouse chain.
+<func> PostRunActions </func>
+%Actions performed sfter each simulation run.
+<func> PostSimulationBatchActions </func>
+%Actions performed before each simulation batch.

@@ -35,3 +35,6 @@ for s = 1:N
         icDelta(s,t) = (N/(1-N) + sum(w(s-1,(1:N-1),N).*w(t-1,(1:N-1),N)))/N;
     end
 end
+
+
+% show the pdf 
