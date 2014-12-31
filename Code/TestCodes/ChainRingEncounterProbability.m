@@ -2,8 +2,8 @@ function ChainRingEncounterProbability(x,m,t,nChain,nRing,b)
 % calculate the encounter probability between bead m of a Rouse chain of
 % nChain beads, and the t bead in a Rouse ring of nRing beads. connected to the
 % nChain bead of the chain. 
-varChain =@(m,nChain,b)((b^2)/numel(x))*abs(nChain-m); % variance of the chain 
-varRing = @(t,nRing,b)((b^2)/numel(x))*((t).*(nRing-(t)));% variance of the ring
+varChain =@(m,nChain,b)((b^2))*abs(nChain-m); % variance of the chain 
+varRing = @(t,nRing,b)((b^2))*((t).*(nRing-(t)));% variance of the ring
 
 % pdf of the chain 
 fChain=@(x,m,nChain,b) ((1./(2*pi*varChain(m,nChain,b))).^(numel(x)/2)).*exp(-0.5*(x*x')./varChain(m,nChain,b));
@@ -14,9 +14,9 @@ fRing = @(x,t,nRing,b) ((1./(2*pi*varRing(t,nRing,b))).^(numel(x)/2)).*exp(-0.5*
 f = @(m,t,nChain,nRing,b)(varChain(m,nChain,b)+varRing(t,nRing,b))./(2*varChain(m,nChain,b).*varRing(t,nRing,b));
 g = @(x,m,nChain,b) (x)./varChain(m,nChain,b);
 h = @(x,m,nChain,b) -(x*x')./(2*varChain(m,nChain,b));
-k = @(x,m,t,nChain,nRing,b) (1./((4*pi^2).*varChain(m,nChain,b).*varRing(t,nRing,b))).^(numel(x)/2);
+k = @(x,m,t,nChain,nRing,b) (numel(x)./((4*pi^2).*varChain(m,nChain,b).*varRing(t,nRing,b))).^(1/2);
 
-fRC= @(x,m,t,nChain,nRing,b) k(x,m,t,nChain,nRing,b).*sqrt(pi./f(m,t,nChain,nRing,b)).*...
+fRC= @(x,m,t,nChain,nRing,b) ((k(x,m,t,nChain,nRing,b).*sqrt(pi./f(m,t,nChain,nRing,b))).^numel(x)).*...
                             exp(((g(x,m,nChain,b)*g(x,m,nChain,b)')./(4*f(m,t,nChain,nRing,b))) +h(x,m,nChain,b));
                         
 % % pdf of the chain-ring encounter 
@@ -47,3 +47,4 @@ line('XData',1:nChain-1,...
      'Marker','.',...
      'DisplayName','Chain',...
      'Parent',a)
+ 
