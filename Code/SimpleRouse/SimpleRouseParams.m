@@ -11,7 +11,7 @@ rouseParams.encounterDist   = rouseParams.b/5;
 rouseParams.dt              = 0.1*(rouseParams.b^2)/(12*rouseParams.diffusionConst);
 rouseParams.noiseSTD        = sqrt(2*rouseParams.diffusionConst*rouseParams.dt);
 rouseParams.noiseCycle      = 10000; % after how many steps we need to recalculate noise [unused]
-rouseParams.springConst     = -(rouseParams.dimension*rouseParams.diffusionConst/rouseParams.b^2)*ones(rouseParams.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
+rouseParams.springConst     = -(rouseParams.dimension*rouseParams.diffusionConst*rouseParams.dt/rouseParams.b^2)*ones(rouseParams.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
 
 % set spring constant for the connected beads
 for cIdx = 1:size(rouseParams.connectedBeads,1)

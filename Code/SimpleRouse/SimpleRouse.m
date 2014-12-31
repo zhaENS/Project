@@ -85,14 +85,8 @@ classdef SimpleRouse<handle
             end
             R(obj.params.stiffConnectors,:) = 0;
             R = R-diag(sum(R,2));
-            
-% %             if half of the matrix are zeroes, switch to sparse
-% % %             representation
-%             if obj.params.numBeads>20;% numel(find(R==0))/obj.params.numBeads^2>0.5
-%               obj.rouseMatrix = sparse(obj.params.springConst*R);
-%             else
-              obj.rouseMatrix = (R);
-%             end
+            obj.rouseMatrix = (R);
+
         end
         
         function GetInitialChainPosition(obj)
@@ -169,7 +163,7 @@ classdef SimpleRouse<handle
 %                 obj.GetNoise;
                 obj.GetBeadsDist;
 %                 obj.LinkCloseBeads
-                obj.position.cur = -(obj.params.dimension*obj.params.diffusionConst*obj.params.dt/obj.params.b^2)*obj.rouseMatrix*obj.position.prev+...
+                obj.position.cur =  -obj.rouseMatrix*obj.position.prev+...
                                      obj.position.prev+...                                     
                                      randn(obj.params.numBeads,obj.params.dimension)*obj.params.noiseSTD;
                 ms = [obj.position.cur(:,1)-obj.savedPosition(:,1,1),...
