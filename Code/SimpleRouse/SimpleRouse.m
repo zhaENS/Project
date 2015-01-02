@@ -22,7 +22,7 @@ classdef SimpleRouse<handle
         
         function obj = SimpleRouse(params)
             %%% Class constructor
-%             obj.SetDefaultParams;
+            obj.SetDefaultParams;
             if exist('params','var')
                 f = fieldnames(params);
                 for fIdx = 1:numel(f)
@@ -36,6 +36,14 @@ classdef SimpleRouse<handle
                 warning('params.saveBeadDist is set to current')
                 obj.params.saveBeadDist = 'current';
             end
+            % recalculate params
+            d                           = sqrt(2*obj.params.diffusionConst*obj.params.dt);
+            numSteps                    = (0.015)*(obj.params.b^2)/(6*(d^2)*sin(pi/(2*obj.params.numBeads))^2); % n times the number of steps until relaxation of the chain 
+            obj.params.numSteps        = round(numSteps);
+%             obj.params.noiseSTD        = sqrt(2*obj.params.diffusionConst*obj.params.dt);
+            obj.params.encounterDist   = obj.params.b/2;
+            obj.params.springConst     = -( obj.params.dimension* obj.params.diffusionConst* obj.params.dt/ obj.params.b^2)*ones( obj.params.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
+
         end
         
         function SetDefaultParams(obj)
@@ -56,6 +64,8 @@ classdef SimpleRouse<handle
             obj.params.recordPath      = false;% save bead positions throughout the simulation (used for later display)
             obj.params.noiseCycle      = 10000; % noise terms will be generated every 1000 steps
             obj.params.saveBeadDist    = 'last';
+            obj.params.springConst     = -( obj.params.dimension* obj.params.diffusionConst* obj.params.dt/ obj.params.b^2)*ones( obj.params.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
+
         end
         
         function Initialize(obj)

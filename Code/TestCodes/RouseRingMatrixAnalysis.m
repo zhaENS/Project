@@ -37,4 +37,15 @@ for s = 1:N
 end
 
 
-% show the pdf 
+% show the pdf for each bead 
+% x = zeros(1,N);
+% x(1,1) = 1;
+f=@(x,N,detCdelta,icDelta)  (1./((2*pi)^numel(x) * detCdelta))^(1/2) *exp(-0.5*(x*icDelta*x'));
+figure, hold on
+for i=1:10
+ x = ones(1,N)*i;
+plot(i,real(f(x,N,detCdelta,icDelta)),'.')
+end
+
+
+

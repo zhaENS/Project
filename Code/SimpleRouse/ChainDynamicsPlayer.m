@@ -25,7 +25,8 @@ classdef ChainDynamicsPlayer<handle
                 obj.params.numBeads  = rouseChain.params.numBeads;
                 obj.params.connectorRadius = 4;
                 obj.params.connectorColor   = [0.1,0.8,0.1];
-                obj.params.beadRadius = 0.1;
+                obj.params.connectedBeadsConnectorColor = [0.8,0.3,0.1];
+                obj.params.beadRadius = 0.01;
                 obj.params.beadColor  = [0.1 0.2, 0.7];
                 obj.params.affineBeadColor  = [0.1, 0.5 0.6];
                 
@@ -94,7 +95,9 @@ classdef ChainDynamicsPlayer<handle
                                                         'Parent',obj.handles.graphical.mainAxes);
             end
             
-            
+            % mark start and end beads 
+            set(obj.handles.graphical.beads(1),'FaceColor','r');
+            set(obj.handles.graphical.beads(end),'FaceColor','m');
             
             obj.handles.graphical.chain = line('XData',obj.chain(:,1,1),...
                 'YData',obj.chain(:,2,1),...
@@ -113,7 +116,10 @@ classdef ChainDynamicsPlayer<handle
 %                     'LineStyle','none',...
 %                     'MarkerFaceColor',rand(1,3));
 %             end
+            % create the connectors between the connnected beads 
             
+           
+                
             for cIdx = 1:size(obj.connectedBeads,1)
                 obj.handles.graphicsl.connectedBeads(cIdx) = line(...
                     'XData',[obj.chain(obj.connectedBeads(cIdx,1),1,1) obj.chain(obj.connectedBeads(cIdx,2),1,1)],...
@@ -122,7 +128,7 @@ classdef ChainDynamicsPlayer<handle
                     'Parent',obj.handles.graphical.mainAxes,...
                     'Marker','none',...
                     'LineStyle','-',...
-                    'Color',obj.params.connectorColor,...
+                    'Color',obj.params.connectedBeadsConnectorColor,...
                     'LineWidth',obj.params.connectorRadius);
             end
             

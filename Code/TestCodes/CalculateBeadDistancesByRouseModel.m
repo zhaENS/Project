@@ -11,6 +11,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         beadsToAnalyze  % for what beads to show the connectivity graphs
         graph
         model
+        chain           % the Rouse chain class
         fitOpt
         dataFolder
         dataFileName
@@ -22,13 +23,13 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end
         
         function SetDefaultParams(obj)
-            obj.beadRange      = struct('bead1',1:107,...
-                                        'bead2',1:107);
+            obj.beadRange      = struct('bead1',1:307,...
+                                        'bead2',1:307);
             obj.smoothingSpan  = 5;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
             obj.numDistances   = 20;       % for how many distances to perform analysis for connectivity
             obj.distToAnalyze  = [1];       % can be a vector of integers, for what disance to show the analysis
-            obj.beadsToAnalyze = 5;   % for what beads to show the connectivity graphs
+            obj.beadsToAnalyze = 10;   % for what beads to show the connectivity graphs
             obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)');
             obj.fitOpt         = fitoptions(obj.model);
             set(obj.fitOpt,'Lower',0,'Upper',1.5,'StartPoint',1,'Robust','off');
@@ -70,17 +71,18 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     inds        = find(~isnan(observedProb));
 %                      [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
                     beta(bIdx)  = 1.5;%fitStruct.beta;
-                    k           =  obj.model(beta(bIdx),inds);
+                    modelValues =  obj.model(beta(bIdx),inds);
+                    
                     % normalize to match the nearest neighbor encounter probability
-                    if mod(bIdx,50)==0
-                        obj.PlotBeadClusteringByDistance(observedProb,inds,k);
+                    if mod(bIdx,300)==0
+                        obj.PlotBeadClusteringByDistance(observedProb,inds,modelValues);
                         title(num2str(bIdx))
                     end
                     % Calculate the histogram
-                    above{bIdx} = find(observedProb>k(1));
+                    above{bIdx} = find(observedProb>modelValues(1));
                     below{bIdx} = [];
-                    for kIdx = 1:numel(k)-1
-                        dists{bIdx,kIdx} = find(observedProb>k(kIdx+1) & observedProb<=k(kIdx));
+                    for kIdx = 1:numel(modelValues)-1
+                        dists{bIdx,kIdx} = find(observedProb>modelValues(kIdx+1) & observedProb<=modelValues(kIdx));
                         below{bIdx,kIdx} = dists{bIdx,kIdx}((dists{bIdx,kIdx}<kIdx));                                                
                         % add the terms "above" to the dist 1 neighbors
                         histK{bIdx,kIdx} = numel(dists{bIdx,kIdx});
@@ -107,6 +109,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.connectivityMat = eMat;
             obj.DisplayConnectivityGraph(eMat,above,obj.distToAnalyze,obj.beadsToAnalyze);
             
+            % from the graph create a chain 
+            obj.CreateChainFromConnectivityGraph;
         end
         
         function GetDistanceDistribution(obj,dist)
@@ -165,6 +169,23 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 end
             end
             view(obj.graph);
+            
+        end
+        
+        function CreateChainFromConnectivityGraph(obj)
+            connectedBeads= obj.connectivityMat;
+            % remove the trivial connections on the super diagonal        
+            connectedBeads= connectedBeads-diag(diag(connectedBeads,1),1);
+            [r,c] = find(connectedBeads);    
+            sr.params.connectedBeads = [r, c];
+            sr.params.noiseSTD       = 0;
+            sr.params.recordPath     = true;
+            sr.params.numBeads       = numel(obj.beadRange.bead1);
+            sr.params.numSteps       = 1000;
+            sr.params.dimension      = 3;            
+            obj.chain = SimpleRouse(sr.params);
+            obj.chain.Initialize;
+            obj.chain.Run;
             
         end
         
