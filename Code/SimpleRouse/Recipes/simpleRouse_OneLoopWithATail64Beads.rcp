@@ -2,7 +2,7 @@
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
 obj.params.connectedBeads = [9,64];
-obj.params.numSimulations = 2000;
+obj.params.numSimulations = 20000;
 obj.params.b = sqrt(3);
 obj.params.difussionConst =1;
 
