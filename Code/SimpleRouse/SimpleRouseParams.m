@@ -20,7 +20,7 @@ for cIdx = 1:size(rouseParams.connectedBeads,1)
 end
 
 d                           = sqrt(2*rouseParams.diffusionConst*rouseParams.dt);
-numSteps                    = (0.01)*(rouseParams.b^2)/(6*(d^2)*sin(pi/(2*rouseParams.numBeads))^2); % n times the number of steps until relaxation of the chain 
+numSteps                    = (0.02)*(rouseParams.b^2)/(6*(d^2)*sin(pi/(2*rouseParams.numBeads))^2); % n times the number of steps until relaxation of the chain 
 rouseParams.numSteps        = round(numSteps);
 rouseParams.stiffConnectors = [];    % fixed bead indices pairs for the number of loops
 rouseParams.affineBeadsNum  = [];    % a fixed pair indices of affine beads
