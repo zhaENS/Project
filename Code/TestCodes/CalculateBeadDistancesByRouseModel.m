@@ -25,7 +25,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function SetDefaultParams(obj)
             obj.beadRange      = struct('bead1',1:307,...
                                         'bead2',1:307);
-            obj.smoothingSpan  = 5;
+            obj.smoothingSpan  = 3;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
             obj.numDistances   = 20;       % for how many distances to perform analysis for connectivity
             obj.distToAnalyze  = [1];       % can be a vector of integers, for what disance to show the analysis
@@ -37,13 +37,17 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.dataFileName   = 'savedAnalysisTADDAndE';
         end
         
-        function Initialize(obj)
+        function Initialize(obj,encounterMat)
             obj.SetDefaultParams;
+            if ~exist('encounterMat','var')
             load(fullfile(obj.dataFolder,obj.dataFileName))
             [~,~,obj.encounterMat,~] = a.ProcessEncounters(obj.beadRange,'average');
             % Truncate the encounter matrix
             obj.encounterMat = obj.encounterMat(obj.beadRange.bead1,obj.beadRange.bead2(1:(end-1))-obj.beadRange.bead1(1)+1);
-            
+            else
+                obj.encounterMat = encounterMat;
+            end
+                
             % preallocations
             above = cell(1,numel(obj.beadRange.bead1));% save indices of distances falling above the nearest neighor encounter probability
             dists = cell(size(obj.encounterMat,1),size(obj.encounterMat,2));
@@ -69,8 +73,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % Divide the probabilites into distances according to a division given by the
                     % expected model
                     inds        = find(~isnan(observedProb));
-%                      [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
-                    beta(bIdx)  = 1.5;%fitStruct.beta;
+                     [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
+                    beta(bIdx)  = fitStruct.beta;
                     modelValues =  obj.model(beta(bIdx),inds);
                     
                     % normalize to match the nearest neighbor encounter probability
@@ -181,7 +185,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             sr.params.noiseSTD       = 0;
             sr.params.recordPath     = true;
             sr.params.numBeads       = numel(obj.beadRange.bead1);
-            sr.params.numSteps       = 1000;
+            sr.params.numSteps       = 2000;
             sr.params.dimension      = 3;            
             obj.chain = SimpleRouse(sr.params);
             obj.chain.Initialize;

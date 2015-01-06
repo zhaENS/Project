@@ -40,16 +40,20 @@ classdef SimpleRouseFramework<handle
             % set input parameters
             obj.params  = rouseParams;
             obj.round   = 0; % start with zero index, the values increases in PreRoundActions function
-
             
-            % Initialize sequence
+            % read recipe file 
             obj.ReadRecipeFile;   % read recipe file 
             obj.SetRecipeParams;  % load the parameters defined in the recipe file 
+                        
+            % Initialize chain classes            
             if obj.params.beta~=2
-                obj.polymerModel = 'betaChain';
+                obj.polymerModel = 'betaChain';  
+%                 obj.handles.classes.chain=BetaPolymer(obj.params);
             else 
                 obj.polymerModel = 'rouseChain';
-            end
+%                 obj.handles.classes.chain=SimpleRouse(obj.params);
+            end                        
+            
             obj.DataPreallocation % preallocate data structures           
             obj.SetFitOptions;    % set fit options
             
@@ -128,11 +132,13 @@ classdef SimpleRouseFramework<handle
             eval(obj.recipe.PreRunActions);            
             % initialize a new chain             
             if strcmpi(obj.polymerModel,'rouseChain')
+                
                 obj.handles.classes.chain = SimpleRouse(obj.params);           
             else 
                 obj.handles.classes.chain = BetaPolymer(obj.params);
             end
-              obj.handles.classes.chain.Initialize              
+                obj.handles.classes.chain.Initialize; % reset the chain to initial values
+                
         end
         
         function PreStepActions(obj)
@@ -487,7 +493,7 @@ classdef SimpleRouseFramework<handle
             
             for rIdx = 1:obj.params.numRounds
                 figure('Name',['Experiment',num2str(rIdx)],'FileName',['EncounterHistogramExperiment',num2str(rIdx)]);
-                windowSize = 10;
+                windowSize = 1;
                 imagesc(medfilt2(obj.encounterHistogram(:,:,rIdx),[windowSize,windowSize])), colormap hot
                 title(sprintf('%s%d','Experiment ', rIdx),'FontSize',40); 
                 xlabel('Bead number','FontSize',40);

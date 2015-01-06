@@ -230,7 +230,15 @@ classdef BetaPolymer<handle
         end
         
         function Reset(obj)
-            obj.step = 1;
+            obj.params.SetDefaultParams;% revert params to default values
+            obj.step           = 1;
+            obj.position       = [];
+            obj.savedPosition  = [];
+            obj.noise          = [];
+            obj.beadDist       = [];
+            obj.simulationTime = [];
+            obj.encounterHist  = [];
+            obj.GetInitialChainPosition;
         end
         
         function CreateNoise(obj)
