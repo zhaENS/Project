@@ -26,7 +26,7 @@ classdef ChainDynamicsPlayer<handle
                 obj.params.connectorRadius = 4;
                 obj.params.connectorColor   = [0.1,0.8,0.1];
                 obj.params.connectedBeadsConnectorColor = [0.8,0.3,0.1];
-                obj.params.beadRadius = 0.01;
+                obj.params.beadRadius = 0.2;
                 obj.params.beadColor  = [0.1 0.2, 0.7];
                 obj.params.affineBeadColor  = [0.1, 0.5 0.6];
                 
