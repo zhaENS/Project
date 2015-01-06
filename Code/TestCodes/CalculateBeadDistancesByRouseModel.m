@@ -25,15 +25,15 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function SetDefaultParams(obj)
             obj.beadRange      = struct('bead1',1:307,...
                                         'bead2',1:307);
-            obj.smoothingSpan  = 3;
+            obj.smoothingSpan  = 5;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
-            obj.numDistances   = 20;       % for how many distances to perform analysis for connectivity
-            obj.distToAnalyze  = [1];       % can be a vector of integers, for what disance to show the analysis
-            obj.beadsToAnalyze = 10;   % for what beads to show the connectivity graphs
+            obj.numDistances   = 1;       % for how many distances to perform analysis for connectivity
+            obj.distToAnalyze  = [1];     % can be a vector of integers, for what disance to show the analysis
+            obj.beadsToAnalyze = 10;      % for what beads to show the connectivity graphs
             obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)');
             obj.fitOpt         = fitoptions(obj.model);
             set(obj.fitOpt,'Lower',0,'Upper',1.5,'StartPoint',1,'Robust','off');
-            obj.dataFolder     = 'D:\Ofir\Work\ENS\Polymer Chain Dynamics\Code\ExperimentDataAnalysis';
+            obj.dataFolder     = fullfile(pwd,'ExperimentDataAnalysis');
             obj.dataFileName   = 'savedAnalysisTADDAndE';
         end
         
@@ -45,7 +45,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             % Truncate the encounter matrix
             obj.encounterMat = obj.encounterMat(obj.beadRange.bead1,obj.beadRange.bead2(1:(end-1))-obj.beadRange.bead1(1)+1);
             else
-                obj.encounterMat = encounterMat;
+                obj.encounterMat = encounterMat;                
             end
                 
             % preallocations
@@ -61,24 +61,26 @@ classdef CalculateBeadDistancesByRouseModel<handle
             expectedSignal = obj.MeanIgnoreNaN(obj.encounterMat);
             expectedSignal  = obj.SmoothSignal(expectedSignal',obj.smoothingSpan,obj.smoothingMethod);
             expectedSignal = expectedSignal./sum(expectedSignal);
-             [fitStruct] = fit((1:numel(expectedSignal))',expectedSignal,obj.model,obj.fitOpt);
+             [fitStructModel] = fit((1:numel(expectedSignal))',expectedSignal,obj.model,obj.fitOpt);
             for bIdx = 1:size(obj.encounterMat,1);
                 
                 observedProb = obj.SmoothSignal(obj.encounterMat(bIdx,~isnan(obj.encounterMat(bIdx,:))),obj.smoothingSpan,obj.smoothingMethod)';
                 
                 if ~all(isnan(observedProb))
                     
-                    observedProb = observedProb/sum(observedProb);
-                    
+                    observedProb   = observedProb/sum(observedProb);
+%                     expectedSignal = expectedSignal*sum(expectedSignal)/sum(observedProb);
                     % Divide the probabilites into distances according to a division given by the
                     % expected model
                     inds        = find(~isnan(observedProb));
-                     [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
+                    [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
                     beta(bIdx)  = fitStruct.beta;
-                    modelValues =  obj.model(beta(bIdx),inds);
-                    
+                    modelValues = obj.model(beta(bIdx),inds);
+                    modelValues = modelValues./modelValues(1) *max(observedProb(1:10));
+%                     observedProb= observedProb*modelValues(1)/observedProb(1);
+
                     % normalize to match the nearest neighbor encounter probability
-                    if mod(bIdx,300)==0
+                    if mod(bIdx,400)==0
                         obj.PlotBeadClusteringByDistance(observedProb,inds,modelValues);
                         title(num2str(bIdx))
                     end
@@ -111,10 +113,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
             
             obj.connectivityMat = eMat;
-            obj.DisplayConnectivityGraph(eMat,above,obj.distToAnalyze,obj.beadsToAnalyze);
+%             obj.DisplayConnectivityGraph(eMat,above,obj.distToAnalyze,obj.beadsToAnalyze);
             
             % from the graph create a chain 
             obj.CreateChainFromConnectivityGraph;
+            obj.DisplayChain;
         end
         
         function GetDistanceDistribution(obj,dist)
@@ -179,18 +182,27 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function CreateChainFromConnectivityGraph(obj)
             connectedBeads= obj.connectivityMat;
             % remove the trivial connections on the super diagonal        
-            connectedBeads= connectedBeads-diag(diag(connectedBeads,1),1);
+            connectedBeads= triu(connectedBeads-diag(diag(connectedBeads,1),1));          
             [r,c] = find(connectedBeads);    
-            sr.params.connectedBeads = [r, c];
-            sr.params.noiseSTD       = 0;
-            sr.params.recordPath     = true;
-            sr.params.numBeads       = numel(obj.beadRange.bead1);
-            sr.params.numSteps       = 2000;
-            sr.params.dimension      = 3;            
-            obj.chain = SimpleRouse(sr.params);
+            sr = SimpleRouseParams;
+            sr.connectedBeads = [r,c];
+           
+            sr.recordPath     = true;
+            sr.numBeads       = numel(obj.beadRange.bead1);
+             sr.dt=1e-5;
+            sr.numSteps       = 500;
+            sr.noiseSTD       = 0.0;
+            sr.dimension      = 3;      
+            
+            obj.chain = SimpleRouse(sr);
             obj.chain.Initialize;
             obj.chain.Run;
             
+        end
+        
+        function DisplayChain(obj)
+            % display the connected chain 
+            ChainDynamicsPlayer(obj.chain);
         end
         
         function NodeCallback(obj,varargin)

@@ -23,7 +23,7 @@ classdef ChainDynamicsPlayer<handle
                 obj.params.dimension = rouseChain.params.dimension;
                 obj.params.numSteps  = rouseChain.step;
                 obj.params.numBeads  = rouseChain.params.numBeads;
-                obj.params.connectorRadius = 4;
+                obj.params.connectorRadius = 3;
                 obj.params.connectorColor   = [0.1,0.8,0.1];
                 obj.params.connectedBeadsConnectorColor = [0.8,0.3,0.1];
                 obj.params.beadRadius = 0.2;
