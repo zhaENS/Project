@@ -14,6 +14,6 @@
 \beamer@subsubsectionintoc {1}{5}{2}{Random loops model}{14}{0}{1}
 \beamer@subsectionintoc {1}{6}{Summary}{17}{0}{1}
 \beamer@sectionintoc {2}{Part II - Reconstruction}{19}{0}{2}
-\beamer@subsectionintoc {2}{1}{The encounter probability}{20}{0}{2}
+\beamer@subsectionintoc {2}{1}{The theoretical model}{20}{0}{2}
 \beamer@subsectionintoc {2}{2}{Validation}{25}{0}{2}
 \beamer@subsectionintoc {2}{3}{reconstruction of the Experimental data}{26}{0}{2}
