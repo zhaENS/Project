@@ -9,7 +9,7 @@
 
 
 
-\title{Random loop model describing the Topologically Associating Domains, application to chromatin structure}
+\title{Reconstruction of polymer structure from HiC experiments. Random loop model describing the Topologically Associating Domains, application to chromatin structure}
 \author{Ofir Shukron\\
 David Holcman\\
 Group of applied Mathematics and computational Biology\\
@@ -282,18 +282,15 @@ We report the values of $\beta$ for each bead in each case.
 \end{frame}
 
 \section{Part II - Reconstruction}\label{section_partII} 
-\begin{frame}
-Reconstruction
-\end{frame}
-
-\subsection{Introduction}
-\begin{frame}{Introduction}
+\begin{frame}{Part II Reconstruction}
 \begin{enumerate}
 \item How do we go from encounter frequencies to structure?
-\item 
+\item The encounter data holds a lot of spatial information 
+\item studying prominent features of the structure 
 \end{enumerate}
 \end{frame}
-\subsubsection{The encounter probability}\label{subsubsection_theRouseEncounterProbability}
+
+\subsection{The theoretical model}\label{subsubsection_theRouseEncounterProbability}
 \begin{frame}{The encounter probability in the Rouse chain}
 We begin by employing a Rouse chain of $N_c$ beads to represent the chromatin.
 
@@ -352,10 +349,6 @@ We can separate the the structures.
 The encounter probability behaves as that of the chain for $1\leq n \leq N_c$ and as a ring for $0\leq m \leq N_r$
 \end{frame}
 
-\begin{frame}{Decomposition of the ring into chains}
-The encounter probability in a chain can be decomposed as the sum of two weighted encounter probabilities of chains
-\end{frame}
-
 \begin{frame}{From encounter probabilities to distances}
 Beads with equal encounter probability are located equidistant along the chain from a reference bead. 
 The distance is the shortest one along the graph representing the polymer.
@@ -386,16 +379,43 @@ Using these two structure we'll invert the encounter probability signals from th
 \end{figure}
 \end{itemize}
 \end{frame}
-
+\subsection{Validation}
 \begin{frame}{Validation}
-As an example, we have simulated a  chain of 128 beads with 3 connected loops 
+As an example, we have simulated a  chain of 128 beads with 3 connected loops.connected beads pairs [8 64; 8 120; 38 92; 64 120]. 
 \begin{figure}
-\includegraphics[scale=0.15]{polymerModelWithCompositeStructure}
+\includegraphics[scale=0.25]{reconstructionResultCompositeStructure}
+\end{figure}
+The algorithm captures perfectly the prominent features. 
+
+Some off diagonal links were found, which can be eliminated by adjusting smoothing of the encounter signal 
+
+\end{frame}
+\subsection{reconstruction of the Experimental data}
+\begin{frame}{Reconstruction of TAD D and E}
+\begin{itemize}
+\item we have tested our method on the experimental data of TAD D and E
+\item Prior to the reconstruction we smooth the noisy experimental data
+\item For very noisy data we suggest using the curves obtained by fitting $\beta$ values for the transformation of probabilities to distances. 
+\item in depth analysis of the resulting structure is underway 
+\end{itemize}
+\begin{figure}
+\includegraphics[scale=0.2]{reconstructionTADDAndE}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Reconstruction of TAD D and E}
-The method was tested on the experimental data 
+
+\begin{frame}{Summary}
+\begin{enumerate}
+\item We have presented a simple method to transform the encounter probability into polymer structure. 
+\item The structure is obtained in seconds
+\item Prominent features of the structure can be studied 
+\item Accuracy is limited by the HiC resolution 
+\item simulation to examine conditional encounter probabilities in non-equilibrium states can be performed given the reconstructed structure
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+Thank you
 \end{frame}
 
 \end{document}
