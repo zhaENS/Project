@@ -25,11 +25,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function SetDefaultParams(obj)
             obj.beadRange      = struct('bead1',1:307,...
                                         'bead2',1:307);
-            obj.smoothingSpan  = 5;
+            obj.smoothingSpan  = 10;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
             obj.numDistances   = 1;       % for how many distances to perform analysis for connectivity
             obj.distToAnalyze  = [1];     % can be a vector of integers, for what disance to show the analysis
-            obj.beadsToAnalyze = 10;      % for what beads to show the connectivity graphs
+            obj.beadsToAnalyze = 8;      % for what beads to show the connectivity graphs
             obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)');
             obj.fitOpt         = fitoptions(obj.model);
             set(obj.fitOpt,'Lower',0,'Upper',1.5,'StartPoint',1,'Robust','off');
@@ -80,7 +80,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
 %                     observedProb= observedProb*modelValues(1)/observedProb(1);
 
                     % normalize to match the nearest neighbor encounter probability
-                    if mod(bIdx,400)==0
+                    if mod(bIdx,408)==0
                         obj.PlotBeadClusteringByDistance(observedProb,inds,modelValues);
                         title(num2str(bIdx))
                     end
@@ -183,17 +183,19 @@ classdef CalculateBeadDistancesByRouseModel<handle
             connectedBeads= obj.connectivityMat;
             % remove the trivial connections on the super diagonal        
             connectedBeads= triu(connectedBeads-diag(diag(connectedBeads,1),1));          
-            [r,c] = find(connectedBeads);    
-            sr = SimpleRouseParams;
-            sr.connectedBeads = [r,c];
-           
+            [r,c]       = find(connectedBeads);    
+            sr          = SimpleRouseParams;
+            sr.numBeads = size(obj.encounterMat,1);                       
             sr.recordPath     = true;
             sr.numBeads       = numel(obj.beadRange.bead1);
-             sr.dt=1e-5;
-            sr.numSteps       = 500;
-            sr.noiseSTD       = 0.0;
+            sr.dt             = 1e-3;
+            sr.numSteps       = 2000;
+            sr.noiseSTD       = 0.00;
             sr.dimension      = 3;      
-            
+            sr.b              = sqrt(3);
+            sr.diffusionConst = 1;
+%             sr.springConst     = -(sr.dimension* sr.diffusionConst* sr.dt/ sr.b^2)*ones( sr.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
+            sr.connectedBeads = [r c];
             obj.chain = SimpleRouse(sr);
             obj.chain.Initialize;
             obj.chain.Run;

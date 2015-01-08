@@ -1,10 +1,6 @@
 <description> Simulating a 64 bead chain with a loop between bead 8 and 64. The simulation is made to test the encounter probability profile of a chain and a ring </description>
 <func> SetRecipeParams </func>
 %Insert parameters as obj.params.[paramsName]=[paramsValue]
-obj.params.connectedBeads = [9,64];
-obj.params.numSimulations = 20000;
-obj.params.b = sqrt(3);
-obj.params.difussionConst =1;
 
 <func> PreSimulationBatchActions </func>
 %Actions performed before each simulation batch
