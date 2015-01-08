@@ -306,7 +306,7 @@ $\left(\frac{3}{2\pi b^2 |m-n|}\right)^{3/2}$.
 
 To match the HiC signals, we normalize by dividing by 
 \begin{equation*}
-\sum_{t=1}^{N_C-1}\left(\frac{3}{2\pi b^2 |N-t|}\right)^{3/2}=
+\sum_{t=1}^{N_C-1}\left(\frac{3}{2\pi b^2 |N-t|}\right)^{3/2}
 \end{equation*}
 Therefore, the encounter probability does not depend on $b^2$ 
 \begin{equation*}
@@ -328,7 +328,7 @@ P(r_m)=\left(\frac{3N}{2\pi b^2 m(N_r-m)} \right)^{3/2}\exp\left(-\frac{3N_rr_mr
 
 Setting $r_m=\vec{0}$ and normalizing, we get 
 \begin{equation*}
-P(r_m=\vec{0})=\frac{m(N_r-m)^{-3/2}}{\sum_{t=1}^{N_r-1}(t(N_r-t))^{-3/2}}
+P(r_m=\vec{0})=\frac{(m(N_r-m))^{-3/2}}{\sum_{t=1}^{N_r-1}(t(N_r-t))^{-3/2}}
 \end{equation*}
 which also does not depend on $b^2$ 
 \begin{figure}[H]
@@ -339,9 +339,9 @@ which also does not depend on $b^2$
 \begin{frame}{The encoutner probability in composite structures}
 The pdf of the vector between bead $n$ of the chain and bead $m$ of the ring is calculated as the sum of the two random vectors $R_{nN_c}$ and $r_m$. 
 
-The calculation can be done using the convolution of the two pdfs, to give 
+The calculation can be done using the convolution of the two pdfs, to give
 \begin{equation*}
-P(r_m+R_{nN_c}=0)=\left(\frac{3}{2\pi b^2(|N_c-n|+m(N_r-m))}\right)^{3/2}/S
+P(r_m+R_{nN_c}=0)=\left(\frac{3}{2\pi b^2(|N_c-n|+m(N_r-m)/N_r)}\right)^{3/2}/S
 \end{equation*}
 $1\leq n \leq N_c \qquad 0\leq m \leq N_r$ and $S$ the normalization constant 
 \begin{figure}
@@ -350,6 +350,10 @@ $1\leq n \leq N_c \qquad 0\leq m \leq N_r$ and $S$ the normalization constant
 \end{figure}
 We can separate the the structures. 
 The encounter probability behaves as that of the chain for $1\leq n \leq N_c$ and as a ring for $0\leq m \leq N_r$
+\end{frame}
+
+\begin{frame}{Decomposition of the ring into chains}
+The encounter probability in a chain can be decomposed as the sum of two weighted encounter probabilities of chains
 \end{frame}
 
 \begin{frame}{From encounter probabilities to distances}
@@ -374,17 +378,20 @@ Using these two structure we'll invert the encounter probability signals from th
 
 \begin{frame}{Interpretation of the encounter signal using chains and rings}
 \begin{itemize}
-\item In theory, we can decompose the HiC signal into regions where the polymer takes a ring or linear chain structure
-\item The question is how to distinguish between them?
-
-\end{itemize}
-As an example, we have simulated a complex structure of the following form 
-
-\begin{figure}
-\includegraphics[scale=0.2]{polymerModelWithCompositeStructure}
+\item we can decompose the HiC signal into regions where the polymer takes a ring or linear chain structure
+\item The question is how to find these regions?
+\item the positions of the peaks of the signal discloses the model to use.
+\begin{figure}[H]
+\includegraphics[scale=0.2]{polymerReconstructionTheoreticalApproach}
 \end{figure}
-
-
+\end{itemize}
 \end{frame}
 
+\begin{frame}{Validation}
+As an example, we have simulated a complex structure of the following form 
+\begin{figure}
+\includegraphics[scale=0.15]{polymerModelWithCompositeStructure}
+\end{figure}
+
+\end{frame}
 \end{document}
