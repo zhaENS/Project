@@ -28,8 +28,9 @@ xlabel(a,'Distance [bead]','FontSize',40);
 ylabel(a,'Encounter Prob.','FontSize',40);
 
 % s= 1;% (sum(fChain(x,nChain-1:-1:m,nChain,b))+1*sum(fRing(x,t(2:end-1),nRing,b)));
-sr = sum(fRing([0 0 0],1:nRing1-1,nRing1,b));
-fr1 = fRing([0 0 0],1:k,nRing1,b);
+sr1 = sum(fRing([0 0 0],1:nRing1-1,nRing1,b));
+sr2 = sum(f2Rings([0 0 0],k,0:nRing2,nRing1,nRing2,b));
+fr1 = fRing([0 0 0],1:k,nRing1,b)./(sr1+sr2);
 % fr1= fr1./sr;
 line('XData',1:k,...
      'YData',fr1,...
@@ -51,6 +52,7 @@ f2r = f2Rings([0 0 0],k,0:nRing2,nRing1,nRing2,b);
      'DisplayName','Ring2 encounters',...
      'Parent',a);
 fr2 = fRing([0 0 0],k:nRing1-1,nRing1,b);
+fr2 = fr2./sum(fr2);
 % fr2 = fr2./sr;
  line('XData',nRing2+k:nRing1+nRing2-1,...
      'YData',fr2,...
