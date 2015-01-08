@@ -25,7 +25,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function SetDefaultParams(obj)
             obj.beadRange      = struct('bead1',1:307,...
                                         'bead2',1:307);
-            obj.smoothingSpan  = 10;
+            obj.smoothingSpan  = 25;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
             obj.numDistances   = 1;       % for how many distances to perform analysis for connectivity
             obj.distToAnalyze  = [1];     % can be a vector of integers, for what disance to show the analysis
@@ -188,12 +188,13 @@ classdef CalculateBeadDistancesByRouseModel<handle
             sr.numBeads = size(obj.encounterMat,1);                       
             sr.recordPath     = true;
             sr.numBeads       = numel(obj.beadRange.bead1);
-            sr.dt             = 1e-3;
-            sr.numSteps       = 2000;
+            sr.dt             = 1e-2;
+            sr.numSteps       = 1500;
             sr.noiseSTD       = 0.00;
             sr.dimension      = 3;      
             sr.b              = sqrt(3);
             sr.diffusionConst = 1;
+            sr.numSimulations = 1;
 %             sr.springConst     = -(sr.dimension* sr.diffusionConst* sr.dt/ sr.b^2)*ones( sr.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
             sr.connectedBeads = [r c];
             obj.chain = SimpleRouse(sr);

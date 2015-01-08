@@ -39,7 +39,7 @@ classdef SimpleRouse<handle
             % recalculate params
             d                           = sqrt(2*obj.params.diffusionConst*obj.params.dt);
             numSteps                    = (0.015)*(obj.params.b^2)/(6*(d^2)*sin(pi/(2*obj.params.numBeads))^2); % n times the number of steps until relaxation of the chain 
-            obj.params.numSteps        = round(numSteps);
+%             obj.params.numSteps        = round(numSteps);
 %             obj.params.noiseSTD        = sqrt(2*obj.params.diffusionConst*obj.params.dt);
             obj.params.encounterDist   = obj.params.b/2;
             obj.params.springConst     = -( obj.params.dimension* obj.params.diffusionConst* obj.params.dt/ obj.params.b^2)*ones( obj.params.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
