@@ -20,12 +20,14 @@ classdef CalculateBeadDistancesByRouseModel<handle
     methods
         
         function obj = CalculateBeadDistancesByRouseModel
+                        obj.SetDefaultParams;
+
         end
         
         function SetDefaultParams(obj)
             obj.beadRange      = struct('bead1',1:307,...
                                         'bead2',1:307);
-            obj.smoothingSpan  = 2;
+            obj.smoothingSpan  = 5;
             obj.smoothingMethod= 'loess'; % see smooth function for options 
             obj.numDistances   = 1;       % for how many distances to perform analysis for connectivity
             obj.distToAnalyze  = [1];     % can be a vector of integers, for what disance to show the analysis
@@ -38,7 +40,6 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end
         
         function Initialize(obj,encounterMat)
-            obj.SetDefaultParams;
             if ~exist('encounterMat','var')
             load(fullfile(obj.dataFolder,obj.dataFileName))
             [~,~,obj.encounterMat,~] = a.ProcessEncounters(obj.beadRange,'average');
