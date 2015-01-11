@@ -1,5 +1,5 @@
 \beamer@endinputifotherversion {3.33pt}
-\beamer@sectionintoc {1}{ Part I}{3}{0}{1}
+\beamer@sectionintoc {1}{ Part I - Random loop model}{3}{0}{1}
 \beamer@subsectionintoc {1}{1}{Introduction}{3}{0}{1}
 \beamer@subsectionintoc {1}{2}{The experimental setting}{4}{0}{1}
 \beamer@subsubsectionintoc {1}{2}{1}{Chromosome Conformation Capture Carbon Copy (5C)}{4}{0}{1}
