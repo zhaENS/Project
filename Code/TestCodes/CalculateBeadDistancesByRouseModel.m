@@ -24,6 +24,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
     methods
         
         function obj = CalculateBeadDistancesByRouseModel
+                        obj.SetDefaultParams;
+
         end
         
         function SetDefaultParams(obj)
@@ -43,7 +45,6 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end
         
         function Initialize(obj,encounterMat)
-            obj.SetDefaultParams;
             if ~exist('encounterMat','var')
             load(fullfile(obj.dataFolder,obj.dataFileName))
             [~,~,obj.encounterMat,~] = a.ProcessEncounters(obj.beadRange,'average');

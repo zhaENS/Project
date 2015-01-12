@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  8 JAN 2015 23:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.6.2)  9 JAN 2015 09:02
 entering extended mode
 **randomLoopsChromosomeStructureReconstruction.tex
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.tex"
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -15,19 +15,23 @@ german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
 ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
 an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
 ishmax, welsh, loaded.
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamer.cls"
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasercs.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamer.cls
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasercs.s
+ty
 Package: beamerbasercs 2013/12/25 (rcs-revision 31cc758a62ae)
 )
 Document Class: beamer 2013/12/02 3.33 A class for typesetting presentations (r
 cs-revision 332bfd3ce558)
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasemodes.sty"
+
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasemodes
+.sty
 Package: beamerbasemodes 2013/09/03 (rcs-revision 768f2d98ca64)
 \beamer@tempbox=\box26
 \beamer@tempcount=\count79
 \c@beamerpauses=\count80
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasedecode.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasedecod
+e.sty
 Package: beamerbasedecode 2010/05/01 (rcs-revision efa082c6111d)
 \beamer@slideinframe=\count81
 \beamer@minimum=\count82
@@ -81,8 +85,8 @@ Package ifpdf Info: pdfTeX in PDF mode is detected.
 \beamer@sectionadjust=\count100
 \beamer@tocsectionnumber=\count101
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseoptions.sty
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseoptio
+ns.sty
 Package: beamerbaseoptions 2013/03/10 (rcs-revision 47431932db0d)
  ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
@@ -115,10 +119,10 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@dimlist=\toks15
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.cfg"))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\extsizes\size8.clo"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\extsizes\size8.clo
 File: size8.clo 1999/11/11 v1.4a NON-Standard LaTeX file (size option)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\pgf\basiclayer\pgfcore.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\pgf\basiclayer\pgfcore.sty
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
@@ -147,35 +151,37 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen127
 \Gin@req@width=\dimen128
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\pgf\systemlayer\pgfsys.sty"
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\pgf\utilities\pgfrcs.sty"
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-common.te
-x"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\pgf\systemlayer\pgfsys.sty
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\pgf\utilities\pgfrcs.sty
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgfutil-com
+mon.tex
 \pgfutil@everybye=\toks16
 \pgfutil@tempdima=\dimen129
 \pgfutil@tempdimb=\dimen130
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-common-li
-sts.tex"))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-latex.def
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgfutil-com
+mon-lists.tex))
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgfutil-lat
+ex.def
 \pgfutil@abb=\box34
- ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\ms\everyshi.sty"
+ (C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\ms\everyshi.sty
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\utilities\pgfrcs.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgfrcs.code
+.tex
 Package: pgfrcs 2013/12/20 v3.0.0 (rcs-revision 1.28)
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsys.code.tex
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsys.co
+de.tex
 Package: pgfsys 2013/11/30 v3.0.0 (rcs-revision 1.47)
- ("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\utilities\pgfkeys.code.tex
-"
+
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgfkeys.cod
+e.tex
 \pgfkeys@pathtoks=\toks17
 \pgfkeys@temptoks=\toks18
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\utilities\pgfkeysfiltered.c
-ode.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgfkeysfilt
+ered.code.tex
 \pgfkeys@tmptoks=\toks19
 ))
 \pgf@x=\dimen131
@@ -196,29 +202,30 @@ ode.tex"
 \t@pgf@tokb=\toks21
 \t@pgf@tokc=\toks22
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgf.cfg"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgf.cfg
 File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
 )
 Driver file for pgf: pgfsys-pdftex.def
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsys-pdftex.d
-ef"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsys-pd
+ftex.def
 File: pgfsys-pdftex.def 2013/07/18  (rcs-revision 1.33)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsys-common-p
-df.def"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsys-co
+mmon-pdf.def
 File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
 )))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsyssoftpath.
-code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsyssof
+tpath.code.tex
 File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
 \pgfsyssoftpath@smallbuffer@items=\count110
 \pgfsyssoftpath@bigbuffer@items=\count111
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\systemlayer\pgfsysprotocol.
-code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsyspro
+tocol.code.tex
 File: pgfsysprotocol.code.tex 2006/10/16  (rcs-revision 1.4)
-)) ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
+))
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\xcolor\xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
@@ -235,14 +242,18 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcore.code.tex
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcore.co
+de.tex
 Package: pgfcore 2010/04/11 v3.0.0 (rcs-revision 1.7)
- ("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmath.code.tex"
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathcalc.code.tex"
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathutil.code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathparser.code.tex
-"
+
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmath.code.tex
+
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathcalc.code
+.tex
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathutil.code
+.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathparser.co
+de.tex
 \pgfmath@dimen=\dimen139
 \pgfmath@count=\count112
 \pgfmath@box=\box35
@@ -250,29 +261,30 @@ Package: pgfcore 2010/04/11 v3.0.0 (rcs-revision 1.7)
 \pgfmath@stack@operand=\toks24
 \pgfmath@stack@operation=\toks25
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.code.
-tex"
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.basic
-.code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.trigo
-nometric.code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.rando
-m.code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.compa
-rison.code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.base.
-code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.round
-.code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.misc.
-code.tex")
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.integ
-erarithmetics.code.tex")))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfloat.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.code.tex
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.basic.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.trigonometric.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.random.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.comparison.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.base.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.round.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.misc.code.tex)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfunctions
+.integerarithmetics.code.tex)))
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfloat.cod
+e.tex
 \c@pgfmathroundto@lastzeros=\count113
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepoints.co
-de.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorepoi
+nts.code.tex
 File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
 \pgf@picminx=\dimen140
 \pgf@picmaxx=\dimen141
@@ -289,83 +301,83 @@ File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
 \pgf@zx=\dimen152
 \pgf@zy=\dimen153
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepathconst
-ruct.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorepat
+hconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
 \pgf@path@lastx=\dimen154
 \pgf@path@lasty=\dimen155
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepathusage
-.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorepat
+husage.code.tex
 File: pgfcorepathusage.code.tex 2013/12/13  (rcs-revision 1.23)
 \pgf@shorten@end@additional=\dimen156
 \pgf@shorten@start@additional=\dimen157
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorescopes.co
-de.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoresco
+pes.code.tex
 File: pgfcorescopes.code.tex 2013/10/09  (rcs-revision 1.44)
 \pgfpic=\box36
 \pgf@hbox=\box37
 \pgf@layerbox@main=\box38
 \pgf@picture@serial@count=\count114
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoregraphicst
-ate.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoregra
+phicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2013/09/19  (rcs-revision 1.11)
 \pgflinewidth=\dimen158
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoretransform
-ations.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoretra
+nsformations.code.tex
 File: pgfcoretransformations.code.tex 2013/10/10  (rcs-revision 1.17)
 \pgf@pt@x=\dimen159
 \pgf@pt@y=\dimen160
 \pgf@pt@temp=\dimen161
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorequick.cod
-e.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorequi
+ck.code.tex
 File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoreobjects.c
-ode.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoreobj
+ects.code.tex
 File: pgfcoreobjects.code.tex 2006/10/11  (rcs-revision 1.2)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepathproce
-ssing.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorepat
+hprocessing.code.tex
 File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorearrows.co
-de.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorearr
+ows.code.tex
 File: pgfcorearrows.code.tex 2013/11/07  (rcs-revision 1.40)
 \pgfarrowsep=\dimen162
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoreshade.cod
-e.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoresha
+de.code.tex
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
 \pgf@max=\dimen163
 \pgf@sys@shading@range@num=\count115
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoreimage.cod
-e.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoreima
+ge.code.tex
 File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoreexternal.
-code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoreext
+ernal.code.tex
 File: pgfcoreexternal.code.tex 2013/07/15  (rcs-revision 1.20)
 \pgfexternal@startupbox=\box39
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorelayers.co
-de.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorelay
+ers.code.tex
 File: pgfcorelayers.code.tex 2013/07/18  (rcs-revision 1.7)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcoretranspare
-ncy.code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoretra
+nsparency.code.tex
 File: pgfcoretransparency.code.tex 2013/09/30  (rcs-revision 1.5)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\generic\pgf\basiclayer\pgfcorepatterns.
-code.tex"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorepat
+terns.code.tex
 File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
 )))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\pgf\utilities\xxcolor.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\pgf\utilities\xxcolor.sty
 Package: xxcolor 2003/10/24 ver 0.1
 \XC@nummixins=\count116
 \XC@countmixins=\count117
@@ -449,7 +461,7 @@ Package hyperref Info: Implicit mode OFF; no redefinition of LaTeX internals.
 Package hyperref Info: Bookmarks ON on input line 4688.
 \c@Hy@tempcnt=\count121
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\url\url.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\url\url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -486,18 +498,18 @@ Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaserequires.st
-y"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaserequi
+res.sty
 Package: beamerbaserequires 2010/05/01  (rcs-revision efa082c6111d)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasecompatibili
-ty.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasecompa
+tibility.sty
 Package: beamerbasecompatibility 2012/05/01  (rcs-revision 67c48b3b652d)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasefont.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasefont.
+sty
 Package: beamerbasefont 2013/10/18  (rcs-revision 72f39e01808a)
-
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+ ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
@@ -508,49 +520,53 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\sansmathaccent\sansmathaccent.sty
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\sansmathaccent\sansmathacce
+nt.sty
 Package: sansmathaccent 2013/03/28
- ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\filehook\filehook.sty"
+
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\filehook\filehook.sty
 Package: filehook 2011/10/12 v0.5d Hooks for input files
 )))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasetranslator.
-sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetrans
+lator.sty
 Package: beamerbasetranslator 2010/06/11  (rcs-revision 85fd1cc7fc42)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\translator
-.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\tran
+slator.sty
 Package: translator 2010/06/12 ver 1.10
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\translator
--language-mappings.tex")))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasemisc.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\tran
+slator-language-mappings.tex)))
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasemisc.
+sty
 Package: beamerbasemisc 2013/09/03  (rcs-revision a55719c41d85)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasetwoscreens.
-sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetwosc
+reens.sty
 Package: beamerbasetwoscreens 2010/05/01  (rcs-revision efa082c6111d)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseoverlay.sty
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseoverl
+ay.sty
 Package: beamerbaseoverlay 2013/12/25  (rcs-revision f6bd5e3805da)
 \beamer@argscount=\count126
 \beamer@lastskipcover=\skip44
 \beamer@trivlistdepth=\count127
-) ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasetitle.sty
-"
+)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetitle
+.sty
 Package: beamerbasetitle 2010/09/21  (rcs-revision f0446ed0b6ae)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasesection.sty
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasesecti
+on.sty
 Package: beamerbasesection 2013/06/07  (rcs-revision 60b9fe0f342f)
 \c@lecture=\count128
 \c@part=\count129
 \c@section=\count130
 \c@subsection=\count131
 \c@subsubsection=\count132
-) ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseframe.sty
-"
+)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseframe
+.sty
 Package: beamerbaseframe 2013/10/02  (rcs-revision cdc8e9a3aaac)
 \beamer@framebox=\box40
 \beamer@frametitlebox=\box41
@@ -567,13 +583,13 @@ Package: beamerbaseframe 2013/10/02  (rcs-revision cdc8e9a3aaac)
 \framewidth=\dimen169
 \c@framenumber=\count136
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseverbatim.st
-y"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseverba
+tim.sty
 Package: beamerbaseverbatim 2012/08/30  (rcs-revision dfdb135076b3)
 \beamer@verbatimfileout=\write4
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseframesize.s
-ty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseframe
+size.sty
 Package: beamerbaseframesize 2011/09/12  (rcs-revision 70f9d8411e54)
 \beamer@splitbox=\box43
 \beamer@autobreakcount=\count137
@@ -581,30 +597,35 @@ Package: beamerbaseframesize 2011/09/12  (rcs-revision 70f9d8411e54)
 \beamer@frametitletoks=\toks28
 \beamer@framesubtitletoks=\toks29
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseframecompon
-ents.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseframe
+components.sty
 Package: beamerbaseframecomponents 2013/10/18  (rcs-revision 5cf6c5555a45)
 \beamer@footins=\box44
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasecolor.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasecolor
+.sty
 Package: beamerbasecolor 2010/06/06  (rcs-revision d1a9b48be06d)
-) ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasenotes.sty
-"
+)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasenotes
+.sty
 Package: beamerbasenotes 2012/12/19  (rcs-revision 1686da3db3c9)
 \beamer@frameboxcopy=\box45
-) ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasetoc.sty"
+)
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetoc.s
+ty
 Package: beamerbasetoc 2013/05/23  (rcs-revision 0fdf5bc43be8)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasetemplates.s
-ty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetempl
+ates.sty
 Package: beamerbasetemplates 2010/05/01  (rcs-revision efa082c6111d)
 \beamer@sbttoks=\toks30
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseauxtemplate
-s.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseauxte
+mplates.sty
 Package: beamerbaseauxtemplates 2013/09/04  (rcs-revision 4ac715c499d0)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaseboxes.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaseboxes
+.sty
 Package: beamerbaseboxes 2012/05/13  (rcs-revision 56972908a390)
 \bmb@box=\box46
 \bmb@colorbox=\box47
@@ -618,8 +639,8 @@ Package: beamerbaseboxes 2012/05/13  (rcs-revision 56972908a390)
 )
 \beamer@blockheadheight=\dimen175
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbaselocalstruct
-ure.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbaselocal
+structure.sty
 Package: beamerbaselocalstructure 2013/09/04  (rcs-revision 4ac715c499d0)
  ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\enumerate.sty"
 Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
@@ -630,13 +651,13 @@ Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasenavigation.
-sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasenavig
+ation.sty
 Package: beamerbasenavigation 2013/10/05  (rcs-revision 62be157fe783)
 \beamer@section@min@dim=\dimen176
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasetheorems.st
-y"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetheor
+ems.sty
 Package: beamerbasetheorems 2010/06/06  (rcs-revision 7e7cc5e53e9d)
  ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
 Package: amsmath 2013/01/14 v2.14 AMS math features
@@ -710,29 +731,30 @@ Package: amsthm 2004/08/06 v2.20
 )
 \c@theorem=\count152
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\beamerbasethemes.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\beamerbasetheme
+s.sty
 Package: beamerbasethemes 2010/05/01  (rcs-revision efa082c6111d)
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\theme\beamerth
-emedefault.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\theme\be
+amerthemedefault.sty
 Package: beamerthemedefault 2010/06/17  (rcs-revision d02a7cf4d8ae)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\font\beamerfon
-tthemedefault.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\font\bea
+merfontthemedefault.sty
 Package: beamerfontthemedefault 2012/12/19  (rcs-revision 1686da3db3c9)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\color\beamerco
-lorthemedefault.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\color\be
+amercolorthemedefault.sty
 Package: beamercolorthemedefault 2012/12/19  (rcs-revision 1686da3db3c9)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\inner\beamerin
-nerthemedefault.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\inner\be
+amerinnerthemedefault.sty
 Package: beamerinnerthemedefault 2013/10/15  (rcs-revision 65cb471f9634)
 \beamer@dima=\dimen186
 \beamer@dimb=\dimen187
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\outer\beamerou
-terthemedefault.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\outer\be
+amerouterthemedefault.sty
 Package: beamerouterthemedefault 2012/12/19  (rcs-revision 1686da3db3c9)
 )))
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\float\float.sty"
@@ -743,13 +765,13 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks44
 \@floatcapt=\box54
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\subfig\subfig.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\subfig\subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
 Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
 \captionmargin=\dimen188
@@ -782,57 +804,57 @@ Package caption Info: Hyperref support is turned off
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 16.
+(hyperref)                removing `\\' on input line 17.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 16.
+(hyperref)                removing `\\' on input line 17.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 16.
+(hyperref)                removing `\\' on input line 17.
 
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\theme\beamerth
-emeMadrid.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\theme\be
+amerthemeMadrid.sty
 Package: beamerthemeMadrid 2010/06/17  (rcs-revision d02a7cf4d8ae)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\color\beamerco
-lorthemewhale.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\color\be
+amercolorthemewhale.sty
 Package: beamercolorthemewhale 2010/06/17  (rcs-revision d02a7cf4d8ae)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\color\beamerco
-lorthemeorchid.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\color\be
+amercolorthemeorchid.sty
 Package: beamercolorthemeorchid 2010/06/17  (rcs-revision d02a7cf4d8ae)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\inner\beamerin
-nerthemerounded.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\inner\be
+amerinnerthemerounded.sty
 Package: beamerinnerthemerounded 2010/06/17  (rcs-revision d02a7cf4d8ae)
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\outer\beamerou
-terthemeinfolines.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\outer\be
+amerouterthemeinfolines.sty
 Package: beamerouterthemeinfolines 2012/10/16  (rcs-revision 51a8c72084af)
 ))
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\themes\color\beamerco
-lorthemedolphin.sty"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\themes\color\be
+amercolorthemedolphin.sty
 Package: beamercolorthemedolphin 2010/06/17  (rcs-revision d02a7cf4d8ae)
 )
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.aux")
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -868,7 +890,7 @@ LaTeX Font Info:    ... okay on input line 20.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count161
 \scratchdimen=\dimen196
@@ -883,7 +905,7 @@ LaTeX Font Info:    ... okay on input line 20.
 \everyMPtoPDFconversion=\toks46
 ) ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box56
-Package hyperref Info: Link coloring OFF on input line 20.
+Package hyperref Info: Link coloring OFF on input line 21.
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -893,111 +915,113 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count167
 )
-LaTeX Info: Redefining \ref on input line 20.
-LaTeX Info: Redefining \pageref on input line 20.
-LaTeX Info: Redefining \nameref on input line 20.
+LaTeX Info: Redefining \ref on input line 21.
+LaTeX Info: Redefining \pageref on input line 21.
+LaTeX Info: Redefining \nameref on input line 21.
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.out")
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.out")
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.out")
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.out")
 \@outlinefile=\write5
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 20.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 21.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 20.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 21.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 20.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 20.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 20.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 20.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 21.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 20.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 20.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 20.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 21.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 20.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 20.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 20.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 21.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 20.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 20.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 21.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 20.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 21.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 20.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 20.
+(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 20.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 20.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 20.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 21.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 20.
-LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 20.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 21.
+LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 21.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `normal'
 (Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 2
-0.
+1.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
 (Font)                  OT1/cmss/bx/it --> OT1/mathkerncmss/m/sl on input line 
-20.
+21.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
 (Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on inp
-ut line 20.
+ut line 21.
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\dicts\tran
-slator-basic-dictionary\translator-basic-dictionary-English.dict"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\dict
+s\translator-basic-dictionary\translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\dicts\tran
-slator-bibliography-dictionary\translator-bibliography-dictionary-English.dict"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\dict
+s\translator-bibliography-dictionary\translator-bibliography-dictionary-English
+.dict
 Dictionary: translator-bibliography-dictionary, Language: English 
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\dicts\tran
-slator-environment-dictionary\translator-environment-dictionary-English.dict"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\dict
+s\translator-environment-dictionary\translator-environment-dictionary-English.d
+ict
 Dictionary: translator-environment-dictionary, Language: English 
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\dicts\tran
-slator-months-dictionary\translator-months-dictionary-English.dict"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\dict
+s\translator-months-dictionary\translator-months-dictionary-English.dict
 Dictionary: translator-months-dictionary, Language: English 
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\dicts\tran
-slator-numbers-dictionary\translator-numbers-dictionary-English.dict"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\dict
+s\translator-numbers-dictionary\translator-numbers-dictionary-English.dict
 Dictionary: translator-numbers-dictionary, Language: English 
 )
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\beamer\base\translator\dicts\tran
-slator-theorem-dictionary\translator-theorem-dictionary-English.dict"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\beamer\base\translator\dict
+s\translator-theorem-dictionary\translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \includegraphics on input line 20.
+LaTeX Info: Redefining \includegraphics on input line 21.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.nav")
-Overfull \hbox (85.3471pt too wide) in paragraph at lines 20--20
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.nav")
+Overfull \hbox (85.3471pt too wide) in paragraph at lines 21--21
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) in paragraph at lines 20--20
+Overfull \hbox (36.62949pt too wide) in paragraph at lines 21--21
  [][][][]  
  []
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
-(Font)              size <5> substituted on input line 24.
+(Font)              size <5> substituted on input line 25.
 
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1005,21 +1029,21 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.toc")
+{C:/Users/Ofir/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.toc")
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1031,7 +1055,7 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1040,7 +1064,7 @@ Overfull \hbox (248.31943pt too wide) has occurred while \output is active
 ] <3Cschematic.jpg, id=177, 465.23813pt x 298.11375pt>
 File: 3Cschematic.jpg Graphic file (type jpg)
  <use 3Cschematic.jpg>
-Package pdftex.def Info: 3Cschematic.jpg used on input line 65.
+Package pdftex.def Info: 3Cschematic.jpg used on input line 66.
 (pdftex.def)             Requested size: 139.57251pt x 89.43481pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1048,20 +1072,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [4
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/3Csch
-ematic.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/3Cschematic.
+jpg>]
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1072,14 +1096,14 @@ File: TADsOfTheXChromosome_NoraEtAl2012.jpg Graphic file (type jpg)
 
 <use TADsOfTheXChromosome_NoraEtAl2012.jpg>
 Package pdftex.def Info: TADsOfTheXChromosome_NoraEtAl2012.jpg used on input li
-ne 93.
+ne 94.
 (pdftex.def)             Requested size: 105.84355pt x 103.4346pt.
 
 <TadDandENoraEtAl2012.jpg, id=235, 234.1247pt x 252.19218pt>
 File: TadDandENoraEtAl2012.jpg Graphic file (type jpg)
 
 <use TadDandENoraEtAl2012.jpg>
-Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 93.
+Package pdftex.def Info: TadDandENoraEtAl2012.jpg used on input line 94.
 (pdftex.def)             Requested size: 58.53102pt x 63.04788pt.
 
 <transcriptionCorrelationTadDandENoraEtAl2012.jpg, id=236, 422.32782pt x 289.08
@@ -1087,7 +1111,7 @@ pt>
 File: transcriptionCorrelationTadDandENoraEtAl2012.jpg Graphic file (type jpg)
  <use transcriptionCorrelationTadDandENoraEtAl2012.jpg>
 Package pdftex.def Info: transcriptionCorrelationTadDandENoraEtAl2012.jpg used 
-on input line 93.
+on input line 94.
 (pdftex.def)             Requested size: 114.03003pt x 78.05263pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1095,39 +1119,38 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [6
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/TADsO
-fTheXChromosome_NoraEtAl2012.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Docu
-ments/lab Meetings/09-01-15/TadDandENoraEtAl2012.jpg> <D:/Ofir/Work/ENS/Polymer
- Chain Dynamics/Documents/lab Meetings/09-01-15/transcriptionCorrelationTadDand
-ENoraEtAl2012.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/TADsOfTheXCh
+romosome_NoraEtAl2012.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meet
+ings/09-01-15/TadDandENoraEtAl2012.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Docum
+ents/lab Meetings/09-01-15/transcriptionCorrelationTadDandENoraEtAl2012.jpg>]
 <restrictionSegmentLengthDistributionLucaetal.jpg, id=263, 255.20343pt x 143.03
 438pt>
 File: restrictionSegmentLengthDistributionLucaetal.jpg Graphic file (type jpg)
  <use restrictionSegmentLengthDistributionLucaetal.jpg>
 Package pdftex.def Info: restrictionSegmentLengthDistributionLucaetal.jpg used 
-on input line 116.
+on input line 117.
 (pdftex.def)             Requested size: 140.36232pt x 78.66913pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 116.
+LaTeX Font Info:    Try loading font information for U+msa on input line 117.
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 116.
+LaTeX Font Info:    Try loading font information for U+msb on input line 117.
 
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input 
-line 116.
+line 117.
 
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\sansmathaccent\ot1mathkerncmss.fd
-"
+(C:\Users\Ofir\AppData\Roaming\MiKTeX\2.9\tex\latex\sansmathaccent\ot1mathkernc
+mss.fd
 File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
@@ -1136,37 +1159,37 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [7
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/restr
-ictionSegmentLengthDistributionLucaetal.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/restrictionS
+egmentLengthDistributionLucaetal.jpg>]
 <encounterProbabilityTADDAndE.jpg, id=291, 1686.3pt x 890.32625pt>
 File: encounterProbabilityTADDAndE.jpg Graphic file (type jpg)
 
 <use encounterProbabilityTADDAndE.jpg>
 Package pdftex.def Info: encounterProbabilityTADDAndE.jpg used on input line 13
-5.
+6.
 (pdftex.def)             Requested size: 131.53601pt x 69.44788pt.
 
 <encounterProbabilityTADD.jpg, id=292, 1686.3pt x 890.32625pt>
 File: encounterProbabilityTADD.jpg Graphic file (type jpg)
 
 <use encounterProbabilityTADD.jpg>
-Package pdftex.def Info: encounterProbabilityTADD.jpg used on input line 135.
+Package pdftex.def Info: encounterProbabilityTADD.jpg used on input line 136.
 (pdftex.def)             Requested size: 126.46704pt x 66.77158pt.
 
 <encounterProbabilityTADE.jpg, id=293, 1686.3pt x 890.32625pt>
 File: encounterProbabilityTADE.jpg Graphic file (type jpg)
 
 <use encounterProbabilityTADE.jpg>
-Package pdftex.def Info: encounterProbabilityTADE.jpg used on input line 135.
+Package pdftex.def Info: encounterProbabilityTADE.jpg used on input line 136.
 (pdftex.def)             Requested size: 126.46704pt x 66.77158pt.
 
-Overfull \hbox (37.27498pt too wide) in paragraph at lines 135--135
+Overfull \hbox (37.27498pt too wide) in paragraph at lines 136--136
  [][][] 
  []
 
@@ -1176,21 +1199,21 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [8
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/encou
-nterProbabilityTADDAndE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents
-/lab Meetings/09-01-15/encounterProbabilityTADD.jpg> <D:/Ofir/Work/ENS/Polymer 
-Chain Dynamics/Documents/lab Meetings/09-01-15/encounterProbabilityTADE.jpg>] <
-RousePolymerSketch.jpg, id=322, 963.6pt x 542.025pt>
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/encounterPro
+babilityTADDAndE.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/
+09-01-15/encounterProbabilityTADD.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Docume
+nts/lab Meetings/09-01-15/encounterProbabilityTADE.jpg>]
+<RousePolymerSketch.jpg, id=322, 963.6pt x 542.025pt>
 File: RousePolymerSketch.jpg Graphic file (type jpg)
 
 <use RousePolymerSketch.jpg>
-Package pdftex.def Info: RousePolymerSketch.jpg used on input line 158.
+Package pdftex.def Info: RousePolymerSketch.jpg used on input line 159.
 (pdftex.def)             Requested size: 96.36565pt x 54.20567pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1198,19 +1221,18 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [9
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/Rouse
-PolymerSketch.jpg>]
-<meanDataFitTADDAndE.jpg, id=354, 1686.3pt x 890.32625pt>
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/RousePolymer
+Sketch.jpg>] <meanDataFitTADDAndE.jpg, id=354, 1686.3pt x 890.32625pt>
 File: meanDataFitTADDAndE.jpg Graphic file (type jpg)
 
 <use meanDataFitTADDAndE.jpg>
-Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 173.
+Package pdftex.def Info: meanDataFitTADDAndE.jpg used on input line 174.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
 <fittedExpValuesWithSplineAverageTADDAndE.jpg, id=355, 1686.3pt x 890.32625pt>
@@ -1218,7 +1240,7 @@ File: fittedExpValuesWithSplineAverageTADDAndE.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADDAndE.jpg>
 Package pdftex.def Info: fittedExpValuesWithSplineAverageTADDAndE.jpg used on i
-nput line 173.
+nput line 174.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1226,20 +1248,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [10
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/meanD
-ataFitTADDAndE.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meet
-ings/09-01-15/fittedExpValuesWithSplineAverageTADDAndE.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/meanDataFitT
+ADDAndE.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/
+fittedExpValuesWithSplineAverageTADDAndE.jpg>]
 <meanDataFitTADD.jpg, id=387, 1686.3pt x 890.32625pt>
 File: meanDataFitTADD.jpg Graphic file (type jpg)
 
 <use meanDataFitTADD.jpg>
-Package pdftex.def Info: meanDataFitTADD.jpg used on input line 186.
+Package pdftex.def Info: meanDataFitTADD.jpg used on input line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
 <fittedExpValuesWithSplineAverageTADD.jpg, id=388, 1686.3pt x 890.32625pt>
@@ -1247,14 +1269,14 @@ File: fittedExpValuesWithSplineAverageTADD.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADD.jpg>
 Package pdftex.def Info: fittedExpValuesWithSplineAverageTADD.jpg used on input
- line 186.
+ line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
 <meanDataFitTADE.jpg, id=389, 1686.3pt x 890.32625pt>
 File: meanDataFitTADE.jpg Graphic file (type jpg)
 
 <use meanDataFitTADE.jpg>
-Package pdftex.def Info: meanDataFitTADE.jpg used on input line 186.
+Package pdftex.def Info: meanDataFitTADE.jpg used on input line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
 <fittedExpValuesWithSplineAverageTADE.jpg, id=390, 1686.3pt x 890.32625pt>
@@ -1262,7 +1284,7 @@ File: fittedExpValuesWithSplineAverageTADE.jpg Graphic file (type jpg)
 
 <use fittedExpValuesWithSplineAverageTADE.jpg>
 Package pdftex.def Info: fittedExpValuesWithSplineAverageTADE.jpg used on input
- line 186.
+ line 187.
 (pdftex.def)             Requested size: 168.63988pt x 89.03784pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1270,23 +1292,22 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [11
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/meanD
-ataFitTADD.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings
-/09-01-15/fittedExpValuesWithSplineAverageTADD.jpg> <D:/Ofir/Work/ENS/Polymer C
-hain Dynamics/Documents/lab Meetings/09-01-15/meanDataFitTADE.jpg> <D:/Ofir/Wor
-k/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/fittedExpValuesWit
-hSplineAverageTADE.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/meanDataFitT
+ADD.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/fitt
+edExpValuesWithSplineAverageTADD.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documen
+ts/lab Meetings/09-01-15/meanDataFitTADE.jpg> <D:/Ofir/ENS/PolymerChainDynamics
+/Documents/lab Meetings/09-01-15/fittedExpValuesWithSplineAverageTADE.jpg>]
 <peakListAverage.jpg, id=416, 1686.3pt x 890.32625pt>
 File: peakListAverage.jpg Graphic file (type jpg)
 
 <use peakListAverage.jpg>
-Package pdftex.def Info: peakListAverage.jpg used on input line 200.
+Package pdftex.def Info: peakListAverage.jpg used on input line 201.
 (pdftex.def)             Requested size: 252.93408pt x 133.54317pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1294,19 +1315,19 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [12
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/peakL
-istAverage.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/peakListAver
+age.jpg>]
 <simulationWithSimpleRouseExperimentalData.jpg, id=444, 597.432pt x 426.8748pt>
 File: simulationWithSimpleRouseExperimentalData.jpg Graphic file (type jpg)
 <use simulationWithSimpleRouseExperimentalData.jpg>
 Package pdftex.def Info: simulationWithSimpleRouseExperimentalData.jpg used on 
-input line 219.
+input line 220.
 (pdftex.def)             Requested size: 238.96857pt x 170.74689pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1314,20 +1335,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [13
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/simul
-ationWithSimpleRouseExperimentalData.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/simulationWi
+thSimpleRouseExperimentalData.jpg>]
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1338,7 +1359,7 @@ Overfull \hbox (248.31943pt too wide) has occurred while \output is active
 File: Figure03_OneTADWithTails0To30RandomLoops.jpg Graphic file (type jpg)
 <use Figure03_OneTADWithTails0To30RandomLoops.jpg>
 Package pdftex.def Info: Figure03_OneTADWithTails0To30RandomLoops.jpg used on i
-nput line 244.
+nput line 245.
 (pdftex.def)             Requested size: 209.18864pt x 144.43375pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1346,20 +1367,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [15
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/Figur
-e03_OneTADWithTails0To30RandomLoops.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/Figure03_One
+TADWithTails0To30RandomLoops.jpg>]
 <Figure04_TwoTADs0To30RandomLoops307Beads.jpg, id=529, 597.81744pt x 433.62pt>
 File: Figure04_TwoTADs0To30RandomLoops307Beads.jpg Graphic file (type jpg)
 
 <use Figure04_TwoTADs0To30RandomLoops307Beads.jpg>
 Package pdftex.def Info: Figure04_TwoTADs0To30RandomLoops307Beads.jpg used on i
-nput line 257.
+nput line 258.
 (pdftex.def)             Requested size: 209.23923pt x 151.76927pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1367,20 +1388,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [16
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/Figur
-e04_TwoTADs0To30RandomLoops307Beads.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/Figure04_Two
+TADs0To30RandomLoops307Beads.jpg>]
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1392,7 +1413,7 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1404,7 +1425,7 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1415,7 +1436,7 @@ File: rouseChainVectorBetweenMAndN.jpg Graphic file (type jpg)
 
 <use rouseChainVectorBetweenMAndN.jpg>
 Package pdftex.def Info: rouseChainVectorBetweenMAndN.jpg used on input line 31
-8.
+9.
 (pdftex.def)             Requested size: 115.627pt x 65.04019pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1423,19 +1444,19 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [20
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/rouse
-ChainVectorBetweenMAndN.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/rouseChainVe
+ctorBetweenMAndN.jpg>]
 <rouseRingVectorBetween0AndM.jpg, id=663, 963.6pt x 542.025pt>
 File: rouseRingVectorBetween0AndM.jpg Graphic file (type jpg)
 
 <use rouseRingVectorBetween0AndM.jpg>
-Package pdftex.def Info: rouseRingVectorBetween0AndM.jpg used on input line 336
+Package pdftex.def Info: rouseRingVectorBetween0AndM.jpg used on input line 337
 .
 (pdftex.def)             Requested size: 192.71658pt x 108.40308pt.
 
@@ -1444,20 +1465,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [21
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/rouse
-RingVectorBetween0AndM.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/rouseRingVec
+torBetween0AndM.jpg>]
 <rouseChainAndRingVectorBetweenBeads.jpg, id=690, 963.6pt x 542.025pt>
 File: rouseChainAndRingVectorBetweenBeads.jpg Graphic file (type jpg)
 
 <use rouseChainAndRingVectorBetweenBeads.jpg>
 Package pdftex.def Info: rouseChainAndRingVectorBetweenBeads.jpg used on input 
-line 352.
+line 353.
 (pdftex.def)             Requested size: 125.2724pt x 70.46571pt.
 
 <chainRingEncounterTheoreticalProb.jpg, id=691, 1686.3pt x 890.32625pt>
@@ -1465,7 +1486,7 @@ File: chainRingEncounterTheoreticalProb.jpg Graphic file (type jpg)
 
 <use chainRingEncounterTheoreticalProb.jpg>
 Package pdftex.def Info: chainRingEncounterTheoreticalProb.jpg used on input li
-ne 352.
+ne 353.
 (pdftex.def)             Requested size: 151.76045pt x 80.1259pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1473,21 +1494,21 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [22
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/rouse
-ChainAndRingVectorBetweenBeads.jpg> <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Do
-cuments/lab Meetings/09-01-15/chainRingEncounterTheoreticalProb.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/rouseChainAn
+dRingVectorBetweenBeads.jpg> <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Me
+etings/09-01-15/chainRingEncounterTheoreticalProb.jpg>]
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1499,7 +1520,7 @@ File: polymerReconstructionTheoreticalApproach.jpg Graphic file (type jpg)
 
 <use polymerReconstructionTheoreticalApproach.jpg>
 Package pdftex.def Info: polymerReconstructionTheoreticalApproach.jpg used on i
-nput line 383.
+nput line 384.
 (pdftex.def)             Requested size: 192.71658pt x 108.40308pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1507,20 +1528,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [24
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/polym
-erReconstructionTheoreticalApproach.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/polymerRecon
+structionTheoreticalApproach.jpg>]
 <reconstructionResultCompositeStructure.jpg, id=769, 963.6pt x 542.025pt>
 File: reconstructionResultCompositeStructure.jpg Graphic file (type jpg)
 
 <use reconstructionResultCompositeStructure.jpg>
 Package pdftex.def Info: reconstructionResultCompositeStructure.jpg used on inp
-ut line 394.
+ut line 395.
 (pdftex.def)             Requested size: 240.89941pt x 135.5059pt.
 
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
@@ -1528,22 +1549,22 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [25
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/recon
-structionResultCompositeStructure.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/reconstructi
+onResultCompositeStructure.jpg>]
 <reconstructionTADDAndE.jpg, id=796, 1686.3pt x 937.5025pt>
 File: reconstructionTADDAndE.jpg Graphic file (type jpg)
 
 <use reconstructionTADDAndE.jpg>
-Package pdftex.def Info: reconstructionTADDAndE.jpg used on input line 406.
+Package pdftex.def Info: reconstructionTADDAndE.jpg used on input line 407.
 (pdftex.def)             Requested size: 337.25403pt x 187.49718pt.
 
-Overfull \vbox (4.15596pt too high) detected at line 406
+Overfull \vbox (4.15596pt too high) detected at line 407
  []
 
 
@@ -1552,20 +1573,20 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
 [26
 
- <D:/Ofir/Work/ENS/Polymer Chain Dynamics/Documents/lab Meetings/09-01-15/recon
-structionTADDAndE.jpg>]
+ <D:/Ofir/ENS/PolymerChainDynamics/Documents/lab Meetings/09-01-15/reconstructi
+onTADDAndE.jpg>]
 Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  [][]  
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1577,7 +1598,7 @@ Overfull \hbox (85.3471pt too wide) has occurred while \output is active
  []
 
 
-Overfull \hbox (248.31943pt too wide) has occurred while \output is active
+Overfull \hbox (36.62949pt too wide) has occurred while \output is active
  [][][][]  
  []
 
@@ -1587,28 +1608,35 @@ Overfull \hbox (248.31943pt too wide) has occurred while \output is active
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 423.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 423.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 424.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 424.
 
-("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\lab Meetings\09-01-15\rando
-mLoopsChromosomeStructureReconstruction.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 423.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 423.
-Package rerunfilecheck Info: File `randomLoopsChromosomeStructureReconstruction
-.out' has not changed.
-(rerunfilecheck)             Checksum: DE15E5FEBCB92EF2A1E4F4DAE672D6DA;728.
+("D:\Ofir\ENS\PolymerChainDynamics\Documents\lab Meetings\09-01-15\randomLoopsC
+hromosomeStructureReconstruction.aux")
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 424.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 424.
 
+
+Package rerunfilecheck Warning: File `randomLoopsChromosomeStructureReconstruct
+ion.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `randomLoopsChromosomeStructureRecon
+struction.out':
+(rerunfilecheck)             Before: DE19CB73901F65C7B782355173EE5544;747
+(rerunfilecheck)             After:  13D2234B6B3B07E6571DE88D48F68737;748.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 423.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 424.
  ) 
 Here is how much of TeX's memory you used:
- 18144 strings out of 493921
- 353295 string characters out of 3144879
- 411626 words of memory out of 3000000
- 20909 multiletter control sequences out of 15000+200000
+ 18152 strings out of 493921
+ 355040 string characters out of 3144880
+ 411488 words of memory out of 3000000
+ 20917 multiletter control sequences out of 15000+200000
  9774 words of font info for 36 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  56i,16n,72p,445b,598s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1624,7 +1652,7 @@ m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/Program F
 iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/Program File
 s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
 Output written on randomLoopsChromosomeStructureReconstruction.pdf (28 pages, 5
-206590 bytes).
+204818 bytes).
 PDF statistics:
  930 PDF objects out of 1000 (max. 8388607)
  92 named destinations out of 1000 (max. 500000)
