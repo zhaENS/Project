@@ -10,6 +10,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         distToAnalyze   % can be a vector of integers, for what disance to show the analysis
         beadsToAnalyze  % for what beads to show the connectivity graphs
         zeroInterpolationMethod % how to fill in nan values of the encounter signal [ linear, nearest, spline, cubic,...]
+        prob2distMethod % how to transform probability into distance [fitModel,rouse,composite]
         graph
         model
         chain           % the Rouse chain class
@@ -18,30 +19,31 @@ classdef CalculateBeadDistancesByRouseModel<handle
         dataFileName
     end
     properties (Access=private)
-        smoother = Smoother;
+        smoother = Smoother; % signal smoother class
     end
     
     methods
         
         function obj = CalculateBeadDistancesByRouseModel
-                        obj.SetDefaultParams;
-
+            % class constructor 
+            obj.SetDefaultParams;
         end
         
         function SetDefaultParams(obj)
             obj.beadRange      = struct('bead1',1:307,...
-                                        'bead2',1:307);
-            obj.smoothingSpan  = 15;      % can be a vector of integer, in the present version only the last span is considered
-            obj.smoothingMethod= 'gaussian'; % see smooth function for options 
-            obj.numDistances   = 1;       % for how many distances to perform analysis for connectivity
-            obj.distToAnalyze  = [1];     % can be a vector of integers, for what disance to show the analysis
-            obj.beadsToAnalyze = 1;      % for what beads to show the connectivity graphs
-            obj.zeroInterpolationMethod = 'linear'; % how to fill in gaps for zero values of the encoutner signal (see interp1 documentation for methods)
-            obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)');
-            obj.fitOpt         = fitoptions(obj.model);
+                                        'bead2',1:307); % bead range to analyze in the encounterMat
+            obj.smoothingSpan  = 10;                  % can be a vector of integer, in the present version only the last span is considered
+            obj.smoothingMethod= 'gaussian';          % see smooth function for options 
+            obj.numDistances   = 1;                   % for how many distances to perform analysis for connectivity
+            obj.distToAnalyze  = 1;                   % can be a vector of integers, for what disance to show the analysis
+            obj.beadsToAnalyze = 1;                   % for what beads to show the connectivity graphs
+            obj.zeroInterpolationMethod = 'linear';   % how to fill in gaps for zero values of the encoutner signal (see interp1 documentation for methods)
+            obj.prob2distMethod         = 'rouse'; % how to transform probability into distance [fitModel,rouse,composite]
+            obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)'); % the model to be used to fit probabilities 
+            obj.fitOpt         = fitoptions(obj.model);                      % fiting options 
             set(obj.fitOpt,'Lower',0,'Upper',1.5,'StartPoint',1,'Robust','off');
-            obj.dataFolder     = fullfile(pwd,'ExperimentDataAnalysis');
-            obj.dataFileName   = 'savedAnalysisTADDAndE';
+            obj.dataFolder     = fullfile(pwd,'ExperimentDataAnalysis');     % default data folder
+            obj.dataFileName   = 'savedAnalysisTADDAndE';                    % name of dataset
         end
         
         function Initialize(obj,encounterMat)
@@ -66,30 +68,30 @@ classdef CalculateBeadDistancesByRouseModel<handle
             eMat = false(numel(obj.beadRange.bead1),numel(obj.beadRange.bead1),obj.numDistances);
             di   = diag(ones(1,size(eMat,1)-1),1)+diag(ones(1,size(eMat,1)-1),-1);% include nearest neighbors by default
             
-            % get expected signal for all encounters 
-            [expectedSignal,fitStructModel] = obj.GetExpectedEncounterSignal(obj.encounterMat);
+%             % get expected signal for all encounters 
+%             [expectedSignal,fitStructModel] = obj.GetExpectedEncounterSignal(obj.encounterMat);
                         
             for bIdx = 1:size(obj.encounterMat,1);% for each bead
                 
                 observedProb = obj.ProcessBeadEncounterSignal(obj.encounterMat(bIdx,:));                
                                 
                 if ~all(isnan(observedProb))                                        
-%                     expectedSignal = expectedSignal*sum(expectedSignal)/sum(observedProb);
                     % Divide the probabilites into distances according to a division given by the
                     % expected model
-                    inds        = find(~isnan(observedProb));
-                    [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
-                    beta(bIdx)  = fitStruct.beta;
-                    s           = sum(inds.^(-beta(bIdx)));
-                    modelValues = obj.model(beta(bIdx),inds);
-                    modelValues = modelValues./modelValues(1) *max(observedProb(1:10));
+%                     inds        = find(~isnan(observedProb));
+%                     [fitStruct] = fit(inds',observedProb(inds)',obj.model,obj.fitOpt);
+%                     beta(bIdx)  = fitStruct.beta;
+%                     s           = sum(inds.^(-beta(bIdx)));
+%                     modelValues = obj.model(beta(bIdx),inds);
+%                     modelValues = modelValues./modelValues(1) *max(observedProb(1:10));
 %                     observedProb= observedProb*modelValues(1)/observedProb(1);
-
+                     [bDists,modelValues] = obj.TransformProbToDist(observedProb);
                     % normalize to match the nearest neighbor encounter probability
                     if mod(bIdx,408)==0
                         obj.PlotBeadClusteringByDistance(observedProb,inds,modelValues);
                         title(num2str(bIdx))
                     end
+                                                          
                     % Calculate the histogram
                     above{bIdx} = find(observedProb>modelValues(1));
                     below{bIdx} = [];
@@ -126,6 +128,28 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.DisplayChain;
         end
         
+        function [dists, modelValues] = TransformProbToDist(obj,prob)
+            % transform the probabilitiy observed into distances 
+            if strcmpi(obj.prob2distMethod,'fitModel')
+            inds        = find(~isnan(prob));
+            [fitStruct] = fit(inds',prob(inds)',obj.model,obj.fitOpt);
+            beta        = fitStruct.beta;
+            s           = sum(inds.^(-beta));
+            modelValues = obj.model(beta,inds);
+            modelValues = modelValues./modelValues(1) *max(prob(1:10)); 
+            dists       = (prob *s).^(-1./beta);
+            elseif strcmpi(obj.prob2distMethod,'rouse')
+            beta        = 1.5;
+            inds        = find(~isnan(prob));
+            s           = sum(inds.^(-beta));
+            modelValues = obj.model(beta,inds);
+            modelValues = modelValues./modelValues(1) *max(prob(1:10)); 
+            dists       = (prob *s).^(-1./beta);
+            elseif strcmpi(obj.prob2distMethod,'composite')
+            end
+            
+        end
+        
         function [expectedSignal,fitStructModel] = GetExpectedEncounterSignal(obj,encounterMat)
             % Get the expected encounter signal from an encounter matrix 
             expectedSignal    = obj.MeanIgnoreNaN(encounterMat);
@@ -148,7 +172,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
         
         function GetDistanceDistribution(obj,dist)
             % calculate the distribution for a specifind distance
-            figure,hold on
+            f = figure;
+            a = axes('Parent',f,'FontSize',30);
             for dIdx = 1:numel(dist)
                 d     = obj.encounterMat(:,dist(dIdx));
                 d     = d(~isnan(d));
@@ -163,11 +188,15 @@ classdef CalculateBeadDistancesByRouseModel<handle
                         'YData',v,...
                         'DisplayName',num2str(dist(dIdx)),...
                         'Color',rand(1,3),...
-                        'LineWidth',4);
+                        'LineWidth',4,...
+                        'Parent',a);
                 end
                 
             end
-            legend(get(gca,'Children'));
+            l=legend(get(a,'Children'));
+            set(l,'FontSize',10);
+            xlabel(a,'(Distance-\mu)/\sigma');
+            ylabel(a,'CDF');
             
         end
         
@@ -214,7 +243,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             sr.numBeads = size(obj.encounterMat,1);                       
             sr.recordPath     = true;
             sr.numBeads       = numel(obj.beadRange.bead1);
-            sr.dt             = 1e-2;
+            sr.dt             = 1e-1;
             sr.numSteps       = 500;
             sr.noiseSTD        = 0.00;
             sr.dimension       = 3;      
