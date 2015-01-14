@@ -160,30 +160,38 @@ classdef CalculateBeadDistancesByRouseModel<handle
                                   'endInd',[],...
                                   'equation',[],...
                                   'length',[],...
+                                  'normalizationConst',[],...
                                   'containing',[]);
             ringStruct   = chainStruct;
-            [lMax] = local_max(prob);
             
-            % If 1 exists in the local_max, remove it             
+            % Find local max in a signal
+            [lMax]       = local_max(prob);
+            
+            % If index 1 exists in the local_max, remove it
             lMax = lMax(lMax~=1);
             
             % For each max point, find the first point of intersection to
-            % its left on the probability signal 
-            % find all rings           
+            % its left on the probability signal curve
+            
+            % Start with all rings           
             for lmIdx = 1:numel(lMax)
-                % match position of the NaNs
+                % Match position of the NaNs in the signal 
                 x = 1:numel(prob);
                 x(isnan(prob))= nan;
                                 
                 intersections   = polyxpoly(x,prob,1:numel(prob), prob(lMax(lmIdx)).*ones(1,numel(prob)));
                 intersections   = round(intersections); % round to get indices                    
-                % Find the first intersection index to the left of the local max
+                % Find the first intersection index to the left of the local max                
                 d               = find(intersections<lMax(lmIdx),1,'last');
+                if isempty(d) && prob(intersections(1))>max(prob(1:10))
+                    d=1;
+                end
                 ringStruct(lmIdx).startInd  = intersections(d);
                 ringStruct(lmIdx).endInd    = lMax(lmIdx);
                 ringStruct(lmIdx).length    = lMax(lmIdx)-intersections(d);
                 ringStruct(lmIdx).equation  = @(d,N)((d./N).*(N-d)).^(-1.5);
                 ringStruct(lmIdx).type      = 'ring';
+                ringStruct(lmIdx).normalizationConst = (sum(ringStruct(lmIdx).equation(1:ringStruct(lmIdx).length-1,ringStruct(lmIdx).length)));
             end
             
            % Sort by ring size 
@@ -213,6 +221,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                chainStruct(rIdx).equation = @(d) d.^(-1.5);
                chainStruct(rIdx).length   = chainStruct(rIdx).endInd-chainStruct(rIdx).startInd;
                chainStruct(rIdx).type     = 'chain';
+               chainStruct(rIdx).normalizationConst = sum(chainStruct(rIdx).equation(1:chainStruct(rIdx).length));
                loopChainMat(end-2*rIdx+1,chainStruct(rIdx).startInd:chainStruct(rIdx).endInd) = numel(ringStruct)+rIdx;
            end
            
@@ -366,6 +375,12 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
         end
         
+        function Vals = GetCompositeFunctionVals(obj,chainRingStruct)
+            % calculate hte values of the composite ring-chain structure;
+            for sIdx = 1:numel(chainRingStruct)
+                
+            end
+        end
     end
     
     methods (Access=private)
