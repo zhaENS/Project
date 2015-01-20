@@ -398,7 +398,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 end
                 
                 ind = 1 ;
-                for pIdx = 1:numel(rp(oIdx).PixelList(:,1))% go over al pixels of that structure and search downward for the first structure
+                for pIdx = 1:numel(rp(oIdx).PixelList(:,1))% go over all pixels of that structure and search downward for the first structure
                  containing = find(loopChainMat(rp(oIdx).PixelList(pIdx,2)+1:end,rp(oIdx).PixelList(pIdx,1)),1,'first');
                  if ~isempty(containing)
                   chainRingStruct(oIdx).containing(ind) = loopChainMat(rp(oIdx).PixelList(pIdx,2)+containing,rp(oIdx).PixelList(pIdx,1));
