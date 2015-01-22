@@ -413,7 +413,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             % Calculate the values of the composite ring-chain structure;
             vals=[];
             for sIdx = 1:numel(chainRingStruct)
-                % evaluate each one of the functions
+                % Evaluate each one of the functions
                 
             end
         end
