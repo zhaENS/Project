@@ -48,5 +48,12 @@ c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^
 \section{Using inverted probabilities assuming a Rouse chain}
 The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the linear distance on the chain. The main observation here is that if we estimate the nearest neighbors for each one of the beads, we can construct the whole connectivity map of the polymer. For this end, we take the encounter probability profile for each bead, and look for beads in distances for correspond to the nearest neighbor probability. 
 
+\subsection{Smoothing the encounter signal}
+To locate prominent features of the signal, we have to reduce noise accompanying the experimental data. 
+We start by iteratively applying Gaussian kernel smoothing with increasing variance until the signal is smooth enough. To find the optimal variance for smoothing, we have to impose that the high frequencies which create the noise should be minimized.
+
+One possible numerical criterion for the presence of noise, is the number of local maxima the signal has over all values of variance chosen in the smoothin procedure. We then choose the variance value that give rise to the minimal number of maxima. 
+ 
+For example, take the encounter signal of a structure with 128 beads. Smooth it by iteratively convolving the signal using a Gaussian kernel with $\sigma\in [0.1,10]$ , for each $\sigma_i$ calculate the number of local maximas and the FFT.
 
 \end{document}
