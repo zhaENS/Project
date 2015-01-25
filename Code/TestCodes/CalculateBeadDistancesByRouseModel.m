@@ -75,9 +75,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % expected model
 
                     [bDists,modelValues] = obj.TransformProbToDist(observedProb);
-                    [chainRingStruct]    = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
+%                     [chainRingStruct]    = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
                     % obtain the values of the composite structure
-                    vals = obj.GetCompositeFunctionVals(chainRingStruct);
+%                     vals = obj.GetCompositeFunctionVals(chainRingStruct);
                     
                     % display
                     if mod(bIdx,408)==0
@@ -203,9 +203,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
             sr.numBeads = size(obj.encounterMat,1);                       
             sr.recordPath     = true;
             sr.numBeads       = numel(obj.beadRange.bead1);
-            sr.dt             = 1e-1;
+            sr.dt             = 1e-2;
             sr.numSteps       = 500;
-            sr.noiseSTD        = 0.00;
+            sr.noiseSTD        = 0.01;
             sr.dimension       = 3;      
             sr.b               = sqrt(3);
             sr.diffusionConst  = 1;
@@ -239,14 +239,14 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
             % Truncate the encounter matrix according to the bead range specified
             obj.encounterMat = obj.encounterMat(obj.beadRange.bead1,obj.beadRange.bead2-obj.beadRange.bead1(1)+1);
-            for bIdx = obj.beadRange.bead1
-                obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:));
-            end
+%             for bIdx = obj.beadRange.bead1
+%                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:));
+%             end
             s= Smoother;
             k = ones(3)*(1/7);
             k(1,1) = 0;
             k(3,3) = 0;
-            s.Smooth(obj.encounterMat,'gaussian',1,0.5);
+            s.Smooth(obj.encounterMat,'iterativeGaussianMinMax',10,0.5);
             obj.encounterMat = s.signalOut;
             for bIdx=obj.beadRange.bead1
                 obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:));
@@ -260,7 +260,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             if any(s(1:2)==1) % for 1D signal
                 zeroInds   = find(sigIn==0 |isnan(sigIn));
                 noZeroInds = find(~(sigIn==0) & ~isnan(sigIn));
-                if ~isempty(zeroInds)
+                if ~isempty(zeroInds) && ~isempty(noZeroInds)
                     % Interpolate the signal in the nan positions
                     x     = noZeroInds;
                     y     = sigIn(x);
@@ -274,9 +274,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     f= find(~isnan(sigOut),1,'last');
                     if f~=numel(sigOut)
                         sigOut(f:end) = sigOut(f);
-                    end
-                    
-                    
+                    end                                        
                 end
             else
                 %                 sigOut(isnan(sigIn))=0;
