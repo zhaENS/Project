@@ -246,7 +246,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             k = ones(3)*(1/7);
             k(1,1) = 0;
             k(3,3) = 0;
-            s.Smooth(obj.encounterMat,'MuLambda',10,1);
+            s.Smooth(obj.encounterMat,obj.smoothingMethod,10,1);
             obj.encounterMat = s.signalOut;
             for bIdx=obj.beadRange.bead1
                 obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:));
