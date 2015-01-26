@@ -205,9 +205,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
             sr.numBeads       = numel(obj.beadRange.bead1);
             sr.dt             = 1e-2;
             sr.numSteps       = 500;
-            sr.noiseSTD        = 0.01;
+            sr.noiseSTD        = 0.0;
             sr.dimension       = 3;      
-            sr.b               = sqrt(3);
+            sr.b               = sqrt(1);
             sr.diffusionConst  = 1;
             sr.numSimulations  = 1;
             sr.springConst     = -(sr.dimension* sr.diffusionConst* sr.dt/ sr.b^2)*ones( sr.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
@@ -246,7 +246,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             k = ones(3)*(1/7);
             k(1,1) = 0;
             k(3,3) = 0;
-            s.Smooth(obj.encounterMat,'iterativeGaussianMinMax',10,0.5);
+            s.Smooth(obj.encounterMat,'MuLambda',10,1);
             obj.encounterMat = s.signalOut;
             for bIdx=obj.beadRange.bead1
                 obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:));
