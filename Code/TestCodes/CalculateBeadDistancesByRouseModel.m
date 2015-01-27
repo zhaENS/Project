@@ -48,6 +48,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end
         
         function Initialize(obj,encounterMat)
+            % The input should be two sided encounter ~histogram~ matrix from the HiC
+            % experiment 
+            % two sided analysis should then follow
+            % the connectivity graph should  be created based on two sided
+            % analysis 
             
             if exist('encounterMat','var')
                 obj.ProcessEncounterMatrix(encounterMat);
