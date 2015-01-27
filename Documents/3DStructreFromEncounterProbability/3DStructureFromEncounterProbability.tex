@@ -10,8 +10,8 @@
 \usepackage{subcaption}
 \title{Three-Dimensional Reconstruction Using the Encounter Probabilities}
 \begin{document}
-\section{Using optimization methods}
 \maketitle
+\section{Using optimization methods}
 Given an encounter probability profile of the first bead in a Rouse chain of $N$ bead, we use the expected encounter model in the Rouse chain to give estimate on the 3D organization of the chain. Given the encounter profile $e$, we minimize the goal function of the form
 \begin{eqnarray}
 && min\{f(d)\}\\
@@ -49,11 +49,55 @@ c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^
 The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the linear distance on the chain. The main observation here is that if we estimate the nearest neighbors for each one of the beads, we can construct the whole connectivity map of the polymer. For this end, we take the encounter probability profile for each bead, and look for beads in distances for correspond to the nearest neighbor probability. 
 
 \subsection{Smoothing the encounter signal}
-To locate prominent features of the signal, we have to reduce noise accompanying the experimental data. 
-We start by iteratively applying Gaussian kernel smoothing with increasing variance until the signal is smooth enough. To find the optimal variance for smoothing, we have to impose that the high frequencies which create the noise should be minimized.
+To locate prominent features of the signal, we have to reduce noise accompanying the experimental data. There are several ways to smooth the encounter probability data. We list few plausible methods.
+The smoothing is performed on the encounter frequency signal, before calculating the encounter probability.
 
-One possible numerical criterion for the presence of noise, is the number of local maxima the signal has over all values of variance chosen in the smoothin procedure. We then choose the variance value that give rise to the minimal number of maxima. 
- 
-For example, take the encounter signal of a structure with 128 beads. Smooth it by iteratively convolving the signal using a Gaussian kernel with $\sigma\in [0.1,10]$ , for each $\sigma_i$ calculate the number of local maximas and the FFT.
+\subsubsection{Iterative Gaussian Smoothing}
+We start by iteratively applying Gaussian kernel smoothing with increasing variance for several iterations. The number of iteration is determined by the numerical accuracy of the machine used, which produces noise after several iterations, depending on machine precision, which prevents us from applying the filter indefinitely. 
 
+One possible numerical criterion for the presence of noise, is the change in the number of local maxima the signal has over all values of variance chosen in the smoothing procedure. We then choose the variance value that give rise to the minimal number of maximal points. 
+
+\subsubsection{$\mu|\lambda$ smoothing}\label{subsubsection_muLambdaSmoothing} 
+Taubin's $\mu|\lambda$ smoothing procedure \cite{taubin1995curve}works by sequentially applying Gaussian smoothing with alternate positive and negative scales factors $\lambda$ and $\mu$ respectively, for $N$ iterations. In fact, any type of weighting other than the Gaussian can be applied, with the condition that the weights sum to one, and that no vertex is included in its own neighborhood. 
+
+At first we compute $v_i'$ from $v_i$ by adding to it an averaging of its neighborhood with a positive scale factor $\lambda$ 
+
+\begin{equation*}
+v_i' = v_i+\lambda\sum_{j\in i^*} (v_j-v_i)w_j
+\end{equation*}
+Then, we compute $v_i''$ from $v_i'$ using a negative scale factor $\mu<-\lambda<0$
+\begin{equation*}
+v_i'' = v_i'+\mu\sum_{j\in i^*} (v_j'-v_i')w_j
+\end{equation*}
+with $w_i$ the weighting mask, $i^*$ are the indices of the vertex $i$ neighborhood excluding itself. 
+
+In practice, we perform this by two steps convolution over $N$ iterations with a $n_v\times n_v$ square convolution kernel $W$. The kernel is changed such that $W_{n_v/2,n_v/2} =0; \quad W_{ij}\leftarrow W_{ij}/\sum\sum W_{ij}$. For an input signal $V$, $V' = V+\lambda (V*W-V)$
+and $V''= V'+\mu (V*W-V)$, over $N$ iterations. 
+
+The variables $\mu,\lambda$ and $N$ are determined by solving the inequalities 
+\begin{eqnarray*}
+((\lambda-\mu)^2 /(-4\lambda\mu))^N &<& 1+\delta_{pB}\\
+((1-\lambda k_{sB})(1-\mu k_{sB})^N &<& \delta_{sB}
+\end{eqnarray*}
+with the constraints:
+\begin{equation*}
+N>0,\quad 0<\lambda<-\mu,\quad \lambda<\frac{1}{k_{sB}},\quad \frac{1}{\lambda}+\frac{1}{\mu}=k_{pB}
+\end{equation*} 
+The filter's parameters are then $k_{sB}, k_{pB}$
+We have to change the shape of the neighborhood for the convolution operations, to take into account the shape of the encounter frequency vs. distance matrix. 
+
+\subsection{The steps}
+
+\begin{enumerate}
+\item Obtain the encounter histogram of the HiC data.
+\item Arrange the encounters as $3D$ matrix $E$, with $x$-axes as bead index $b=1,...,N$, $y$-axes as the distance $d=-N..N$ along the chain, and the $z$-axes the number of encounters $E(b,d)$. Arranging the HiC data from left to right, we distinguish between 'right' encounter matrix, $e_r(b,d)$ for $d>0$ and 'left' encounter matrix $e_l(b,-d)$ for $d<0$ such that $E=e_l(b,-d)\bigoplus e_r(b,d)$ which is  $N\times 2N$ matrix. 
+\item Smooth $e_r(b,d)$ and $e_l(b,-d)$ using the procedure described in \ref{subsubsection_muLambdaSmoothing}.
+\item Normalize each row of the smoothed encounter histogram to get probabilities [Read about bias]
+\item Analyze $e_l(b,-d)$ and $e_r(b,d)$ using the procedure described in [Missing subsection] to construct the connectivity graph.
+\end{enumerate}
+
+
+
+\bibliographystyle{plain}
+\bibliography{3DStructureFromEncounterProbabilityBibliography} % the bibliography.bib file 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  23 JAN 2015 15:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  27 JAN 2015 17:41
 entering extended mode
 **3DStructureFromEncounterProbability.tex
 
@@ -191,47 +191,50 @@ LaTeX Font Info:    ... okay on input line 12.
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
- [1
-
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-LaTeX Font Info:    Try loading font information for U+lasy on input line 14.
-
-("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ulasy.fd"
+LaTeX Font Info:    Try loading font information for U+lasy on input line 13.
+ ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 
 LaTeX Warning: No \author given.
 
+[1
 
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
 Overfull \hbox (22.62985pt too wide) in paragraph at lines 48--48
 []\OT1/cmr/bx/n/17.28 Using in-verted prob-a-bil-i-ties as-sum-ing a Rouse
  []
 
 [2] [3]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\3DStructreFromEncounterProb
+ability\3DStructureFromEncounterProbability.bbl") [4]
+("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\3DStructreFromEncounterProb
 ability\3DStructureFromEncounterProbability.aux") ) 
 Here is how much of TeX's memory you used:
- 2902 strings out of 493921
- 43498 string characters out of 3144879
- 105433 words of memory out of 3000000
- 6196 multiletter control sequences out of 15000+200000
- 10262 words of font info for 41 fonts, out of 3000000 for 9000
+ 2910 strings out of 493921
+ 43836 string characters out of 3144879
+ 106433 words of memory out of 3000000
+ 6200 multiletter control sequences out of 15000+200000
+ 10916 words of font info for 43 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,7n,38p,552b,189s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,7n,38p,552b,187s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/Program Files (x86)/MiKTeX 2
 .9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmr12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmr17.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
-blic/amsfonts/cm/cmsy8.pfb>
-Output written on 3DStructureFromEncounterProbability.pdf (3 pages, 102637 byte
+/fonts/type1/public/amsfonts/cm/cmmi6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmmi8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmr12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr17.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmsy6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmti12.pfb>
+Output written on 3DStructureFromEncounterProbability.pdf (4 pages, 145214 byte
 s).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
+ 63 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
