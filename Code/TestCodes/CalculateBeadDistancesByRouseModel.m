@@ -34,7 +34,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.beadRange      = struct('bead1',1:307,...
                                         'bead2',1:306); % bead range to analyze in the encounterMat
             obj.smoothingSpan  = 10;                  % can be a vector of integer, in the present version only the last span is considered
-            obj.smoothingMethod= 'gaussian';          % see smooth function for options 
+            obj.smoothingMethod= 'Mulambda';          % see smooth function for options 
             obj.numDistances   = 1;                   % for how many distances to perform analysis for connectivity
             obj.distToAnalyze  = 1;                   % can be a vector of integers, for what disance to show the analysis
             obj.beadsToAnalyze = 1;                   % for what beads to show the connectivity graphs
@@ -242,14 +242,16 @@ classdef CalculateBeadDistancesByRouseModel<handle
 %             for bIdx = obj.beadRange.bead1
 %                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:));
 %             end
-            s= Smoother;
-            k = ones(3)*(1/7);
+            s      = Smoother;
+            k      = ones(3)*(1/7);
             k(1,1) = 0;
             k(3,3) = 0;
             s.Smooth(obj.encounterMat,obj.smoothingMethod,10,1);
             obj.encounterMat = s.signalOut;
+            
             for bIdx=obj.beadRange.bead1
-                obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:));
+                obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
+                obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:)); % normalize to get probabilities 
             end
         end
         
