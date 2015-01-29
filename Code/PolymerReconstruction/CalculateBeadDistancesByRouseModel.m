@@ -14,34 +14,12 @@ classdef CalculateBeadDistancesByRouseModel<handle
     
     methods
         
-        function obj = CalculateBeadDistancesByRouseModel(params)
+        function obj = CalculateBeadDistancesByRouseModel()
             % class constructor 
          obj.params = ReconstructionParams;
 %             obj.SetParams(params);
         end
-        
-        function SetParams(obj,params)
-            % set default 
-            
-            % set input params
-            % to be done 
-%                         
-%             obj.beadRange      = struct('bead1',1:307,...
-%                                         'bead2',1:306); % bead range to analyze in the encounterMat
-%             obj.smoothingSpan  = 10;                  % can be a vector of integer, in the present version only the last span is considered
-%             obj.smoothingMethod= 'Mulambda';          % see smooth function for options 
-%             obj.numDistances   = 1;                   % for how many distances to perform analysis for connectivity
-%             obj.distToAnalyze  = 1;                   % can be a vector of integers, for what disance to show the analysis
-%             obj.beadsToAnalyze = 1;                   % for what beads to show the connectivity graphs
-%             obj.zeroInterpolationMethod = 'linear';   % how to fill in gaps for zero values of the encoutner signal (see interp1 documentation for methods)
-%             obj.prob2distMethod         = 'rouse'; % how to transform probability into distance [fitModel,rouse,composite]
-%             obj.model          = fittype('(1/sum(x.^(-beta))).*x.^(-beta)'); % the model to be used to fit probabilities 
-%             obj.fitOpt         = fitoptions(obj.model);                      % fiting options 
-%             set(obj.fitOpt,'Lower',0,'Upper',1.5,'StartPoint',1,'Robust','off');
-%             obj.dataFolder     = fullfile(pwd,'ExperimentDataAnalysis');     % default data folder
-%             obj.dataFileName   = 'savedAnalysisTADDAndE';                    % name of dataset
-        end
-        
+                
         function Initialize(obj,encounterMat)
             % The input should be two sided encounter ~histogram~ matrix from the HiC
             % experiment 
