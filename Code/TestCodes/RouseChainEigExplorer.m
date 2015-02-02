@@ -19,7 +19,7 @@ methods
         obj.matrix = RouseMatrix(20);
         [obj.eigenvectors, obj.eigenvalues] = eig(obj.matrix);
         
-         obj.handles.mainFigure = figure('Units','norm');
+         obj.handles.mainFigure = figure('Units','norm','MenuBar','none','ToolBar','none');
          % display panel
          obj.handles.displayPanel= uipanel('Parent',obj.handles.mainFigure,...
              'Units','norm',...             
@@ -42,7 +42,7 @@ methods
              'Callback',@obj.SliderCallback,...
              'Style','slider',...
              'Min', 0,...
-             'Max',size(obj.matrix,1)-1);
+             'Max',2*(size(obj.matrix,1)-1));
          
          % eig index
          eigString = num2str(1);
@@ -85,6 +85,7 @@ methods
         c = get(obj.handles.mainAxes,'CameraPosition');
         surf(obj.handles.mainAxes,obj.matrix);%,[],'Parent',obj.handles.mainAxes) 
         set(obj.handles.mainAxes,'CameraPosition',c)
+        cameratoolbar
     end
     
     function EditEigValue(obj,varargin)
@@ -101,12 +102,15 @@ methods
         numBeads = str2double(get(obj.handles.numBeads,'String'));
         obj.matrix = RouseMatrix(numBeads);
         [obj.eigenvectors, obj.eigenvalues] = eig(obj.matrix);
+        obj.eigenvalues = max(obj.eigenvalues,0);
         eigString = num2str(1);
          for bIdx = 2:size(obj.matrix,1)
            eigString = [eigString '|', num2str(bIdx)];
          end
          set(obj.handles.dropDown,'String',eigString);
-         set(obj.handles.slider,'Max',numBeads-1);
+         set(obj.handles.dropDown,'Value',1);
+         set(obj.handles.slider,'Value',obj.eigenvalues(1,1));
+%          set(obj.handles.slider,'Max',numBeads-1);         
         obj.Display
     end
     
