@@ -11,9 +11,9 @@ profile on
 % Initialize environment
 curPath = pwd;
 addpath(genpath(fullfile(curPath,'..','..','Utils')));
-xmlStr = fileread('SimulationFrameworkParams.xml');
-params = xml_parse(xmlStr);
-
+% xmlStr = fileread('SimulationFrameworkParams.xml');
+% params = xml_parse(xmlStr);
+params = SimulationFrameworkParams;
 % SimulatorParams
 r = RouseSimulatorFramework(params);
 r.Run

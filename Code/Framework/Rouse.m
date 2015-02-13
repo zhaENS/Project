@@ -99,7 +99,7 @@ classdef Rouse<handle
             obj.params.LJPotentialDepth  = 1e-5;             
             obj.params.LJPotentialWidth  = 10;            
             obj.params.bendingConst      = 0.1;                        
-            obj.params.connectMonomers   = [];% bounded monomers should come in pairs, this is an integer list of [n by 2]
+            obj.params.connectedBeads   = [];% bounded monomers should come in pairs, this is an integer list of [n by 2]
             obj.params.beta              = 2*ones(obj.params.numBeads); % the anomolouse exponent. for beta~=2 all beads are connected. 
             
         end
@@ -224,7 +224,7 @@ classdef Rouse<handle
             % changed. 
             % adjust connect monomer list accordingly 
             obj.AdjustConnectedMonomersList
-            cm = obj.params.connectMonomers;
+            cm = obj.params.connectedBeads;
             assert(all(cm(:)<=obj.params.numBeads),'The monomers index to connect cannot exceed the number of monomers in the chain')
            
             % recalculate the connection map 
@@ -338,11 +338,12 @@ classdef Rouse<handle
         
         function SetRouseMatrix(obj)
             % Define the Rouse matrix 
-            obj.mobilityMatrices.rouse          = 2*eye(obj.params.numBeads)...
-                                                  -diag(ones(1,obj.params.numBeads-1),1)...
-                                                  -diag(ones(1,obj.params.numBeads-1),-1);
-            obj.mobilityMatrices.rouse(1,1)     = 1;
-            obj.mobilityMatrices.rouse(end,end) = 1;
+            obj.mobilityMatrices.rouse = RouseMatrix(obj.params.numBeads);
+%             obj.mobilityMatrices.rouse          = 2*eye(obj.params.numBeads)...
+%                                                   -diag(ones(1,obj.params.numBeads-1),1)...
+%                                                   -diag(ones(1,obj.params.numBeads-1),-1);
+%             obj.mobilityMatrices.rouse(1,1)     = 1;
+%             obj.mobilityMatrices.rouse(end,end) = 1;
         end
         
         function AdjustConnectedMonomersList(obj)% unfinished

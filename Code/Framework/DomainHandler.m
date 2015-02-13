@@ -113,7 +113,8 @@ classdef DomainHandler<handle
                     obj.points.x = [];
                     obj.points.y = [];
                     obj.points.z = [];
-
+            else 
+                error('unsupported domain type');
             end
             
             delete(obj.handles.graphical.domain);

@@ -1,13 +1,20 @@
 classdef RouseSimulatorFramework<handle
+    %TODO: debug 
     %TODO: add plotter class
     %TODO: add presets for simulations,(load/save)
     %TODO: move the initialization of the chains to allow initialization on
     %the fly
     %TODO: add a listener that draws emails from the server, to allow
     %controlling the simulations from a distance
-    %TODO: save noise terms to allow resimulations
+    %TODO: save noise terms seeds to allow resimulations
     %TODO: save parameters and a short explanation with the results
-    
+    %TODO: parameters should have their own class for each class
+    %TODO: remove the option to plot online. plotting is always offline.
+    %remove parentAxes property from domainHandlerParams
+    %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params 
+    %TODO: add class for each force. input: position, connectivityMat,
+    %distances. output: bead displacement
+    %TODO: 
     properties
         handles        
         beadDistance
@@ -46,47 +53,15 @@ classdef RouseSimulatorFramework<handle
         end
         
         function OrganizeParams(obj,frameworkParams)
-            obj.params                             = frameworkParams;
-            obj.params.domainParams.dimension      = obj.params.simulatorParams.dimension;
-            obj.params.domainParams.parentAxes     = obj.handles.graphical.mainAxes;
-            obj.params.rouseParams.dimension       = obj.params.simulatorParams.dimension;
+            obj.params                       = frameworkParams;
+            obj.params.domain.dimension      = obj.params.simulator.dimension;
+            obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
+            obj.params.chain.dimension       = obj.params.simulator.dimension;
                       
-            obj.params.dataRecorder.recipeFileName = obj.params.simulatorParams.recipeFileName;
-            obj.params.dataRecorder.encounterDist = obj.params.simulatorParams.encounterDist;
+            obj.params.dataRecorder.recipeFileName = obj.params.simulator.recipeFileName;
+            obj.params.dataRecorder.encounterDist  = obj.params.simulator.encounterDist;
         end
-        
-        function SetDefaultParams(obj)
-            
-           % Set default parameters 
-           obj.params.simulationType         ='RunFree';% simulationTypes are:
-           obj.params.numSimulationBatches   = 0;
-           obj.params.numSimulations         = 0;
-           obj.params.numChains              = 1;
-           obj.params.numBeads               = 5;
-           obj.params.dt                     = 1e-2; %[sec]
-           obj.params.diffusionConst         = 1e-3;
-           obj.params.bendingConst           = 0.5;
-           obj.params.minBeadDist            = 1;
-%            obj.params.calculateBeadDists     = false;
-%            obj.params.stopIfMinDistReached   = false;
-           obj.params.numSteps               = Inf;
-           obj.params.runSimulation          = true;           
-           obj.params.plotChains             = false;
-           obj.params.showDomain             = false;
-           obj.params.dimension              = 3;
-           obj.params.domainShape            = 'none';
-           obj.params.domainWidth            = 50; %[muM]
-           obj.params.domainHeight           = 50; % in case the domain is not spherical
-           obj.params.connectMonomers        = [];
-           obj.params.bendingElasticityForce = true;
-           obj.params.lennardJonesForce      = true;
-           obj.params.LJPotentialWidth       = 1e-4; %[muM]
-           obj.params.LJPotentialDepth       = 1e-13;
-           obj.params.stopIfMinDistReached   = false;
-           obj.params.springForce            = true;
-           obj.params.recordDistributions    = true;
-        end
-        
+                
         function SetInputParams(obj,varargin)
             if mod(numel(varargin),2)~=0
                 error('value pair input must come in pairs')
@@ -96,10 +71,10 @@ classdef RouseSimulatorFramework<handle
             end
         end
                 
-        function SetChainParams(obj)
+        function SetChainParams(obj)%obsolete
                        % set chain parameters 
            for cIdx = 1:obj.params.numChains
-               obj.params.chainParams{cIdx}    = ...
+               obj.params.chain{cIdx}    = ...
                          {'dt',obj.params.dt,... 
                           'numBeads',obj.params.numBeads,...
                           'dimension',obj.params.dimension,...
@@ -125,18 +100,18 @@ classdef RouseSimulatorFramework<handle
         function InitializeClasses(obj)
             obj.CreateDomain
             obj.InitializeChains                                          
-            obj.InitializeDistributionHandler
+%             obj.InitializeDistributionHandler
             obj.InitializeDataRecorder;
         end
         
         function InitializeChains(obj)
            % set graphics
-           l = linspace(0.4,0.9,obj.params.simulatorParams.numChains);
+           l = linspace(0.4,0.9,obj.params.simulator.numChains);
           
-           for cIdx = 1:obj.params.simulatorParams.numChains
+           for cIdx = 1:obj.params.simulator.numChains
                r = zeros(1,3);
                for rIdx = 1:3
-                k       = randperm(obj.params.simulatorParams.numChains);
+                k       = randperm(obj.params.simulator.numChains);
                 r(rIdx) = k(1);
                end
                obj.chainColors(cIdx,1:3) = [l(r(1)),l(r(2)),l(r(3))];
@@ -144,13 +119,13 @@ classdef RouseSimulatorFramework<handle
         
         
          % Create chains 
-            for cIdx = 1:obj.params.simulatorParams.numChains
+            for cIdx = 1:obj.params.simulator.numChains
                 % Initialize class
-                cParams                         = obj.params.rouseParams;
+                cParams                         = obj.params.chain;
                 obj.handles.classes.rouse(cIdx) = Rouse(cParams);
                 % make sure the chain is inside the domain
                 obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
-                if ~(obj.params.rouseParams.springForce) && ~obj.params.rouseParams.bendingElasticityForce
+                if ~(obj.params.chain.springForce) && ~obj.params.chain.bendingElasticityForce
                     lineStyle = 'none';
                 else
                     lineStyle = '-';
@@ -173,7 +148,7 @@ classdef RouseSimulatorFramework<handle
                 
                 
                 % Plot connectors
-                if obj.params.rouseParams.springForce || obj.params.rouseParams.bendingElasticityForce
+                if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce
                                                                         
                    cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
                     for mIdx = 1:size(cm,1);
@@ -200,7 +175,7 @@ classdef RouseSimulatorFramework<handle
         
         function ReadRecipeFile(obj)
 %             try
-         t = fileread([obj.params.simulatorParams.recipeFileName,'.rcp']);
+         t = fileread([obj.params.simulator.recipeFileName,'.rcp']);
 %             catch
                 % if the file does not exist, read the default file 
 %             end
@@ -215,14 +190,7 @@ classdef RouseSimulatorFramework<handle
              functionName = strtrim(t(funcStartPos2(end)+1:funcEndPos1(end)-1));
              obj.recipe.(functionName) = t(funcEndPos2(end)+1:end);     
         end
-        
-        function InitializeDistributionHandler(obj)
-            % Initialize distributionsHandler with the initialized Rouse
-            % models 
-            obj.handles.classes.distributionHandler  = DistributionsHandler(obj.handles.classes.rouse);
-            obj.handles.classes.distributionHandler.Add;% add the first observation(initial chain position);
-        end
-                
+               
         function InitializeDataRecorder(obj)
             obj.handles.classes.dataRecorder = SimulationDataRecorder(obj.params.dataRecorder);
         end
@@ -254,10 +222,10 @@ classdef RouseSimulatorFramework<handle
             % Run the simulation according to the specified simulationType
             % parameter
            
-            for bIdx = 1:obj.params.simulatorParams.numSimulationBatches
+            for bIdx = 1:obj.params.simulator.numSimulationBatches
                 % perform actions before each simulation batch
                 obj.PreSimulationBatchActions
-                for sIdx = 1:obj.params.simulatorParams.numSimulations
+                for sIdx = 1:obj.params.simulator.numSimulations
                     % perform actions before each simulation
                     obj.PreRunActions                    
                     while obj.runSimulation
@@ -285,7 +253,7 @@ classdef RouseSimulatorFramework<handle
               obj.Record % record data related to the Rouse polymer                        
               % raise the Stop flag if the number of steps is more than the allowed
               obj.runSimulation = obj.runSimulation && ...
-             (obj.simulationData(obj.batchRound,obj.simulationRound).step<obj.params.simulatorParams.numSteps);
+             (obj.simulationData(obj.batchRound,obj.simulationRound).step<obj.params.simulator.numSteps);
         end
         
         function PostRunActions(obj)
@@ -297,8 +265,8 @@ classdef RouseSimulatorFramework<handle
             obj.handles.classes.dataRecorder.SetSimulationEndTime;
             obj.handles.classes.dataRecorder.SaveResults;% save results
             
-            if obj.params.simulatorParams.notifyByEmail
-                if mod(obj.simulationRound,obj.params.simulatorParams.notifyCycleLength)==0
+            if obj.params.simulator.notifyByEmail
+                if mod(obj.simulationRound,obj.params.simulator.notifyCycleLength)==0
                     msg = sprintf('%s%s%s\n%s%s%s\n%s%s\n%s','simulation batch',num2str(obj.batchRound),', ',...
                         'simulation ', num2str(obj.simulationRound),' is done. ',...
                         'Simulation Time: ',num2str(obj.handles.classes.dataRecorder.simulationData(obj.simulationRound).simulationTime),...
@@ -315,7 +283,7 @@ classdef RouseSimulatorFramework<handle
             % actions performed post simulation batch
             eval(obj.recipe.PostSimulationBatchActions);            
             obj.handles.classes.dataRecorder.ClearAllSimulationData;            
-            obj.simulationRound = 0;               
+%             obj.simulationRound = 0;               
         end
         
         function CreateControls(obj)% move to Plotter class
@@ -352,9 +320,9 @@ classdef RouseSimulatorFramework<handle
 
         end
         
-        function CreateDomain(obj)
+        function CreateDomain(obj)% move to plotter class
            set(obj.handles.graphical.mainAxes,'NextPlot','Add')
-              obj.handles.classes.domain = DomainHandler(obj.params.domainParams);
+              obj.handles.classes.domain = DomainHandler(obj.params.domain);
            set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
 
         end
@@ -372,7 +340,7 @@ classdef RouseSimulatorFramework<handle
         
         function NextStep(obj,varargin)
             % Next simulation step 
-            for cIdx = 1:obj.params.simulatorParams.numChains 
+            for cIdx = 1:obj.params.simulator.numChains 
                 obj.handles.classes.rouse(cIdx).Next
                 obj.Reflect(cIdx)             
 %                 obj.handles.classes.rouse(cIdx).GetSprings;
@@ -400,7 +368,7 @@ classdef RouseSimulatorFramework<handle
                     beadPrev.(dimName{dIdx}) = prevPos.(dimName{dIdx})(outIdx(oIdx));
                 end
                 [~,np] = obj.handles.classes.domain.Reflect(beadPrev,beadCur);
-                for dIdx = 1:obj.params.simulatorParams.dimension
+                for dIdx = 1:obj.params.simulator.dimension
                     obj.handles.classes.rouse(chainIdx).positions.beads.cur.(dimName{dIdx})(outIdx(oIdx))  = np.(dimName{dIdx});                    
                 end                 
             end  
@@ -409,7 +377,7 @@ classdef RouseSimulatorFramework<handle
         function Record(obj)
             % Add samples to the recorded distributions in
             % distributionHandler
-            if obj.params.simulatorParams.recordData
+            if obj.params.simulator.recordData
 %                obj.handles.classes.distributionHandler.Add% add to the frequency array of the distributionHandler
                obj.handles.classes.dataRecorder.Add;
             end
@@ -442,15 +410,15 @@ classdef RouseSimulatorFramework<handle
         end
         
         function ShowSimulation(obj)% move to Plotter class
-         if obj.params.simulatorParams.showSimulation 
+         if obj.params.simulator.showSimulation 
             obj.ShowDomain
             obj.PlotChains 
          end
         end
                 
         function PlotChains(obj)% move to Plotter class
-%             if obj.params.simulatorParams.plotChains
-                for cIdx = 1:obj.params.simulatorParams.numChains
+%             if obj.params.simulator.plotChains
+                for cIdx = 1:obj.params.simulator.numChains
                     p = obj.handles.classes.rouse(cIdx).positions.beads.cur;
                     set(obj.handles.graphical.chain(cIdx).beads,...
                         'XData',p.x,...
@@ -460,7 +428,7 @@ classdef RouseSimulatorFramework<handle
                     
                     % plot the connectors between beads ( plot only non
                     % trivial connections)
-                    if obj.params.rouseParams.springForce || obj.params.rouseParams.bendingElasticityForce
+                    if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce
                         % Plot connectors for non trivial (non consecutives
                         % beads) connections 
                     cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
@@ -488,7 +456,7 @@ classdef RouseSimulatorFramework<handle
         end
         
         function ShowDomain(obj)% move to Plotter class
-%             if obj.params.simulatorParams.showDomain
+%             if obj.params.simulator.showDomain
                 obj.handles.classes.domain.ShowDomain()
 %                 obj.SetAxesLimits       
 %             end
@@ -512,17 +480,17 @@ classdef RouseSimulatorFramework<handle
 %              drawnow
         end
         
-        function GetChainsCenterOfMass(obj)
+        function GetChainsCenterOfMass(obj)% move to chain class
            % get the center of mass of ALL chains  
-           ccm(1:obj.params.simulatorParams.numChains) = struct('x',[],'y',[],'z',[]);
+           ccm(1:obj.params.simulator.numChains) = struct('x',[],'y',[],'z',[]);
            
-            for cIdx = 1:obj.params.simulatorParams.numChains              
+            for cIdx = 1:obj.params.simulator.numChains              
               ccm(cIdx) = obj.handles.classes.rouse(cIdx).positions.beads.cm;             
             end
            
-           cm.x = sum([ccm.x])/obj.params.simulatorParams.numChains;
-           cm.y = sum([ccm.y])/obj.params.simulatorParams.numChains;
-           cm.z = sum([ccm.z])/obj.params.simulatorParams.numChains;
+           cm.x = sum([ccm.x])/obj.params.simulator.numChains;
+           cm.y = sum([ccm.y])/obj.params.simulator.numChains;
+           cm.z = sum([ccm.z])/obj.params.simulator.numChains;
            obj.chainsCenterOfMass = cm;
         end
     end
