@@ -21,7 +21,7 @@ numSimulations@double   % number of simulations in each round
 numSteps@double         % n times the number of steps until relaxation of the chain 
 plot@logical            % TODO: should call the plotter  [obsolete]
 recipeFileName@char     % recipe filename
-recipeFolder@char       % wrecipe folder
+recipeFolder@char       % recipe folder
 recordPath@logical      % record bead position (slows down simulations)
 saveBeadDist@char       % options [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
 saveResults@logical     % save results to folder (logical)  
