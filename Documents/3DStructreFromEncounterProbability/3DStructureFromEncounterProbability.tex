@@ -46,7 +46,7 @@ c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^
 \end{equation}
 
 \section{Using inverted probabilities assuming a Rouse chain}
-The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the linear distance on the chain. The main observation here is that if we estimate the nearest neighbors for each one of the beads, we can construct the whole connectivity map of the polymer. For this end, we take the encounter probability profile for each bead, and look for beads in distances for correspond to the nearest neighbor probability. 
+The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the distance between beads on the chain. The main observation here is that if we estimate the nearest neighbors encounter probability for each bead, we can construct the whole connectivity map of the polymer. It will later be left to show that the non-nearest bneighbor encounter probability will serve as correction factors.
 
 \subsection{Smoothing the encounter signal}
 To locate prominent features of the signal, we have to reduce noise accompanying the experimental data. There are several ways to smooth the encounter probability data. We list few plausible methods.
