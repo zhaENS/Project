@@ -46,11 +46,14 @@ classdef CalculateBeadDistancesByRouseModel<handle
             % specified distance
             if strcmpi(side,'left')% left encounters
                 % take the left side of the encounter matrix and rotate it 
-                encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,...
-                                              1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
-                encounters = fliplr(encounters);
+%                 encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,...
+%                                               1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
+%                 encounters = fliplr(encounters);
+                encounters = tril(obj.encounterMat)';
+                
             elseif strcmpi(side,'right')% right encounters 
-                encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1 :end);                
+%                 encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1 :end);                
+                  encounters = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
             end
             
             % Preallocations
@@ -224,13 +227,19 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             % smooth left and right 
             s      = Smoother;            
-            left  = obj.encounterMat(:,1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
-            right = obj.encounterMat(:,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1:end);
-            s.Smooth(left,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma);
-            left = s.signalOut;
-            s.Smooth(right,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma);
+            left  = tril(obj.encounterMat);
+            right = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
+            
+%             left  = obj.encounterMat(:,1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
+%             right = obj.encounterMat(:,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1:end);
+
+            
+            s.Smooth(left',obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+            left = s.signalOut';
+            s.Smooth(right,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
             right = s.signalOut;
-            obj.encounterMat = [left, zeros(size(left,1),1), right];
+            right = right-diag(diag(right));
+            obj.encounterMat = left+right;%[left, zeros(size(left,1),1), right];
             
             for bIdx=obj.params.reconstruction.beadRange.bead1
 %                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
@@ -419,7 +428,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 s           = sum(inds.^(-beta));
                 modelValues = obj.params.optimization.model(beta,inds);
                 modelValues = modelValues./modelValues(1) *max(prob(1:5));
-                dists       = (prob *s).^(-1./beta);
+                dists       = (prob *s).^(-1/beta);
             elseif strcmpi(obj.params.reconstruction.prob2distMethod,'composite')
 %                 do nothing
             end
