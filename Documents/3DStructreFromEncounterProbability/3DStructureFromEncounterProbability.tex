@@ -50,7 +50,11 @@ The procedure relies on the nearest neighbor connectivity. As with the previous 
 
 \subsection{Smoothing the encounter signal}
 To locate prominent features of the signal, we have to reduce noise accompanying the experimental data. There are several ways to smooth the encounter probability data. We list few plausible methods.
-The smoothing is performed on the encounter frequency signal, before calculating the encounter probability.
+The smoothing is performed on the encounter frequency signal, before calculating the encounter probability. 
+
+\subsubsection{Averaging}
+Due to the structure of the encounter frequency matrix, we have to choose a proper smoothing kernel. To take into account the structure of the chain , smoothing is performed with the following kernel 
+
 
 \subsubsection{Iterative Gaussian Smoothing}
 We start by iteratively applying Gaussian kernel smoothing with increasing variance for several iterations. The number of iteration is determined by the numerical accuracy of the machine used, which produces noise after several iterations, depending on machine precision, which prevents us from applying the filter indefinitely. 
