@@ -49,11 +49,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
 %                 encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,...
 %                                               1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
 %                 encounters = fliplr(encounters);
-                encounters = tril(obj.encounterMat)';
-                
+                encounters = obj.encounterMat(:,1:(size(obj.encounterMat,2)-1)/2);% tril(obj.encounterMat)';
+                 encounters = fliplr(encounters);
             elseif strcmpi(side,'right')% right encounters 
 %                 encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1 :end);                
-                  encounters = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
+                  encounters = obj.encounterMat(:,(size(obj.encounterMat,2)+1)/2:end);
             end
             
             % Preallocations
@@ -78,7 +78,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % expected model
 
                     [~,modelValues] = obj.TransformProbToDist(observedProb);
-%                     [chainRingStruct]    = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
+                    [chainRingStruct]    = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
                     % obtain the values of the composite structure
 %                     vals = obj.GetCompositeFunctionVals(chainRingStruct);
                     inds = 1:numel(observedProb);
@@ -226,20 +226,22 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.params.reconstruction.beadRange.bead2 = 1:size(encounterMat,2);
             
             % smooth left and right 
-            s      = Smoother;            
-            left  = tril(obj.encounterMat);
-            right = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
+            s      = Smoother;        
+            left  = obj.encounterMat(:,1:(size(encounterMat,2)-1)/2);
+            right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
+%             left  = tril(obj.encounterMat);
+%             right = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
             
 %             left  = obj.encounterMat(:,1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
 %             right = obj.encounterMat(:,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1:end);
 
             
-            s.Smooth(left',obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-            left = s.signalOut';
+            s.Smooth(left,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+            left = s.signalOut;
             s.Smooth(right,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
             right = s.signalOut;
-            right = right-diag(diag(right));
-            obj.encounterMat = left+right;%[left, zeros(size(left,1),1), right];
+%             right = right-diag(diag(right));
+            obj.encounterMat = [left, zeros(size(left,1),1), right];
             
             for bIdx=obj.params.reconstruction.beadRange.bead1
 %                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
