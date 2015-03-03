@@ -42,7 +42,7 @@ classdef ReconstructionParams<handle
         function SetSmootherParams(obj)
             % Signal smoothing parameters
             params.nHoodRad  = 3;         % radius of kernel (full size is [2nHoodRad+1,2nHoodRad+1] in the 2D case)
-            params.method    = 'Gaussian'; % smoothing method
+            params.method    = 'Bilateral'; % smoothing method
             params.sigma     = 1;  % std of kernel (or degree)
             smoothKernel     = eye(2*params.nHoodRad+1);
             n                = size(smoothKernel,1);
