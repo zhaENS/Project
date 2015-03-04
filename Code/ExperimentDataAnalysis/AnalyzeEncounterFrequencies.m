@@ -97,11 +97,17 @@ classdef AnalyzeEncounterFrequencies<handle
             
             obj.CreateEncounterFrequencyMatrices;
             fNames = lower(obj.params.replicateName);
+            
             for fIdx = 1:numel(fNames)
              [oneSide, twoSides] = obj.ProcessEncounters(obj.params.beadRangeToAnalyze,fNames{fIdx});
-              obj.beadData.encounterData.twoSides.(fNames{fIdx})= twoSides;
-              obj.beadData.encounterData.oneSide.(fNames{fIdx}) = oneSide;
+              obj.beadData.encounterProb.twoSides.(fNames{fIdx})= twoSides;
+              obj.beadData.encounterProb.oneSide.(fNames{fIdx}) = oneSide;
+              % process frequencies
+              [oneSidef, twoSidesf] = obj.ProcessFrequencies(obj.params.beadRangeToAnalyze,fNames{fIdx});
+              obj.beadData.encounterFreq.twoSides.(fNames{fIdx})= twoSidesf;
+              obj.beadData.encounterFreq.oneSide.(fNames{fIdx}) = oneSidef;
             end
+            
             obj.FitData;
             
             obj.FitMeanModel;
@@ -185,11 +191,11 @@ classdef AnalyzeEncounterFrequencies<handle
         function [oneSide, twoSides,encounterOneSide,oneSideTr] = ProcessEncounters(obj,beadRangeToAnalyze,replicateName)
             % Process encounters             
             % Get encoutner matrix in the range specified by analysisRange
-            allFreq   = obj.GetEncounterMatrix(beadRangeToAnalyze,replicateName);
-            twoSides  = cell(numel(beadRangeToAnalyze.bead1),2);
-            inds1     = beadRangeToAnalyze.bead1;
-            inds2     = beadRangeToAnalyze.bead2;  
-            encounterOneSide         = nan(obj.beadData.numBeads,obj.beadData.numBeads-1);
+            allFreq          = obj.GetEncounterMatrix(beadRangeToAnalyze,replicateName);
+            twoSides         = cell(numel(beadRangeToAnalyze.bead1),2);
+            inds1            = beadRangeToAnalyze.bead1;
+            inds2            = beadRangeToAnalyze.bead2;  
+            encounterOneSide = nan(obj.beadData.numBeads,obj.beadData.numBeads-1);
             
             % Compute  encounter probability 
             count = 1;
@@ -227,6 +233,57 @@ classdef AnalyzeEncounterFrequencies<handle
             count = 1;
             for b1Idx= inds1
                 encounterOneSide(b1Idx,:) = encounterOneSide(b1Idx,:)/obj.SumIgnoreNaN(encounterOneSide(b1Idx,:),2);
+                encounterOneSide(b1Idx,~oneSideTr(b1Idx,:))= nan;
+                oneSide{count,1} = encounterOneSide(b1Idx,:);
+                count = count+1;
+            end
+        end
+        
+        function [oneSide, twoSides,encounterOneSide,oneSideTr] = ProcessFrequencies(obj,beadRangeToAnalyze,replicateName)
+            % Process frequencies             
+            % Get frequency matrix in the range specified by analysisRange
+            allFreq          = obj.GetEncounterMatrix(beadRangeToAnalyze,replicateName);
+            twoSides         = cell(numel(beadRangeToAnalyze.bead1),2);
+            inds1            = beadRangeToAnalyze.bead1;
+            inds2            = beadRangeToAnalyze.bead2;  
+            encounterOneSide = nan(obj.beadData.numBeads,obj.beadData.numBeads-1);
+            
+            % Compute  encounter probability 
+            count = 1;
+            for b1Idx = inds1
+                for b2Idx = inds2
+                    dist = abs(b1Idx-b2Idx);
+                    if dist~=0
+                    after  = nan;
+                    before = nan;
+                    if (b1Idx+dist)<=obj.beadData.numBeads-1
+                        after  = allFreq(b1Idx,b1Idx+dist);
+                    end
+                    if (b1Idx-dist)>=1
+                        before = allFreq(b1Idx,b1Idx-dist);
+                    end
+                    twoSides{count,1}(dist) = before;
+                    twoSides{count,2}(dist) = after;                    
+                    m    = obj.MeanIgnoreNaN( [before, after],2);
+                    encounterOneSide(b1Idx,dist) = m;
+                    end
+                end
+                % normalize two sides 
+%                 s = obj.SumIgnoreNaN([twoSides{count,1},twoSides{count,2}],2);
+%                 twoSides{count,1} = twoSides{count,1}/s;
+%                 twoSides{count,2} = twoSides{count,2}/s;
+                
+                count = count+1;
+            end
+            
+            % Define valid indices 
+            oneSideTr = ~isnan(encounterOneSide);            
+            oneSide   = cell(beadRangeToAnalyze.bead1(end)-beadRangeToAnalyze.bead1(1)+1,1);
+
+       % Divide by the sum of each row to get probability 
+            count = 1;
+            for b1Idx= inds1
+                encounterOneSide(b1Idx,:) = encounterOneSide(b1Idx,:);%/obj.SumIgnoreNaN(encounterOneSide(b1Idx,:),2);
                 encounterOneSide(b1Idx,~oneSideTr(b1Idx,:))= nan;
                 oneSide{count,1} = encounterOneSide(b1Idx,:);
                 count = count+1;
@@ -289,7 +346,7 @@ classdef AnalyzeEncounterFrequencies<handle
                 missingIdx  = [];% missing beads indices
                 for bIdx = 1:numel(obj.params.beadRangeToAnalyze.bead1); %obj.beadData.numBeads
                     
-                    freq = obj.beadData.encounterData.oneSide.(lower(fNames{fIdx}))(bIdx,1);% raw data
+                    freq = obj.beadData.encounterProb.oneSide.(lower(fNames{fIdx}))(bIdx,1);% raw data
                     if ~all(freq{:}==0)% if it is present in the database
                         freq = {freq{:}./obj.SumIgnoreNaN(freq{:})};% normalize to create probability
                     end                    
@@ -379,9 +436,9 @@ classdef AnalyzeEncounterFrequencies<handle
         function FitMeanModel(obj)
             % Calculate the mean of the mean data
             [distMin,distMax] = obj.GetDistanceRange;                 
-            dists = distMin:distMax;            
-            model                         = obj.params.fitModel;
-            [meanSignal,~,~] = obj.GetMeanSignal(obj.params.beadRangeToAnalyze,'average');
+            dists             = distMin:distMax;            
+            model             = obj.params.fitModel;
+            [meanSignal,~,~]  = obj.GetMeanSignal(obj.params.beadRangeToAnalyze,'average');
              obj.results.fit.allData.meanEncounterProb = meanSignal;
             [fitObject, gof]              = fit(dists',meanSignal(dists)',model,obj.params.fOptions);
             obj.results.fit.allData.bias  = 1/(sum(dists.^(-fitObject.slope)));
@@ -510,8 +567,21 @@ classdef AnalyzeEncounterFrequencies<handle
             twoSided = zeros(numBeads,numBeads-1 +1 +numBeads-1);
             % The encounter signal probability
             for bIdx = 1:numel(analysisRange.bead1);%numBeads
-                oneSided(bIdx,:) = obj.beadData.encounterData.oneSide.(lower(fName)){bIdx};
-                t = obj.beadData.encounterData.twoSides.(fName)(bIdx,:);
+                oneSided(bIdx,:) = obj.beadData.encounterProb.oneSide.(lower(fName)){bIdx};
+                t = obj.beadData.encounterProb.twoSides.(fName)(bIdx,:);
+                twoSided(bIdx,numBeads-numel(t{1}):numBeads-1) = fliplr(t{1});
+                twoSided(bIdx,numBeads+1:numBeads+numel(t{2})) = t{2};
+            end
+        end
+        
+        function [oneSided,twoSided] = GetEncounterFrequencyMatrix(obj,analysisRange,fName)% nfinished
+            numBeads = (obj.beadData.numBeads); 
+            oneSided = zeros(numBeads,numBeads-1);             
+            twoSided = zeros(numBeads,numBeads-1 +1 +numBeads-1);
+            % The encounter signal probability
+            for bIdx = 1:numel(analysisRange.bead1);%numBeads
+                oneSided(bIdx,:) = obj.beadData.encounterFreq.oneSide.(lower(fName)){bIdx};
+                t = obj.beadData.encounterFreq.twoSides.(fName)(bIdx,:);
                 twoSided(bIdx,numBeads-numel(t{1}):numBeads-1) = fliplr(t{1});
                 twoSided(bIdx,numBeads+1:numBeads+numel(t{2})) = t{2};
             end
@@ -678,10 +748,10 @@ classdef AnalyzeEncounterFrequencies<handle
                             
                            
                         elseif strcmpi(sides,'twoSides')
-%                               eData = [fliplr(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
-%                                      obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}];                                 
+%                               eData = [fliplr(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
+%                                      obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,2}];                                 
                             if ~exist('distance','var')
-                              distance = (1:numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2})); % at what distance to display the encounter probability 
+                              distance = (1:numel(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,2})); % at what distance to display the encounter probability 
                               indsLeft  = distance;
                               indsRight = distance;
                             else
@@ -689,8 +759,8 @@ classdef AnalyzeEncounterFrequencies<handle
                                indsRight = distance;
                             end
                            
-                            eData     = [fliplr(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}(indsLeft)),...
-                                         obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}(indsRight)];
+                            eData     = [fliplr(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,1}(indsLeft)),...
+                                         obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,2}(indsRight)];
                                                 
                             line('XData',[-fliplr(indsLeft) indsRight],...
                                 'YData',eData,...
@@ -1042,18 +1112,18 @@ classdef AnalyzeEncounterFrequencies<handle
             d      = zeros(obj.beadData.numBeads,numel(fNames));
             meanDiff = zeros(1,numel(fNames));
             for fIdx = 1:numel(fNames)
-                for bIdx = 1:numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx}))(:,1))
+                for bIdx = 1:numel(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx}))(:,1))
                     % find the end with the least number of beads
-                    [~,m] = min([numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
-                        numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2})]);
-                    numPoints = numel(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,m});
+                    [~,m] = min([numel(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,1}),...
+                        numel(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,2})]);
+                    numPoints = numel(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,m});
                     
-                    if ~isempty(obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1})
+                    if ~isempty(obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,1})
                         
-                        pLeft = obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,1}(1:numPoints);
+                        pLeft = obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,1}(1:numPoints);
                         pLeft = pLeft./obj.SumIgnoreNaN(pLeft);
                         
-                        pRight = obj.beadData.encounterData.twoSides.(lower(fNames{fIdx})){bIdx,2}(1:numPoints);
+                        pRight = obj.beadData.encounterProb.twoSides.(lower(fNames{fIdx})){bIdx,2}(1:numPoints);
                         pRight = pRight./obj.SumIgnoreNaN(pRight);% get prob by normalizeing
                         
                         d(bIdx,fIdx) = mean(pLeft-pRight);
@@ -1115,17 +1185,17 @@ classdef AnalyzeEncounterFrequencies<handle
                 'model',[]);
         end
         
-        function valsOut = model(x,encounterData)%unused
+        function valsOut = model(x,encounterProb)%unused
             % this ia the SSD of the fitted parameters
-            % encounterData is a two column vector. the first column is the
+            % encounterProb is a two column vector. the first column is the
             % encounter frequencies, the second is the index of included
             % beads.
-            % encounterData(:,1) - log(encounter frequencies)
-            % encounterData(:,2) - log(included bead indices)
+            % encounterProb(:,1) - log(encounter frequencies)
+            % encounterProb(:,2) - log(included bead indices)
             % x(1) - is the bias
             % x(2) - is the slope
-            logBeadDist      = encounterData(:,2);
-            logEncounterFreq = encounterData(:,1);
+            logBeadDist      = encounterProb(:,2);
+            logEncounterFreq = encounterProb(:,1);
             valsOut = (sum((x(1)-x(2)*logBeadDist-logEncounterFreq).^2));
         end
         

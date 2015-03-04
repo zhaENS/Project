@@ -26,19 +26,28 @@ classdef CalculateBeadDistancesByRouseModel<handle
             % two sided analysis should then follow
             % the connectivity graph should  be created based on two sided
             % analysis 
-                         
-            obj.ProcessEncounterMatrix(encounterMat);
+             if size(encounterMat,1)~=((size(encounterMat,2)-1)/2+1)
+                 error('encounter matrix must reflect two sides of a square matrix and must be of size Nx(2*N+1)')
+             end
+             
+             obj.ProcessEncounterMatrix(encounterMat);
             
+             obj.AnalyzeConnectivity
+
+            
+            %  create a chain from the graph
+            obj.CreateChainFromConnectivityGraph;
+            obj.DisplayChain;
+        end
+        
+        
+        function AnalyzeConnectivity(obj)
              % Perform analysis for each side        
              eMatLeft  = obj.TransformEncountersToConnectivityMap('left');
              eMatRight = obj.TransformEncountersToConnectivityMap('right');                                      
              eMat      = eMatLeft |eMatRight;
              obj.connectivityMat = eMat;
 %             obj.DisplayConnectivityGraph(eMat,above,obj.distToAnalyze,obj.beadsToAnalyze);
-            
-            %  create a chain from the graph
-            obj.CreateChainFromConnectivityGraph;
-            obj.DisplayChain;
         end
         
         function eMat= TransformEncountersToConnectivityMap(obj,side)
@@ -49,7 +58,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
 %                 encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,...
 %                                               1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
 %                 encounters = fliplr(encounters);
-                encounters = obj.encounterMat(:,1:(size(obj.encounterMat,2)-1)/2);% tril(obj.encounterMat)';
+                 encounters = obj.encounterMat(:,1:(size(obj.encounterMat,2)-1)/2);% tril(obj.encounterMat)';
                  encounters = fliplr(encounters);
             elseif strcmpi(side,'right')% right encounters 
 %                 encounters = obj.encounterMat(obj.params.reconstruction.beadRange.bead1,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1 :end);                
@@ -60,25 +69,43 @@ classdef CalculateBeadDistancesByRouseModel<handle
             above = cell(1,size(encounters,1));% save indices of distances falling above the nearest neighor encounter probability
             dists = cell(size(encounters,1),size(encounters,2));
             histK = cell(size(encounters,1),size(encounters,2));
-            
+            chainRingStruct = cell(size(encounters,1),1);
             % Construct a binary connection matrix for a specific distance
             eMat = false(size(encounters,1),...
                          size(encounters,1),...
                          obj.params.reconstruction.numDistances);
-            di   = diag(ones(1,size(eMat,1)-1),1)+diag(ones(1,size(eMat,1)-1),-1);% include nearest neighbors by default
-                                    
+            di          = diag(ones(1,size(eMat,1)-1),1)+diag(ones(1,size(eMat,1)-1),-1);% include nearest neighbors by default
+            chainRingImage = zeros(size(encounters,1), size(encounters,2)*2 +1,3);  % an image representing positions of chains and rings                        
             for bIdx = 1:size(encounters,1);% for each bead
                 
-                % Interpolate and smooth the encounter signal 
-%                 observedProb = obj.ProcessBeadEncounterSignal(encounters(bIdx,:));                
-                  observedProb = encounters(bIdx,:);
+                  if strcmpi(side,'left')              
+                  observedProb = encounters(bIdx,1:(bIdx-1));
+                  else
+                      observedProb = encounters(bIdx,1:(size(encounters,2)-bIdx+1));
+                  end
                   
                 if ~all(isnan(observedProb))                                        
                     % Divide the probabilites into distances according to a division given by the
                     % expected model
 
-                    [~,modelValues] = obj.TransformProbToDist(observedProb);
-%                     [chainRingStruct]    = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
+                    [~,modelValues]         = obj.TransformProbToDist(observedProb);
+                    [chainRingStruct{bIdx}] = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
+                    % fill in the ring chain image 
+                    for cIdx = 1:numel(chainRingStruct{bIdx});
+                        if strcmpi(chainRingStruct{bIdx}(cIdx).type,'chain')
+                            if strcmpi(side,'left')
+                              chainRingImage(bIdx,(chainRingStruct{bIdx}(cIdx).startInd:chainRingStruct{bIdx}(cIdx).endInd),1)=255;
+                            elseif strcmpi(side,'right')
+                              chainRingImage(bIdx,chainRingStruct{bIdx}(cIdx).startInd:chainRingStruct{bIdx}(cIdx).endInd,1)=255;  
+                            end
+                        elseif strcmpi(chainRingStruct{bIdx}(cIdx).type,'ring')
+                            if strcmpi(side,'left')
+                              chainRingImage(bIdx,(chainRingStruct{bIdx}(cIdx).startInd:chainRingStruct{bIdx}(cIdx).endInd),3)=255;
+                            elseif strcmpi(side,'right')
+                              chainRingImage(bIdx,chainRingStruct{bIdx}(cIdx).startInd:chainRingStruct{bIdx}(cIdx).endInd,3)=255;  
+                            end
+                        end
+                    end
                     % obtain the values of the composite structure
 %                     vals = obj.GetCompositeFunctionVals(chainRingStruct);
                     inds = 1:numel(observedProb);
@@ -90,10 +117,10 @@ classdef CalculateBeadDistancesByRouseModel<handle
                                                           
                     % Calculate the histogram
                     above{bIdx} = find(observedProb>modelValues(1));
-                    below{bIdx} = [];
+%                     below{bIdx} = [];
                     for kIdx = 1:numel(modelValues)-1
                         dists{bIdx,kIdx} = find(observedProb>modelValues(kIdx+1) & observedProb<=modelValues(kIdx));
-                        below{bIdx,kIdx} = dists{bIdx,kIdx}((dists{bIdx,kIdx}<kIdx));                                                
+%                         below{bIdx,kIdx} = dists{bIdx,kIdx}((dists{bIdx,kIdx}<kIdx));                                                
                         % add the terms "above" to the dist 1 neighbors
                         histK{bIdx,kIdx} = numel(dists{bIdx,kIdx});
                         if kIdx ==1
@@ -225,34 +252,19 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.params.reconstruction.beadRange.bead1 = 1:size(encounterMat,1);
             obj.params.reconstruction.beadRange.bead2 = 1:size(encounterMat,2);
             
-            % smooth left and right 
-            s      = Smoother;        
+            % Smooth left and right parts of the encounter matrix                
             left  = obj.encounterMat(:,1:(size(encounterMat,2)-1)/2);
-            right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
-%             left  = tril(obj.encounterMat);
-%             right = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
+            ml    = max(left(:));
             
-%             left  = obj.encounterMat(:,1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
-%             right = obj.encounterMat(:,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1:end);
-%             for sIdx = 1:size(obj.encounterMat,1)
-            s.Smooth(left,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-            left= s.signalOut;
-            s.Smooth(right,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-            right= s.signalOut;
-%             obj.encounterMat(sIdx,:) = s.signalOut;
-%             end
-%             
-%             for lIdx = 1:size(left,1)
-%             s.Smooth(left(lIdx,:),obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-%             left(lIdx,:) = s.signalOut;
-%             end
-%             for rIdx = 1:size(right,1)
-%             s.Smooth(right(rIdx,:),obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-%             right(rIdx,:) = s.signalOut;
-%             end
-% %             right = right-diag(diag(right));
+            right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
+            mr    = max(right(:));
+            obj.smoother.Smooth(left./ml,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+            left  = obj.smoother.signalOut.*ml;
+            obj.smoother.Smooth(right./mr,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+            right = obj.smoother.signalOut.*mr;
             obj.encounterMat = [left, zeros(size(left,1),1), right];
             
+            % Normalize the smoothed encounter matrix
             for bIdx=obj.params.reconstruction.beadRange.bead1
 %                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
                 obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:)); % normalize to get probabilities 
@@ -305,44 +317,51 @@ classdef CalculateBeadDistancesByRouseModel<handle
             % prob.
             
             chainStruct  = struct('type',[],...
-                                'containedIn',[],...
-                                'startInd',[],...
-                                'endInd',[],...
-                                'equation',[],...
-                                'length',[],...
-                                'normalizationConst',[],...
-                                'containing',[]);
-            ringStruct   = chainStruct;
-            
-            % Find local max in a signal
+                                  'containedIn',[],...
+                                  'startInd',[],...
+                                  'endInd',[],...
+                                  'equation',[],...
+                                  'length',[],...
+                                  'normalizationConst',[],...
+                                  'containing',[]);
+            ringStruct        = chainStruct;
+            minProbVecLength  = 2;
+            if numel(prob)>minProbVecLength % analyze only vectors with more than minProbVecLength values
+                
+            % Find local max in prob signal
             [lMax]       = local_max(prob);
             
-            % If index 1 exists in the local_max, remove it
+            % If index 1 exists as a local_max, remove it
             lMax = lMax(lMax~=1);
             
             % For each max point, find the first point of intersection to
             % its left on the probability signal curve
-            
-            % Start with all rings
-            for lmIdx = 1:numel(lMax)
-                % Match position of the NaNs in the signal
+            % Match position of the NaNs in the signal
                 x = 1:numel(prob);
                 x(isnan(prob))= nan;
                 
+            % Start with all rings
+            for lmIdx = 1:numel(lMax)
+                                
                 intersections   = polyxpoly(x,prob,1:numel(prob), prob(lMax(lmIdx)).*ones(1,numel(prob)));
                 intersections   = round(intersections); % round to get indices
                 % Find the first intersection index to the left of the local max
                 d               = find(intersections<lMax(lmIdx),1,'last');
-                if isempty(d) && prob(intersections(1))>=max(prob(1:10))
-                    d=1;
+                if isempty(d) && prob(intersections(1))>=max(prob(1:min(numel(prob),10)))                    
+                    ringStruct(lmIdx).startInd  = 1;% assume it intersects the first bead
+                else
+                    ringStruct(lmIdx).startInd  = intersections(d);
                 end
-                ringStruct(lmIdx).startInd  = intersections(d);
-                ringStruct(lmIdx).endInd    = lMax(lmIdx);
+                
+                ringStruct(lmIdx).endInd    = lMax(lmIdx);% the local max index itself
                 ringStruct(lmIdx).length    = lMax(lmIdx)-intersections(d);
                 ringStruct(lmIdx).equation  = @(d,N,sig)(sig+(d./N).*(N-d)).^(-1.5); % where sig is the sigma for the containing structure
                 ringStruct(lmIdx).type      = 'ring';
-                ringStruct(lmIdx).normalizationConst = (sum(ringStruct(lmIdx).equation(1:ringStruct(lmIdx).length-1,ringStruct(lmIdx).length,0)));
+%                 ringStruct(lmIdx).normalizationConst = (sum(ringStruct(lmIdx).equation(1:ringStruct(lmIdx).length-1,ringStruct(lmIdx).length,0)));
             end
+            
+            
+            % place chains where there are no rings 
             
             % Sort by ring size
             [loopSize,inds] = sort([ringStruct.length],'descend');
@@ -351,7 +370,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             ringStruct = ringStruct(inds);
             
             % Construct a matrix with a visual display of the loops
-            loopChainMat = zeros(2*numel(ringStruct),numel(obj.params.reconstruction.beadRange.bead1));
+            loopChainMat = zeros(2*numel(ringStruct),numel(prob));
             for lIdx = 1:numel(loopSize);
                 loopChainMat(2*lIdx-1,ringStruct(lIdx).startInd:ringStruct(lIdx).endInd)=lIdx;
             end
@@ -376,8 +395,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
             
             % Find the correct ordering of loops and chains by labeling
-            rp = regionprops(logical(loopChainMat),'PixelList');
+            rp   = regionprops(logical(loopChainMat),'PixelList');
             oMap = zeros(numel(rp),2);
+            
             % first column is the order in the composite structure
             % second column is the index in the chainLoopMat
             for rIdx = 1:numel(rp)
@@ -411,6 +431,17 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 end
                  chainRingStruct(oIdx).containing= unique(chainRingStruct(oIdx).containing);
             end
+            
+            else
+                % By default, if the prob vector is shorter than minProbVecLength, set it
+                % to be a chain 
+                chainRingStruct(1)          = chainStruct;
+                chainRingStruct(1).type     = 'chain';
+                chainRingStruct(1).startInd = 1;
+                chainRingStruct(1).endInd   = numel(prob);
+                chainRingStruct(1).length   = numel(prob);
+                
+            end
         end
         
         function vals = GetCompositeFunctionVals(obj,chainRingStruct)%unfinished
@@ -439,7 +470,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 inds        = find(~isnan(prob));
                 s           = sum(inds.^(-beta));
                 modelValues = obj.params.optimization.model(beta,inds);
-                modelValues = modelValues./modelValues(1) *max(prob(1:5));
+                modelValues = modelValues./modelValues(1) *max(prob(1:min(5,size(prob,2))));
                 dists       = (prob *s).^(-1/beta);
             elseif strcmpi(obj.params.reconstruction.prob2distMethod,'composite')
 %                 do nothing
@@ -509,16 +540,6 @@ classdef CalculateBeadDistancesByRouseModel<handle
             set(gca,'XLim',[1 inds(end)])
         end
         
-        function sigOut = SmoothSignal(sigIn,smoothSpan,method)%obsolete
-            % Smooth a signal sigIn with a smoothing span smoothSpan
-            % try all smoothing spans defing in the parameter smoothiSpan
-            ind    = 1;
-            sigOut = zeros(1,numel(sigIn),numel(smoothSpan));
-            for s = smoothSpan
-            sigOut(1,:,ind) = smooth(sigIn,s,method);
-            ind = ind+1;
-            end
-        end
     end
     
 end
