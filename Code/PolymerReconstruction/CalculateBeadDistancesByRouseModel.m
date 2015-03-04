@@ -227,17 +227,20 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             % smooth left and right 
             s      = Smoother;        
-%             left  = obj.encounterMat(:,1:(size(encounterMat,2)-1)/2);
-%             right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
+            left  = obj.encounterMat(:,1:(size(encounterMat,2)-1)/2);
+            right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
 %             left  = tril(obj.encounterMat);
 %             right = triu(obj.encounterMat)+diag(diag(obj.encounterMat));
             
 %             left  = obj.encounterMat(:,1:(obj.params.reconstruction.beadRange.bead2(end)-1)/2);
 %             right = obj.encounterMat(:,(obj.params.reconstruction.beadRange.bead2(end)+1)/2 +1:end);
-            for sIdx = 1:size(obj.encounterMat,1)
-            s.Smooth(obj.encounterMat(sIdx,:),obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-            obj.encounterMat(sIdx,:) = s.signalOut;
-            end
+%             for sIdx = 1:size(obj.encounterMat,1)
+            s.Smooth(left,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+            left= s.signalOut;
+            s.Smooth(right,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+            right= s.signalOut;
+%             obj.encounterMat(sIdx,:) = s.signalOut;
+%             end
 %             
 %             for lIdx = 1:size(left,1)
 %             s.Smooth(left(lIdx,:),obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
@@ -248,7 +251,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
 %             right(rIdx,:) = s.signalOut;
 %             end
 % %             right = right-diag(diag(right));
-%             obj.encounterMat = [left, zeros(size(left,1),1), right];
+            obj.encounterMat = [left, zeros(size(left,1),1), right];
             
             for bIdx=obj.params.reconstruction.beadRange.bead1
 %                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
