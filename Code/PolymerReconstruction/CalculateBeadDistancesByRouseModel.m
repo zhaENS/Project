@@ -126,8 +126,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                         if kIdx ==1
                             dists{bIdx,kIdx} = [dists{bIdx,kIdx}, above{bIdx}];
                         end
-                    end
-                    
+                    end                    
                 end
             end
             
@@ -254,10 +253,19 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             % Smooth left and right parts of the encounter matrix                
             left  = obj.encounterMat(:,1:(size(encounterMat,2)-1)/2);
-            ml    = max(left(:));
+            
+            % interpolate zero values in the signal
+            for lIdx = 1:size(left,1)
+                left(lIdx,:) = obj.InterpolateZeroValuesInSignal(left(lIdx,:));
+            end
+            ml    = obj.MaxIgnoreNaN(left(:));% maxima of the left signal 
             
             right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
-            mr    = max(right(:));
+            for rIdx = 1:size(right,1)
+                right(rIdx,:) = obj.InterpolateZeroValuesInSignal(right(rIdx,:));
+            end                        
+            mr    = obj.MaxIgnoreNaN(right(:));% maxima of the right signal
+            
             obj.smoother.Smooth(left./ml,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
             left  = obj.smoother.signalOut.*ml;
             obj.smoother.Smooth(right./mr,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
@@ -278,7 +286,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             if any(s(1:2)==1) % for 1D signal
                 zeroInds   = find(sigIn==0 |isnan(sigIn));
                 noZeroInds = find(~(sigIn==0) & ~isnan(sigIn));
-                if ~isempty(zeroInds) && ~isempty(noZeroInds)
+                if ~isempty(zeroInds) && numel(noZeroInds)>2
                     % Interpolate the signal in the nan positions
                     x     = noZeroInds;
                     y     = sigIn(x);
@@ -303,7 +311,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 if ~isempty(zeroInds)
                     % Interpolate the signal in the nan positions
                     %                     [x,y] = meshgrid(1:size(sigOut,1),1:size(sigOut,2));
-                    intPoints = interp2(noZeroInds(:,2), noZeroInds(:,1),sigOut,zeroInds(:,2), zeroInds(:,1),obj.zeroInterpolationMethod);
+                    intPoints = interp2(noZeroInds(:,2), noZeroInds(:,1),sigOut,zeroInds(:,2), zeroInds(:,1),obj.params.interpolation.zeroInterpolationMethod);
                     s         = sub2ind(size(sigOut),zeroInds(:,1), zeroInds(:,2));
                     sigOut(s) = intPoints;
                 end
@@ -522,6 +530,12 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function s = SumIgnoreNaN(sigIn)
             % calculate the sum of an input signal without the NaNs
                s  = sum(sigIn(~isnan(sigIn)));
+        end
+        
+        function m = MaxIgnoreNaN(sigIn)
+            s = sigIn(:);
+            s(isnan(s))= -Inf;
+            m = max(s);
         end
         
         function PlotBeadClusteringByDistance(observedProb,inds, k)
