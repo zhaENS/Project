@@ -58,17 +58,21 @@ classdef ReconstructionParams<handle
         end
         
         function SetChainParams(obj)
-            % Rouse chain parameters
+            % Rouse chain parameters these are the parameters for the
+            % SimpleRouseFramework class
             % Make sure the SimpleRouseParams is in the working path 
             params                = SimpleRouseParams;
             params.dt             = 1e-3;
-            params.numSteps       = 2000;
+            params.numSteps       = 3000;
             params.noiseSTD       = sqrt(2*1*params.dt);
             params.b              = sqrt(1.5);
             params.diffusionConst = 1;
             params.numSimulations = 1;
+            params.numRounds      = 200;
+            params.analyzeResults = false;
             params.dimension      = 3;
-            params.recordPath     = true;% for visualisation 
+            params.recordPath     = false;% for visualisation 
+            params.calculateMSD   = false;
             obj.chain             = params;
         end
         

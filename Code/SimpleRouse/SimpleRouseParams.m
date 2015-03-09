@@ -47,7 +47,7 @@ obj.dimension       = 3;
 obj.numBeads        = 64;
 obj.b               = sqrt(3);
 obj.diffusionConst  = 1;
-obj.connectedBeads  = [9 64]; % the beads connected other than the trivial connections. given by bead pairs
+obj.connectedBeads  = []; % the beads connected other than the trivial connections. given by bead pairs
 obj.encounterDist   = obj.b/5;
 obj.dt              = 0.1*(obj.b^2)/(12*obj.diffusionConst);
 obj.noiseSTD        = sqrt(2*obj.diffusionConst*obj.dt);
@@ -68,7 +68,7 @@ obj.affineBeadsNum  = [];    % a fixed pair indices of affine beads
 obj.kOff            = 0.1;   % the detachment rate of affine beads
 obj.beta            = 2;     % ~~!!for beta~=2 the polymer is a beta polymer!!~~to set all betas to the same value insert one value only
 obj.recipeFolder    = fullfile(pwd,'SimpleRouse','Recipes');
-obj.recipeFileName  = 'simpleRouse_OneLoopWithATail64Beads';
+obj.recipeFileName  = 'simpleRouseDebugRecipe';
 obj.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 obj.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
 obj.calculateMSD    = true;  % indicate whether to calculate the MSD for each bead (slows down simulations)
