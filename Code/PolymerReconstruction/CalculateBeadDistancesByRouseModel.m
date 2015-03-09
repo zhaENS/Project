@@ -38,8 +38,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             %  create a chain from the graph
             obj.CreateChainFromConnectivityGraph;
             obj.DisplayChain;
-        end
-        
+        end       
         
         function AnalyzeConnectivity(obj)
              % Perform analysis for each side        
@@ -89,7 +88,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % expected model
 
                     [~,modelValues]         = obj.TransformProbToDist(observedProb);
-                    [chainRingStruct{bIdx}] = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
+%                     [chainRingStruct{bIdx}] = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
                     % fill in the ring chain image 
                     for cIdx = 1:numel(chainRingStruct{bIdx});
                         if strcmpi(chainRingStruct{bIdx}(cIdx).type,'chain')
@@ -230,9 +229,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.params.chain.connectedBeads = [r,c];                        
             obj.params.chain.springConst     = -(obj.params.chain.dimension* obj.params.chain.diffusionConst*...
                                                  obj.params.chain.dt/obj.params.chain.b^2)*obj.connectivityMat;% ones(obj.params.chain.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)         
-            obj.chain = SimpleRouse(obj.params.chain);
-            obj.chain.Initialize;
-            obj.chain.Run;
+            obj.chain = SimpleRouseFramework;
+            obj.chain.Initialize(obj.params.chain);
+%             obj.chain.Run;
             
         end
         
@@ -251,26 +250,64 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.params.reconstruction.beadRange.bead1 = 1:size(encounterMat,1);
             obj.params.reconstruction.beadRange.bead2 = 1:size(encounterMat,2);
             
+            obj.encounterMat(isnan(obj.encounterMat))=0;% zero out nans
+
             % Smooth left and right parts of the encounter matrix                
-            left  = obj.encounterMat(:,1:(size(encounterMat,2)-1)/2);
+            left  = fliplr(obj.encounterMat(:,1:(size(encounterMat,2)-1)/2));
             
-            % interpolate zero values in the signal
-            for lIdx = 1:size(left,1)
-                left(lIdx,:) = obj.InterpolateZeroValuesInSignal(left(lIdx,:));
+            right = (obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end));
+            
+            regOrder = 1; % regularization order [0,1,2]
+            lambda   = 0.01; % regularization constant
+            minNumPts = 4; % min number of points to perform analysis (smoothing)
+            % calculate the sum for each row to be used for the
+            % normalization of both sides
+
+            
+
+            % interpolate zero values in the signal            
+            for lIdx = minNumPts:size(obj.encounterMat,1)
+                left(lIdx,1:lIdx-1) = obj.InterpolateZeroValuesInSignal(left(lIdx,1:lIdx-1));
+                left(lIdx,lIdx:end) = 0; % zero out the ends
+
             end
-            ml    = obj.MaxIgnoreNaN(left(:));% maxima of the left signal 
+%             ml    = obj.MaxIgnoreNaN(left(:));% maxima of the left signal 
             
-            right = obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end);
-            for rIdx = 1:size(right,1)
-                right(rIdx,:) = obj.InterpolateZeroValuesInSignal(right(rIdx,:));
-            end                        
-            mr    = obj.MaxIgnoreNaN(right(:));% maxima of the right signal
+            right(isnan(right)) = 0;
+            for rIdx = 1:size(right,1)-minNumPts
+                right(rIdx,1:end-rIdx+1)     = obj.InterpolateZeroValuesInSignal(right(rIdx,1:end-rIdx+1));
+                right(rIdx,end-rIdx+2:end)   = 0; 
+            end  
             
-            obj.smoother.Smooth(left./ml,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-            left  = obj.smoother.signalOut.*ml;
-            obj.smoother.Smooth(right./mr,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-            right = obj.smoother.signalOut.*mr;
-            obj.encounterMat = [left, zeros(size(left,1),1), right];
+            s = sum(right+left,2);% normalization constant for each row
+            for sIdx = 1:numel(s)
+                if s(sIdx)>0
+                    left(sIdx,:) = left(sIdx,:)./s(sIdx);
+                    right(sIdx,:) = right(sIdx,:)./s(sIdx);
+                end            
+            end
+            % perform smoothing
+            for lIdx = minNumPts:size(obj.encounterMat,1)
+               if ~all(left(lIdx,:)==0)% perform smoothing for non zero signals
+                % smooth using the inverse heat equation
+                
+                  [~,left(lIdx,1:lIdx-1)] =BoundaryElementHeatEquation('TestBemHeatEq_optimized',left(lIdx,1:lIdx-1),regOrder,lambda,false); 
+               end
+            end
+            
+            for rIdx =1:size(right)-minNumPts
+               if ~all(right(rIdx,:)==0)
+                  [~,right(rIdx,1:end-rIdx+1)] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',right(rIdx,1:end-rIdx+1),regOrder,lambda,false); 
+               end
+            end
+            
+%             mr    = obj.MaxIgnoreNaN(right(:));% maxima of the right signal
+%             
+%             obj.smoother.Smooth(left./ml,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+%             left  = obj.smoother.signalOut.*ml;
+%             obj.smoother.Smooth(right./mr,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
+%             right = obj.smoother.signalOut.*mr;
+            obj.encounterMat = [fliplr(left), zeros(size(left,1),1), right];
             
             % Normalize the smoothed encounter matrix
             for bIdx=obj.params.reconstruction.beadRange.bead1
@@ -478,7 +515,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 inds        = find(~isnan(prob));
                 s           = sum(inds.^(-beta));
                 modelValues = obj.params.optimization.model(beta,inds);
-                modelValues = modelValues./modelValues(1) *max(prob(1:min(5,size(prob,2))));
+                modelValues = modelValues./modelValues(1) *max(prob(1:min(15,size(prob,2))));
                 dists       = (prob *s).^(-1/beta);
             elseif strcmpi(obj.params.reconstruction.prob2distMethod,'composite')
 %                 do nothing
