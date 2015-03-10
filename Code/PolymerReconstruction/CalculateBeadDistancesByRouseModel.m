@@ -87,8 +87,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     % expected model
 
                     [~,modelValues]         = obj.TransformProbToDist(observedProb);
-                    [chainRingStruct{bIdx}] = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
-                    [connectivity{bIdx}]          = obj.DetermineConnectivityByChainRingStruct(bIdx,chainRingStruct{bIdx},side);
+%                     [chainRingStruct{bIdx}] = obj.AnalyzeEncounterAsRingsAndChains(observedProb);
+%                     [connectivity{bIdx}]          = obj.DetermineConnectivityByChainRingStruct(bIdx,chainRingStruct{bIdx},side);
                     
                     % fill in the ring chain image 
                     for cIdx = 1:numel(chainRingStruct{bIdx});

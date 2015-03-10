@@ -63,12 +63,12 @@ classdef ReconstructionParams<handle
             % Make sure the SimpleRouseParams is in the working path 
             params                = SimpleRouseParams;
             params.dt             = 1e-3;
-            params.numSteps       = 3000;
+            params.numSteps       = 2000;
             params.noiseSTD       = sqrt(2*1*params.dt);
             params.b              = sqrt(1.5);
             params.diffusionConst = 1;
             params.numSimulations = 1;
-            params.numRounds      = 200;
+            params.numRounds      = 30;
             params.analyzeResults = false;
             params.dimension      = 3;
             params.recordPath     = false;% for visualisation 
