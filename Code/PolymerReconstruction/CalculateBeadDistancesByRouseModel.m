@@ -10,6 +10,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
     
     properties (Access=private)
         smoother =Smoother; % signal smoother class
+        nnEncounterProb = struct('distribution',[],'mean',[]);
+        aboveLeft % probabilities above nn. encounter prob for left side
+        aboveRight % probabilities above nn. encounter prob for right side 
     end
     
     methods
@@ -31,7 +34,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
              end
              
              obj.ProcessEncounterMatrix(encounterMat);
-            
+             
+             obj.EstimateNearestNeighborEncounterProbability
+             
              obj.AnalyzeConnectivity
 
             
@@ -41,9 +46,10 @@ classdef CalculateBeadDistancesByRouseModel<handle
         end       
         
         function AnalyzeConnectivity(obj)
-             % Perform analysis for each side        
-             [eMatLeft, cMatLeft]  = obj.TransformEncountersToConnectivityMap('left');
-             [eMatRight, cMatRight] = obj.TransformEncountersToConnectivityMap('right');                                      
+             % Perform analysis for each side 
+             
+             [eMatLeft, cMatLeft,obj.aboveLeft]    = obj.TransformEncountersToConnectivityMap('left');
+             [eMatRight, cMatRight,obj.aboveRight] = obj.TransformEncountersToConnectivityMap('right');                                      
              eMat      = eMatLeft |eMatRight;
              obj.connectivityMat = eMat;
              cMat = cMatLeft |cMatRight;
@@ -51,7 +57,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
 %             obj.DisplayConnectivityGraph(eMat,above,obj.distToAnalyze,obj.beadsToAnalyze);
         end
         
-        function [eMat,cMat]= TransformEncountersToConnectivityMap(obj,side)
+        function [eMat,cMat,above]= TransformEncountersToConnectivityMap(obj,side)
             % Analyze the encounters and determine bead neighbors in the
             % specified distance
             if strcmpi(side,'left')% left encounters
@@ -74,6 +80,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                          obj.params.reconstruction.numDistances);
             di          = diag(ones(1,size(eMat,1)-1),1)+diag(ones(1,size(eMat,1)-1),-1);% include nearest neighbors by default
             chainRingImage = zeros(size(encounters,1), size(encounters,2)*2 +1,3);  % an image representing positions of chains and rings                        
+            connectivity = cell(size(encounters,1),1);
             for bIdx = 1:size(encounters,1);% for each bead
                 
                   if strcmpi(side,'left')              
@@ -117,6 +124,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                                                           
                     % Calculate the histogram
                     above{bIdx} = find(observedProb>modelValues(1));
+                    above{bIdx} = above{bIdx}(above{bIdx}>5); % don't allow the first 5 points to be included as peaks 
 %                     below{bIdx} = [];
                     for kIdx = 1:numel(modelValues)-1
                         dists{bIdx,kIdx} = find(observedProb>modelValues(kIdx+1) & observedProb<=modelValues(kIdx));
@@ -233,9 +241,39 @@ classdef CalculateBeadDistancesByRouseModel<handle
             connectedBeads = triu(connectedBeads-diag(diag(connectedBeads,1),1)); 
             [r,c]          = find(connectedBeads);    
             obj.params.chain.numBeads       = size(obj.encounterMat,1);
-            obj.params.chain.connectedBeads = [r,c];                        
-            obj.params.chain.springConst    = -(obj.params.chain.dimension* obj.params.chain.diffusionConst*...
-                                                obj.params.chain.dt/obj.params.chain.b^2)*obj.connectivityMat;% ones(obj.params.chain.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)                                  
+            obj.params.chain.connectedBeads = [r,c];   
+             k = -(obj.params.chain.dimension* obj.params.chain.diffusionConst*...
+                                                obj.params.chain.dt/obj.params.chain.b^2);
+            obj.params.chain.springConst    = k*ones(size(obj.encounterMat,1)); 
+            l  = logical(tril(obj.connectivityMat));
+            u  = logical(triu(obj.connectivityMat));
+            obj.connectivityMat = (l | l' | u | u');
+            % set spring constants 
+            for rIdx = 1:size(obj.connectivityMat,1)
+                for cIdx = 1:size(obj.connectivityMat,1)
+                    if (rIdx)>(cIdx) % left
+                         above = obj.aboveLeft{(rIdx)};  
+                        for aIdx = 1:numel(above)
+                         if obj.connectivityMat((rIdx),(rIdx)-above(aIdx));
+                             % ones(obj.params.chain.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
+                          obj.params.chain.springConst((rIdx),(rIdx)-above(aIdx))=k*(obj.nnEncounterProb.mean/obj.encounterMat((rIdx),size(obj.encounterMat,1)-above(aIdx)))^1.5 *above(aIdx); 
+                         end
+                        end
+                    elseif (cIdx)>(rIdx)% right
+                        above = obj.aboveRight{(rIdx)};                        
+                        for aIdx = 1:numel(above)
+                           if obj.connectivityMat((rIdx),(rIdx)+above(aIdx));
+                               % ones(obj.params.chain.numBeads); % can be a scalar or a matrix the size of (numBeads) X (numBeads)
+                             obj.params.chain.springConst((rIdx),rIdx+above(aIdx))=k*(obj.nnEncounterProb.mean/obj.encounterMat((rIdx),size(obj.encounterMat,1)+1+above(aIdx)))^1.5 *above(aIdx); 
+                           end
+                        end
+                    else % same bead 
+                        obj.params.chain.springConst((rIdx),(cIdx))=-(obj.params.chain.dimension* obj.params.chain.diffusionConst*...
+                                                obj.params.chain.dt/obj.params.chain.b^2);
+                    end
+                end
+            end
+            
             obj.chain = SimpleRouseFramework;
             obj.chain.Initialize(obj.params.chain);
 %             obj.chain.Run;
@@ -271,11 +309,10 @@ classdef CalculateBeadDistancesByRouseModel<handle
             regOrder  = 2; % regularization order [0,1,2]
             lambda    = 5; % regularization constant
             minNumPts = 4; % min number of points to perform analysis (smoothing)
+            
             % calculate the sum for each row to be used for the
             % normalization of both sides
-
             
-
             % interpolate zero values in the signal            
             for lIdx = minNumPts:size(obj.encounterMat,1)
                 left(lIdx,1:lIdx-1) = obj.InterpolateZeroValuesInSignal(left(lIdx,1:lIdx-1));
@@ -312,19 +349,29 @@ classdef CalculateBeadDistancesByRouseModel<handle
                end
             end
             
-%             mr    = obj.MaxIgnoreNaN(right(:));% maxima of the right signal
-%             
-%             obj.smoother.Smooth(left./ml,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-%             left  = obj.smoother.signalOut.*ml;
-%             obj.smoother.Smooth(right./mr,obj.params.smoothing.method,obj.params.smoothing.nHoodRad, obj.params.smoothing.sigma,obj.params.smoothing.kernel);
-%             right = obj.smoother.signalOut.*mr;
             obj.encounterMat = [fliplr(left), zeros(size(left,1),1), right];
+            obj.encounterMat(obj.encounterMat<0) = 0; % zero out negative values 
             
             % Normalize the smoothed encounter matrix
             for bIdx=obj.params.reconstruction.beadRange.bead1
-%                 obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
+                obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
+                obj.encounterMat(bIdx,size(obj.encounterMat,1))= 0;
+                obj.encounterMat(bIdx,1:size(obj.encounterMat,1)-bIdx) = 0; % zero left size
+                obj.encounterMat(bIdx,2*(size(obj.encounterMat,1))+1-bIdx:end) = 0;                
                 obj.encounterMat(bIdx,:)= obj.encounterMat(bIdx,:)./obj.SumIgnoreNaN(obj.encounterMat(bIdx,:)); % normalize to get probabilities 
+                obj.encounterMat(bIdx,isnan(obj.encounterMat(bIdx,:)))=0; % make nan equal zero
             end
+        end
+        
+        function EstimateNearestNeighborEncounterProbability(obj)
+            % Use the encounter proability matrix to get an estimation of
+            % the expected nearest neighor encounter probability 
+            nnProb  = obj.encounterMat(:,[size(obj.encounterMat,1)-2:size(obj.encounterMat,1)-1 size(obj.encounterMat,1)+1:size(obj.encounterMat,1)+2]);
+            nnProb = nnProb(nnProb>0);
+            % calculate the histogram 
+            [obj.nnEncounterProb.distribution,bins] = hist(nnProb(:),40);
+             l = lognfit((nnProb+eps));
+            obj.nnEncounterProb.mean = exp(l(1));
         end
         
         function [sigOut] = InterpolateZeroValuesInSignal(obj,sigIn)
@@ -543,7 +590,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 inds        = find(~isnan(prob));
                 s           = sum(inds.^(-beta));
                 modelValues = obj.params.optimization.model(beta,inds);
-                modelValues = modelValues./modelValues(1) *max(prob(1:min(15,size(prob,2))));
+                modelValues = modelValues./modelValues(1) * obj.nnEncounterProb.mean;%max(prob(1:min(15,size(prob,2))));
                 dists       = (prob *s).^(-1/beta);
             elseif strcmpi(obj.params.reconstruction.prob2distMethod,'composite')
 %                 do nothing

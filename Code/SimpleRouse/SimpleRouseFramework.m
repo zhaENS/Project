@@ -85,7 +85,11 @@ classdef SimpleRouseFramework<handle
             obj.beadEncounterProbability.oneSide  = zeros(obj.params.numBeads,obj.params.numBeads-1,obj.params.numRounds);
             obj.beadEncounterProbability.twoSides = zeros(obj.params.numBeads,2*(obj.params.numBeads-1)+1,obj.params.numRounds);
             obj.meanEncounterProbability  = zeros(1,obj.params.numBeads-1,obj.params.numRounds);
-            obj.msd                       = zeros(obj.params.numBeads,obj.params.numSteps,obj.params.numRounds);
+            if obj.params.calculateMSD
+              obj.msd                       = zeros(obj.params.numBeads,obj.params.numSteps,obj.params.numRounds);
+            else
+                obj.msd=0;
+            end
         end
                
         function ReadRecipeFile(obj)
@@ -189,7 +193,9 @@ classdef SimpleRouseFramework<handle
         function PostStepActions(obj)
             % actions performed after each step
             eval(obj.recipe.PostStepActions);
-            obj.msd(:,obj.step,obj.round) = (obj.msd(:,obj.step,obj.round)*(obj.simulation-1) + obj.handles.classes.chain.msd)/obj.simulation;
+            if obj.params.calculateMSD
+              obj.msd(:,obj.step,obj.round) = (obj.msd(:,obj.step,obj.round)*(obj.simulation-1) + obj.handles.classes.chain.msd)/obj.simulation;
+            end
         end
         
         function PostRunActions(obj)
