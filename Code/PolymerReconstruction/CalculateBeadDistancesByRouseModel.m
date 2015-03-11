@@ -2,17 +2,20 @@ classdef CalculateBeadDistancesByRouseModel<handle
     
     properties (Access=public)
         encounterMat
+        encounterMatOriginal
+        encounterProbOriginal
         connectivityMat
         params           % class for parameters
         graph
         chain           % the Rouse chain class
-    end
-    
-    properties (Access=private)
         smoother =Smoother; % signal smoother class
         nnEncounterProb = struct('distribution',[],'mean',[]);
         aboveLeft % probabilities above nn. encounter prob for left side
         aboveRight % probabilities above nn. encounter prob for right side 
+    end
+    
+    properties (Access=private)
+
     end
     
     methods
@@ -289,13 +292,11 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
         end
         
-    end
-    
-    methods (Access=private)
         
         function ProcessEncounterMatrix(obj,encounterMat)
             % Interpolate and normalize the encounter histogram             
             obj.encounterMat                          = encounterMat;
+            obj.encounterMatOriginal                  = encounterMat;
             obj.params.reconstruction.beadRange.bead1 = 1:size(encounterMat,1);
             obj.params.reconstruction.beadRange.bead2 = 1:size(encounterMat,2);
             
@@ -334,6 +335,9 @@ classdef CalculateBeadDistancesByRouseModel<handle
                     right(sIdx,:) = right(sIdx,:)./s(sIdx);
                 end            
             end
+            % save the original version of the prob.
+            obj.encounterProbOriginal = [fliplr(left), zeros(size(left,1),1), right];
+
             % perform smoothing
             for lIdx = minNumPts:size(obj.encounterMat,1)
                if ~all(left(lIdx,:)==0)% perform smoothing for non zero signals
