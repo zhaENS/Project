@@ -6,13 +6,14 @@ classdef CalculateBeadDistancesByRouseModel<handle
         params           % class for parameters
         graph
         chain           % the Rouse chain class
+        smoother =Smoother; % signal smoother class
+        nnEncounterProb = struct('distribution',[],'bins',[],'mean',[]);
+        aboveLeft % probabilities above nn. encounter prob for left side
+        aboveRight % probabilities above nn. encounter prob for right side 
     end
     
     properties (Access=private)
-        smoother =Smoother; % signal smoother class
-        nnEncounterProb = struct('distribution',[],'mean',[]);
-        aboveLeft % probabilities above nn. encounter prob for left side
-        aboveRight % probabilities above nn. encounter prob for right side 
+       
     end
     
     methods
@@ -288,10 +289,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 disp('encounters were not recorded, cannot display chain')
             end
         end
-        
-    end
-    
-    methods (Access=private)
+            
         
         function ProcessEncounterMatrix(obj,encounterMat)
             % Interpolate and normalize the encounter histogram             
@@ -306,8 +304,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             right = (obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end));
             
-            regOrder  = 2; % regularization order [0,1,2]
-            lambda    = 5; % regularization constant
+            regOrder  = 1; % regularization order [0,1,2]
+            lambda    = 1.5; % regularization constant
             minNumPts = 4; % min number of points to perform analysis (smoothing)
             
             % calculate the sum for each row to be used for the
@@ -340,6 +338,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
                 % smooth using the inverse heat equation
                 
                   [~,left(lIdx,1:lIdx-1)] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',left(lIdx,1:lIdx-1),regOrder,lambda,false); 
+                  
                end
             end
             
@@ -369,7 +368,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             nnProb  = obj.encounterMat(:,[size(obj.encounterMat,1)-2:size(obj.encounterMat,1)-1 size(obj.encounterMat,1)+1:size(obj.encounterMat,1)+2]);
             nnProb = nnProb(nnProb>0);
             % calculate the histogram 
-            [obj.nnEncounterProb.distribution,bins] = hist(nnProb(:),40);
+            [obj.nnEncounterProb.distribution,obj.nnEncounterProb.bins] = hist(nnProb(:),40);
              l = lognfit((nnProb+eps));
             obj.nnEncounterProb.mean = exp(l(1));
         end
