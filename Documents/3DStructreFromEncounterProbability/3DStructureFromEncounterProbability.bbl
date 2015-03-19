@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{hazanee2013inverse}
+A~Hazanee, MI~Ismailov, D~Lesnic, and NB~Kerimov.
+\newblock An inverse time-dependent source problem for the heat equation.
+\newblock {\em Applied Numerical Mathematics}, 69:13--33, 2013.
+
 \bibitem{taubin1995curve}
 Gabriel Taubin.
 \newblock Curve and surface smoothing without shrinkage.
