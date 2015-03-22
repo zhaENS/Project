@@ -317,7 +317,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             % interpolate zero values in the signal            
             for lIdx = minNumPts:size(obj.encounterMat,1)
-                left(lIdx,1:lIdx-1) = obj.InterpolateZeroValuesInSignal(left(lIdx,1:lIdx-1));
+                left(lIdx,1:lIdx-1) = InterpolateZeroValuesInSignal(left(lIdx,1:lIdx-1),obj.params.interpolation.zeroInterpolationMethod);
                 left(lIdx,lIdx:end) = 0; % zero out the ends
 
             end
@@ -325,7 +325,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             right(isnan(right)) = 0;
             for rIdx = 1:size(right,1)-minNumPts
-                right(rIdx,1:end-rIdx+1)     = obj.InterpolateZeroValuesInSignal(right(rIdx,1:end-rIdx+1));
+                right(rIdx,1:end-rIdx+1)     = InterpolateZeroValuesInSignal(right(rIdx,1:end-rIdx+1),obj.params.interpolation.zeroInterpolationMethod);
                 right(rIdx,end-rIdx+2:end)   = 0; 
             end  
             
@@ -360,7 +360,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             % Normalize the smoothed encounter matrix
             for bIdx=obj.params.reconstruction.beadRange.bead1
-                obj.encounterMat(bIdx,:) = obj.InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:)); % interpolate zero values
+                obj.encounterMat(bIdx,:) = InterpolateZeroValuesInSignal(obj.encounterMat(bIdx,:),obj.params.interpolation.zeroInterpolationMethod); % interpolate zero values
                 obj.encounterMat(bIdx,size(obj.encounterMat,1))= 0;
                 obj.encounterMat(bIdx,1:size(obj.encounterMat,1)-bIdx) = 0; % zero left size
                 obj.encounterMat(bIdx,2*(size(obj.encounterMat,1))+1-bIdx:end) = 0;                
@@ -380,44 +380,44 @@ classdef CalculateBeadDistancesByRouseModel<handle
             obj.nnEncounterProb.mean = exp(l(1));
         end
         
-        function [sigOut] = InterpolateZeroValuesInSignal(obj,sigIn)
-            % remove nan values by interpolation of the signal
-            sigOut = sigIn;
-            s      = size(sigIn);
-            if any(s(1:2)==1) % for 1D signal
-                zeroInds   = find(sigIn==0 |isnan(sigIn));
-                noZeroInds = find(~(sigIn==0) & ~isnan(sigIn));
-                if ~isempty(zeroInds) && numel(noZeroInds)>2
-                    % Interpolate the signal in the nan positions
-                    x     = noZeroInds;
-                    y     = sigIn(x);
-                    sigOut(zeroInds)= interp1(x,y,zeroInds,obj.params.interpolation.zeroInterpolationMethod);% for the boundary values
-                    % extrapolate the end values
-                    
-                    f =find(~isnan(sigOut),1,'first');
-                    if f~=1
-                        sigOut(1:f) = sigOut(f);
-                    end
-                    f= find(~isnan(sigOut),1,'last');
-                    if f~=numel(sigOut)
-                        sigOut(f:end) = sigOut(f);
-                    end                                        
-                end
-            else
-                %                 sigOut(isnan(sigIn))=0;
-                [zeroInds(:,1), zeroInds(:,2)]     = find(sigOut==0);
-                [noZeroInds(:,1), noZeroInds(:,2)] = find(~(sigIn==0) & ~isnan(sigIn));
-                sigNoZero = sigIn(:);
-                sigNoZero = sigNoZero (sigNoZero ~=0 & ~isnan(sigNoZero));
-                if ~isempty(zeroInds)
-                    % Interpolate the signal in the nan positions
-                    %                     [x,y] = meshgrid(1:size(sigOut,1),1:size(sigOut,2));
-                    intPoints = interp2(noZeroInds(:,2), noZeroInds(:,1),sigOut,zeroInds(:,2), zeroInds(:,1),obj.params.interpolation.zeroInterpolationMethod);
-                    s         = sub2ind(size(sigOut),zeroInds(:,1), zeroInds(:,2));
-                    sigOut(s) = intPoints;
-                end
-            end
-        end
+%         function [sigOut] = InterpolateZeroValuesInSignal(obj,sigIn)
+%             % remove nan values by interpolation of the signal
+%             sigOut = sigIn;
+%             s      = size(sigIn);
+%             if any(s(1:2)==1) % for 1D signal
+%                 zeroInds   = find(sigIn==0 |isnan(sigIn));
+%                 noZeroInds = find(~(sigIn==0) & ~isnan(sigIn));
+%                 if ~isempty(zeroInds) && numel(noZeroInds)>2
+%                     % Interpolate the signal in the nan positions
+%                     x     = noZeroInds;
+%                     y     = sigIn(x);
+%                     sigOut(zeroInds)= interp1(x,y,zeroInds,obj.params.interpolation.zeroInterpolationMethod);% for the boundary values
+%                     % extrapolate the end values
+%                     
+%                     f =find(~isnan(sigOut),1,'first');
+%                     if f~=1
+%                         sigOut(1:f) = sigOut(f);
+%                     end
+%                     f= find(~isnan(sigOut),1,'last');
+%                     if f~=numel(sigOut)
+%                         sigOut(f:end) = sigOut(f);
+%                     end                                        
+%                 end
+%             else
+%                 %                 sigOut(isnan(sigIn))=0;
+%                 [zeroInds(:,1), zeroInds(:,2)]     = find(sigOut==0);
+%                 [noZeroInds(:,1), noZeroInds(:,2)] = find(~(sigIn==0) & ~isnan(sigIn));
+%                 sigNoZero = sigIn(:);
+%                 sigNoZero = sigNoZero (sigNoZero ~=0 & ~isnan(sigNoZero));
+%                 if ~isempty(zeroInds)
+%                     % Interpolate the signal in the nan positions
+%                     %                     [x,y] = meshgrid(1:size(sigOut,1),1:size(sigOut,2));
+%                     intPoints = interp2(noZeroInds(:,2), noZeroInds(:,1),sigOut,zeroInds(:,2), zeroInds(:,1),obj.params.interpolation.zeroInterpolationMethod);
+%                     s         = sub2ind(size(sigOut),zeroInds(:,1), zeroInds(:,2));
+%                     sigOut(s) = intPoints;
+%                 end
+%             end
+%         end
         
         function [chainRingStruct] = AnalyzeEncounterAsRingsAndChains(obj,prob)
             % Seperate the encounter probability signal prob
@@ -630,7 +630,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function [observedProb] = ProcessBeadEncounterSignal(obj,encounterSignal)%obsolete
             % process a single encounter signal
             % fill NaN position with nearest neighbors mean value
-            observedProb = obj.InterpolateZeroValuesInSignal(encounterSignal);
+            observedProb = InterpolateZeroValuesInSignal(encounterSignal,obj.params.interpolation.zeroInterpolationMethod);
             observedProb = obj.smoother.Smooth(observedProb,obj.params.smoothing.method,obj.params.smoothing.nHoodRad,obj.params.smoothing.sigma);            
             sop            = obj.SumIgnoreNaN(observedProb(1,:,end));
             observedProb   = observedProb(1,:,end)./sop; % normalize
