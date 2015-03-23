@@ -308,9 +308,12 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             right = (obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end));
             
-            regOrder  = 1; % regularization order [0,1,2]
-            lambda    = 1.2; % regularization constant
-            minNumPts = 4; % min number of points to perform analysis (smoothing)
+            regOrder    = 2; % regularization order [0,1,2]
+            lambda      = 2.7; % regularization constant
+            alpha       = -1;
+            numSpacePts = 3;
+            initCond    = 3;
+            minNumPts   = 5; % min number of points to perform analysis (smoothing)
             
             % calculate the sum for each row to be used for the
             % normalization of both sides
@@ -344,14 +347,15 @@ classdef CalculateBeadDistancesByRouseModel<handle
                if ~all(left(lIdx,:)==0)% perform smoothing for non zero signals
                 % smooth using the inverse heat equation
                 
-                  [~,left(lIdx,1:lIdx-1)] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',left(lIdx,1:lIdx-1),regOrder,lambda,false); 
-                  
+                  [~,rL] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',left(lIdx,1:lIdx-1),regOrder,lambda,alpha,numSpacePts,initCond,false); 
+                  left(lIdx,1:lIdx-1) = rL./sum(rL);
                end
             end
             
             for rIdx =1:size(right)-minNumPts
                if ~all(right(rIdx,:)==0)
-                  [~,right(rIdx,1:end-rIdx+1)] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',right(rIdx,1:end-rIdx+1),regOrder,lambda,false); 
+                  [~,rR] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',right(rIdx,1:end-rIdx+1),regOrder,lambda,alpha,numSpacePts,initCond,false); 
+                  right(rIdx,1:end-rIdx+1)=rR./sum(rR);
                end
             end
             
