@@ -286,7 +286,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         function DisplayChain(obj)
             % Display the connected chain 
             if obj.params.chain.recordPath
-                 ChainDynamicsPlayer(obj.chain);
+                 ChainDynamicsPlayer(obj.chain.handles.classes.chain);
             else
                 disp('encounters were not recorded, cannot display chain')
             end
