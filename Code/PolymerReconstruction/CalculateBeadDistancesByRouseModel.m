@@ -290,9 +290,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             else
                 disp('encounters were not recorded, cannot display chain')
             end
-        end
-            
-        
+        end                    
         
         function ProcessEncounterMatrix(obj,encounterMat)
             % Interpolate and normalize the encounter histogram             
