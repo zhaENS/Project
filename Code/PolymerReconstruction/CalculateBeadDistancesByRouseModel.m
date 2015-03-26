@@ -306,8 +306,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
             right = (obj.encounterMat(:,(size(encounterMat,2)+1)/2 +1 :end));
             
-            regOrder  = 2; % regularization order [0,1,2]
-            lambda    = 5; % regularization constant
+            regOrder  = 1; % regularization order [0,1,2]
+            lambda    = 3; % regularization constant
             minNumPts = 4; % min number of points to perform analysis (smoothing)
             
             % calculate the sum for each row to be used for the
