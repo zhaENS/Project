@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  27 JAN 2015 17:41
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  19 MAR 2015 19:48
 entering extended mode
 **3DStructureFromEncounterProbability.tex
 
@@ -205,19 +205,19 @@ Overfull \hbox (22.62985pt too wide) in paragraph at lines 48--48
 []\OT1/cmr/bx/n/17.28 Using in-verted prob-a-bil-i-ties as-sum-ing a Rouse
  []
 
-[2] [3]
+[2] [3] [4]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\3DStructreFromEncounterProb
-ability\3DStructureFromEncounterProbability.bbl") [4]
+ability\3DStructureFromEncounterProbability.bbl") [5]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\3DStructreFromEncounterProb
 ability\3DStructureFromEncounterProbability.aux") ) 
 Here is how much of TeX's memory you used:
- 2910 strings out of 493921
- 43836 string characters out of 3144879
+ 2911 strings out of 493921
+ 43856 string characters out of 3144879
  106433 words of memory out of 3000000
- 6200 multiletter control sequences out of 15000+200000
+ 6201 multiletter control sequences out of 15000+200000
  10916 words of font info for 43 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,7n,38p,552b,187s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,7n,38p,530b,187s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/Program Files (x86)/MiKTeX 2
@@ -231,10 +231,10 @@ lic/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
 c/amsfonts/cm/cmsy6.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/a
 msfonts/cm/cmsy8.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
 onts/cm/cmti12.pfb>
-Output written on 3DStructureFromEncounterProbability.pdf (4 pages, 145214 byte
+Output written on 3DStructureFromEncounterProbability.pdf (5 pages, 155082 byte
 s).
 PDF statistics:
- 63 PDF objects out of 1000 (max. 8388607)
+ 66 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

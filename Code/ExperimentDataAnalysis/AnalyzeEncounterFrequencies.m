@@ -563,21 +563,27 @@ classdef AnalyzeEncounterFrequencies<handle
         
         function [oneSided,twoSided] = GetEncounterProbabilityMatrix(obj,analysisRange,fName)% nfinished
             numBeads = (obj.beadData.numBeads); 
-            oneSided = zeros(numBeads,numBeads-1);             
-            twoSided = zeros(numBeads,numBeads-1 +1 +numBeads-1);
+            oneSided = nan(numBeads,numBeads-1);             
+            twoSided = nan(numBeads,numBeads-1 +1 +numBeads-1);
             % The encounter signal probability
             for bIdx = 1:numel(analysisRange.bead1);%numBeads
-                oneSided(bIdx,:) = obj.beadData.encounterProb.oneSide.(lower(fName)){bIdx};
+                oSig =obj.beadData.encounterProb.oneSide.(lower(fName)){bIdx};
+%                 oSig(isnan(oSig))= 0;
+                oneSided(bIdx,:) = oSig;
                 t = obj.beadData.encounterProb.twoSides.(fName)(bIdx,:);
-                twoSided(bIdx,numBeads-numel(t{1}):numBeads-1) = fliplr(t{1});
-                twoSided(bIdx,numBeads+1:numBeads+numel(t{2})) = t{2};
+                t1Sig=t{1};
+%                 t1Sig(isnan(t1Sig))=0;
+                t2Sig = t{2};
+%                 t2Sig(isnan(t2Sig))=0;
+                twoSided(bIdx,numBeads-numel(t{1}):numBeads-1) = fliplr(t1Sig);
+                twoSided(bIdx,numBeads+1:numBeads+numel(t{2})) = t2Sig;
             end
         end
         
         function [oneSided,twoSided] = GetEncounterFrequencyMatrix(obj,analysisRange,fName)% nfinished
             numBeads = (obj.beadData.numBeads); 
-            oneSided = zeros(numBeads,numBeads-1);             
-            twoSided = zeros(numBeads,numBeads-1 +1 +numBeads-1);
+            oneSided = nan(numBeads,numBeads-1);             
+            twoSided = nan(numBeads,numBeads-1 +1 +numBeads-1);
             % The encounter signal probability
             for bIdx = 1:numel(analysisRange.bead1);%numBeads
                 oneSided(bIdx,:) = obj.beadData.encounterFreq.oneSide.(lower(fName)){bIdx};
