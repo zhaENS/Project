@@ -16,7 +16,7 @@ classdef DomainHandlerParams<handle
         end
         
         function SetDefaultParams(obj)
-            obj.domainShape  = 'none';
+            obj.domainShape  = 'sphere';
             obj.domainWidth  = 5;
             obj.domainHeight = 5;
             obj.domainCenter = [0 0 0];

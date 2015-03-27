@@ -35,7 +35,7 @@ classdef RouseSimulatorFramework<handle
     end
     
     events
-        run
+        run        
     end
     
     methods 
@@ -231,7 +231,7 @@ classdef RouseSimulatorFramework<handle
                     while obj.runSimulation
                         % perform actions before the current step
                         obj.PreStepActions                                               
-                        obj.NextStep;% advance one step of the polymer chain 
+                        obj.NextStep;% advance one step of the polymer chain                           
                         % perform action post the current step 
                         obj.PostStepActions                                              
                     end
@@ -340,10 +340,10 @@ classdef RouseSimulatorFramework<handle
         
         function NextStep(obj,varargin)
             % Next simulation step 
+           
             for cIdx = 1:obj.params.simulator.numChains 
-                obj.handles.classes.rouse(cIdx).Next
-                obj.Reflect(cIdx)             
-%                 obj.handles.classes.rouse(cIdx).GetSprings;
+                obj.handles.classes.rouse(cIdx).Next % advance one step for all chains 
+                obj.Reflect(cIdx) % reflection with the domain             
                 obj.handles.classes.rouse(cIdx).GetForces;
                 obj.handles.classes.rouse(cIdx).SetPrevBeadPosition;
 
