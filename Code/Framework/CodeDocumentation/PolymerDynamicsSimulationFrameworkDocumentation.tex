@@ -113,13 +113,6 @@ To save computation time for each step, the noise terms are determined every 10,
 \section{The Recipe files}
 The recipe files are used to allow the user to insert simulation specific commands without changing the content of the code. Recipe files allow the user to insert 4 functions, which are executed in: PreSimulationBatchActions, PreRunActions, PostRunActions, PostSimulationBatchActions. of the simulation framework. 
 
-\section{Chains' Association and Dissociation} 
-To explain the data structure's dynamics for chain association and dissociation, we first make several definitions.
-
-A system of $N$ chains will be written as:  $[C^{(1)},C^{(2)},...,C^{(N)} ]$, the coordinates of the beads in $C^{(i)}$ will be written as $X^{i}$. For each chain $C^{(i)}$ there exist a subset of 'sticky' beads $S^{(i)}$ that are allowed to interact with a subset $S^{(j)},\quad j\in [1,N]$.For the present notation we do not allow self interactions. A subscript will indicate a member of the group, i.e $X^{(i)}_k$ will indicate the $k^{th}$ coordinate in the coordinates of chain $i$, $S^{(i)}_k$ will indicate the $k^{th}$ coordinate in the subset of interacting beads of chain $i$, etc... 
-
-An \textit{association} between a chain $i$ and $j$ is the interaction between a member of $S^{(i)}$ and $S^{(j)}$ and will be denoted by  
-$C^{(i)}\oplus C^{(j)}$, that is $\exists \alpha \in S^{(i)},\beta \in S^{(j)}; |X^{(i)}_\alpha-X^{(j)}_\beta |<\epsilon$, with $\epsilon$ the interaction distance.
  
 
 \end{document} 

@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  19 JUN 2014 13:28
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  30 MAR 2015 12:59
 entering extended mode
 **Polymer*Chain*Dynamics_Summary*Of*Methods.tex
 
-("D:\Ofir\Work\Copy\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Sum
-mary Of Methods.tex"
+("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Summ
+ary Of Methods\Polymer Chain Dynamics_Summary Of Methods.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -101,8 +101,8 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-("D:\Ofir\Work\Copy\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Sum
-mary Of Methods.aux")
+("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Summ
+ary Of Methods\Polymer Chain Dynamics_Summary Of Methods.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
@@ -127,8 +127,8 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-("D:\Ofir\Work\Copy\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Sum
-mary Of Methods.toc")
+("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Summ
+ary Of Methods\Polymer Chain Dynamics_Summary Of Methods.toc")
 \tf@toc=\write3
 
 Overfull \hbox (14.06525pt too wide) in paragraph at lines 13--15
@@ -185,27 +185,29 @@ Overfull \hbox (5.9008pt too wide) in paragraph at lines 65--67
  []
 
 [3] [4] [5]
-("D:\Ofir\Work\Copy\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Sum
-mary Of Methods.aux") ) 
+("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Summ
+ary Of Methods\Polymer Chain Dynamics_Summary Of Methods.aux") ) 
 Here is how much of TeX's memory you used:
  1182 strings out of 493921
- 14164 string characters out of 3144879
+ 14533 string characters out of 3144879
  64998 words of memory out of 3000000
  4508 multiletter control sequences out of 15000+200000
  13356 words of font info for 51 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,6n,26p,514b,239s stack positions out of 5000i,500n,10000p,200000b,50000s
-<d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmbx12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmmi12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmr12.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmr17.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-ti12.pfb>
-Output written on "Polymer Chain Dynamics_Summary Of Methods.pdf" (6 pages, 903
-02 bytes).
+ 27i,6n,26p,643b,239s stack positions out of 5000i,500n,10000p,200000b,50000s
+<d:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><d:/Program Files (
+x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><d:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><d:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on "Polymer Chain Dynamics_Summary Of Methods.pdf" (6 pages, 112
+870 bytes).
 PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
+ 53 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

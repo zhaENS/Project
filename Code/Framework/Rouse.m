@@ -1,7 +1,5 @@
 classdef Rouse<handle
     
-    % TODO: sort the properties by subjects, move unneccessary to private
-    %      properties 
     % TODO: add chain starting position options: linear, dense, loose, random,
     %       etc...
     % TODO: when beads are connected, make their stating position close.
@@ -54,6 +52,7 @@ classdef Rouse<handle
     end
     
     events
+        getForce% next step event 
     end
     
     methods
@@ -61,8 +60,7 @@ classdef Rouse<handle
             % class constructor
             obj.runSimulation = true;
             obj.params        = rouseParams;
-          
-%             obj.SetDefaultParams
+            obj.handles.classes.spring = Spring(obj);
             % adjust input parameters to match the structure expected in
             % the class
             obj.SetInputParams
@@ -73,36 +71,7 @@ classdef Rouse<handle
             
 %             obj.CreateControls             
             
-        end
-        
-        function SetDefaultParams(obj)%Unused
-            % Default Params
-            
-            obj.params.bendingElasticityForce = true;
-            obj.params.lennardJonesForce   = true;
-            obj.params.springForce       = true;
-
-            obj.params.dimension         = 3;       % an integer between 1 and 3
-            obj.params.numBeads          = 2;       % number of beads in the chain            
-            obj.params.dt                = 10^(-2); % time step [sec]
-            obj.params.k                 = 1e-1;    % Boltzman constant            
-            obj.params.b                 = 1;            
-            obj.params.zeta              = 1;             
-            obj.params.temperature       = 273;      % thermodynamic temperature (Kelvin)            
-            obj.params.minBeadDist       = 0.5;      % min distance between beads [unused in this version]            
-            obj.params.fixedBeadNum      = [];       % beads index fixed            
-            obj.params.noiseDistribution = 'Gaussian';            
-            obj.params.diffusionConst    = 1;            
-            obj.params.springConst       = -2*obj.params.dimension*obj.params.diffusionConst*obj.params.dt/(obj.params.b^2);            
-            obj.params.noiseStd          = sqrt(2*obj.params.diffusionConst*obj.params.dt);%2*obj.params.k*obj.params.temperature*obj.params.dt;            
-            obj.params.noiseMean         = 0;            
-            obj.params.LJPotentialDepth  = 1e-5;             
-            obj.params.LJPotentialWidth  = 10;            
-            obj.params.bendingConst      = 0.1;                        
-            obj.params.connectedBeads   = [];% bounded monomers should come in pairs, this is an integer list of [n by 2]
-            obj.params.beta              = 2*ones(obj.params.numBeads); % the anomolouse exponent. for beta~=2 all beads are connected. 
-            
-        end
+        end        
         
         function SetInputParams(obj)% clean up 
 %             if mod(numel(paramsIn),2)~=0
@@ -153,14 +122,6 @@ classdef Rouse<handle
             % but is represented as N 2D arrays of sparse matrices 
             obj.positions.springs.angleBetweenSprings = sparse(repmat(1:obj.params.numBeads,1,obj.params.numBeads),1:obj.params.numBeads^2,pi);
             obj.beadsDist                       = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0);
-            obj.distributions.beadDistance.dist = []; % to be moved to distributionHandler
-            obj.distributions.beadDistance.mean = []; % remove
-            obj.distributions.beadDistance.std  = []; % remove
-            obj.distributions.beadDistance.rms  = []; % remove
-            obj.distributions.endToEnd.vec      = []; % remove
-            obj.distributions.endToEnd.std      = []; % remove
-            obj.distributions.endToEnd.mean     = []; % remove
-            obj.distributions.endToEnd.dist     = []; % remove
             obj.connectionMap.beadTriplets      = [];
             
             % Initialize forces struct
@@ -173,38 +134,12 @@ classdef Rouse<handle
                                         'z',zeros(obj.params.numBeads,1));        
                                 
             % Initialize structures 
-            obj.SetBeadsMobilityMatrices;  
+%             obj.SetBeadsMobilityMatrices;  
             obj.SetBeadConnectionMap
             obj.SetInitialChainPosition; 
-            obj.SetBeadsEquation 
-        end
-        
-        function SetBeadsEquation(obj)% unused
-            % the beads positions 
-%             p       - previous position
-%             Fm      - forward mobility matrix
-%             Bm      - backward mobility matrix 
-%             Fb      - forward binary matrix
-%             Bb      - backward binary matrix
-%             n       - noise term 
-%             b       - mean springs length
-% %             params  - parameters 
-            if obj.params.minBeadDist~=0
 
-                obj.eq.beads = @(p,Fb,Bb,mobilityMatrices,D,b,dt,n,l,dim)...
-                    (-dim*D*dt/(b^2))*abs(mobilityMatrices.beads.forward*p)+...
-                    (-dim*D*dt/(b^2))*abs(mobilityMatrices.beads.backward*(p))-...
-                    (-dim*2*D*dt/(b^2))*l*ones(size(p))+...
-                    n+...
-                    p;
-            else
-                % for the case the min distance is 0, the position can be
-                % found solving the matrix form 
-                obj.eq.beads = @(prevPos,mobilityMatrix,D,b,dt,n,dim)(-dim*D*dt/(b.^2))*(mobilityMatrix.beads.normal*prevPos)+n+prevPos;
-            end
-                
         end
-        
+                
         function CalculateRelaxationTime(obj)
             % the relaxation time of the first mode of the Rouse chain 
             d = sqrt(2*obj.params.diffusionConst*obj.params.dt);
@@ -217,13 +152,12 @@ classdef Rouse<handle
         function SetBeadConnectionMap(obj)
             % Set the default linear connection 
             % define the Rouse matrix 
-            obj.SetRouseMatrix                         
+            obj.mobilityMatrices.rouse = RouseMatrix(obj.params.numBeads);                        
             
             [v,lambda]           = obj.GetRouseEig;
             % if the lambdas are changed, then the connection map is
             % changed. 
-            % adjust connect monomer list accordingly 
-            obj.AdjustConnectedMonomersList
+
             cm = obj.params.connectedBeads;
             assert(all(cm(:)<=obj.params.numBeads),'The monomers index to connect cannot exceed the number of monomers in the chain')
            
@@ -334,29 +268,8 @@ classdef Rouse<handle
            k       = obj.connectionMap.indices.uniqueBeadTriplets.uniqueIndicesMap;
            obj.connectionMap.indices.uniqueBeadTripletsLinear = sub2ind([obj.params.numBeads,numel(n)], k(:,1),k(:,2));
             
-        end
-        
-        function SetRouseMatrix(obj)
-            % Define the Rouse matrix 
-            obj.mobilityMatrices.rouse = RouseMatrix(obj.params.numBeads);
-%             obj.mobilityMatrices.rouse          = 2*eye(obj.params.numBeads)...
-%                                                   -diag(ones(1,obj.params.numBeads-1),1)...
-%                                                   -diag(ones(1,obj.params.numBeads-1),-1);
-%             obj.mobilityMatrices.rouse(1,1)     = 1;
-%             obj.mobilityMatrices.rouse(end,end) = 1;
-        end
-        
-        function AdjustConnectedMonomersList(obj)% unfinished
-            % This function operates after the Rouse Matrix is defined. It
-            % takes into account the connected monomers indices defined by
-            % the user and the resulted connection matrix after the beta
-            % values of the chains have been altered (Reminder: if beta=2
-            % we get the classical Rouse matrix, other wise it is the beta
-            % model) 
-            m= obj.mobilityMatrices.rouse;
-            % remove the diagonal 
-        end
-        
+        end        
+                
         function [v,lambda] = GetRouseEig(obj)
             % Get the rouse matrix eigen values and eigen vectors
             v      = zeros(obj.params.numBeads);
@@ -440,7 +353,7 @@ classdef Rouse<handle
 %                 obj.simulationTime.meanStepTime = (obj.simulationTime.meanStepTime*(obj.step-1)+endRoundTime)/obj.step;% the mean round time 
         end
         
-        function GetForces(obj)
+        function GetForces(obj)% used externaly
              % Calculate forces               
              obj.GetSpringForce();             
              obj.GetLennardJonesForce();
@@ -493,6 +406,8 @@ classdef Rouse<handle
             % Solve the rouse system, given the previous location of the chain system
             % parameters
             % solve the system of equations
+            notify(obj,'getForce');
+            
             prevPos      = [obj.positions.beads.prev.x,obj.positions.beads.prev.y,obj.positions.beads.prev.z]; 
             ljForce      = [obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
             bendingForce = [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];
@@ -500,15 +415,31 @@ classdef Rouse<handle
             noiseForce   = [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
             
             newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
-                      ljForce+...
-                      obj.params.bendingConst*obj.params.dt*bendingForce+...
-                      noiseForce+...
-                      prevPos;
+                       ljForce+...
+                       obj.params.bendingConst*obj.params.dt*bendingForce+...
+                       noiseForce+...
+                       prevPos;
 
              obj.positions.beads.cur.x = newPos(:,1);
              obj.positions.beads.cur.y = newPos(:,2);
-             obj.positions.beads.cur.z = newPos(:,3);
+             obj.positions.beads.cur.z = newPos(:,3);            
+        end
+        
+        function Step(obj,force)% experimental 
+            prevPos      = [obj.positions.beads.prev.x,obj.positions.beads.prev.y,obj.positions.beads.prev.z]; 
+            ljForce      = force.lenardJones; %[obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
+            bendingForce = force.bending;     % [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];            
+            noiseForce   = force.noise;       % [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
             
+            newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
+                       ljForce+...
+                       obj.params.bendingConst*obj.params.dt*bendingForce+...
+                       noiseForce+...
+                       prevPos;
+
+             obj.positions.beads.cur.x = newPos(:,1);
+             obj.positions.beads.cur.y = newPos(:,2);
+             obj.positions.beads.cur.z = newPos(:,3);    
         end
         
         function SetPrevBeadPosition(obj)
@@ -542,7 +473,7 @@ classdef Rouse<handle
                 sig          = obj.params.LJPotentialWidth;
                 epsilon      = obj.params.LJPotentialDepth;
                 bdmInv       = (beadsDistMat).^(-1);            % one over the bead distance matrix 
-                d            = obj.MatIntPower(bdmInv, 6); % matrix integer power 
+                d            = MatIntPower(bdmInv, 6); % matrix integer power 
                 t            = (sig^6).*d;                
                 forceValue   = 24*(epsilon*bdmInv).*(-2*t.*t +t); % derivative of LJ function 
                 
@@ -720,31 +651,6 @@ classdef Rouse<handle
         end
         
     end
-    
-    methods (Static)
-
-            function d = MatIntPower(a, n)
-                % d = MatIntPower(a, n)
-                % power with integer exponent
-                % return the array d = a.^n
-
-                % binary decomposition
-                nb = dec2bin(n)-'0';
-                ak = a;
-                if nb(end)
-                    d = a;
-                else
-                    d = 1;
-                end
-                for nbk = nb(end-1:-1:1)
-                    ak = ak.*ak;
-                    if nbk
-                        d = d.*ak;
-                    end
-                end
-
-            end % MatIntPower
-       end
-    
+        
 end
 
