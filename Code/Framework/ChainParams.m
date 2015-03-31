@@ -60,8 +60,8 @@ classdef ChainParams<handle
                 obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
             end
             
-            obj.LJPotentialDepth = 10^(-5);
-            obj.LJPotentialWidth = 10^(-5);
+            obj.LJPotentialDepth = 1;
+            obj.LJPotentialWidth = 1;
             obj.bendingConst     = 90;
         end
         
