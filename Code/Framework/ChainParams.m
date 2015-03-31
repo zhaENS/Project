@@ -13,6 +13,7 @@ classdef ChainParams<handle
         bendingElasticityForce@logical
         lennardJonesForce@logical
         springForce@logical
+        diffusionForce@logical
         minBeadDist@double
         fixedBeadNum@double
         noiseDistribution@char
@@ -37,13 +38,14 @@ classdef ChainParams<handle
             obj.dimension              = 3;
             obj.beta                   = 2; % for rouse, place 2. 
             obj.b                      = sqrt(3);
-            obj.dt                     = 1e-3;
+            obj.dt                     = 1e-2;
             obj.diffusionConst         = 1;
             obj.numBeads               = 64;
             obj.connectedBeads         = [];
             obj.bendingElasticityForce = false;
             obj.lennardJonesForce      = false;
             obj.springForce            = true;
+            obj.diffusionForce         = true;
             obj.minBeadDist            = 0;
             obj.fixedBeadNum           = [];
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain
@@ -58,8 +60,8 @@ classdef ChainParams<handle
                 obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
             end
             
-            obj.LJPotentialDepth = 10^(-15);
-            obj.LJPotentialWidth = 10^(-5);
+            obj.LJPotentialDepth = 10^(-2);
+            obj.LJPotentialWidth = 10^(-2);
             obj.bendingConst     = 90;
         end
         

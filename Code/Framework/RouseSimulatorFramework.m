@@ -40,24 +40,22 @@ classdef RouseSimulatorFramework<handle
     
     methods 
         function obj = RouseSimulatorFramework(frameworkParams)
-%            obj.simulationData(1).step      = 1;
-%            obj.simulationData(1).stepTime  = 0;
-                     
+                                
+           % Set initial parameters
+           obj.OrganizeParams(frameworkParams)
            % Create controls
            obj.CreateControls 
-           
-           % Set initial parameters
-           obj.OrganizeParams(frameworkParams)        
+           % Initizlie chains and domain 
            obj.InitializeClasses
+           % set recipe files 
            obj.ReadRecipeFile           
         end
         
         function OrganizeParams(obj,frameworkParams)
-            obj.params                       = frameworkParams;
-            obj.params.domain.dimension      = obj.params.simulator.dimension;
-            obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
-            obj.params.chain.dimension       = obj.params.simulator.dimension;
-                      
+            obj.params                             = frameworkParams;            
+            obj.params.chain.dimension             = obj.params.simulator.dimension;
+            obj.params.domain.showDomain           = obj.params.simulator.showSimulation;  
+            obj.params.domain.dimension            = obj.params.simulator.dimension;
             obj.params.dataRecorder.recipeFileName = obj.params.simulator.recipeFileName;
             obj.params.dataRecorder.encounterDist  = obj.params.simulator.encounterDist;
         end
@@ -98,7 +96,9 @@ classdef RouseSimulatorFramework<handle
         end
         
         function InitializeClasses(obj)
+            
             obj.CreateDomain
+            
             obj.InitializeChains                                          
 %             obj.InitializeDistributionHandler
             obj.InitializeDataRecorder;
@@ -121,7 +121,7 @@ classdef RouseSimulatorFramework<handle
          % Create chains 
             for cIdx = 1:obj.params.simulator.numChains
                 % Initialize class
-                cParams                         = obj.params.chain;
+                cParams                         = obj.params.chain;% should be expanded to include parameters for each chain
                 obj.handles.classes.rouse(cIdx) = Rouse(cParams);
                 % make sure the chain is inside the domain
                 obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
@@ -287,6 +287,7 @@ classdef RouseSimulatorFramework<handle
         end
         
         function CreateControls(obj)% move to Plotter class
+            if obj.params.simulator.showSimulation
             obj.handles.graphical.mainFigure = figure('Units','normalized',...
                                                       'Tag','mainFigure',...
                                                       'ToolBar','none',...
@@ -317,13 +318,23 @@ classdef RouseSimulatorFramework<handle
                'Tag','nextButton',...
                'Position',[0.15 0.05, 0.1, 0.05],...
                'Callback',@obj.NextStep);
-
+                      
+            end
         end
         
-        function CreateDomain(obj)% move to plotter class
-           set(obj.handles.graphical.mainAxes,'NextPlot','Add')
-              obj.handles.classes.domain = DomainHandler(obj.params.domain);
-           set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
+        function CreateDomain(obj)
+            
+             % parameters for the domain are set in the organizeParams
+             obj.params.domain.parentAxes = obj.handles.graphical.mainAxes;
+             obj.handles.classes.domain  = DomainHandler(obj.params.domain);
+             
+            if obj.params.domain.showDomain
+                % move these commands to future Plotter class               
+               obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
+               obj.handles.classes.domain.ConstructDomain;
+               set(obj.handles.graphical.mainAxes,'NextPlot','Add')                 
+               set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
+            end
 
         end
         
@@ -344,7 +355,7 @@ classdef RouseSimulatorFramework<handle
             for cIdx = 1:obj.params.simulator.numChains 
                 obj.handles.classes.rouse(cIdx).Next % advance one step for all chains 
                 obj.Reflect(cIdx) % reflection with the domain             
-                obj.handles.classes.rouse(cIdx).GetForces;
+%                 obj.handles.classes.rouse(cIdx).GetForces;
                 obj.handles.classes.rouse(cIdx).SetPrevBeadPosition;
 
             end            
@@ -482,16 +493,16 @@ classdef RouseSimulatorFramework<handle
         
         function GetChainsCenterOfMass(obj)% move to chain class
            % get the center of mass of ALL chains  
-           ccm(1:obj.params.simulator.numChains) = struct('x',[],'y',[],'z',[]);
-           
-            for cIdx = 1:obj.params.simulator.numChains              
-              ccm(cIdx) = obj.handles.classes.rouse(cIdx).positions.beads.cm;             
-            end
-           
-           cm.x = sum([ccm.x])/obj.params.simulator.numChains;
-           cm.y = sum([ccm.y])/obj.params.simulator.numChains;
-           cm.z = sum([ccm.z])/obj.params.simulator.numChains;
-           obj.chainsCenterOfMass = cm;
+%            ccm(1:obj.params.simulator.numChains) = struct('x',[],'y',[],'z',[]);
+%            
+%             for cIdx = 1:obj.params.simulator.numChains              
+%               ccm(cIdx) = obj.handles.classes.rouse(cIdx).positions.beads.cm;             
+%             end
+%            
+%            cm.x = sum([ccm.x])/obj.params.simulator.numChains;
+%            cm.y = sum([ccm.y])/obj.params.simulator.numChains;
+%            cm.z = sum([ccm.z])/obj.params.simulator.numChains;
+           obj.chainsCenterOfMass = zeros(1,obj.params.chain.dimension);%cm;
         end
     end
        

@@ -7,6 +7,7 @@ classdef DomainHandlerParams<handle
         domainHeight@double
         reflectionType@char % current only option: preserveEnergy
         domainCenter@double % position in space for the center default [0 0 0] 3d
+        showDomain@logical  % flag to show or hide the domain 
         parentAxes
     end
     
@@ -17,9 +18,10 @@ classdef DomainHandlerParams<handle
         
         function SetDefaultParams(obj)
             obj.domainShape  = 'sphere';
-            obj.domainWidth  = 5;
-            obj.domainHeight = 5;
+            obj.domainWidth  = 10;
+            obj.domainHeight = 20;
             obj.domainCenter = [0 0 0];
+            obj.showDomain   = true;
             obj.reflectionType = 'preserveEnergy';
         end
     end

@@ -31,18 +31,17 @@ classdef Rouse<handle
         step 
         time
         simulationTime
-        distributions  
+        distributions% should e removed  
         connectionMap
 
         runSimulation
-        eq        
         mobilityMatrices
         
         relaxationTime %[sec] relaxation time of the first mode
         
-        beadsDist
-        forces
-        dimNames = {'x','y','z'};
+        beadsDist % move to ForceManager
+        forces    % should move to ForceManager
+        dimNames = {'x','y','z'}; % should be discarded, move to matrix representation 
     end
     
     properties (Access=private)
@@ -53,6 +52,7 @@ classdef Rouse<handle
     
     events
         getForce% next step event 
+        
     end
     
     methods
@@ -60,16 +60,19 @@ classdef Rouse<handle
             % class constructor
             obj.runSimulation = true;
             obj.params        = rouseParams;
-            obj.handles.classes.spring = Spring(obj);
-            % adjust input parameters to match the structure expected in
+            
+            % Initialize the forces acting on the chain 
+            obj.handles.classes.forceManager = ForceManager();  
+            obj.handles.classes.forceManager.springForce       = obj.params.springForce;
+            obj.handles.classes.forceManager.lennardJonesForce = obj.params.lennardJonesForce;
+            obj.handles.classes.forceManager.diffusionForce    = obj.params.diffusionForce;
+            obj.handles.classes.forceManager.bendingElasticityForce = obj.params.bendingElasticityForce;
+            % Adjust input parameters to match the structure expected in
             % the class
             obj.SetInputParams
-            
-            obj.CalculateRelaxationTime
-            
+                        
             obj.InitializeRouseStruct
             
-%             obj.CreateControls             
             
         end        
         
@@ -107,11 +110,7 @@ classdef Rouse<handle
             
             obj.positions.beads.prev.x          = zeros(obj.params.numBeads,1);
             obj.positions.beads.prev.y          = zeros(obj.params.numBeads,1);
-            obj.positions.beads.prev.z          = zeros(obj.params.numBeads,1);
-            
-            obj.positions.beads.cm.x            = 0;
-            obj.positions.beads.cm.y            = 0;
-            obj.positions.beads.cm.z            = 0;
+            obj.positions.beads.prev.z          = zeros(obj.params.numBeads,1);            
             
             obj.positions.springs.x             = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0); 
             obj.positions.springs.y             = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0);  
@@ -136,7 +135,7 @@ classdef Rouse<handle
             % Initialize structures 
 %             obj.SetBeadsMobilityMatrices;  
             obj.SetBeadConnectionMap
-            obj.SetInitialChainPosition; 
+            obj.SetInitialChainPosition; % should be moved out of the initialization process
 
         end
                 
@@ -170,19 +169,19 @@ classdef Rouse<handle
             end
             
             obj.connectionMap.connectionMatrix = connectionMatrix; % used for multiplication of beads location 
-            cMap = double((connectionMatrix-diag(diag(connectionMatrix)))~=0);
-            cMap(~cMap) = NaN;
+            cMap = logical((connectionMatrix-diag(diag(connectionMatrix)))~=0);
+%             cMap(~cMap) = NaN;
            % add the connection between distant beads
            
            for bIdx = 1:size(cm,1)
-               cMap(cm(bIdx,1),cm(bIdx,2))= 1;
-               cMap(cm(bIdx,2),cm(bIdx,1))= 1;
+               cMap(cm(bIdx,1),cm(bIdx,2))= true;
+               cMap(cm(bIdx,2),cm(bIdx,1))= true;
            end
            
            obj.connectionMap.map                = cMap;
-           [obj.connectionMap.indices.in.map]   = ~isnan(cMap); % linear indices of positions of monomer pairs connected. 
-           [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(~isnan(cMap)));
-           [obj.connectionMap.indices.out.map]  =  isnan(cMap);% linear indices of positions of monomer pairs connected. 
+           [obj.connectionMap.indices.in.map]   = find(cMap); % linear indices of positions of monomer pairs connected. 
+           [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(cMap));
+           [obj.connectionMap.indices.out.map]  =  ~cMap;% linear indices of positions of monomer pairs connected. 
            [obj.connectionMap.indices.out.list(:,1), obj.connectionMap.indices.out.list(:,2)]  = find(obj.connectionMap.indices.out.map); 
            cMapNz = cMap;
            cMapNz(isnan(cMapNz))=0;
@@ -334,9 +333,9 @@ classdef Rouse<handle
             end
 %             obj.positions.beads.prev = obj.positions.beads.cur;
             % Initialize the springs vectors and lengths 
-            obj.GetSprings;
+%             obj.GetSprings;
 %             % calculate forces at initial position 
-            obj.GetForces;
+%             obj.GetForces;
         end                        
                 
         function Next(obj,varargin)
@@ -353,8 +352,9 @@ classdef Rouse<handle
 %                 obj.simulationTime.meanStepTime = (obj.simulationTime.meanStepTime*(obj.step-1)+endRoundTime)/obj.step;% the mean round time 
         end
         
-        function GetForces(obj)% used externaly
-             % Calculate forces               
+        function GetForces(obj)% used externaly should be controlled by ForceManager and Framework
+             % Calculate forces   
+             % call forceManager
              obj.GetSpringForce();             
              obj.GetLennardJonesForce();
              obj.GetBendingElasticityForce();
@@ -406,19 +406,24 @@ classdef Rouse<handle
             % Solve the rouse system, given the previous location of the chain system
             % parameters
             % solve the system of equations
-            notify(obj,'getForce');
+%             notify(obj,'getForce');
             
             prevPos      = [obj.positions.beads.prev.x,obj.positions.beads.prev.y,obj.positions.beads.prev.z]; 
-            ljForce      = [obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
-            bendingForce = [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];
+%             ljForce      = [obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
+%             bendingForce = [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];
             
-            noiseForce   = [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
+%             noiseForce   = [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
+            p = obj.params;
             
-            newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
-                       ljForce+...
-                       obj.params.bendingConst*obj.params.dt*bendingForce+...
-                       noiseForce+...
-                       prevPos;
+            % Apply forces on the beads to get the new bead position
+            newPos       = obj.handles.classes.forceManager.Apply(prevPos,obj.connectionMap.map,p.dt,...
+                           p.diffusionConst,p.springConst,p.LJPotentialWidth,p.LJPotentialDepth,p.minBeadDist,p.fixedBeadNum); 
+                            
+%             newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
+%                        ljForce+...
+%                        obj.params.bendingConst*obj.params.dt*bendingForce+...
+%                        noiseForce+...
+%                        prevPos;
 
              obj.positions.beads.cur.x = newPos(:,1);
              obj.positions.beads.cur.y = newPos(:,2);
@@ -431,6 +436,7 @@ classdef Rouse<handle
             bendingForce = force.bending;     % [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];            
             noiseForce   = force.noise;       % [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
             
+
             newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
                        ljForce+...
                        obj.params.bendingConst*obj.params.dt*bendingForce+...
@@ -463,7 +469,7 @@ classdef Rouse<handle
                 obj.forces.springs(:,obj.params.fixedBeadNum) = 0;
 %                 obj.forces.springs = (obj.forces.springs~=0).*obj.connectionMap.connectionMatrix;
             end
-        end
+        end% move to ForceManager
         
         function GetLennardJonesForce(obj)
             % Get the LJ forces between monomers
@@ -494,7 +500,7 @@ classdef Rouse<handle
                 end
             end
             
-        end
+        end% move to ForceManager
         
         function GetBendingElasticityForce(obj)
             % Calculate the force and direction 
@@ -562,7 +568,7 @@ classdef Rouse<handle
                 obj.forces.bending = Force;               
             end
            
-        end        
+        end % move to ForceManager
         
         function GetNoise(obj)
             % Get noise according to the specified noise districution params
@@ -588,7 +594,7 @@ classdef Rouse<handle
             else
                 error('Noise distribution is undefined')
             end
-        end
+        end% move to ForceManager
               
         function CalculateAngleBetweenSprings(obj)
             % Calculate the angle between springs
@@ -603,15 +609,9 @@ classdef Rouse<handle
             linInd3 = obj.connectionMap.indices.in.linear.beadTriplets;%(obj.connectionMap.beadTriplets(:,3)-1)*obj.params.numBeads^2+linInd1;
             obj.positions.springs.angleBetweenSprings(linInd3) = sAngle;
 
-        end
-                       
-        function GetChainCenterOfMass(obj)
-            obj.positions.beads.cm.x = mean(obj.positions.beads.cur.x(:,end));
-            obj.positions.beads.cm.y = mean(obj.positions.beads.cur.y(:,end));
-            obj.positions.beads.cm.z = mean(obj.positions.beads.cur.z(:,end));
-        end
+        end% move to ForceManager                       
         
-        function GetSprings(obj)
+        function GetSprings(obj)% move to ForceManager
             % Calculate the springs vectors. the springs vectors are in the
             % direction of the bead_N-bead_N-1
             if obj.params.numBeads>1   
@@ -632,9 +632,9 @@ classdef Rouse<handle
                 obj.positions.springs.z       = 0;
                 obj.positions.springs.lengths = 0;
             end                        
-        end    
+        end 
         
-        function GetBeadsDist(obj)
+        function GetBeadsDist(obj)% move to ForceManager
            % Calculate the pairwise distance between beads
            % This function requires the mex file pdist2mex in the working path
 
