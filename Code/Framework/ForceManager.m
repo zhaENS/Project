@@ -95,32 +95,7 @@ classdef ForceManager<handle
             % calculate Lenard jones force between particles 
             force = zeros(size(particlePosition));
             if obj.lennardJonesForce
-                numParticles = size(particlePosition,1);
-                dimension    = size(particlePosition,2);
-                force        = zeros(numParticles,dimension);
-                beadsDistMat = particleDist;
-                sig          = LJPotentialWidth;
-                epsilon      = LJPotentialDepth;
-                bdmInv       = (beadsDistMat).^(-1);   % one over the bead distance matrix
-                d            = MatIntPower(bdmInv, 6); % matrix integer power (mex form Utils)
-                t            = (sig^6).*d;
-                forceValue   = 24*(epsilon*bdmInv).*(-2*t.*t +t); % derivative of LJ function
-                
-                forceValue(isnan(forceValue))= 0;
-                for dIdx = 1:size(particlePosition,2)
-                    % replicate the position vector
-                    A    = particlePosition(:,dIdx);
-                    siz  = [1,numParticles];
-                    B1   = A(:,ones(siz(2),1));
-                    siz  = [numParticles,1];
-                    A    = A';
-                    B2   = A(ones(siz(1),1),:);
-                    % Subtract positions to get the direction vectors
-                    fd  = B1-B2;
-                    
-                    force(:,dIdx) = (sum(fd.*forceValue,1)');
-                    %                     force(:,dIdx)(obj.params.fixedBeadNum) = 0;
-                end
+                force = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
             end
         end
         

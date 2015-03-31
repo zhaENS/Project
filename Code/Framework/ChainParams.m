@@ -43,7 +43,7 @@ classdef ChainParams<handle
             obj.numBeads               = 64;
             obj.connectedBeads         = [];
             obj.bendingElasticityForce = false;
-            obj.lennardJonesForce      = false;
+            obj.lennardJonesForce      = true;
             obj.springForce            = true;
             obj.diffusionForce         = true;
             obj.minBeadDist            = 0;
@@ -60,8 +60,8 @@ classdef ChainParams<handle
                 obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
             end
             
-            obj.LJPotentialDepth = 10^(-2);
-            obj.LJPotentialWidth = 10^(-2);
+            obj.LJPotentialDepth = 10^(-5);
+            obj.LJPotentialWidth = 10^(-5);
             obj.bendingConst     = 90;
         end
         

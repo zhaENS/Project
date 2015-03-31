@@ -125,12 +125,15 @@ classdef RouseSimulatorFramework<handle
                 obj.handles.classes.rouse(cIdx) = Rouse(cParams);
                 % make sure the chain is inside the domain
                 obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
+                
+                % Initialize chain graphics
+                if obj.params.simulator.showSimulation
                 if ~(obj.params.chain.springForce) && ~obj.params.chain.bendingElasticityForce
                     lineStyle = 'none';
                 else
                     lineStyle = '-';
                 end
-                % Initialize chain graphics
+                
                 p = obj.handles.classes.rouse(cIdx).positions.beads.prev;
                 obj.handles.graphical.chain(cIdx).beads = line(...
                     'XData',p.x,...                                   
@@ -167,6 +170,7 @@ classdef RouseSimulatorFramework<handle
                             'Tag','connector');     
                     end
 %                 end
+                end
                 end
             end                                 
            % get chains center of mass- for the plotting 
@@ -318,14 +322,15 @@ classdef RouseSimulatorFramework<handle
                'Tag','nextButton',...
                'Position',[0.15 0.05, 0.1, 0.05],...
                'Callback',@obj.NextStep);
-                      
+           
+                obj.params.domain.parentAxes = obj.handles.graphical.mainAxes;      
             end
         end
         
         function CreateDomain(obj)
             
              % parameters for the domain are set in the organizeParams
-             obj.params.domain.parentAxes = obj.handles.graphical.mainAxes;
+             
              obj.handles.classes.domain  = DomainHandler(obj.params.domain);
              
             if obj.params.domain.showDomain
