@@ -56,6 +56,8 @@ classdef ForceManager<handle
              % thermal (diffusion) force
              diffusionForces = obj.GetDiffusionForce(particlePosition,diffusionConst,dt);
              
+             % bending forces 
+             bendingForces = obj.GetBendingElasticityForce(obj.edges,connectivityMap);
              % the effect of appliying forces is considered addative 
              newParticlePosition = -springForces*dt*particlePosition+...
                                       ljForces*dt+...
@@ -99,67 +101,109 @@ classdef ForceManager<handle
             end
         end
         
-        function force  = GetBendingElasticity(obj)% needs clean up 
+        function force  = GetBendingElasticityForce(obj,edgeMat,connectivityMat)% needs clean up 
+            %===========    
+            % Calculate the force on each particle given its connectivity 
+            numParticles = size(connectivityMat,1);
+            dimension    = size(edgeMat,3);
+            force = zeros(numParticles,dimension);
+            for pIdx = 1:numParticles
+               edgeVec =  edgeMat(pIdx,connectivityMat(pIdx,:),:);
+%                calculate the pairwise angles between the connected
+%                particles
+               n     = size(edgeVec,2);% number of edge pairs
+               if n>=2
+                next  = 1;
                 
-                % get the coordinates of the first vector comprising the
-                % angle
-                t1x     = obj.positions.springs.x(obj.connectionMap.indices.in.linear.bead1ToBead2);
-                t1y     = obj.positions.springs.y(obj.connectionMap.indices.in.linear.bead1ToBead2);
-                t1z     = obj.positions.springs.z(obj.connectionMap.indices.in.linear.bead1ToBead2);
-                % get the coordinates of the second vector  comprising the
-                % angle
-                t2x     = obj.positions.springs.x(obj.connectionMap.indices.in.linear.bead3ToBead2);
-                t2y     = obj.positions.springs.y(obj.connectionMap.indices.in.linear.bead3ToBead2);
-                t2z     = obj.positions.springs.z(obj.connectionMap.indices.in.linear.bead3ToBead2);
-               
-                % calculate the the force (normalized) given by the angle
-                FValue = (pi- obj.positions.springs.angleBetweenSprings(obj.connectionMap.indices.in.linear.beadTriplets))/pi;
-                % direct the force of each bead toward the base of the
-                % triangle formed by the two edges (vectors) comprising the
-                % angle
-                tempFx  = (t1x-(0.5*(t2x-t1x))).*FValue;
-                tempFy  = (t1y-(0.5*(t2y-t1y))).*FValue;
-                tempFz  = (t1z-(0.5*(t2z-t1z))).*FValue;  
-%                 % ====== debug================
-%                  hold on 
-%                  line('XData',obj.positions.beads.cur.x(2),...
-%                       'YData',obj.positions.beads.cur.y(2),...
-%                       'ZData',obj.positions.beads.cur.z(2),...
-%                       'Marker','o',...
-%                       'MarkerFaceColor','r',...
-%                       'Tag','point')
-%                  % plot the vectors 
-%                  quiver3(obj.positions.beads.cur.x(2),...
-%                      obj.positions.beads.cur.y(2),...
-%                      obj.positions.beads.cur.z(2),t1x,t1y,t1z)
-%                  quiver3(obj.positions.beads.cur.x(2),...
-%                      obj.positions.beads.cur.y(2),...
-%                      obj.positions.beads.cur.z(2),t2x,t2y,t2z)
-%                   quiver3(obj.positions.beads.cur.x(2),...
-%                      obj.positions.beads.cur.y(2),...
-%                      obj.positions.beads.cur.z(2),tempFx,tempFy,tempFz)
-%                  hold off
-%                   
-%                  %=== end debug ====================
-                 
-                % for each bead, calculate the force as the sum of forces
-                % exerted by the angles
-%                 n       = [1:obj.params.numBeads,1:abs(numel(obj.connectionMap.beadTriplets(:,2))-obj.params.numBeads)];
-%                 a       = sparse(obj.params.numBeads,1:numel(n),0);     
-                a       = sparse(size(obj.positions.springs.angleBetweenSprings,1),size(obj.positions.springs.angleBetweenSprings,2));
-                ind     = obj.connectionMap.indices.uniqueBeadTripletsLinear;
-                a       = full(a);
-                a(ind)  = tempFx;
-
-                Force.x = sum(a,2);
-                Force.x(obj.params.fixedBeadNum) = 0;
-                a(ind)  = tempFy;
-                Force.y = sum(a,2);
-                Force.y(obj.params.fixedBeadNum) = 0;
-                a(ind)  = tempFz;
-                Force.z = sum(a,2);
-                Force.z(obj.params.fixedBeadNum) = 0;
-                obj.forces.bending = Force;       
+                numPairs = factorial(n)/(factorial(2)*factorial(n-2));
+                pairs    = zeros(numPairs,2);
+                forceVec  = zeros(numPairs,dimension);
+                angle    = zeros(1,numPairs);
+                 for a1Idx = 1:n                
+                     for a2Idx = a1Idx+1:n
+                         vec1          = edgeVec(1,a1Idx,:);
+                         vec1          = vec1(:);
+                         vec2          = edgeVec(1,a2Idx,:);
+                         vec2          = vec2(:);
+                         angle(next)   = acos(sum(vec1.*vec2)./(norm(vec1(:))*norm(vec2)));
+                         % calculate the resulting force vector 
+                         forceVec(next,:) = angle(next)./pi *( (vec1-vec2)/2);
+                         pairs(next,1) = a1Idx;
+                         pairs(next,2) = a2Idx;
+                         next          = next+1;
+                     end                     
+                 end
+%                  calculate the resulting force vector for the specific
+%                  particle 
+                force(pIdx,:) = sum(forceVec,1);
+                 % calculate the force based on the pair of vectors 
+               end 
+            end
+            
+            
+            
+            
+            
+%             %%%%%%%%%%%%%
+%                 % get the coordinates of the first vector comprising the
+%                 % angle
+%                 t1x     = obj.positions.springs.x(obj.connectionMap.indices.in.linear.bead1ToBead2);
+%                 t1y     = obj.positions.springs.y(obj.connectionMap.indices.in.linear.bead1ToBead2);
+%                 t1z     = obj.positions.springs.z(obj.connectionMap.indices.in.linear.bead1ToBead2);
+%                 % get the coordinates of the second vector  comprising the
+%                 % angle
+%                 t2x     = obj.positions.springs.x(obj.connectionMap.indices.in.linear.bead3ToBead2);
+%                 t2y     = obj.positions.springs.y(obj.connectionMap.indices.in.linear.bead3ToBead2);
+%                 t2z     = obj.positions.springs.z(obj.connectionMap.indices.in.linear.bead3ToBead2);
+%                
+%                 % calculate the the force (normalized) given by the angle
+%                 FValue = (pi- obj.positions.springs.angleBetweenSprings(obj.connectionMap.indices.in.linear.beadTriplets))/pi;
+%                 % direct the force of each bead toward the base of the
+%                 % triangle formed by the two edges (vectors) comprising the
+%                 % angle
+%                 tempFx  = (t1x-(0.5*(t2x-t1x))).*FValue;
+%                 tempFy  = (t1y-(0.5*(t2y-t1y))).*FValue;
+%                 tempFz  = (t1z-(0.5*(t2z-t1z))).*FValue;  
+% %                 % ====== debug================
+% %                  hold on 
+% %                  line('XData',obj.positions.beads.cur.x(2),...
+% %                       'YData',obj.positions.beads.cur.y(2),...
+% %                       'ZData',obj.positions.beads.cur.z(2),...
+% %                       'Marker','o',...
+% %                       'MarkerFaceColor','r',...
+% %                       'Tag','point')
+% %                  % plot the vectors 
+% %                  quiver3(obj.positions.beads.cur.x(2),...
+% %                      obj.positions.beads.cur.y(2),...
+% %                      obj.positions.beads.cur.z(2),t1x,t1y,t1z)
+% %                  quiver3(obj.positions.beads.cur.x(2),...
+% %                      obj.positions.beads.cur.y(2),...
+% %                      obj.positions.beads.cur.z(2),t2x,t2y,t2z)
+% %                   quiver3(obj.positions.beads.cur.x(2),...
+% %                      obj.positions.beads.cur.y(2),...
+% %                      obj.positions.beads.cur.z(2),tempFx,tempFy,tempFz)
+% %                  hold off
+% %                   
+% %                  %=== end debug ====================
+%                  
+%                 % for each bead, calculate the force as the sum of forces
+%                 % exerted by the angles
+% %                 n       = [1:obj.params.numBeads,1:abs(numel(obj.connectionMap.beadTriplets(:,2))-obj.params.numBeads)];
+% %                 a       = sparse(obj.params.numBeads,1:numel(n),0);     
+%                 a       = sparse(size(obj.positions.springs.angleBetweenSprings,1),size(obj.positions.springs.angleBetweenSprings,2));
+%                 ind     = obj.connectionMap.indices.uniqueBeadTripletsLinear;
+%                 a       = full(a);
+%                 a(ind)  = tempFx;
+% 
+%                 Force.x = sum(a,2);
+%                 Force.x(obj.params.fixedBeadNum) = 0;
+%                 a(ind)  = tempFy;
+%                 Force.y = sum(a,2);
+%                 Force.y(obj.params.fixedBeadNum) = 0;
+%                 a(ind)  = tempFz;
+%                 Force.z = sum(a,2);
+%                 Force.z(obj.params.fixedBeadNum) = 0;
+%                 obj.forces.bending = Force;       
         end             
     end
     
