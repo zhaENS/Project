@@ -7,8 +7,6 @@ classdef Rouse<handle
     % distance from the center of mass (sequentially in creating the
     % initial beads)
     % TODO: add Reset option (so the class doesn't have to be initialized again)
-    % TODO: add an option to recreate the noise values from previously used
-    %       seed or simulation parameters
     % TODO: add the possibility to change the Raouse matrix's eigenvalues,
     %       making the model a beta model
     %
@@ -153,26 +151,25 @@ classdef Rouse<handle
             % define the Rouse matrix 
             obj.mobilityMatrices.rouse = RouseMatrix(obj.params.numBeads);                        
             
-            [v,lambda]           = obj.GetRouseEig;
+%             [v,lambda]           = obj.GetRouseEig;
             % if the lambdas are changed, then the connection map is
             % changed. 
 
             cm = obj.params.connectedBeads;
-            assert(all(cm(:)<=obj.params.numBeads),'The monomers index to connect cannot exceed the number of monomers in the chain')
-           
+            assert(all(cm(:)<=obj.params.numBeads),'The monomers index to connect cannot exceed the number of monomers in the chain')            
             % recalculate the connection map 
-            connectionMatrix = v*diag(lambda)*v';
-            connectionMatrix = connectionMatrix.*(abs(connectionMatrix)>1e-12);
-            for bIdx = 1:size(cm,1)
-                connectionMatrix(cm(bIdx,1),cm(bIdx,2))  = -1;
-                connectionMatrix(cm(bIdx,2),cm(bIdx,1))  = -1;
-            end
+%             connectionMatrix = v*diag(lambda)*v';
+%             connectionMatrix = connectionMatrix.*(abs(connectionMatrix)>1e-12);
+%             for bIdx = 1:size(cm,1)
+%                 connectionMatrix(cm(bIdx,1),cm(bIdx,2))  = -1;
+%                 connectionMatrix(cm(bIdx,2),cm(bIdx,1))  = -1;
+%             end
             
-            obj.connectionMap.connectionMatrix = connectionMatrix; % used for multiplication of beads location 
-            cMap = logical((connectionMatrix-diag(diag(connectionMatrix)))~=0);
+%             obj.connectionMap.connectionMatrix = connectionMatrix; % used for multiplication of beads location 
+%             cMap = logical((connectionMatrix-diag(diag(connectionMatrix)))~=0);
 %             cMap(~cMap) = NaN;
            % add the connection between distant beads
-           
+           cMap = logical(diag(ones(1,obj.params.numBeads-1),-1)+diag(ones(1,obj.params.numBeads-1),1));
            for bIdx = 1:size(cm,1)
                cMap(cm(bIdx,1),cm(bIdx,2))= true;
                cMap(cm(bIdx,2),cm(bIdx,1))= true;
@@ -181,91 +178,91 @@ classdef Rouse<handle
            obj.connectionMap.map                = cMap;
            [obj.connectionMap.indices.in.map]   = find(cMap); % linear indices of positions of monomer pairs connected. 
            [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(cMap));
-           [obj.connectionMap.indices.out.map]  =  ~cMap;% linear indices of positions of monomer pairs connected. 
-           [obj.connectionMap.indices.out.list(:,1), obj.connectionMap.indices.out.list(:,2)]  = find(obj.connectionMap.indices.out.map); 
-           cMapNz = cMap;
-           cMapNz(isnan(cMapNz))=0;
-           obj.connectionMap.numConnections = sum(cMapNz,2);% number of connection each bead has 
-
-           % Set angle between springs as a triplet of beads. The middle
-           % bead represents the middle node in the triplet defining the
-           % angle. The convention is row number, column number, height
-           % number. To represent an angle between bead i,j,k. start from
-           % row i to column j and go to the depth layer k
-           
-           sMap = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numBeads);
-           % first register the linear connections 
-           for bIdx = 2:obj.params.numBeads-1
-               sMap(bIdx-1,bIdx,bIdx+1) = 1;
-               obj.connectionMap.beadTriplets(end+1,:) = [bIdx-1,bIdx,bIdx+1];
-           end
-           
-           % next, register the non-trivial connections
-%            cMap1 = triu(cMap);
-%            cMap1(isnan(cMap1))=0;
-%            cMap1(isnan(cMap1))=0;
-           for bIdx = 1:obj.params.numBeads
-               % there are either 2 or more non-zero elements in each row.
-               allPairs = [];
-                f= find(cMap(:,bIdx)==1);
-                for fIdx = 1:numel(f);
-                    g = find(cMap(f(fIdx),:)==1);
-                    g= setdiff(g,bIdx);
-                    for gIdx = 1:numel(g)
-                        allPairs(end+1,:) = [min([bIdx g(gIdx)]),f(fIdx),max([bIdx,g(gIdx)])];
-                    end
-                end
-
-%                 if numel(f)>2
-%                     allPairs = [f,bIdx*ones(numel(f),1),circshift(f,1)];
-%                 elseif numel(f)==2
-%                     allPairs = [f(1),bIdx,f(2)];                    
-%                 else 
-%                     allPairs = [];
+%            [obj.connectionMap.indices.out.map]  =  ~cMap;% linear indices of positions of monomer pairs connected. 
+%            [obj.connectionMap.indices.out.list(:,1), obj.connectionMap.indices.out.list(:,2)]  = find(obj.connectionMap.indices.out.map); 
+%            cMapNz = cMap;
+%            cMapNz(isnan(cMapNz))=0;
+%            obj.connectionMap.numConnections = sum(cMapNz,2);% number of connection each bead has 
+% 
+%            % Set angle between springs as a triplet of beads. The middle
+%            % bead represents the middle node in the triplet defining the
+%            % angle. The convention is row number, column number, height
+%            % number. To represent an angle between bead i,j,k. start from
+%            % row i to column j and go to the depth layer k
+%            
+%            sMap = zeros(obj.params.numBeads,obj.params.numBeads,obj.params.numBeads);
+%            % first register the linear connections 
+%            for bIdx = 2:obj.params.numBeads-1
+%                sMap(bIdx-1,bIdx,bIdx+1) = 1;
+%                obj.connectionMap.beadTriplets(end+1,:) = [bIdx-1,bIdx,bIdx+1];
+%            end
+%            
+%            % next, register the non-trivial connections
+% %            cMap1 = triu(cMap);
+% %            cMap1(isnan(cMap1))=0;
+% %            cMap1(isnan(cMap1))=0;
+%            for bIdx = 1:obj.params.numBeads
+%                % there are either 2 or more non-zero elements in each row.
+%                allPairs = [];
+%                 f= find(cMap(:,bIdx)==1);
+%                 for fIdx = 1:numel(f);
+%                     g = find(cMap(f(fIdx),:)==1);
+%                     g= setdiff(g,bIdx);
+%                     for gIdx = 1:numel(g)
+%                         allPairs(end+1,:) = [min([bIdx g(gIdx)]),f(fIdx),max([bIdx,g(gIdx)])];
+%                     end
 %                 end
-                % sort the indices such that the smaller index is on the
-                % left
+% 
+% %                 if numel(f)>2
+% %                     allPairs = [f,bIdx*ones(numel(f),1),circshift(f,1)];
+% %                 elseif numel(f)==2
+% %                     allPairs = [f(1),bIdx,f(2)];                    
+% %                 else 
+% %                     allPairs = [];
+% %                 end
+%                 % sort the indices such that the smaller index is on the
+%                 % left
+% %                 for pIdx = 1:size(allPairs,1)
+% %                     if allPairs(pIdx,1)>allPairs(pIdx,3)
+% %                         allPairs(pIdx,:) = fliplr(allPairs(pIdx,:));
+% %                     end                        
+% %                 end
+% %                 allPairs = unique(allPairs,'rows');
 %                 for pIdx = 1:size(allPairs,1)
-%                     if allPairs(pIdx,1)>allPairs(pIdx,3)
-%                         allPairs(pIdx,:) = fliplr(allPairs(pIdx,:));
-%                     end                        
+%                     % make a symmetric matrix in 3D
+%                     sMap(allPairs(pIdx,1),allPairs(pIdx,2),allPairs(pIdx,3))= 1;
+%                     sMap(allPairs(pIdx,3),allPairs(pIdx,2), allPairs(pIdx,1))=1;% check                     
+%                     obj.connectionMap.beadTriplets(end+1,:) = allPairs(pIdx,:);
 %                 end
-%                 allPairs = unique(allPairs,'rows');
-                for pIdx = 1:size(allPairs,1)
-                    % make a symmetric matrix in 3D
-                    sMap(allPairs(pIdx,1),allPairs(pIdx,2),allPairs(pIdx,3))= 1;
-                    sMap(allPairs(pIdx,3),allPairs(pIdx,2), allPairs(pIdx,1))=1;% check                     
-                    obj.connectionMap.beadTriplets(end+1,:) = allPairs(pIdx,:);
-                end
-              obj.connectionMap.angles = sMap;  
-           end
-            obj.connectionMap.beadTriplets= unique(obj.connectionMap.beadTriplets,'rows');
-           % define the linear indices in the array of bead triplets to
-           % save running time later in the calculation of angle between
-           % beads. angles is the angle at the middle bead (bead2) so we
-           % have bead1ToBead2 and bead3ToBead2 to define the edges of the
-           % angle
-           bt     = obj.connectionMap.beadTriplets;
-           for btIdx = 1:numel(bt(:,1))
-            obj.connectionMap.indices.in.linear.bead1ToBead2(btIdx,1)  = sub2ind([obj.params.numBeads,obj.params.numBeads],min([bt(btIdx,1),bt(btIdx,2)]),max([bt(btIdx,1),bt(btIdx,2)]));
-            obj.connectionMap.indices.in.linear.bead3ToBead2(btIdx,1)  = sub2ind([obj.params.numBeads,obj.params.numBeads],min([bt(btIdx,2),bt(btIdx,3)]),max([bt(btIdx,2),bt(btIdx,3)]));
-           end
-           % bead triplets represents the indices in the N 2D sparse matrix
-           % of bead connections, row for bead1, bead2 is represented N
-           % times in N*2D matrix, bead3 is the column Nth block meaning
-           % size(matrix,2)/numBeads.                       
-           obj.connectionMap.indices.in.linear.beadTriplets  = (obj.connectionMap.beadTriplets(:,3)-1)*obj.params.numBeads^2+obj.connectionMap.indices.in.linear.bead1ToBead2;
-           k = sub2ind([obj.params.numBeads, obj.params.numBeads],obj.connectionMap.indices.in.list(:,1),obj.connectionMap.indices.in.list(:,2));
-           obj.connectionMap.indices.in.linear.beadPairs  = k;% pair of beads connected (linear indices of the matrix size [numBead X numBeads])
-           [c,~,ic] = unique(obj.connectionMap.beadTriplets(:,2),'R2012a');                
-           obj.connectionMap.indices.uniqueBeadTriplets.uniqueList = c;
-           obj.connectionMap.indices.uniqueBeadTriplets.uniqueListIndices = ic;
-           n       = 1:numel(obj.connectionMap.beadTriplets(:,2));
-           k       = [c(ic),n'];  
-           obj.connectionMap.indices.uniqueBeadTriplets.uniqueIndicesMap = k;
-           n = [1:obj.params.numBeads,1:abs(numel(obj.connectionMap.beadTriplets(:,2))-obj.params.numBeads)];
-           k       = obj.connectionMap.indices.uniqueBeadTriplets.uniqueIndicesMap;
-           obj.connectionMap.indices.uniqueBeadTripletsLinear = sub2ind([obj.params.numBeads,numel(n)], k(:,1),k(:,2));
+%               obj.connectionMap.angles = sMap;  
+%            end
+%             obj.connectionMap.beadTriplets= unique(obj.connectionMap.beadTriplets,'rows');
+%            % define the linear indices in the array of bead triplets to
+%            % save running time later in the calculation of angle between
+%            % beads. angles is the angle at the middle bead (bead2) so we
+%            % have bead1ToBead2 and bead3ToBead2 to define the edges of the
+%            % angle
+%            bt     = obj.connectionMap.beadTriplets;
+%            for btIdx = 1:numel(bt(:,1))
+%             obj.connectionMap.indices.in.linear.bead1ToBead2(btIdx,1)  = sub2ind([obj.params.numBeads,obj.params.numBeads],min([bt(btIdx,1),bt(btIdx,2)]),max([bt(btIdx,1),bt(btIdx,2)]));
+%             obj.connectionMap.indices.in.linear.bead3ToBead2(btIdx,1)  = sub2ind([obj.params.numBeads,obj.params.numBeads],min([bt(btIdx,2),bt(btIdx,3)]),max([bt(btIdx,2),bt(btIdx,3)]));
+%            end
+%            % bead triplets represents the indices in the N 2D sparse matrix
+%            % of bead connections, row for bead1, bead2 is represented N
+%            % times in N*2D matrix, bead3 is the column Nth block meaning
+%            % size(matrix,2)/numBeads.                       
+%            obj.connectionMap.indices.in.linear.beadTriplets  = (obj.connectionMap.beadTriplets(:,3)-1)*obj.params.numBeads^2+obj.connectionMap.indices.in.linear.bead1ToBead2;
+%            k = sub2ind([obj.params.numBeads, obj.params.numBeads],obj.connectionMap.indices.in.list(:,1),obj.connectionMap.indices.in.list(:,2));
+%            obj.connectionMap.indices.in.linear.beadPairs  = k;% pair of beads connected (linear indices of the matrix size [numBead X numBeads])
+%            [c,~,ic] = unique(obj.connectionMap.beadTriplets(:,2),'R2012a');                
+%            obj.connectionMap.indices.uniqueBeadTriplets.uniqueList = c;
+%            obj.connectionMap.indices.uniqueBeadTriplets.uniqueListIndices = ic;
+%            n       = 1:numel(obj.connectionMap.beadTriplets(:,2));
+%            k       = [c(ic),n'];  
+%            obj.connectionMap.indices.uniqueBeadTriplets.uniqueIndicesMap = k;
+%            n = [1:obj.params.numBeads,1:abs(numel(obj.connectionMap.beadTriplets(:,2))-obj.params.numBeads)];
+%            k       = obj.connectionMap.indices.uniqueBeadTriplets.uniqueIndicesMap;
+%            obj.connectionMap.indices.uniqueBeadTripletsLinear = sub2ind([obj.params.numBeads,numel(n)], k(:,1),k(:,2));
             
         end        
                 
@@ -332,10 +329,6 @@ classdef Rouse<handle
             end
             end
 %             obj.positions.beads.prev = obj.positions.beads.cur;
-            % Initialize the springs vectors and lengths 
-%             obj.GetSprings;
-%             % calculate forces at initial position 
-%             obj.GetForces;
         end                        
                 
         function Next(obj,varargin)
@@ -352,44 +345,14 @@ classdef Rouse<handle
 %                 obj.simulationTime.meanStepTime = (obj.simulationTime.meanStepTime*(obj.step-1)+endRoundTime)/obj.step;% the mean round time 
         end
         
-        function GetForces(obj)% used externaly should be controlled by ForceManager and Framework
+        function GetForces(obj)% unused
              % Calculate forces   
              % call forceManager
              obj.GetSpringForce();             
              obj.GetLennardJonesForce();
              obj.GetBendingElasticityForce();
              obj.GetNoise();
-        end
-        
-        function SetBeadsMobilityMatrices(obj)%unused
-            % create the Rouse mobility matrix for the beads
-            % this matrix is used in the calculation of the new beads positions
-            numBeads              = obj.params.numBeads;
-            
-            forwardMobilityMatrix = diag(ones(1,numBeads),0) +...
-                diag(-1*ones(1,numBeads-1),1);                
-            forwardMobilityMatrix(end,:) = 0;            
-            obj.mobilityMatrices.beads.forward = forwardMobilityMatrix;
-            
-            % set backward mobility matrix 
-            backwardMobilityMatrix = diag(ones(1,numBeads),0) +...
-                diag(-1*ones(1,numBeads-1),-1);                
-            backwardMobilityMatrix(1,:) = 0;            
-            obj.mobilityMatrices.beads.backward = backwardMobilityMatrix;
-            
-            % set normal (minDist =0 ) mobility matrix 
-            obj.mobilityMatrices.beads.normal = 2*diag(ones(1,numBeads),0) -diag(ones(1,numBeads-1),-1)-...
-                diag(ones(1,numBeads-1),+1);
-            obj.mobilityMatrices.beads.normal(1,1)     = 1;
-            obj.mobilityMatrices.beads.normal(end,end) = 1;
-            
-            if ~isempty(obj.params.fixedBeadNum)
-                f = (obj.params.fixedBeadNum); %#ok<*ST2NM>
-                for fIdx = 1:numel(f)
-                    obj.mobilityMatrices.beads.normal(f(fIdx),:) = 0;                    
-                end
-            end
-        end
+        end        
         
         function Run(obj,varargin)
            
@@ -417,13 +380,8 @@ classdef Rouse<handle
             
             % Apply forces on the beads to get the new bead position
             newPos       = obj.handles.classes.forceManager.Apply(prevPos,obj.connectionMap.map,p.dt,...
-                           p.diffusionConst,p.springConst,p.LJPotentialWidth,p.LJPotentialDepth,p.minBeadDist,p.fixedBeadNum); 
-                            
-%             newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
-%                        ljForce+...
-%                        obj.params.bendingConst*obj.params.dt*bendingForce+...
-%                        noiseForce+...
-%                        prevPos;
+                           p.diffusionConst,p.springConst,p.LJPotentialWidth,p.LJPotentialDepth,p.bendingConst,...
+                           p.minBeadDist,p.fixedBeadNum);                             
 
              obj.positions.beads.cur.x = newPos(:,1);
              obj.positions.beads.cur.y = newPos(:,2);
@@ -452,196 +410,7 @@ classdef Rouse<handle
              % Save previous position as the currentPosition                     
             obj.positions.beads.prev= obj.positions.beads.cur;
               
-        end
-        
-        function GetSpringForce(obj)
-           % get the force between beeds caused by spring
-           % attrcation/repultion  
-            obj.GetSprings;
-%             obj.forces.springs = zeros(size(l));
-            if obj.params.springForce
-                L                  = 1-obj.params.minBeadDist./obj.positions.springs.lengths;
-                L(obj.connectionMap.indices.out.map)= 0; % zero out forces where there is no connection
-                sumForces          = sum(L,2);
-                force              = diag(sumForces)-L; % set the maindiagonal
-                obj.forces.springs = force;
-                obj.forces.springs(obj.params.fixedBeadNum,:) = 0;
-                obj.forces.springs(:,obj.params.fixedBeadNum) = 0;
-%                 obj.forces.springs = (obj.forces.springs~=0).*obj.connectionMap.connectionMatrix;
-            end
-        end% move to ForceManager
-        
-        function GetLennardJonesForce(obj)
-            % Get the LJ forces between monomers
-                        
-            if obj.params.lennardJonesForce
-                beadsDistMat = (obj.beadsDist);                               
-                sig          = obj.params.LJPotentialWidth;
-                epsilon      = obj.params.LJPotentialDepth;
-                bdmInv       = (beadsDistMat).^(-1);            % one over the bead distance matrix 
-                d            = MatIntPower(bdmInv, 6); % matrix integer power 
-                t            = (sig^6).*d;                
-                forceValue   = 24*(epsilon*bdmInv).*(-2*t.*t +t); % derivative of LJ function 
-                
-                forceValue(isnan(forceValue))= 0;
-                for dIdx = 1:3
-                    % replicate the position vector
-                    A    = obj.positions.beads.cur.(obj.dimNames{dIdx});
-                    siz  = [1,obj.params.numBeads];
-                    B1   = A(:,ones(siz(2),1));
-                    siz  = [obj.params.numBeads,1];
-                    A    = A';
-                    B2   = A(ones(siz(1),1),:);
-                    % Subtract positions to get the direction vectors
-                    fd  = B1-B2;
-
-                     obj.forces.lennardJones.(obj.dimNames{dIdx}) = (sum(fd.*forceValue,1)')*obj.params.dt;
-                     obj.forces.lennardJones.(obj.dimNames{dIdx})(obj.params.fixedBeadNum) = 0; 
-                end
-            end
-            
-        end% move to ForceManager
-        
-        function GetBendingElasticityForce(obj)
-            % Calculate the force and direction 
-
-            if (obj.params.bendingElasticityForce)
-                obj.CalculateAngleBetweenSprings
-                % get the coordinates of the first vector comprising the
-                % angle
-                t1x     = obj.positions.springs.x(obj.connectionMap.indices.in.linear.bead1ToBead2);
-                t1y     = obj.positions.springs.y(obj.connectionMap.indices.in.linear.bead1ToBead2);
-                t1z     = obj.positions.springs.z(obj.connectionMap.indices.in.linear.bead1ToBead2);
-                % get the coordinates of the second vector  comprising the
-                % angle
-                t2x     = obj.positions.springs.x(obj.connectionMap.indices.in.linear.bead3ToBead2);
-                t2y     = obj.positions.springs.y(obj.connectionMap.indices.in.linear.bead3ToBead2);
-                t2z     = obj.positions.springs.z(obj.connectionMap.indices.in.linear.bead3ToBead2);
-               
-                % calculate the the force (normalized) given by the angle
-                FValue = (pi- obj.positions.springs.angleBetweenSprings(obj.connectionMap.indices.in.linear.beadTriplets))/pi;
-                % direct the force of each bead toward the base of the
-                % triangle formed by the two edges (vectors) comprising the
-                % angle
-                tempFx  = (t1x-(0.5*(t2x-t1x))).*FValue;
-                tempFy  = (t1y-(0.5*(t2y-t1y))).*FValue;
-                tempFz  = (t1z-(0.5*(t2z-t1z))).*FValue;  
-%                 % ====== debug================
-%                  hold on 
-%                  line('XData',obj.positions.beads.cur.x(2),...
-%                       'YData',obj.positions.beads.cur.y(2),...
-%                       'ZData',obj.positions.beads.cur.z(2),...
-%                       'Marker','o',...
-%                       'MarkerFaceColor','r',...
-%                       'Tag','point')
-%                  % plot the vectors 
-%                  quiver3(obj.positions.beads.cur.x(2),...
-%                      obj.positions.beads.cur.y(2),...
-%                      obj.positions.beads.cur.z(2),t1x,t1y,t1z)
-%                  quiver3(obj.positions.beads.cur.x(2),...
-%                      obj.positions.beads.cur.y(2),...
-%                      obj.positions.beads.cur.z(2),t2x,t2y,t2z)
-%                   quiver3(obj.positions.beads.cur.x(2),...
-%                      obj.positions.beads.cur.y(2),...
-%                      obj.positions.beads.cur.z(2),tempFx,tempFy,tempFz)
-%                  hold off
-%                   
-%                  %=== end debug ====================
-                 
-                % for each bead, calculate the force as the sum of forces
-                % exerted by the angles
-%                 n       = [1:obj.params.numBeads,1:abs(numel(obj.connectionMap.beadTriplets(:,2))-obj.params.numBeads)];
-%                 a       = sparse(obj.params.numBeads,1:numel(n),0);     
-                a       = sparse(size(obj.positions.springs.angleBetweenSprings,1),size(obj.positions.springs.angleBetweenSprings,2));
-                ind     = obj.connectionMap.indices.uniqueBeadTripletsLinear;
-                a       = full(a);
-                a(ind)  = tempFx;
-
-                Force.x = sum(a,2);
-                Force.x(obj.params.fixedBeadNum) = 0;
-                a(ind)  = tempFy;
-                Force.y = sum(a,2);
-                Force.y(obj.params.fixedBeadNum) = 0;
-                a(ind)  = tempFz;
-                Force.z = sum(a,2);
-                Force.z(obj.params.fixedBeadNum) = 0;
-                obj.forces.bending = Force;               
-            end
-           
-        end % move to ForceManager
-        
-        function GetNoise(obj)
-            % Get noise according to the specified noise districution params
-            % the output noise term is a colum vector wuth params.numBeads entries  
-%             noiseTerm = zeros(obj.params.numBeads,3);
-            if strcmpi(obj.params.noiseDistribution,'Gaussian')
-                
-                if obj.step==1 || mod(obj.step,1e5)==0;
-                    obj.noise = obj.params.noiseMean+...
-                    randn(1e5*obj.params.numBeads,obj.params.dimension)*obj.params.noiseStd;
-                    obj.noiseIndex = 1;
-                else 
-                    obj.noiseIndex = obj.noiseIndex+1;
-                end
-%                 noiseTerm(:,1:obj.params.dimension) = obj.params.noiseMean+...
-%                     randn(obj.params.numBeads,obj.params.dimension)*obj.params.noiseStd;
-                noiseTerm(:,1:obj.params.dimension) = obj.noise((obj.noiseIndex-1)*obj.params.numBeads +1: obj.noiseIndex*obj.params.numBeads,:);
-                noiseTerm((obj.params.fixedBeadNum),:) = 0;        
-               
-                obj.forces.noise.x = noiseTerm(:,1);
-                obj.forces.noise.y = noiseTerm(:,2);
-                obj.forces.noise.z = noiseTerm(:,3);
-            else
-                error('Noise distribution is undefined')
-            end
-        end% move to ForceManager
-              
-        function CalculateAngleBetweenSprings(obj)
-            % Calculate the angle between springs
-            
-            linInd1 = obj.connectionMap.indices.in.linear.bead1ToBead2;
-            linInd2 = obj.connectionMap.indices.in.linear.bead3ToBead2;
-            c1      = full([obj.positions.springs.x(linInd1),obj.positions.springs.y(linInd1),obj.positions.springs.z(linInd1)]);
-            c2      = full([obj.positions.springs.x(linInd2),obj.positions.springs.y(linInd2),obj.positions.springs.z(linInd2)]);
-%             c1 = c1(sum(c1,2)~=0,:);
-%             c2 = c2(sum(c2,2)~=0,:);
-            sAngle  = acos(sum(c1.*c2,2)./(sqrt(sum(c1.^2,2)).*sqrt(sum(c2.^2,2))));
-            linInd3 = obj.connectionMap.indices.in.linear.beadTriplets;%(obj.connectionMap.beadTriplets(:,3)-1)*obj.params.numBeads^2+linInd1;
-            obj.positions.springs.angleBetweenSprings(linInd3) = sAngle;
-
-        end% move to ForceManager                       
-        
-        function GetSprings(obj)% move to ForceManager
-            % Calculate the springs vectors. the springs vectors are in the
-            % direction of the bead_N-bead_N-1
-            if obj.params.numBeads>1   
-
-                for dIdx = 1:3
-                 obj.positions.springs.(obj.dimNames{dIdx})(obj.connectionMap.indices.in.linear.beadPairs) = ...
-                     obj.positions.beads.prev.(obj.dimNames{dIdx})(obj.connectionMap.indices.in.list(:,1))-...
-                     obj.positions.beads.prev.(obj.dimNames{dIdx})(obj.connectionMap.indices.in.list(:,2));
-                end
-                
-                % Get pairwise bead distances (between all beads)
-                 obj.GetBeadsDist
-                                                   
-                 obj.positions.springs.lengths = obj.beadsDist.*obj.connectionMap.map;
-            else
-                obj.positions.springs.x       = 0;
-                obj.positions.springs.y       = 0;
-                obj.positions.springs.z       = 0;
-                obj.positions.springs.lengths = 0;
-            end                        
-        end 
-        
-        function GetBeadsDist(obj)% move to ForceManager
-           % Calculate the pairwise distance between beads
-           % This function requires the mex file pdist2mex in the working path
-
-            obj.beadsDist = pdist2mex([obj.positions.beads.prev.x,obj.positions.beads.prev.y, obj.positions.beads.prev.z]',...
-                [obj.positions.beads.prev.x,obj.positions.beads.prev.y, obj.positions.beads.prev.z]','euc',[],[],[]);
-            
-        end
+        end                                                                  
         
         function Reset(obj,newParams)% unfinished
             if nargin<2

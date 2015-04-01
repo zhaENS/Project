@@ -6,7 +6,7 @@ close hidden
 % clear all
 % clear classes
 dbstop if error
-profile on 
+
 
 % Initialize environment
 curPath = pwd;
@@ -15,5 +15,7 @@ addpath(genpath(fullfile(curPath,'..','..','Utils')));
 % params = xml_parse(xmlStr);
 params = SimulationFrameworkParams;
 % SimulatorParams
+profile on 
 r = RouseSimulatorFramework(params);
 r.Run
+profile viewer

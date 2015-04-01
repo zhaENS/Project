@@ -40,10 +40,10 @@ classdef ChainParams<handle
             obj.b                      = sqrt(3);
             obj.dt                     = 1e-2;
             obj.diffusionConst         = 1;
-            obj.numBeads               = 64;
-            obj.connectedBeads         = [1 10; 1 15; 1 30];
+            obj.numBeads               = 32;
+            obj.connectedBeads         = [1 10; 1 15; 1 32];
             obj.bendingElasticityForce = false;
-            obj.lennardJonesForce      = true;
+            obj.lennardJonesForce      = false;
             obj.springForce            = true;
             obj.diffusionForce         = true;
             obj.minBeadDist            = 0;
@@ -54,15 +54,16 @@ classdef ChainParams<handle
             obj.noiseStd               = sqrt(2*obj.diffusionConst*obj.dt);
             obj.noiseMean              = 0;
             obj.springConst            = (obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);
+            
             % set spring constant for the connected beads
             for cIdx = 1:size(obj.connectedBeads,1)
                 obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2))=obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2));
                 obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
             end
             
-            obj.LJPotentialDepth = 0.3;
-            obj.LJPotentialWidth = 0.07;
-            obj.bendingConst     = 90;
+            obj.LJPotentialDepth = 0.1;
+            obj.LJPotentialWidth = 0.1;
+            obj.bendingConst     = 1;
         end
         
     end

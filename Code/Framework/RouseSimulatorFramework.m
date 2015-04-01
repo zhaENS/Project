@@ -151,7 +151,7 @@ classdef RouseSimulatorFramework<handle
                 
                 
                 % Plot connectors
-                if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce
+                if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce || obj.params.chain.lennardJonesForce
                                                                         
                    cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
                     for mIdx = 1:size(cm,1);
@@ -444,7 +444,7 @@ classdef RouseSimulatorFramework<handle
                     
                     % plot the connectors between beads ( plot only non
                     % trivial connections)
-                    if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce
+                    if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce || obj.params.chain.lennardJonesForce
                         % Plot connectors for non trivial (non consecutives
                         % beads) connections 
                     cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
