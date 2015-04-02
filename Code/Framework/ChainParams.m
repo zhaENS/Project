@@ -14,7 +14,7 @@ classdef ChainParams<handle
         lennardJonesForce@logical
         springForce@logical
         diffusionForce@logical
-        minBeadDist@double
+        minBeadDistance@double
         fixedBeadNum@double
         noiseDistribution@char
         noiseStd@double
@@ -25,16 +25,12 @@ classdef ChainParams<handle
         bendingConst@double
         stickyBeads@double
         allowSelfAffinity@logical
+        forceParams
         
     end
     
     methods
-        function obj = ChainParams
-            obj.SetDefaultParams;
-        end
-                
-        function SetDefaultParams(obj)
-            
+        function obj = ChainParams                        
             obj.dimension              = 3;
             obj.beta                   = 2; % for rouse, place 2. 
             obj.b                      = sqrt(3);
@@ -44,9 +40,11 @@ classdef ChainParams<handle
             obj.connectedBeads         = [1 10; 1 15; 1 32];
             obj.bendingElasticityForce = false;
             obj.lennardJonesForce      = false;
-            obj.springForce            = true;
-            obj.diffusionForce         = true;
-            obj.minBeadDist            = 0;
+            obj.springForce            = false;
+            obj.diffusionForce         = false;
+            obj.LJPotentialDepth       = 0.1;
+            obj.LJPotentialWidth       = 0.1;
+            obj.minBeadDistance        = 0;
             obj.fixedBeadNum           = [];
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain
             obj.stickyBeads            = [];    % beads that can stick to others, is used to stick to other chains  
@@ -54,6 +52,7 @@ classdef ChainParams<handle
             obj.noiseStd               = sqrt(2*obj.diffusionConst*obj.dt);
             obj.noiseMean              = 0;
             obj.springConst            = (obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);
+            obj.bendingConst           = 1; 
             
             % set spring constant for the connected beads
             for cIdx = 1:size(obj.connectedBeads,1)
@@ -61,9 +60,23 @@ classdef ChainParams<handle
                 obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
             end
             
-            obj.LJPotentialDepth = 0.1;
-            obj.LJPotentialWidth = 0.1;
-            obj.bendingConst     = 1;
+            %============================
+            % Define force parameters 
+            obj.forceParams                        = ForceManagerParams;
+            
+            obj.forceParams.bendingElasticityForce = obj.bendingElasticityForce;
+            obj.forceParams.lennardJonesForce      = obj.lennardJonesForce;
+            obj.forceParams.springForce            = obj.springForce;
+            obj.forceParams.diffusionForce         = obj.diffusionForce;  
+            
+            obj.forceParams.LJPotentialDepth       = obj.LJPotentialDepth;
+            obj.forceParams.LJPotentialWidth       = obj.LJPotentialWidth;
+            obj.forceParams.bendingConst           = obj.bendingConst;
+            obj.forceParams.dt                     = obj.dt;
+            obj.forceParams.diffusionConst         = obj.diffusionConst;
+            obj.forceParams.fixedParticleNum       = obj.fixedBeadNum;
+            obj.forceParams.springConst            = obj.springConst;        
+            obj.forceParams.minParticleDistance    = obj.minBeadDistance;
         end
         
     end

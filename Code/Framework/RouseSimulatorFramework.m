@@ -1,20 +1,16 @@
 classdef RouseSimulatorFramework<handle
-    %TODO: debug 
-    %TODO: add plotter class
+      
     %TODO: add presets for simulations,(load/save)
     %TODO: move the initialization of the chains to allow initialization on
     %the fly
     %TODO: add a listener that draws emails from the server, to allow
     %controlling the simulations from a distance
     %TODO: save noise terms seeds to allow resimulations
-    %TODO: save parameters and a short explanation with the results
-    %TODO: parameters should have their own class for each class
+    %TODO: save parameters and a short explanation with the results   
     %TODO: remove the option to plot online. plotting is always offline.
-    %remove parentAxes property from domainHandlerParams
-    %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params 
-    %TODO: add class for each force. input: position, connectivityMat,
-    %distances. output: bead displacement
-    %TODO: 
+    %      remove parentAxes property from domainHandlerParams
+    %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params     
+    %TODO: add SimulationGraphics class
     properties
         handles        
         beadDistance
@@ -52,10 +48,12 @@ classdef RouseSimulatorFramework<handle
         end
         
         function OrganizeParams(obj,frameworkParams)
-            obj.params                             = frameworkParams;            
+            obj.params                             = frameworkParams;           
+            obj.params.chain.dt                    = obj.params.simulator.dt;
             obj.params.chain.dimension             = obj.params.simulator.dimension;
             obj.params.domain.showDomain           = obj.params.simulator.showSimulation;  
             obj.params.domain.dimension            = obj.params.simulator.dimension;
+            obj.params.domain.dt                    = obj.params.simulator.dt;
             obj.params.dataRecorder.recipeFileName = obj.params.simulator.recipeFileName;
             obj.params.dataRecorder.encounterDist  = obj.params.simulator.encounterDist;
         end
@@ -102,9 +100,11 @@ classdef RouseSimulatorFramework<handle
             obj.InitializeChains                                          
 %             obj.InitializeDistributionHandler
             obj.InitializeDataRecorder;
+            
+            % add SimulationGraphics class
         end
         
-        function InitializeChains(obj)
+        function InitializeChains(obj)% moe to plotter class
            % set graphics
            l = linspace(0.4,0.9,obj.params.simulator.numChains);
           
@@ -134,11 +134,11 @@ classdef RouseSimulatorFramework<handle
                     lineStyle = '-';
                 end
                 
-                p = obj.handles.classes.rouse(cIdx).positions.beads.prev;
+                p = obj.handles.classes.rouse(cIdx).position.prev;
                 obj.handles.graphical.chain(cIdx).beads = line(...
-                    'XData',p.x,...                                   
-                    'YData',p.y,...
-                    'ZData',p.z,...
+                    'XData',p(:,1),...                                   
+                    'YData',p(:,2),...
+                    'ZData',p(:,3),...
                     'Marker','o',...
                     'LineStyle',lineStyle,...
                     'Color','w',...
@@ -155,12 +155,12 @@ classdef RouseSimulatorFramework<handle
                                                                         
                    cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
                     for mIdx = 1:size(cm,1);
-                        lineData.x = [obj.handles.classes.rouse(cIdx).positions.beads.cur.x(cm(mIdx,1)),...
-                                      obj.handles.classes.rouse(cIdx).positions.beads.cur.x(cm(mIdx,2))];
-                        lineData.y = [obj.handles.classes.rouse(cIdx).positions.beads.cur.y(cm(mIdx,1)),...
-                                      obj.handles.classes.rouse(cIdx).positions.beads.cur.y(cm(mIdx,2))];
-                        lineData.z = [obj.handles.classes.rouse(cIdx).positions.beads.cur.z(cm(mIdx,1)),...
-                                      obj.handles.classes.rouse(cIdx).positions.beads.cur.z(cm(mIdx,2))];  
+                        lineData.x = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
+                                      obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
+                        lineData.y = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
+                                      obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
+                        lineData.z = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
+                                      obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];  
                           obj.handles.graphical.chain(cIdx).connectors(mIdx)= line(...
                             'XData',lineData.x,...
                             'YData',lineData.y,...
@@ -235,7 +235,7 @@ classdef RouseSimulatorFramework<handle
                     while obj.runSimulation
                         % perform actions before the current step
                         obj.PreStepActions                                               
-                        obj.NextStep;% advance one step of the polymer chain                           
+                        obj.Step;% advance one step of the polymer chain                           
                         % perform action post the current step 
                         obj.PostStepActions                                              
                     end
@@ -321,7 +321,7 @@ classdef RouseSimulatorFramework<handle
                'String','Next',...
                'Tag','nextButton',...
                'Position',[0.15 0.05, 0.1, 0.05],...
-               'Callback',@obj.NextStep);
+               'Callback',@obj.Step);
            
                 obj.params.domain.parentAxes = obj.handles.graphical.mainAxes;      
             end
@@ -354,14 +354,26 @@ classdef RouseSimulatorFramework<handle
             end
         end
         
-        function NextStep(obj,varargin)
+        function Step(obj,varargin)
             % Next simulation step 
+           % dt should be a global property of the framework
            
             for cIdx = 1:obj.params.simulator.numChains 
-                obj.handles.classes.rouse(cIdx).Next % advance one step for all chains 
-                obj.Reflect(cIdx) % reflection with the domain             
-%                 obj.handles.classes.rouse(cIdx).GetForces;
-                obj.handles.classes.rouse(cIdx).SetPrevBeadPosition;
+                obj.handles.classes.rouse(cIdx).Step % advance one step for all chains 
+                
+                % Apply domain forces and reflect 
+                particlePosition = obj.handles.classes.rouse(cIdx).position.cur;                
+                connectivityMap  = obj.handles.classes.rouse(cIdx).connectionMap.map;
+                cp      = obj.handles.classes.rouse(cIdx).params.forceParams;
+                dp      = obj.handles.classes.domain.params.forceParams;
+                particlePosition = obj.handles.classes.domain.ApplyForces(particlePosition,connectivityMap,...                
+                                             cp.springConst,cp.diffusionConst,cp.bendingConst,...
+                                             dp.LJPotentialWidth,dp.LJPotentialDepth,...
+                                             cp.minParticleDistance,cp.fixedParticleNum,obj.params.simulator.dt);
+                                         
+                obj.handles.classes.rouse(cIdx).position.cur = particlePosition;                           
+                obj.Reflect(cIdx)              
+                obj.handles.classes.rouse(cIdx).SetPrevBeadPosition();
 
             end            
             obj.ShowSimulation            
@@ -372,21 +384,21 @@ classdef RouseSimulatorFramework<handle
         
         function Reflect(obj,chainIdx)
             % Reflect the beads
-            dimName  = {'x','y','z'};            
-            curPos   = obj.handles.classes.rouse(chainIdx).positions.beads.cur; 
-            prevPos  = obj.handles.classes.rouse(chainIdx).positions.beads.prev; 
+%             dimName  = {'x','y','z'};            
+            curPos   = obj.handles.classes.rouse(chainIdx).position.cur; 
+            prevPos  = obj.handles.classes.rouse(chainIdx).position.prev; 
             
             inIdx    = obj.handles.classes.domain.InDomain(curPos);
             outIdx   = find(~inIdx);
             for oIdx = 1:numel(outIdx)
-                for dIdx = 1:3
-                    beadCur.(dimName{dIdx})  = curPos.(dimName{dIdx})(outIdx(oIdx));
-                    beadPrev.(dimName{dIdx}) = prevPos.(dimName{dIdx})(outIdx(oIdx));
-                end
-                [~,np] = obj.handles.classes.domain.Reflect(beadPrev,beadCur);
-                for dIdx = 1:obj.params.simulator.dimension
-                    obj.handles.classes.rouse(chainIdx).positions.beads.cur.(dimName{dIdx})(outIdx(oIdx))  = np.(dimName{dIdx});                    
-                end                 
+               
+                 beadCur  = curPos(outIdx(oIdx),:);
+                 beadPrev = prevPos(outIdx(oIdx),:);
+               
+                 [~,np] = obj.handles.classes.domain.Reflect(beadPrev,beadCur);
+              
+                 obj.handles.classes.rouse(chainIdx).position.cur(outIdx(oIdx),:)  = np;                    
+                         
             end  
         end        
         
@@ -435,40 +447,37 @@ classdef RouseSimulatorFramework<handle
         function PlotChains(obj)% move to Plotter class
 %             if obj.params.simulator.plotChains
                 for cIdx = 1:obj.params.simulator.numChains
-                    p = obj.handles.classes.rouse(cIdx).positions.beads.cur;
+                    p = obj.handles.classes.rouse(cIdx).position.cur;
                     set(obj.handles.graphical.chain(cIdx).beads,...
-                        'XData',p.x,...
-                        'YData',p.y,...
-                        'ZData',p.z,...
+                        'XData',p(:,1),...
+                        'YData',p(:,2),...
+                        'ZData',p(:,3),...
                         'Visible','on');
-                    
+                  
                     % plot the connectors between beads ( plot only non
                     % trivial connections)
-                    if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce || obj.params.chain.lennardJonesForce
+%                     if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce || obj.params.chain.lennardJonesForce
                         % Plot connectors for non trivial (non consecutives
                         % beads) connections 
-                    cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
-                    for mIdx = 1:size(cm,1);
-                        lineData.x = [obj.handles.classes.rouse(cIdx).positions.beads.cur.x(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).positions.beads.cur.x(cm(mIdx,2))];
-                        lineData.y = [obj.handles.classes.rouse(cIdx).positions.beads.cur.y(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).positions.beads.cur.y(cm(mIdx,2))];
-                        lineData.z = [obj.handles.classes.rouse(cIdx).positions.beads.cur.z(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).positions.beads.cur.z(cm(mIdx,2))];  
-                        set(obj.handles.graphical.chain(cIdx).connectors(mIdx),...
-                            'XData',lineData.x,...
-                            'YData',lineData.y,...
-                            'ZData',lineData.z,...
-                            'Color','w',...
-                            'Tag','connector',...
-                            'Visible','on');     
-                    end                    
+%                     cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
+%                     for mIdx = 1:size(cm,1);
+%                         lineData.x = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
+%                         lineData.y = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
+%                         lineData.z = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];  
+%                         set(obj.handles.graphical.chain(cIdx).connectors(mIdx),...
+%                             'XData',lineData.x,...
+%                             'YData',lineData.y,...
+%                             'ZData',lineData.z,...
+%                             'Color','w',...
+%                             'Tag','connector',...
+%                             'Visible','on');     
+%                     end                    
                     
-                    end
+%                     end
                     
                 end
                 drawnow
-%                 start(obj.handles.classes.timer);
-%                 stop(obj.handles.classes.timer);
-                
-%             end
+
         end
         
         function ShowDomain(obj)% move to Plotter class

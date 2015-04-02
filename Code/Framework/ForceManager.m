@@ -10,12 +10,22 @@ classdef ForceManager<handle
     % TODO: add an option to recreate the noise values from previously used
     %       seed or simulation parameters
     properties
-        %  Names of forces acting on the particle system
-        params
+        %  Names of forces acting on the particle system      
         springForce            = false;
         lennardJonesForce      = false;
         diffusionForce         = false;
         bendingElasticityForce = false;
+        
+        % Parameters for the forces
+        bendingConst           = 0;
+        springConst            = 0;
+        diffusionConst         = 0;
+        LJPotentialWidth       = 0;
+        LJPotentialDepth       = 0;
+        minParticleDistance    = 0;
+        dt                     = 0; % the time to activate the force
+        fixedParticleNum       = [];
+                
         edges % matrices representing the edges between connected particles
         particleDistance % pairwise distance between particles
         
@@ -23,12 +33,19 @@ classdef ForceManager<handle
     
     methods
         
-        function obj = ForceManager
-            
+        function obj = ForceManager(params)
+            % set input parameters 
+            f = fieldnames(params);
+            for fIdx = 1:numel(f)
+                obj.(f{fIdx}) = params.(f{fIdx});                
+            end
         end
         
-        function newParticlePosition = Apply(obj,particlePosition,connectivityMap,dt,...
-                diffusionConst,springConst,LJPotentialWidth,LJPotentialDepth,bendingConst,minParticleDist,fixedParticleNum)
+        function newParticlePosition = Apply(obj,particlePosition,connectivityMap,...
+                                             springConst,diffusionConst,bendingConst,...
+                                             LJPotentialWidth,LJPotentialDepth,...
+                                             minParticleDistance,fixedParticleNum,dt)
+                
             % Apply chosen forces on the N vertices/particles of an object
             % object must contain the position of its vertices in any
             % dimension
@@ -49,7 +66,7 @@ classdef ForceManager<handle
             edgeLength = obj.GetEdgesLength(particleDistances,connectivityMap);
             
             % Apply forces
-            springForces =  obj.GetSpringForce(edgeLength,springConst,connectivityMap,minParticleDist,fixedParticleNum);
+            springForces =  obj.GetSpringForce(edgeLength,springConst,connectivityMap,minParticleDistance,fixedParticleNum);
             
             % Lenard-jones force
             ljForces      = obj.GetLenardJonesForce(particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth);
@@ -61,10 +78,10 @@ classdef ForceManager<handle
             bendingForces = obj.GetBendingElasticityForce(obj.edges,connectivityMap,bendingConst);
             % the effect of appliying forces is considered addative
             newParticlePosition = -springForces*dt*particlePosition+...
-                ljForces*dt+...
-                bendingForces*dt+...
-                diffusionForces+...
-                particlePosition;
+                                   ljForces*dt+...
+                                   bendingForces*dt+...
+                                   diffusionForces+...
+                                   particlePosition;
         end
         
         function force  = GetSpringForce(obj,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum)

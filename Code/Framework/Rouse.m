@@ -25,7 +25,7 @@ classdef Rouse<handle
     properties
         params
         handles
-        positions                       
+        position                       
         step 
         time
         simulationTime
@@ -48,9 +48,7 @@ classdef Rouse<handle
         numNoisePoints
     end
     
-    events
-        getForce% next step event 
-        
+    events        
     end
     
     methods
@@ -58,41 +56,25 @@ classdef Rouse<handle
             % class constructor
             obj.runSimulation = true;
             obj.params        = rouseParams;
-            
-            % Initialize the forces acting on the chain 
-            obj.handles.classes.forceManager = ForceManager();  
-            obj.handles.classes.forceManager.springForce       = obj.params.springForce;
-            obj.handles.classes.forceManager.lennardJonesForce = obj.params.lennardJonesForce;
-            obj.handles.classes.forceManager.diffusionForce    = obj.params.diffusionForce;
-            obj.handles.classes.forceManager.bendingElasticityForce = obj.params.bendingElasticityForce;
             % Adjust input parameters to match the structure expected in
             % the class
-            obj.SetInputParams
+            obj.SetInputParams;
+            
+            obj.InitializeForceManger;
+            
+            obj.InitializeRouseStruct;
                         
-            obj.InitializeRouseStruct
-            
-            
         end        
         
         function SetInputParams(obj)% clean up 
-%             if mod(numel(paramsIn),2)~=0
-%                 error('value pair input must come in pairs')
-%             end
-%             for pIdx = 1:2:numel(paramsIn);
-%                 obj.params.(paramsIn{pIdx})= paramsIn{pIdx+1};
-%             end
+
             % expend the beta vector to match the number of beads 
             if numel(obj.params.beta)~=obj.params.numBeads && numel(obj.params.beta)~=1
                 error('the number of beta values must match the number of beads')
             end             
             if numel(obj.params.beta)==1
                 obj.params.beta = obj.params.beta*ones(obj.params.numBeads,1);
-            end
-                
-%             % Update noise STD
-%             obj.params.noiseStd          = sqrt(2*obj.params.diffusionConst*obj.params.dt);
-%             % update spring const.
-%             obj.params.springConst       = -obj.params.dimension*obj.params.diffusionConst*obj.params.dt/(obj.params.b^2);
+            end                        
         end
         
         function InitializeRouseStruct(obj)
@@ -102,41 +84,34 @@ classdef Rouse<handle
             obj.simulationTime.total            = 0; % in seconds 
             obj.simulationTime.meanStepTime     = 0; % in seconds
             
-            obj.positions.beads.cur.x           = zeros(obj.params.numBeads,1);
-            obj.positions.beads.cur.y           = zeros(obj.params.numBeads,1);
-            obj.positions.beads.cur.z           = zeros(obj.params.numBeads,1);
-            
-            obj.positions.beads.prev.x          = zeros(obj.params.numBeads,1);
-            obj.positions.beads.prev.y          = zeros(obj.params.numBeads,1);
-            obj.positions.beads.prev.z          = zeros(obj.params.numBeads,1);            
-            
-            obj.positions.springs.x             = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0); 
-            obj.positions.springs.y             = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0);  
-            obj.positions.springs.z             = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0); 
-            obj.positions.springs.lengths       = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0);
-            
-            % The angle between springs is defined as a 3D array
-            % but is represented as N 2D arrays of sparse matrices 
-            obj.positions.springs.angleBetweenSprings = sparse(repmat(1:obj.params.numBeads,1,obj.params.numBeads),1:obj.params.numBeads^2,pi);
-            obj.beadsDist                       = sparse(1:obj.params.numBeads,1:obj.params.numBeads,0);
-            obj.connectionMap.beadTriplets      = [];
-            
-            % Initialize forces struct
-            obj.forces.springs      = zeros(obj.params.numBeads);
-            obj.forces.lennardJones = struct('x',zeros(obj.params.numBeads,1),...
-                                             'y',zeros(obj.params.numBeads,1),...
-                                             'z',zeros(obj.params.numBeads,1));
-            obj.forces.bending = struct('x',zeros(obj.params.numBeads,1),...
-                                        'y',zeros(obj.params.numBeads,1),...
-                                        'z',zeros(obj.params.numBeads,1));        
-                                
-            % Initialize structures 
-%             obj.SetBeadsMobilityMatrices;  
+            obj.position.cur             = zeros(obj.params.numBeads,3); 
+            obj.position.prev            = zeros(obj.params.numBeads,3);
+
             obj.SetBeadConnectionMap
             obj.SetInitialChainPosition; % should be moved out of the initialization process
 
         end
-                
+        
+        function InitializeForceManger(obj)
+        % Add forceManager to affect objects in the domain
+            obj.handles.classes.forceManager  = ForceManager(obj.params.forceParams); 
+%             % Update the parameters for the force manager
+%             obj.handles.classes.forceManager.springForce            = obj.params.springForce;
+%             obj.handles.classes.forceManager.lennardJonesForce      = obj.params.lennardJonesForce;
+%             obj.handles.classes.forceManager.diffusionForce         = obj.params.diffusionForce;
+%             obj.handles.classes.forceManager.bendingElasticityForce = obj.params.bendingElasticityForce;
+%             
+%             % Pass parameters to the force manager assigned to the chain 
+%             obj.handles.classes.forceManager.springConst         = obj.params.springConst;
+%             obj.handles.classes.forceManager.diffusionConst      = obj.params.diffusionConst;
+%             obj.handles.classes.forceManager.LJPotentialWidth    = obj.params.LJPotentialWidth;
+%             obj.handles.classes.forceManager.LJPotentialDepth    = obj.params.LJPotentialDepth;
+%             obj.handles.classes.forceManager.bendingConst        = obj.params.bendingConst;
+%             obj.handles.classes.forceManager.minParticleDistance = obj.params.minBeadDistance;
+%             obj.handles.classes.forceManager.fixedParticleNum    = obj.params.fixedBeadNum;
+%             obj.handles.classes.forceManager.dt                  = obj.params.dt;
+        end
+        
         function CalculateRelaxationTime(obj)
             % the relaxation time of the first mode of the Rouse chain 
             d = sqrt(2*obj.params.diffusionConst*obj.params.dt);
@@ -178,6 +153,7 @@ classdef Rouse<handle
            obj.connectionMap.map                = cMap;
            [obj.connectionMap.indices.in.map]   = find(cMap); % linear indices of positions of monomer pairs connected. 
            [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(cMap));
+           
 %            [obj.connectionMap.indices.out.map]  =  ~cMap;% linear indices of positions of monomer pairs connected. 
 %            [obj.connectionMap.indices.out.list(:,1), obj.connectionMap.indices.out.list(:,2)]  = find(obj.connectionMap.indices.out.map); 
 %            cMapNz = cMap;
@@ -295,43 +271,47 @@ classdef Rouse<handle
             if exist('domainHandler','var')
            
                 % The bead positions
+%                 obj.position.prev = zeros(1,3);
+%                 obj.position.prev.x(1,1) = 0;% the first bead is placed at the origin
+%                 obj.position.prev.y(1,1) = 0;% the first bead is placed at the origin
+%                 obj.position.prev.z(1,1) = 0;% the first bead is placed at the origin
                
-                obj.positions.beads.prev.x(1) = 0;% the first bead is placed at the origin
-                obj.positions.beads.prev.y(1) = 0;% the first bead is placed at the origin
-                obj.positions.beads.prev.z(1) = 0;% the first bead is placed at the origin
-                
                 for bIdx = 2:obj.params.numBeads
-                    inDomain= true;
-                     while inDomain 
-                         x = obj.params.b*randc(obj.params.dimension,1);
+                    inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:));     
+                    tempPos  = obj.position.prev(bIdx,:);
+                   while ~inDomain 
+                     x = obj.params.b*randc(1,obj.params.dimension);
 %                          n = sqrt(sum(x.^2));
-                         for dIdx = 1:obj.params.dimension
-                          obj.positions.beads.prev.(obj.dimNames{dIdx})(bIdx) = obj.positions.beads.prev.(obj.dimNames{dIdx})(bIdx-1)+x(dIdx);
-                         end
-
-                     a.x = obj.positions.beads.prev.x(bIdx);
-                     a.y = obj.positions.beads.prev.y(bIdx);
-                     a.z = obj.positions.beads.prev.z(bIdx);
-                     inDomain = ~domainHandler.InDomain(a);
-                     end                
+                       tempPos = obj.position.prev(bIdx-1,:)+x;
+%                          for dIdx = 1:obj.params.dimension
+%                           obj.position.prev.(obj.dimNames{dIdx})(bIdx) = obj.position.prev.(obj.dimNames{dIdx})(bIdx-1)+x(dIdx);
+%                          end
+%                      a.x = obj.position.prev.x(bIdx);
+%                      a.y = obj.position.prev.y(bIdx);
+%                      a.z = obj.position.prev.z(bIdx);
+                     inDomain = domainHandler.InDomain(tempPos);
+                   end   
+                    obj.position.prev(bIdx,:)= tempPos;
                end
             
             else
                 
-            for dIdx = 1:obj.params.dimension
+%             for dIdx = 1:obj.params.dimension
                 % The bead positions
-                obj.positions.beads.prev.(obj.dimNames{dIdx})(1) = 0;
-                for bIdx = 2:obj.params.numBeads
-                 obj.positions.beads.prev.(obj.dimNames{dIdx})(bIdx) = ...
-                    obj.positions.beads.prev.(obj.dimNames{dIdx})(bIdx-1)+...
-                    randn(1)*((obj.params.b)^(1/obj.params.dimension));
-                end                
+%                 obj.position.prev.(obj.dimNames{dIdx})(1) = 0;
+               r = randn(obj.params.numBeads-1,3);
+               obj.position.prev = [obj.position.prev(1,:); cumsum(r)];
+%                 for bIdx = 2:obj.params.numBeads
+%                  obj.position.prev.(obj.dimNames{dIdx})(bIdx) = ...
+%                     obj.position.prev.(obj.dimNames{dIdx})(bIdx-1)+...
+%                     randn(1)*((obj.params.b)^(1/obj.params.dimension));
+%                 end                
             end
-            end
-%             obj.positions.beads.prev = obj.positions.beads.cur;
+            
+%             obj.position.prev = obj.position.cur;
         end                        
                 
-        function Next(obj,varargin)
+        function Next(obj,varargin)% to be removed
             % Next simulation step 
 %                 tic
                 % Update simulation time and step 
@@ -343,18 +323,9 @@ classdef Rouse<handle
 %                 endRoundTime = toc;
 %                 obj.simulationTime.total        = obj.simulationTime.total+endRoundTime;
 %                 obj.simulationTime.meanStepTime = (obj.simulationTime.meanStepTime*(obj.step-1)+endRoundTime)/obj.step;% the mean round time 
-        end
+        end              
         
-        function GetForces(obj)% unused
-             % Calculate forces   
-             % call forceManager
-             obj.GetSpringForce();             
-             obj.GetLennardJonesForce();
-             obj.GetBendingElasticityForce();
-             obj.GetNoise();
-        end        
-        
-        function Run(obj,varargin)
+        function Run(obj,varargin)% unused
            
             while obj.runSimulation
                
@@ -365,13 +336,13 @@ classdef Rouse<handle
             end
         end
                 
-        function GetNewBeadsPosition(obj)
+        function GetNewBeadsPosition(obj)% to be removed
             % Solve the rouse system, given the previous location of the chain system
             % parameters
             % solve the system of equations
 %             notify(obj,'getForce');
-            
-            prevPos      = [obj.positions.beads.prev.x,obj.positions.beads.prev.y,obj.positions.beads.prev.z]; 
+            obj.step = obj.step + 1;
+            prevPos      = [obj.position.prev.x,obj.position.prev.y,obj.position.prev.z]; 
 %             ljForce      = [obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
 %             bendingForce = [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];
             
@@ -383,41 +354,37 @@ classdef Rouse<handle
                            p.diffusionConst,p.springConst,p.LJPotentialWidth,p.LJPotentialDepth,p.bendingConst,...
                            p.minBeadDist,p.fixedBeadNum);                             
 
-             obj.positions.beads.cur.x = newPos(:,1);
-             obj.positions.beads.cur.y = newPos(:,2);
-             obj.positions.beads.cur.z = newPos(:,3);            
+             obj.position.cur.x = newPos(:,1);
+             obj.position.cur.y = newPos(:,2);
+             obj.position.cur.z = newPos(:,3);            
         end
         
-        function Step(obj,force)% experimental 
-            prevPos      = [obj.positions.beads.prev.x,obj.positions.beads.prev.y,obj.positions.beads.prev.z]; 
-            ljForce      = force.lenardJones; %[obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
-            bendingForce = force.bending;     % [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];            
-            noiseForce   = force.noise;       % [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
+        function Step(obj)% experimental 
+            % Solve the rouse system, given the previous location of the chain system
+            % parameters
+            obj.step = obj.step + 1;% advance the counter one step             
             
-
-            newPos  = -obj.params.springConst.*obj.forces.springs*obj.params.dt*prevPos+...
-                       ljForce+...
-                       obj.params.bendingConst*obj.params.dt*bendingForce+...
-                       noiseForce+...
-                       prevPos;
-
-             obj.positions.beads.cur.x = newPos(:,1);
-             obj.positions.beads.cur.y = newPos(:,2);
-             obj.positions.beads.cur.z = newPos(:,3);    
-        end
-        
-        function SetPrevBeadPosition(obj)
-             % Save previous position as the currentPosition                     
-            obj.positions.beads.prev= obj.positions.beads.cur;
-              
-        end                                                                  
-        
-        function Reset(obj,newParams)% unfinished
-            if nargin<2
+            % Apply forces on the beads to get the new bead position    
+            forceParams = obj.params.forceParams;
+            newPos   = obj.handles.classes.forceManager.Apply(obj.position.prev,obj.connectionMap.map,...                                            
+                                             forceParams.springConst,forceParams.diffusionConst,forceParams.bendingConst,...
+                                             forceParams.LJPotentialWidth,forceParams.LJPotentialDepth,...
+                                             forceParams.minParticleDistance,forceParams.fixedParticleNum,forceParams.dt);
                 
-            end
+            obj.position.cur = newPos;
             
         end
+        
+        function SetPrevBeadPosition(obj,pos)% externaly 
+             % Save previous position as the currentPosition
+             if ~exist('pos','var')
+               obj.position.prev = obj.position.cur; 
+             else
+               obj.position.prev = pos;
+             end
+            
+              
+        end                                   
         
     end
         

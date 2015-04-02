@@ -15,7 +15,7 @@ addpath(genpath(fullfile(curPath,'..','..','Utils')));
 % params = xml_parse(xmlStr);
 params = SimulationFrameworkParams;
 % SimulatorParams
-profile on 
+% profile on 
 r = RouseSimulatorFramework(params);
 r.Run
-profile viewer
+% profile viewer

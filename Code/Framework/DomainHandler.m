@@ -1,6 +1,7 @@
 classdef DomainHandler<handle
-    % At the moment the domain is parametrically defined 
-    % TODO: allow insertion of a polygonal domain 
+    % A domain class to be used in the polymer simulation 
+    
+    % TODO: allow insertion of a polygonal domain or a mesh from meshlab
     properties 
         handles
         params
@@ -12,18 +13,24 @@ classdef DomainHandler<handle
     
     methods 
         function obj = DomainHandler(domainParams)
+             % class constructor 
             obj.params = domainParams;
-            % class constructor 
-%             obj.SetDefaultParams
-%             
+                      
 %             obj.SetInputParams(varargin{:})
-            obj.handles.graphical.domain = [];
-            obj.handles.graphical.light  = [];  
-            obj.handles.graphical.mainAxes = obj.params.parentAxes;            
-                    
+            obj.handles.graphical.domain   = [];
+            obj.handles.graphical.light    = [];  
+            obj.handles.graphical.mainAxes = obj.params.parentAxes;
+            
+            % Add forceManager to affect objects in the domain            
+            obj.InitializeForceManager
+        end                        
+        
+        function InitializeForceManager(obj)
+            % Initialize forces class
+            obj.handles.classes.forceManager  = ForceManager(obj.params.forceParams);            
         end
         
-        function SetDefaultParams(obj)
+        function SetDefaultParams(obj)%obsolete
             obj.params.domainShape    = 'Sphere'; % sphere| cylinder | twoPlates | none
             obj.params.domainWidth    = 1;
             obj.params.domainHeight   = 50;
@@ -143,6 +150,20 @@ classdef DomainHandler<handle
             
         end
         
+        function newParticlePosition  = ApplyForces(obj,particlePosition,connectivityMap,...
+                                             springConst,diffusionConst,bendingConst,...
+                                             LJPotentialWidth,LJPotentialDepth,...
+                                             minParticleDistance,fixedParticleNum,dt)
+%             diffusionConst = obj.handles.classes.forceManager.params.diffusionconstant;
+            % Apply forces on object in the domain, reflect them if
+            % neccessary and return their new position 
+            newParticlePosition = obj.handles.classes.forceManager.Apply(particlePosition,connectivityMap,...
+                                            springConst,diffusionConst,bendingConst,...
+                                             LJPotentialWidth,LJPotentialDepth,...
+                                             minParticleDistance,fixedParticleNum,dt);
+                           
+        end
+        
         function ShowDomain(obj)
               f = findobj(get(obj.handles.graphical.mainAxes,'Children'),'Tag','domain');
               set(f,'Visible','on')
@@ -152,16 +173,16 @@ classdef DomainHandler<handle
         
         function [prevPos,curPos,inFlag] = Reflect(obj,prevPos,curPos)%TODO: fix reflection for all domain shapes
 %             disp('reflect')
-            dimName  = {'x','y','z'};
-            numBeads = numel(prevPos.x);
-            inFlag   = true(numBeads,1);         
-                count   = 1;
+%             dimName  = {'x','y','z'};
+                numBeads = size(prevPos,1);
+                inFlag   = true(numBeads,1);         
+                count    = 1;
                 while ~obj.InDomain(curPos)
                     % Reflect the particle
-                    if strcmpi(obj.params.domainShape,'none')
+                    if strcmpi(obj.params.domainShape,'none')% change 'none' to 'open'
                         % Do nothing
                     elseif strcmpi(obj.params.domainShape,'sphere')
-                        intersectionPoint = obj.FindIntersectionPoint([prevPos.x prevPos.y prevPos.z],[curPos.x curPos.y curPos.z]);
+                        intersectionPoint = obj.FindIntersectionPoint(prevPos,curPos);
                         if obj.InDomain(prevPos) && ~obj.InDomain(curPos) && isempty(intersectionPoint) %%|| sqrt(sum(intersectionPoint.^2))~=obj.params.domainWidth)
                             error('something is wrong with the intersection point function')
                         end
@@ -169,8 +190,8 @@ classdef DomainHandler<handle
                             domainNorm  = obj.GetDomainNormal(intersectionPoint);
                             
                             % Calculate reflected ray
-                            pp  = [prevPos.x prevPos.y prevPos.z];
-                            cp  = [curPos.x curPos.y curPos.z];
+                            pp  = prevPos;% [prevPos.x prevPos.y prevPos.z];
+                            cp  = curPos;%[curPos.x curPos.y curPos.z];
                             di  = (intersectionPoint-pp)/sqrt(sum(intersectionPoint-pp).^2);
                             ds  = -(2*dot(domainNorm,di)*domainNorm-di);
                             t   = sqrt(sum(cp-intersectionPoint).^2);
@@ -180,14 +201,14 @@ classdef DomainHandler<handle
                             biasNorm = (n-intersectionPoint)/norm(n-intersectionPoint);
                             %
                             %
-                            for dIdx = 1:obj.params.dimension
-                                curPos.(dimName{dIdx})  = n(dIdx);
+%                             for dIdx = 1:obj.params.dimension
+                                curPos  = n;
                                 % To avoid numerical error, move the prev point
                                 % slightly on the vector between the new point and the
                                 % intersectionPoint
-                                prevPos.(dimName{dIdx}) = intersectionPoint(dIdx)+(1e-15)*biasNorm(dIdx);
+                                prevPos = intersectionPoint+(1e-15)*biasNorm;
                                 
-                            end
+%                             end
                         else
                             disp('no intersection point')
                         end
@@ -315,25 +336,27 @@ classdef DomainHandler<handle
             % Check if points are inside the domain 
             % the outut is a binary vector with 1 if the point is inside
             % the domain, 0 otherwise.
-            dimName = {'x','y','z'};                                    
-           
-            inIdx = ones(numel(vecIn.x),1);
+%             dimName       = {'x','y','z'};                                    
+            numParticles = size(vecIn,1);
+            inIdx        = true(numParticles,1);
             if strcmpi(obj.params.domainShape,'Sphere')
-                 v       = zeros(numel(vecIn.x),obj.params.dimension);
-            for dIdx = 1:obj.params.dimension
-                v(:,dIdx)  = (vecIn.(dimName{dIdx}));                
-            end
+%                  v       = zeros(size(vecIn));
+%             for dIdx = 1:obj.params.dimension
+%                 v(:,dIdx)  = (vecIn.(dimName{dIdx}));                
+%             end
+%             v = vecIn
             % the vector norm
-            n     = sqrt(sum(v.^2,2));
+            n     = sqrt(sum(vecIn.^2,2));
             inIdx = n<=obj.params.domainWidth;
             
             elseif strcmpi(obj.params.domainShape,'cylinder')
-                 v       = zeros(numel(vecIn.x),obj.params.dimension);
-                for dIdx = 1:2
-                    v(:,dIdx)  = (vecIn.(dimName{dIdx}));                
-                end
+%                  v       = zeros(numel(vecIn.x),obj.params.dimension);
+%                 for dIdx = 1:2
+%                     v(:,dIdx)  = (vecIn.(dimName{dIdx}));                
+%                 end
+                
             % the vector norm
-            n     = sqrt(sum(v.^2,2));
+            n     = sqrt(sum(vevIn.^2,2));
             inIdx = n<=obj.params.domainWidth;
             elseif strcmpi(obj.params.domainShape,'twoPlates')
                   inIdx = vecIn.x<obj.params.domainWidth;                 

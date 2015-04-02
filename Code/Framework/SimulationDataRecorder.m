@@ -104,9 +104,9 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).encounterHist{cIdx} = zeros(chainObj(cIdx).params.numBeads);
                 obj.simulationData(obj.simulationRound).encounterTime{cIdx} = zeros(chainObj(cIdx).params.numBeads);
                 % record positions
-                obj.simulationData(obj.simulationRound).positions.x = chainObj(cIdx).positions.beads.cur.x;
-                obj.simulationData(obj.simulationRound).positions.y = chainObj(cIdx).positions.beads.cur.y;
-                obj.simulationData(obj.simulationRound).positions.z = chainObj(cIdx).positions.beads.cur.z;
+                obj.simulationData(obj.simulationRound).positions.x = chainObj(cIdx).position.cur(:,1);
+                obj.simulationData(obj.simulationRound).positions.y = chainObj(cIdx).position.cur(:,2);
+                obj.simulationData(obj.simulationRound).positions.z = chainObj(cIdx).position.cur(:,3);
             end
         end
         
