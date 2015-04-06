@@ -2,9 +2,9 @@ classdef SimulationFrameworkParams<handle
     % this class holds all parameters used by the Framework class
     properties
         simulator
-        chain
-        domain       
-        dataRecorder
+        chain        = ChainParams;
+        domain       = DomainHandlerParams      
+        dataRecorder = SimulationDataRecorderParams;
         plotHandler
     end
     
@@ -26,8 +26,8 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.numSimulationBatches = 1;     % number of simulation batches
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
             obj.simulator.numSteps             = Inf;   % for inf place inf
-            obj.simulator.dt                   = 1e-1;  % time step 
-            obj.simulator.numChains            = 1;   
+            obj.simulator.dt                   = 1e-2;  % time step 
+            obj.simulator.numChains            = 10;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
@@ -37,16 +37,32 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.recipesFolder        = ''; 
         end
         
-        function SetChainParams(obj)
-            obj.chain = ChainParams;
+        function SetChainParams(obj)%TODO: change force params accordingly
+            % Assign parameters for each chain 
+            for cIdx = 1:obj.simulator.numChains
+                obj.chain(cIdx) = ChainParams;
+                % inherit the framework parameters 
+                obj.chain(cIdx).dimension = obj.simulator.dimension;            
+                obj.chain(cIdx).dt        = obj.simulator.dt;
+                obj.chain(cIdx).SetForceParams;
+            end
         end
         
-        function SetDomainParams(obj)
+        function SetDomainParams(obj)% TODO: change force params accordingly 
             obj.domain = DomainHandlerParams;
+              % inherit the framework parameters 
+            obj.domain.dimension  = obj.simulator.dimension;  
+            obj.domain.showDomain = obj.simulator.showSimulation;  
+            obj.domain.dt         = obj.simulator.dt;
+            obj.domain.SetForceParams;
+           
         end
         
         function SetDataRecorderParams(obj)
             obj.dataRecorder = SimulationDataRecorderParams;
+            % inherit the framework params
+            obj.dataRecorder.recipeFileName = obj.simulator.recipeFileName;
+            obj.dataRecorder.encounterDist  = obj.simulator.encounterDist;
         end
         
         function SetPlotHandlerParams(obj)

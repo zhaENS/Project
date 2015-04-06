@@ -120,6 +120,19 @@ A system of $N$ chains will be written as:  $[C^{(1)},C^{(2)},...,C^{(N)} ]$, th
 
 An \textit{association} between a chain $i$ and $j$ is the interaction between a member of $S^{(i)}$ and $S^{(j)}$ and will be denoted by  
 $C^{(i)}\oplus C^{(j)}$, that is $\exists \alpha \in S^{(i)},\beta \in S^{(j)}; |X^{(i)}_\alpha-X^{(j)}_\beta |<\epsilon$, with $\epsilon$ the interaction distance.
+
+A \textit{dissociation} of the structure 
  
+
+\section{Domain Reflection}
+\subsection{Sphere}
+First we find the intersection point between the path at two consecutive time steps and the spherical domain. Let $A$ be the particle location at time $t$ and $B$ the tentative location of the particle at time $t+\Delta t$, at any step we check if the path $C=B-A$ have crossed the spherical boundary by finding the roots of the quadratic equation for the intersection between a line and a sphere. setting $\alpha= \langle A,B \rangle -\langle A,A \rangle , \beta = \langle B-A,B-A \rangle$
+\begin{equation*}
+t_{1,2}=\frac{-\alpha \pm \sqrt{\alpha^2-\beta (\langle A,A \rangle -R^2)}}{\beta}
+\end{equation*}
+then we take the $t$ such that $0<t<1$, to make sure the intersection is in the right direction and is between points $A$ and $B$.
+
+
+
 
 \end{document} 

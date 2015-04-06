@@ -13,3 +13,5 @@
 \contentsline {subsection}{\numberline {1.3.3}Noise}{5}
 \contentsline {section}{\numberline {1.4}The Recipe files}{5}
 \contentsline {section}{\numberline {1.5}Chains' Association and Dissociation}{5}
+\contentsline {section}{\numberline {1.6}Domain Reflection}{6}
+\contentsline {subsection}{\numberline {1.6.1}Sphere}{6}

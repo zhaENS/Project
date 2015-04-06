@@ -172,8 +172,7 @@ classdef DomainHandler<handle
         end
         
         function [prevPos,curPos,inFlag] = Reflect(obj,prevPos,curPos)%TODO: fix reflection for all domain shapes
-%             disp('reflect')
-%             dimName  = {'x','y','z'};
+
                 numBeads = size(prevPos,1);
                 inFlag   = true(numBeads,1);         
                 count    = 1;
@@ -190,7 +189,7 @@ classdef DomainHandler<handle
                             domainNorm  = obj.GetDomainNormal(intersectionPoint);
                             
                             % Calculate reflected ray
-                            pp  = prevPos;% [prevPos.x prevPos.y prevPos.z];
+                            pp  = prevPos;% [prevPos.x prevPos.y prevPos.zs];
                             cp  = curPos;%[curPos.x curPos.y curPos.z];
                             di  = (intersectionPoint-pp)/sqrt(sum(intersectionPoint-pp).^2);
                             ds  = -(2*dot(domainNorm,di)*domainNorm-di);
@@ -206,7 +205,7 @@ classdef DomainHandler<handle
                                 % To avoid numerical error, move the prev point
                                 % slightly on the vector between the new point and the
                                 % intersectionPoint
-                                prevPos = intersectionPoint+(1e-15)*biasNorm;
+                                prevPos = intersectionPoint+(obj.params.domainWidth/10)*biasNorm;
                                 
 %                             end
                         else
@@ -226,8 +225,11 @@ classdef DomainHandler<handle
                             d       = (cp-pp)/sqrt(sum(cp-pp).^2);
                             r       = d-2*dot(d,domainNorm)*domainNorm;
                             n       = intersectionPoint+r*sqrt(sum(intersectionPoint-cp).^2)/sqrt(sum(r.^2));
-                            curPos  = struct('x',n(1),'y',n(2),'z',n(3));
-                            prevPos = struct('x',intersectionPoint(1),'y',intersectionPoint(2),'z',intersectionPoint(3));
+                            curPos = n;
+                            prevPos = intersectionPoint;
+%                             
+%                             curPos  = struct('x',n(1),'y',n(2),'z',n(3));
+%                             prevPos = struct('x',intersectionPoint(1),'y',intersectionPoint(2),'z',intersectionPoint(3));
                             obj.PlotReflection(pp,cp,intersectionPoint,n,domainNorm);
                         end
                         
@@ -242,12 +244,14 @@ classdef DomainHandler<handle
                             r                 = d-2*dot(d,domainNorm)*domainNorm;
                             n                 = intersectionPoint+r*sqrt(sum(intersectionPoint-curPos).^2)/sqrt(sum(r.^2));
                             obj.PlotReflection(prevPos,curPos,intersectionPoint,n,domainNorm);
-                            newPos  = struct('x',[],'y',[],'z',[]);
-                            prevPos = struct('x',[],'y',[],'z',[]);
-                            for dIdx = 1:obj.params.dimension
-                                newPos.(dimName{dIdx})  = n(dIdx);
-                                prevPos.(dimName{dIdx}) = intersectionPoint(dIdx);
-                            end
+                            curPos  = n;
+                            prevPos = intersectionPoint;
+%                             newPos  = struct('x',[],'y',[],'z',[]);
+%                             prevPos = struct('x',[],'y',[],'z',[]);
+%                             for dIdx = 1:obj.params.dimension
+%                                 newPos.(dimName{dIdx})  = n(dIdx);
+%                                 prevPos.(dimName{dIdx}) = intersectionPoint(dIdx);
+%                             end
                         end
                         
                     else
@@ -255,9 +259,9 @@ classdef DomainHandler<handle
                         prevPos = pp;
                     end
                     count = count+1;
-                    if count>10
-                        disp('reflection count is bigger than 10. Terminating');
-                        error('too many reflection iterations')
+                    if count>obj.params.maxReflectionsPerParticle
+                        error('%s%s%s','Reflection count is bigger than',obj.params.maxReflectionsPerParticle,...
+                            'Terminating');                        
                     end
                 end
       
@@ -283,11 +287,19 @@ classdef DomainHandler<handle
                      A  = prevPos;
                      B  = curPos; 
                      C  = (B-A);%./norm(B-A);
-                     dotCA = dot(C,A);
-                     dotCC = dot(C,C);
-                     dotAA = dot(A,A);
-                     t(1) = (-2*dotCA+sqrt(4*dotCA^2 -4*dotCC*(dotAA-R^2)))/(2*dotCC);
-                     t(2) = (-2*dotCA-sqrt(4*dotCA^2 -4*dotCC*(dotAA-R^2)))/(2*dotCC);
+%                      dotCA = dot(C,A);
+%                      dotCC = dot(C,C);
+%                      dotAA = dot(A,A);
+%                      t(1) = (-2*dotCA+sqrt(4*dotCA^2 -4*dotCC*(dotAA-R^2)))/(2*dotCC);
+%                      t(2) = (-2*dotCA-sqrt(4*dotCA^2 -4*dotCC*(dotAA-R^2)))/(2*dotCC);
+                     
+                     gamma = dot(A,A);
+                     alpha = dot (A,B) -gamma;
+                     beta  = dot(C,C);
+                     t(1)= (-alpha+sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
+                     t(2)= (-alpha-sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
+                     
+                     
                       % === end test ====
                      % Take only the positive root smaller than 1 
                     t    = t(t>0&t<=1); 

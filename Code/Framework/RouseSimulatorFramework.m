@@ -47,15 +47,15 @@ classdef RouseSimulatorFramework<handle
            obj.ReadRecipeFile           
         end
         
-        function OrganizeParams(obj,frameworkParams)
+        function OrganizeParams(obj,frameworkParams)% move to params class
             obj.params                             = frameworkParams;           
-            obj.params.chain.dt                    = obj.params.simulator.dt;
-            obj.params.chain.dimension             = obj.params.simulator.dimension;
-            obj.params.domain.showDomain           = obj.params.simulator.showSimulation;  
-            obj.params.domain.dimension            = obj.params.simulator.dimension;
-            obj.params.domain.dt                    = obj.params.simulator.dt;
-            obj.params.dataRecorder.recipeFileName = obj.params.simulator.recipeFileName;
-            obj.params.dataRecorder.encounterDist  = obj.params.simulator.encounterDist;
+%             obj.params.chain.dt                    = obj.params.simulator.dt;
+%             obj.params.chain.dimension             = obj.params.simulator.dimension;
+%             obj.params.domain.showDomain           = obj.params.simulator.showSimulation;  
+%             obj.params.domain.dimension            = obj.params.simulator.dimension;
+%             obj.params.domain.dt                    = obj.params.simulator.dt;
+%             obj.params.dataRecorder.recipeFileName = obj.params.simulator.recipeFileName;
+%             obj.params.dataRecorder.encounterDist  = obj.params.simulator.encounterDist;
         end
                 
         function SetInputParams(obj,varargin)
@@ -119,16 +119,17 @@ classdef RouseSimulatorFramework<handle
         
         
          % Create chains 
+           cParams = obj.params.chain;% should be expanded to include parameters for each chain
             for cIdx = 1:obj.params.simulator.numChains
                 % Initialize class
-                cParams                         = obj.params.chain;% should be expanded to include parameters for each chain
-                obj.handles.classes.rouse(cIdx) = Rouse(cParams);
+              
+                obj.handles.classes.rouse(cIdx) = Rouse(cParams(cIdx));
                 % make sure the chain is inside the domain
                 obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
                 
                 % Initialize chain graphics
                 if obj.params.simulator.showSimulation
-                if ~(obj.params.chain.springForce) && ~obj.params.chain.bendingElasticityForce
+                if ~(obj.params.chain(cIdx).springForce) && ~obj.params.chain(cIdx).bendingElasticityForce
                     lineStyle = 'none';
                 else
                     lineStyle = '-';
@@ -149,9 +150,9 @@ classdef RouseSimulatorFramework<handle
                     'Parent',obj.handles.graphical.mainAxes,...
                     'Visible','off');
                 
-                
+                %TODO: fix such that the if loop is discarded
                 % Plot connectors
-                if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce || obj.params.chain.lennardJonesForce
+                if obj.params.chain(cIdx).springForce || obj.params.chain(cIdx).bendingElasticityForce || obj.params.domain.lennardJonesForce
                                                                         
                    cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
                     for mIdx = 1:size(cm,1);
@@ -367,7 +368,7 @@ classdef RouseSimulatorFramework<handle
                 cp      = obj.handles.classes.rouse(cIdx).params.forceParams;
                 dp      = obj.handles.classes.domain.params.forceParams;
                 particlePosition = obj.handles.classes.domain.ApplyForces(particlePosition,connectivityMap,...                
-                                             cp.springConst,cp.diffusionConst,cp.bendingConst,...
+                                             cp.springConst,dp.diffusionConst,cp.bendingConst,...
                                              dp.LJPotentialWidth,dp.LJPotentialDepth,...
                                              cp.minParticleDistance,cp.fixedParticleNum,obj.params.simulator.dt);
                                          
