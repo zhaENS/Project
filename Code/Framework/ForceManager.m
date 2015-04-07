@@ -59,24 +59,24 @@ classdef ForceManager<handle
             obj.edges   = GetEdgesVectors_mex(particlePosition,connectivityMap);
             
             % get pair-wise distance between particles
-            particleDistances = obj.GetParticleDistance(particlePosition);
+            particleDistances    = obj.GetParticleDistance(particlePosition);
             obj.particleDistance = particleDistances;% save property
             
             % obtain the edges length
-            edgeLength = obj.GetEdgesLength(particleDistances,connectivityMap);
+            edgeLength    = obj.GetEdgesLength(particleDistances,connectivityMap);
             
             % Apply forces
-            springForces =  obj.GetSpringForce(edgeLength,springConst,connectivityMap,minParticleDistance,fixedParticleNum);
+            springForces  = obj.GetSpringForce(edgeLength,springConst,connectivityMap,minParticleDistance,fixedParticleNum);
             
             % Lenard-jones force
             ljForces      = obj.GetLenardJonesForce(particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth);
             
-            % thermal (diffusion) force
+            % Thermal (diffusion) force
             diffusionForces = obj.GetDiffusionForce(particlePosition,diffusionConst,dt);
             
-            % bending forces
+            % Bending forces
             bendingForces = obj.GetBendingElasticityForce(obj.edges,connectivityMap,bendingConst);
-            % the effect of appliying forces is considered addative
+            % The effect of applying forces is addative
             newParticlePosition = -springForces*dt*particlePosition+...
                                    ljForces*dt+...
                                    bendingForces*dt+...

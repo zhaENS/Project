@@ -23,20 +23,19 @@ classdef DomainHandlerParams<handle
     
     methods
         function obj = DomainHandlerParams
-            obj.domainShape            = 'sphere';
-            obj.domainWidth            = 20;
+            obj.domainShape            = 'none';
+            obj.domainWidth            = 10;
             obj.domainHeight           = 10;
             obj.domainCenter           = [0 0 0];
             obj.showDomain             = true;
             
             % forces of the domain 
             obj.LJPotentialWidth       = 0.5;
-            obj.LJPotentialDepth       = 0.1;
-            obj.diffusionConst         = 1;
+            obj.LJPotentialDepth       = 0.2;
+            obj.diffusionConst         = 1;   % assigned by framework
             obj.lennardJonesForce      = false;
-            obj.diffusionForce         = true;
-            
-            obj.dt                     = 0;%  assigned by Framework
+            obj.diffusionForce         = true;            
+            obj.dt                     = 0;   % assigned by Framework
             obj.reflectionType         = 'preserveEnergy';
             obj.maxReflectionsPerParticle  = 30;
                         
@@ -47,13 +46,11 @@ classdef DomainHandlerParams<handle
         function SetForceParams(obj)
             % forces inherit class params
             obj.forceParams.dt                     = obj.dt;
-            obj.forceParams.lennardJonesForce      = obj.lennardJonesForce;
-            obj.forceParams.diffusionConst         = obj.diffusionConst;
-            obj.forceParams.diffusionForce         = obj.diffusionForce;
-%             obj.forceParams.bendingElasticityForce = obj.bendingElasticityForce;
-%             obj.forceParams.springForce            = obj.springForce;
+            obj.forceParams.lennardJonesForce      = obj.lennardJonesForce;            
             obj.forceParams.LJPotentialDepth       = obj.LJPotentialDepth;
             obj.forceParams.LJPotentialWidth       = obj.LJPotentialWidth;
+            obj.forceParams.diffusionConst         = obj.diffusionConst;
+            obj.forceParams.diffusionForce         = obj.diffusionForce;
         end
     end
 end

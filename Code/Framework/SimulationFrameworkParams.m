@@ -27,7 +27,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
             obj.simulator.numSteps             = Inf;   % for inf place inf
             obj.simulator.dt                   = 1e-2;  % time step 
-            obj.simulator.numChains            = 10;   
+            obj.simulator.numChains            = 5;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
@@ -35,6 +35,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.notifyCycleLength    = 30;    % number of simulation cycles after which an email is sent 
             obj.simulator.recipeFileName       = 'debugRecipe';
             obj.simulator.recipesFolder        = ''; 
+            obj.simulator.diffusionConst       = 1.1;
         end
         
         function SetChainParams(obj)%TODO: change force params accordingly
@@ -42,6 +43,7 @@ classdef SimulationFrameworkParams<handle
             for cIdx = 1:obj.simulator.numChains
                 obj.chain(cIdx) = ChainParams;
                 % inherit the framework parameters 
+                obj.chain(cIdx).diffusionConst = obj.simulator.diffusionConst;
                 obj.chain(cIdx).dimension = obj.simulator.dimension;            
                 obj.chain(cIdx).dt        = obj.simulator.dt;
                 obj.chain(cIdx).SetForceParams;
@@ -50,10 +52,12 @@ classdef SimulationFrameworkParams<handle
         
         function SetDomainParams(obj)% TODO: change force params accordingly 
             obj.domain = DomainHandlerParams;
-              % inherit the framework parameters 
-            obj.domain.dimension  = obj.simulator.dimension;  
-            obj.domain.showDomain = obj.simulator.showSimulation;  
-            obj.domain.dt         = obj.simulator.dt;
+            
+            % inherit the framework parameters 
+            obj.domain.dimension      = obj.simulator.dimension;  
+            obj.domain.diffusionConst = obj.simulator.diffusionConst;
+            obj.domain.showDomain     = obj.simulator.showSimulation;  
+            obj.domain.dt             = obj.simulator.dt;
             obj.domain.SetForceParams;
            
         end

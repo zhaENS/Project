@@ -38,7 +38,7 @@ classdef ChainParams<handle
             obj.numBeads               = 32;
             obj.connectedBeads         = [1 10; 1 15; 1 32];
             obj.bendingElasticityForce = false;
-            obj.springForce            = false;
+            obj.springForce            = true;
             obj.minBeadDistance        = 0;
             obj.fixedBeadNum           = [];
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain

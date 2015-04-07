@@ -360,30 +360,35 @@ classdef RouseSimulatorFramework<handle
            % dt should be a global property of the framework
            
             for cIdx = 1:obj.params.simulator.numChains 
-                obj.handles.classes.rouse(cIdx).Step % advance one step for all chains 
                 
-                % Apply domain forces and reflect 
+                % Advance one step (apply object forces)
+                obj.handles.classes.rouse(cIdx).Step 
+                
+                % Apply domain forces 
                 particlePosition = obj.handles.classes.rouse(cIdx).position.cur;                
                 connectivityMap  = obj.handles.classes.rouse(cIdx).connectionMap.map;
-                cp      = obj.handles.classes.rouse(cIdx).params.forceParams;
-                dp      = obj.handles.classes.domain.params.forceParams;
+                cp               = obj.handles.classes.rouse(cIdx).params.forceParams;
+                dp               = obj.handles.classes.domain.params.forceParams;                                
                 particlePosition = obj.handles.classes.domain.ApplyForces(particlePosition,connectivityMap,...                
                                              cp.springConst,dp.diffusionConst,cp.bendingConst,...
                                              dp.LJPotentialWidth,dp.LJPotentialDepth,...
                                              cp.minParticleDistance,cp.fixedParticleNum,obj.params.simulator.dt);
                                          
-                obj.handles.classes.rouse(cIdx).position.cur = particlePosition;                           
-                obj.Reflect(cIdx)              
+                obj.handles.classes.rouse(cIdx).position.cur = particlePosition;
+                
+                % Reflect particles 
+                [~,np]= obj.handles.classes.domain.Reflect(obj.handles.classes.rouse(cIdx).position.prev,...
+                                                           obj.handles.classes.rouse(cIdx).position.cur);
+                obj.handles.classes.rouse(cIdx).position.cur = np;
                 obj.handles.classes.rouse(cIdx).SetPrevBeadPosition();
-
-            end            
-            obj.ShowSimulation            
+            end 
+            
+            obj.ShowSimulation
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
                 obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
-
         end
         
-        function Reflect(obj,chainIdx)
+        function Reflect(obj,chainIdx)% moved to Domain
             % Reflect the beads
 %             dimName  = {'x','y','z'};            
             curPos   = obj.handles.classes.rouse(chainIdx).position.cur; 
@@ -398,8 +403,7 @@ classdef RouseSimulatorFramework<handle
                
                  [~,np] = obj.handles.classes.domain.Reflect(beadPrev,beadCur);
               
-                 obj.handles.classes.rouse(chainIdx).position.cur(outIdx(oIdx),:)  = np;                    
-                         
+                 obj.handles.classes.rouse(chainIdx).position.cur(outIdx(oIdx),:)  = np;
             end  
         end        
         
@@ -517,7 +521,7 @@ classdef RouseSimulatorFramework<handle
 %            cm.x = sum([ccm.x])/obj.params.simulator.numChains;
 %            cm.y = sum([ccm.y])/obj.params.simulator.numChains;
 %            cm.z = sum([ccm.z])/obj.params.simulator.numChains;
-           obj.chainsCenterOfMass = zeros(1,obj.params.chain.dimension);%cm;
+           obj.chainsCenterOfMass = zeros(1,obj.params.chain(1).dimension);%cm;
         end
     end
        
