@@ -39,7 +39,7 @@ classdef Rouse<handle
         
         beadsDist % move to ForceManager
         forces    % should move to ForceManager
-        dimNames = {'x','y','z'}; % should be discarded, move to matrix representation 
+%         dimNames = {'x','y','z'}; % should be discarded, move to matrix representation 
     end
     
     properties (Access=private)

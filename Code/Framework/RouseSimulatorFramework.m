@@ -12,7 +12,8 @@ classdef RouseSimulatorFramework<handle
     %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params     
     %TODO: add SimulationGraphics class
     properties
-        handles        
+        handles     
+        objectManager
         beadDistance
         runSimulation
         params
@@ -22,7 +23,7 @@ classdef RouseSimulatorFramework<handle
     end
     
     properties (Access=private)
-        chainColors 
+%         chainColors 
         chainsCenterOfMass
         recipe = struct('PreSimulationBatchActions','',...
                         'PreRunActions','',...
@@ -40,7 +41,7 @@ classdef RouseSimulatorFramework<handle
            % Set initial parameters
            obj.OrganizeParams(frameworkParams)
            % Create controls
-           obj.CreateControls 
+           obj.CreateControls % move to plotter class
            % Initizlie chains and domain 
            obj.InitializeClasses
            % set recipe files 
@@ -66,46 +67,33 @@ classdef RouseSimulatorFramework<handle
                 obj.params.(varargin{pIdx}) = varargin{pIdx+1};
             end
         end
-                
-        function SetChainParams(obj)%obsolete
-                       % set chain parameters 
-           for cIdx = 1:obj.params.numChains
-               obj.params.chain{cIdx}    = ...
-                         {'dt',obj.params.dt,... 
-                          'numBeads',obj.params.numBeads,...
-                          'dimension',obj.params.dimension,...
-                          'diffusionConst',obj.params.diffusionConst,...   
-                          'minBeadDist',obj.params.minBeadDist,...
-                          'numSteps',obj.params.numSteps,...
-                          'showSimulation',false,...
-                          'debug',false,...
-                          'showBeadsDist',false,...
-                          'showEnd2EndDist',false,...
-                          'fixedBeadNum',obj.params.fixedBeadNum,...
-                          'b',obj.params.b,...
-                          'connectMonomers',obj.params.connectMonomers,...
-                          'bendingElasticityForce',obj.params.bendingElasticityForce,...  
-                          'bendingConst',obj.params.bendingConst,...
-                          'lennardJonesForce',obj.params.lennardJonesForce,...
-                          'springForce',obj.params.springForce,...
-                          'LJPotentialDepth',obj.params.LJPotentialDepth,...
-                          'LJPotentialWidth',obj.params.LJPotentialWidth};                                                                       
-           end 
-        end
-        
+                        
         function InitializeClasses(obj)
             
-            obj.CreateDomain
+            obj.CreateDomain                        
             
-            obj.InitializeChains                                          
+            obj.InitializeChains 
+                        
 %             obj.InitializeDistributionHandler
             obj.InitializeDataRecorder;
             
-            % add SimulationGraphics class
+            obj.InitializeGraphics
         end
         
-        function InitializeChains(obj)% moe to plotter class
-           % set graphics
+        function InitializeGraphics(obj)
+          % initialize graphics 
+          obj.handles.classes.graphical= SimulationFrameworkGraphics(obj);    
+        end
+        
+        function InitializeChains(obj)
+            % Initialize objectManager
+            obj.objectManager = ObjectManager(obj.params.chain);
+            obj.objectManager.InitializeObjects(obj.handles.classes.domain);
+                                                                               
+        end
+        
+        function InitializeChainGraphics(obj)% obsolete -moved to plotter class
+            % set graphics
            l = linspace(0.4,0.9,obj.params.simulator.numChains);
           
            for cIdx = 1:obj.params.simulator.numChains
@@ -116,18 +104,16 @@ classdef RouseSimulatorFramework<handle
                end
                obj.chainColors(cIdx,1:3) = [l(r(1)),l(r(2)),l(r(3))];
            end
-        
-        
-         % Create chains 
-           cParams = obj.params.chain;% should be expanded to include parameters for each chain
+           
+        % Create chains 
+  %            cParams = obj.params.chain;
             for cIdx = 1:obj.params.simulator.numChains
-                % Initialize class
-              
-                obj.handles.classes.rouse(cIdx) = Rouse(cParams(cIdx));
+                % Initialize class              
+%                 obj.handles.classes.rouse(cIdx) = Rouse(cParams(cIdx));
                 % make sure the chain is inside the domain
-                obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
+%                 obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
                 
-                % Initialize chain graphics
+                % Initialize chain graphics 
                 if obj.params.simulator.showSimulation
                 if ~(obj.params.chain(cIdx).springForce) && ~obj.params.chain(cIdx).bendingElasticityForce
                     lineStyle = 'none';
@@ -135,11 +121,12 @@ classdef RouseSimulatorFramework<handle
                     lineStyle = '-';
                 end
                 
-                p = obj.handles.classes.rouse(cIdx).position.prev;
+                [p,~] = obj.objectManager.GetPosition(cIdx);% obj.handles.classes.rouse(cIdx).position.prev;
+                
                 obj.handles.graphical.chain(cIdx).beads = line(...
-                    'XData',p(:,1),...                                   
-                    'YData',p(:,2),...
-                    'ZData',p(:,3),...
+                    'XData',p{:,1},...                                   
+                    'YData',p{:,2},...
+                    'ZData',p{:,3},...
                     'Marker','o',...
                     'LineStyle',lineStyle,...
                     'Color','w',...
@@ -152,9 +139,12 @@ classdef RouseSimulatorFramework<handle
                 
                 %TODO: fix such that the if loop is discarded
                 % Plot connectors
-                if obj.params.chain(cIdx).springForce || obj.params.chain(cIdx).bendingElasticityForce || obj.params.domain.lennardJonesForce
+                if any([obj.params.chain(cIdx).springForce,...
+                        obj.params.chain(cIdx).bendingElasticityForce,...
+                        obj.params.domain.lennardJonesForce])
                                                                         
-                   cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
+                   cm = obj.objectManager.GetConnectionMap(cIdx);% obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
+                   cm = cm{cIdx}.indices.in.list;
                     for mIdx = 1:size(cm,1);
                         lineData.x = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
                                       obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
@@ -173,8 +163,9 @@ classdef RouseSimulatorFramework<handle
 %                 end
                 end
                 end
-            end                                 
-           % get chains center of mass- for the plotting 
+            end 
+            
+            % Get chains center of mass for plotting 
            obj.GetChainsCenterOfMass 
         end
         
@@ -217,7 +208,7 @@ classdef RouseSimulatorFramework<handle
             
             eval(obj.recipe.PreRunActions);
             
-            obj.handles.classes.dataRecorder.NewSimulation(obj.handles.classes.rouse,obj.params);                        
+            obj.handles.classes.dataRecorder.NewSimulation(obj.objectManager.handles.chain,obj.params);%(obj.handles.classes.rouse,obj.params);                        
             obj.handles.classes.dataRecorder.SetSimulationStartTime;
             obj.simulationData(obj.batchRound,obj.simulationRound).step     = 1;
             obj.simulationData(obj.batchRound,obj.simulationRound).stepTime = 0;
@@ -334,14 +325,13 @@ classdef RouseSimulatorFramework<handle
              
              obj.handles.classes.domain  = DomainHandler(obj.params.domain);
              
-            if obj.params.domain.showDomain
-                % move these commands to future Plotter class               
-               obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
-               obj.handles.classes.domain.ConstructDomain;
-               set(obj.handles.graphical.mainAxes,'NextPlot','Add')                 
-               set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
-            end
-
+%             if obj.params.domain.showDomain
+%                 % move these commands to future Plotter class               
+%                obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
+%                obj.handles.classes.domain.ConstructDomain;
+%                set(obj.handles.graphical.mainAxes,'NextPlot','Add')                 
+%                set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
+%             end
         end
         
         function StartStop(obj,buttonHandle,varargin)% move to Plotter Class
@@ -362,11 +352,14 @@ classdef RouseSimulatorFramework<handle
             for cIdx = 1:obj.params.simulator.numChains 
                 
                 % Advance one step (apply object forces)
-                obj.handles.classes.rouse(cIdx).Step 
-                
+%                 obj.handles.classes.rouse(cIdx).Step 
+                obj.objectManager.handles.chain(cIdx).Step
                 % Apply domain forces 
-                particlePosition = obj.handles.classes.rouse(cIdx).position.cur;                
-                connectivityMap  = obj.handles.classes.rouse(cIdx).connectionMap.map;
+                [~, particlePosition] = obj.objectManager.GetPosition(cIdx);
+%                 particlePosition = obj.handles.classes.rouse(cIdx).position.cur;             
+                connectivityMap   = obj.objectManager.GetConnectionMap(cIdx);
+                connectivityMap  = connectivityMap{1}.map;
+%                 connectivityMap  = obj.handles.classes.rouse(cIdx).connectionMap.map;
                 cp               = obj.handles.classes.rouse(cIdx).params.forceParams;
                 dp               = obj.handles.classes.domain.params.forceParams;                                
                 particlePosition = obj.handles.classes.domain.ApplyForces(particlePosition,connectivityMap,...                
@@ -382,8 +375,8 @@ classdef RouseSimulatorFramework<handle
                 obj.handles.classes.rouse(cIdx).position.cur = np;
                 obj.handles.classes.rouse(cIdx).SetPrevBeadPosition();
             end 
-            
-            obj.ShowSimulation
+            obj.handles.classes.graphical.ShowSimulation
+%             obj.ShowSimulation
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
                 obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
         end
