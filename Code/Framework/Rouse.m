@@ -22,40 +22,26 @@ classdef Rouse<handle
     
     % The function G_n(t) is the random fluctuation for the bead n, it is a
     % Gaussian with zero mean and 2*k*T/s std
-    properties
-        params
+    properties 
+%         params
         handles
-        position                       
-        step 
-        time
-        simulationTime
-        distributions% should e removed  
+        position
         connectionMap
-
-        runSimulation
         mobilityMatrices
-        
-        relaxationTime %[sec] relaxation time of the first mode
-        
-        beadsDist % move to ForceManager
-        forces    % should move to ForceManager
-%         dimNames = {'x','y','z'}; % should be discarded, move to matrix representation 
+        beadsDist
+        relaxationTime %[sec] relaxation time of the first mode        
     end
     
-    properties (Access=private)
-        noise
-        noiseIndex = 0;
-        numNoisePoints
+    properties (SetObservable)
+        params
     end
-    
-    events        
-    end
-    
+   
     methods
         function obj = Rouse(rouseParams)
-            % class constructor
-            obj.runSimulation = true;
+            % Class constructor
+
             obj.params        = rouseParams;
+            
             % Adjust input parameters to match the structure expected in
             % the class
             obj.SetInputParams;
@@ -78,16 +64,11 @@ classdef Rouse<handle
         end
         
         function InitializeRouseStruct(obj)
-            
-            obj.time(1)                         = 0;
-            obj.step                            = 1;
-            obj.simulationTime.total            = 0; % in seconds 
-            obj.simulationTime.meanStepTime     = 0; % in seconds
-            
+            % Initialize positions
             obj.position.cur             = zeros(obj.params.numBeads,3); 
             obj.position.prev            = zeros(obj.params.numBeads,3);
 
-            obj.SetBeadConnectionMap
+            obj.InitializeBeadConnectionMap;
             obj.SetInitialChainPosition; % should be moved out of the initialization process
 
         end
@@ -95,21 +76,6 @@ classdef Rouse<handle
         function InitializeForceManger(obj)
         % Add forceManager to affect objects in the domain
             obj.handles.classes.forceManager  = ForceManager(obj.params.forceParams); 
-%             % Update the parameters for the force manager
-%             obj.handles.classes.forceManager.springForce            = obj.params.springForce;
-%             obj.handles.classes.forceManager.lennardJonesForce      = obj.params.lennardJonesForce;
-%             obj.handles.classes.forceManager.diffusionForce         = obj.params.diffusionForce;
-%             obj.handles.classes.forceManager.bendingElasticityForce = obj.params.bendingElasticityForce;
-%             
-%             % Pass parameters to the force manager assigned to the chain 
-%             obj.handles.classes.forceManager.springConst         = obj.params.springConst;
-%             obj.handles.classes.forceManager.diffusionConst      = obj.params.diffusionConst;
-%             obj.handles.classes.forceManager.LJPotentialWidth    = obj.params.LJPotentialWidth;
-%             obj.handles.classes.forceManager.LJPotentialDepth    = obj.params.LJPotentialDepth;
-%             obj.handles.classes.forceManager.bendingConst        = obj.params.bendingConst;
-%             obj.handles.classes.forceManager.minParticleDistance = obj.params.minBeadDistance;
-%             obj.handles.classes.forceManager.fixedParticleNum    = obj.params.fixedBeadNum;
-%             obj.handles.classes.forceManager.dt                  = obj.params.dt;
         end
         
         function CalculateRelaxationTime(obj)
@@ -121,7 +87,7 @@ classdef Rouse<handle
             obj.relaxationTime = b^2/(12*d^2 *sin(p*pi/(2*N))^2);%[sec]
         end
         
-        function SetBeadConnectionMap(obj)
+        function InitializeBeadConnectionMap(obj,varargin)
             % Set the default linear connection 
             % define the Rouse matrix 
             obj.mobilityMatrices.rouse = RouseMatrix(obj.params.numBeads);                        
@@ -151,6 +117,7 @@ classdef Rouse<handle
            end
            
            obj.connectionMap.map                = cMap;
+                      
            [obj.connectionMap.indices.in.map]   = find(cMap); % linear indices of positions of monomer pairs connected. 
            [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(cMap));
            
@@ -241,7 +208,17 @@ classdef Rouse<handle
 %            obj.connectionMap.indices.uniqueBeadTripletsLinear = sub2ind([obj.params.numBeads,numel(n)], k(:,1),k(:,2));
             
         end        
-                
+         
+        function UpdateLinearConnectivityMap(obj)
+            % activated upon changing parameres of connectivityMap
+          
+             cMap                               = obj.connectionMap.map;
+             [obj.connectionMap.indices.in.map] = find(cMap); % linear indices of positions of monomer pairs connected. 
+             [inList(:,1), inList(:,2)]         = find(triu(cMap));
+             obj.connectionMap.indices.in.list  = inList;
+           
+        end
+        
         function [v,lambda] = GetRouseEig(obj)
             % Get the rouse matrix eigen values and eigen vectors
             v      = zeros(obj.params.numBeads);
@@ -270,103 +247,32 @@ classdef Rouse<handle
             % the domain, else it is randomly placed.
             if exist('domainHandler','var')
            
-                % The bead positions
-%                 obj.position.prev = zeros(1,3);
-%                 obj.position.prev.x(1,1) = 0;% the first bead is placed at the origin
-%                 obj.position.prev.y(1,1) = 0;% the first bead is placed at the origin
-%                 obj.position.prev.z(1,1) = 0;% the first bead is placed at the origin
-               
+                % The bead positions               
                 for bIdx = 2:obj.params.numBeads
                     inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:));     
                     tempPos  = obj.position.prev(bIdx,:);
                    while ~inDomain 
                      x = obj.params.b*randc(1,obj.params.dimension);
-%                          n = sqrt(sum(x.^2));
                        tempPos = obj.position.prev(bIdx-1,:)+x;
-%                          for dIdx = 1:obj.params.dimension
-%                           obj.position.prev.(obj.dimNames{dIdx})(bIdx) = obj.position.prev.(obj.dimNames{dIdx})(bIdx-1)+x(dIdx);
-%                          end
-%                      a.x = obj.position.prev.x(bIdx);
-%                      a.y = obj.position.prev.y(bIdx);
-%                      a.z = obj.position.prev.z(bIdx);
-                     inDomain = domainHandler.InDomain(tempPos);
+                       inDomain = domainHandler.InDomain(tempPos);
                    end   
                     obj.position.prev(bIdx,:)= tempPos;
                end
             
-            else
-                
-%             for dIdx = 1:obj.params.dimension
+            else                
                 % The bead positions
-%                 obj.position.prev.(obj.dimNames{dIdx})(1) = 0;
                r = randn(obj.params.numBeads-1,3);
                obj.position.prev = [obj.position.prev(1,:); cumsum(r)];
-%                 for bIdx = 2:obj.params.numBeads
-%                  obj.position.prev.(obj.dimNames{dIdx})(bIdx) = ...
-%                     obj.position.prev.(obj.dimNames{dIdx})(bIdx-1)+...
-%                     randn(1)*((obj.params.b)^(1/obj.params.dimension));
-%                 end                
             end
             
-%             obj.position.prev = obj.position.cur;
+            obj.position.cur = obj.position.prev;
         end                        
-                
-        function Next(obj,varargin)% to be removed
-            % Next simulation step 
-%                 tic
-                % Update simulation time and step 
-%                 obj.time = obj.time + obj.params.dt;
-                obj.step = obj.step + 1;
-                obj.GetNewBeadsPosition; 
-%                 obj.GetSprings; % set previous spring position as the current spring position
-%                 obj.GetForces;  % calculate he forces in the current position
-%                 endRoundTime = toc;
-%                 obj.simulationTime.total        = obj.simulationTime.total+endRoundTime;
-%                 obj.simulationTime.meanStepTime = (obj.simulationTime.meanStepTime*(obj.step-1)+endRoundTime)/obj.step;% the mean round time 
-        end              
-        
-        function Run(obj,varargin)% unused
-           
-            while obj.runSimulation
-               
-                obj.Next                
-                obj.runSimulation = obj.runSimulation & obj.step<obj.params.numSteps;
-                
-                continue
-            end
-        end
-                
-        function GetNewBeadsPosition(obj)% to be removed
-            % Solve the rouse system, given the previous location of the chain system
-            % parameters
-            % solve the system of equations
-%             notify(obj,'getForce');
-            obj.step = obj.step + 1;
-            prevPos      = [obj.position.prev.x,obj.position.prev.y,obj.position.prev.z]; 
-%             ljForce      = [obj.forces.lennardJones.x, obj.forces.lennardJones.y, obj.forces.lennardJones.z];
-%             bendingForce = [obj.forces.bending.x, obj.forces.bending.y,obj.forces.bending.z];
-            
-%             noiseForce   = [obj.forces.noise.x, obj.forces.noise.y,obj.forces.noise.z];
-            p = obj.params;
-            
-            % Apply forces on the beads to get the new bead position
-            newPos       = obj.handles.classes.forceManager.Apply(prevPos,obj.connectionMap.map,p.dt,...
-                           p.diffusionConst,p.springConst,p.LJPotentialWidth,p.LJPotentialDepth,p.bendingConst,...
-                           p.minBeadDist,p.fixedBeadNum);                             
-
-             obj.position.cur.x = newPos(:,1);
-             obj.position.cur.y = newPos(:,2);
-             obj.position.cur.z = newPos(:,3);            
-        end
-        
-        function Step(obj)% experimental 
-            % Solve the rouse system, given the previous location of the chain system
-            % parameters
-            obj.step = obj.step + 1;% advance the counter one step             
+                                        
+        function Step(obj)
             
             % Apply forces on the beads to get the new bead position    
             forceParams = obj.params.forceParams;
-            newPos   = obj.handles.classes.forceManager.Apply(obj.position.prev,obj.connectionMap.map,...                                            
+            newPos   = obj.handles.classes.forceManager.Apply(obj.position.cur,obj.connectionMap.map,...                                            
                                              forceParams.springConst,forceParams.diffusionConst,forceParams.bendingConst,...
                                              forceParams.LJPotentialWidth,forceParams.LJPotentialDepth,...
                                              forceParams.minParticleDistance,forceParams.fixedParticleNum,forceParams.dt);
@@ -375,17 +281,56 @@ classdef Rouse<handle
             
         end
         
-        function SetPrevBeadPosition(obj,pos)% externaly 
+        function SetPrevBeadPosition(obj,pos)% obsolete, externaly used
              % Save previous position as the currentPosition
              if ~exist('pos','var')
                obj.position.prev = obj.position.cur; 
              else
                obj.position.prev = pos;
-             end
-            
-              
+             end                          
         end                                   
         
+        function ConnectBeads(obj,bead1,bead2)
+            % Check if the pair is already in the list 
+            flag = false;
+            if isempty(obj.params.connectedBeads)
+                flag = true;
+            else
+                % check if the pair is already on the list 
+               b = any(all(bsxfun(@eq,[bead1,bead2],[obj.params.connectedBeads; fliplr(obj.params.connectedBeads)]),2));
+            if ~b
+              flag = true;
+            end             
+            end
+            
+            if flag 
+                % Add the pair entry to the end of the connectivity list 
+                obj.params.connectedBeads(end+1,:) = [bead1 bead2];
+                obj.connectionMap.map(bead1,bead2) = 1;
+                obj.connectionMap.map(bead2,bead1) = 1;
+                
+                % Update linear connectivity list
+                obj.UpdateLinearConnectivityMap
+            end
+        end
+        
+        function DisconnectBeads(obj,bead1,bead2)
+            
+            % zero out the entries in the connectivity matrix 
+            obj.connectionMap.map(bead1,bead2) = 0;
+            obj.connectionMap.map(bead2,bead1) = 0;
+             
+            if ~isempty(obj.params.connectedBeads)
+                
+            % Remove the pair entry in the list 
+            b1 = all(bsxfun(@eq,[bead1,bead2],[obj.params.connectedBeads]),2);
+            b2 = all(bsxfun(@eq,[bead2,bead1],[obj.params.connectedBeads]),2);
+            obj.params.connectedBeads((b1|b2),:) =[]; 
+            
+            % Update linear indices
+            obj.UpdateLinearConnectivityMap
+            end
+        end
     end
         
 end

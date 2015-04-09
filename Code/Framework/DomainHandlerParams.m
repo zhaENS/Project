@@ -23,8 +23,8 @@ classdef DomainHandlerParams<handle
     
     methods
         function obj = DomainHandlerParams
-            obj.domainShape            = 'none';
-            obj.domainWidth            = 10;
+            obj.domainShape            = 'sphere';
+            obj.domainWidth            = 20;
             obj.domainHeight           = 10;
             obj.domainCenter           = [0 0 0];
             obj.showDomain             = true;
@@ -32,7 +32,7 @@ classdef DomainHandlerParams<handle
             % forces of the domain 
             obj.LJPotentialWidth       = 0.5;
             obj.LJPotentialDepth       = 0.2;
-            obj.diffusionConst         = 1;   % assigned by framework
+            obj.diffusionConst         = 0.1;   % assigned by framework
             obj.lennardJonesForce      = false;
             obj.diffusionForce         = true;            
             obj.dt                     = 0;   % assigned by Framework

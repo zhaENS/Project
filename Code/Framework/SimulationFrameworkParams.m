@@ -27,7 +27,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
             obj.simulator.numSteps             = Inf;   % for inf place inf
             obj.simulator.dt                   = 1e-2;  % time step 
-            obj.simulator.numChains            = 5;   
+            obj.simulator.numChains            = 1;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
@@ -35,7 +35,10 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.notifyCycleLength    = 30;    % number of simulation cycles after which an email is sent 
             obj.simulator.recipeFileName       = 'debugRecipe';
             obj.simulator.recipesFolder        = ''; 
-            obj.simulator.diffusionConst       = 1.1;
+            % Control domain forces
+            obj.simulator.diffusionConst       = 0.1;
+            obj.simulator.LJPotentialWidth     = 0.3;
+            obj.simulator.LJPotentialDepth     = 0.2;
         end
         
         function SetChainParams(obj)%TODO: change force params accordingly
@@ -54,10 +57,12 @@ classdef SimulationFrameworkParams<handle
             obj.domain = DomainHandlerParams;
             
             % inherit the framework parameters 
-            obj.domain.dimension      = obj.simulator.dimension;  
-            obj.domain.diffusionConst = obj.simulator.diffusionConst;
-            obj.domain.showDomain     = obj.simulator.showSimulation;  
-            obj.domain.dt             = obj.simulator.dt;
+            obj.domain.dimension        = obj.simulator.dimension;  
+            obj.domain.diffusionConst   = obj.simulator.diffusionConst;
+            obj.domain.showDomain       = obj.simulator.showSimulation;  
+            obj.domain.dt               = obj.simulator.dt;
+            obj.domain.LJPotentialWidth = obj.simulator.LJPotentialWidth;
+            obj.domain.LJPotentialDepth = obj.simulator.LJPotentialDepth;
             obj.domain.SetForceParams;
            
         end

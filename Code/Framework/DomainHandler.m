@@ -17,7 +17,6 @@ classdef DomainHandler<handle
              % class constructor 
             obj.params = domainParams;
                       
-%             obj.SetInputParams(varargin{:})
             obj.handles.graphical.domain   = [];
             obj.handles.graphical.light    = [];  
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
@@ -51,105 +50,7 @@ classdef DomainHandler<handle
             end
             
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
-        end
-        
-        function CreateControls(obj)
-            if obj.params.showDomain
-                obj.handles.graphical.mainFigure = figure('Tag','mainFigure',...
-                    'Units','normalized');
-
-                obj.handles.graphical.mainAxes = axes('Parent',obj.handles.graphical.mainFigure,...
-                    'Tag','mainAxes',...
-                    'Units','normalized',...
-                    'NextPlot','ReplaceChildren');
-                daspect([1 1 1])
-            end
-        end
-        
-        function ConstructDomain(obj)
-            if isempty(obj.handles.graphical.mainAxes)
-                 obj.CreateControls
-            else
-%                 obj.handles.graphical.mainAxes = axesHandle;
-            end
-            
-            if strcmpi(obj.params.domainShape,'sphere')
-                [x,y,z] = sphere(20);
-                
-                obj.points.x = x*obj.params.domainWidth;
-                obj.points.y = y*obj.params.domainWidth;
-                obj.points.z = z*obj.params.domainWidth;
-                
-                if obj.params.dimension ==1
-                    obj.points.y = zeros(size(y));
-                    obj.points.z = zeros(size(z));
-                elseif obj.params.dimension==2 
-                    obj.points.z = zeros(size(z));
-                end
-            elseif strcmpi(obj.params.domainShape,'cylinder')
-                % the cylinder z axis is pointing towatd [0 0 1];
-                [x,y,z]      = cylinder(obj.params.domainWidth,20);
-                obj.points.x = repmat(x,10,1);
-                obj.points.y = repmat(y,10,1);
-                obj.points.z = repmat(linspace(-obj.params.domainHeight/2,obj.params.domainHeight/2,...
-                                    size(obj.points.x,1))',1,size(obj.points.x,2));  
-                
-               if obj.params.dimension ==1
-                    obj.points.y = zeros(size(y));
-                    obj.points.z = zeros(size(z));
-                elseif obj.params.dimension==2 
-                    obj.points.z = zeros(size(z));
-                end
-            elseif strcmpi(obj.params.domainShape,'twoPlates')
-                   [obj.points.z,obj.points.y] = meshgrid(-obj.params.domainHeight:obj.params.domainHeight,...
-                                                          -obj.params.domainHeight:obj.params.domainHeight,50);
-                   obj.points.x    = obj.params.domainWidth*ones(size(obj.points.z));
-                   obj.handles.graphical.mesh = mesh(obj.points.x,obj.points.y,obj.points.z,...
-                                                     'FaceAlpha',0.3,...
-                                                     'FaceColor',[0.7 0.9 0.2],...
-                                                     'EdgeColor','none',...
-                                                     'FaceLighting','phong',...
-                                                     'Parent',obj.handles.graphical.mainAxes,...
-                                                     'Tag','domain',...
-                                                     'HandleVisibility','on',...
-                                                     'Visible','off');
-                 
-                 [obj.points.z,obj.points.y] = meshgrid(-obj.params.domainHeight:obj.params.domainHeight,...
-                                                         -obj.params.domainHeight:obj.params.domainHeight,50);
-                  obj.points.x               = -obj.params.domainWidth*ones(size(obj.points.z));
-                  
-            elseif strcmpi(obj.params.domainShape,'none')
-                    obj.points.x = [];
-                    obj.points.y = [];
-                    obj.points.z = [];
-            else 
-                error('unsupported domain type');
-            end
-            
-            delete(obj.handles.graphical.domain);
-            delete(obj.handles.graphical.light);
-            
-             m = mesh(obj.points.x,obj.points.y,obj.points.z,...
-                     'FaceAlpha',0.3,...
-                     'FaceColor',[0.7 0.9 0.2],...
-                     'EdgeColor','none',...
-                     'FaceLighting','phong',...
-                     'Parent',obj.handles.graphical.mainAxes,...
-                     'Tag','domain',...
-                     'HandleVisibility','on',...
-                     'Visible','off');
-             
-            l= light('Position',[1 1 1],...
-                    'Style','local',...
-                    'Tag','light',...
-                    'Parent',obj.handles.graphical.mainAxes,...
-                    'HandleVisibility','on',...
-                    'Visible','off');  
-             
-            obj.handles.graphical.domain      = m;
-            obj.handles.graphical.domainLight = l;
-            
-        end
+        end                
         
         function newParticlePosition  = ApplyForces(obj,particlePosition,connectivityMap,...
                                              springConst,diffusionConst,bendingConst,...
@@ -163,14 +64,7 @@ classdef DomainHandler<handle
                                              LJPotentialWidth,LJPotentialDepth,...
                                              minParticleDistance,fixedParticleNum,dt);
                            
-        end
-        
-        function ShowDomain(obj)
-              f = findobj(get(obj.handles.graphical.mainAxes,'Children'),'Tag','domain');
-              set(f,'Visible','on')
-              l = findobj(get(obj.handles.graphical.mainAxes,'Children'),'Tag','light');
-              set(l,'Visible','on');                        
-        end
+        end        
         
         function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2)%TODO: fix reflection for all domain shapes
               % Reflect a particle previously at pos1 and currently at

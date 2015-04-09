@@ -1,11 +1,14 @@
 classdef SimulationFrameworkGraphics<handle
-    properties        
+    % This class controls the graphical features of the simulation
+    % framework
+    % TODO: graphics should operate offline after simulations are done
+    properties
         runSimulation
         handles
         mainAxes        
         chainColors
         params % holds the framework parameters
-        chain = struct('bead',[],'connectors',[])
+%         chain = struct('bead',[],'connectors',[])
     end
     
     methods
@@ -16,16 +19,14 @@ classdef SimulationFrameworkGraphics<handle
         
         function CreateControls(obj)
            if obj.params.simulator.showSimulation
-
-               
-               
+             % Main figure          
             obj.handles.graphical.mainFigure = figure('Units','normalized',...
                                                       'Tag','mainFigure',...
                                                       'ToolBar','none',...
                                                       'MenuBar','none',...                                                     
                                                       'BusyAction','queue');
                                                       
-                                                  
+            % Main axes                                      
             obj.handles.graphical.mainAxes  = axes('Units','normalized',...
                                                    'Parent',obj.handles.graphical.mainFigure,...
                                                    'NextPlot','ReplaceChildren',...
@@ -33,13 +34,8 @@ classdef SimulationFrameworkGraphics<handle
                                                    'Box','on',...
                                                    'XTick',[],...
                                                    'YTick',[],...
-                                                   'ZTick',[]);
-             % Show domain 
-               obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
-               obj.handles.classes.domain.ConstructDomain;
-
-               
-           cameratoolbar
+                                                   'ZTick',[]);      
+         
            
            obj.handles.graphical.stop   = uicontrol('Units','normalized',...
                'Parent',obj.handles.graphical.mainFigure,...
@@ -53,152 +49,254 @@ classdef SimulationFrameworkGraphics<handle
                'String','Next',...
                'Tag','nextButton',...
                'Position',[0.15 0.05, 0.1, 0.05],...
-               'Callback',@Step);
-           
-                obj.params.domain.parentAxes = obj.handles.graphical.mainAxes;   
-              
-
-          
+               'Callback',@obj.Step);
+                           
+                % show domain  
+                obj.ConstructDomain;                
+                
+                % show chains 
+                obj.InitializeChainGraphics
+                
+                cameratoolbar
             end
         end
         
-        function ShowSimulation(obj)% move to Plotter class
+        function ConstructDomain(obj)
+            
+            if strcmpi(obj.params.domain.domainShape,'sphere')
+                [x,y,z] = sphere(20);
+                
+                obj.handles.graphical.domain.points.x = x*obj.params.domain.domainWidth;
+                obj.handles.graphical.domain.points.y = y*obj.params.domain.domainWidth;
+                obj.handles.graphical.domain.points.z = z*obj.params.domain.domainWidth;
+                
+                if obj.params.domain.dimension ==1
+                    obj.handles.graphical.domain.points.y = zeros(size(y));
+                    obj.handles.graphical.domain.points.z = zeros(size(z));
+                elseif obj.params.domain.dimension==2 
+                    obj.handles.graphical.domain.points.z = zeros(size(z));
+                end
+            elseif strcmpi(obj.params.domain.domainShape,'cylinder')
+                % the cylinder z axis is pointing towatd [0 0 1];
+                [x,y,z]      = cylinder(obj.params.domain.domainWidth,20);
+                obj.handles.graphical.domain.points.x = repmat(x,10,1);
+                obj.handles.graphical.domain.points.y = repmat(y,10,1);
+                obj.handles.graphical.domain.points.z = repmat(linspace(-obj.params.domain.domainHeight/2,obj.params.domain.domainHeight/2,...
+                                    size(obj.handles.graphical.domain.points.x,1))',1,size(obj.handles.graphical.domain.points.x,2));  
+                
+               if obj.params.domain.dimension ==1
+                    obj.handles.graphical.domain.points.y = zeros(size(y));
+                    obj.handles.graphical.domain.points.z = zeros(size(z));
+                elseif obj.params.dimension==2 
+                    obj.handles.graphical.domain.points.z = zeros(size(z));
+                end
+            elseif strcmpi(obj.params.domain.domainShape,'twoPlates')
+                   [obj.handles.graphical.domain.points.z,obj.handles.graphical.domain.points.y] = ...
+                          meshgrid(-obj.params.domain.domainHeight:obj.params.domainHeight,...
+                           -obj.params.domain.domainHeight:obj.params.domain.domainHeight,50);
+                       
+                   obj.handles.graphical.domain.points.x    = obj.params.domain.domainWidth*ones(size(obj.handles.graphical.domain.points.z));
+                   obj.handles.graphical.domain.mesh = mesh(obj.handles.graphical.domain.points.x,...
+                                                            obj.handles.graphical.domain.points.y,...
+                                                            obj.handles.graphical.domain.points.z,...
+                                                             'FaceAlpha',0.3,...
+                                                             'FaceColor',[0.7 0.9 0.2],...
+                                                             'EdgeColor','none',...
+                                                             'FaceLighting','phong',...
+                                                             'Parent',obj.handles.graphical.mainAxes,...
+                                                             'Tag','domain',...
+                                                             'HandleVisibility','on',...
+                                                             'Visible','on');
+                 
+                 [obj.handles.graphical.domain.points.z,obj.handles.graphical.domain.points.y] = ...
+                                             meshgrid(-obj.params.domainHeight:obj.params.domainHeight,...
+                                                -obj.params.domain.domainHeight:obj.params.domainHeight,50);
+                  obj.handles.graphical.domain.points.x  = -obj.params.domain.domainWidth*ones(size(obj.handles.graphical.domain.points.z));
+                  
+            elseif strcmpi(obj.params.domain.domainShape,'none')
+                    obj.handles.graphical.domain.points.x = [];
+                    obj.handles.graphical.domain.points.y = [];
+                    obj.handles.graphical.domain.points.z = [];
+            else 
+                error('unsupported domain type');
+            end
+            
+%             delete(obj.handles.graphical.domain);
+%             delete(obj.handles.graphical.light);
+            
+             m = mesh(obj.handles.graphical.domain.points.x,...
+                     obj.handles.graphical.domain.points.y,...
+                     obj.handles.graphical.domain.points.z,...
+                     'FaceAlpha',0.3,...
+                     'FaceColor',[0.7 0.9 0.2],...
+                     'EdgeColor','none',...
+                     'FaceLighting','phong',...
+                     'Parent',obj.handles.graphical.mainAxes,...
+                     'Tag','domain',...
+                     'HandleVisibility','on',...
+                     'Visible','on');
+             
+            l= light('Position',[1 1 1],...
+                    'Style','local',...
+                    'Tag','light',...
+                    'Parent',obj.handles.graphical.mainAxes,...
+                    'HandleVisibility','on',...
+                    'Visible','on');  
+             
+            obj.handles.graphical.domain      = m;
+            obj.handles.graphical.domainLight = l;
+            
+      end       
+        
+        function ShowSimulation(obj)
          if obj.params.simulator.showSimulation 
-            obj.ShowDomain
-            obj.PlotChains 
+            obj.UpdateChainPosition
          end
         end
                 
-        function PlotChains(obj)% move to Plotter class
-%             if obj.params.simulator.plotChains
-                for cIdx = 1:obj.params.simulator.numChains
-                    p = obj.handles.classes.rouse(cIdx).position.cur;
-                    set(obj.handles.graphical.chain(cIdx).beads,...
-                        'XData',p(:,1),...
-                        'YData',p(:,2),...
-                        'ZData',p(:,3),...
+        function UpdateChainPosition(obj)
+            
+                numObjects      = obj.handles.framework.objectManager.numObjects;
+                [~, curPos]     = obj.handles.framework.objectManager.GetPosition(1:numObjects);
+                chainParams     = obj.handles.framework.objectManager.GetObjectParameters(1:numObjects);
+                
+                for oIdx = 1:numObjects;
+                    c = curPos{oIdx};
+                    % Plot beads
+                    set(obj.handles.graphical.chain(oIdx).beads,...
+                        'XData',c(:,1),...
+                        'YData',c(:,2),...
+                        'ZData',c(:,3),...
                         'Visible','on');
                   
-                    % plot the connectors between beads ( plot only non
-                    % trivial connections)
-%                     if obj.params.chain.springForce || obj.params.chain.bendingElasticityForce || obj.params.chain.lennardJonesForce
-                        % Plot connectors for non trivial (non consecutives
-                        % beads) connections 
-%                     cm = obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
-%                     for mIdx = 1:size(cm,1);
-%                         lineData.x = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
-%                         lineData.y = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
-%                         lineData.z = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];  
-%                         set(obj.handles.graphical.chain(cIdx).connectors(mIdx),...
-%                             'XData',lineData.x,...
-%                             'YData',lineData.y,...
-%                             'ZData',lineData.z,...
-%                             'Color','w',...
-%                             'Tag','connector',...
-%                             'Visible','on');     
-%                     end                    
-                    
-%                     end
-                    
+                    % Show connectors between beads 
+                        cm = chainParams{oIdx}.connectedBeads;
+                     if ~isempty(cm)
+                        set(obj.handles.graphical.chain(oIdx).connectors,...
+                                'XData',[c(cm(:,1),1);c(cm(:,2),1)],...
+                                'YData',[c(cm(:,1),2);c(cm(:,2),2)],...
+                                'ZData',[c(cm(:,1),3);c(cm(:,2),3)],...
+                                'Color','y',...
+                                'LineWidth',4,...
+                                'Tag','connector',...
+                                'Visible','on');  
+                     else
+                       % Create a phantom connector, a place holder for future
+                       % connections                     
+                     set(obj.handles.graphical.chain(oIdx).connectors,...
+                               'XData',[0;0],...
+                               'YData',[0;0],...
+                               'ZData',[0;0],...
+                               'Tag','connector',...
+                               'Color','w',...
+                               'Visible','off');
+                    end                    
                 end
-                drawnow
-
+            drawnow
         end
         
-        function ShowDomain(obj)% move to Plotter class
-%             if obj.params.simulator.showDomain
-                obj.handles.classes.domain.ShowDomain()
-%                 obj.SetAxesLimits       
-%             end
-        end
-        
-        function Step(obj)
+        function Step(obj,varargin)
             obj.handles.framework.Step
         end
         
-        function StartStop(obj,buttonHandle,varargin)% move to Plotter Class
-            if obj.runSimulation
+        function StartStop(obj,buttonHandle,varargin)
+            if obj.handles.framework.runSimulation 
                 set(buttonHandle,'String','Continue')
-                obj.runSimulation = false;
-            else
+                obj.handles.framework.runSimulation = false;
+            else 
                 set(buttonHandle,'String','Stop')
-                obj.runSimulation = true;
-                obj.fhandles.framework.Run
+                obj.handles.framework.runSimulation = true;
+                obj.handles.framework.Run
             end
         end
         
-        function InitializeChainGraphics(obj)
+        function InitializeChainGraphics(obj)%TODO: discard the matrix representation for connectivity
             % set graphics
+           numObj           = obj.handles.framework.objectManager.numObjects;
+           [prevPos,curPos] = obj.handles.framework.objectManager.GetPosition(1:numObj);
+           objParams        = obj.handles.framework.objectManager.GetObjectParameters(1:numObj);
+           obj.handles.graphical.chain= struct('beads',[],'connectors',[]);
+           
+           % choose chain colors 
            l = linspace(0.4,0.9,obj.params.simulator.numChains);
           
-           for cIdx = 1:obj.params.simulator.numChains
+           for oIdx = 1:numObj
                r = zeros(1,3);
                for rIdx = 1:3
                 k       = randperm(obj.params.simulator.numChains);
                 r(rIdx) = k(1);
                end
-               obj.chainColors(cIdx,1:3) = [l(r(1)),l(r(2)),l(r(3))];
+               obj.chainColors(oIdx,1:3) = [l(r(1)),l(r(2)),l(r(3))];
            end
            
         % Create chains 
-  %            cParams = obj.params.chain;
-            for cIdx = 1:obj.params.simulator.numChains
-                % Initialize class              
-%                 obj.handles.classes.rouse(cIdx) = Rouse(cParams(cIdx));
-                % make sure the chain is inside the domain
-%                 obj.handles.classes.rouse(cIdx).SetInitialChainPosition(obj.handles.classes.domain);
+            for oIdx = 1:numObj
                 
-                % Initialize chain graphics 
-                if obj.params.simulator.showSimulation
-                if ~(obj.params.chain(cIdx).springForce) && ~obj.params.chain(cIdx).bendingElasticityForce
+                if ~(objParams{oIdx}.springForce) && ~objParams{oIdx}.bendingElasticityForce
                     lineStyle = 'none';
                 else
                     lineStyle = '-';
                 end
                 
-                [p,~] = obj.objectManager.GetPosition(cIdx);% obj.handles.classes.rouse(cIdx).position.prev;
-                
-                obj.handles.graphical.chain(cIdx).beads = line(...
-                    'XData',p{:,1},...                                   
-                    'YData',p{:,2},...
-                    'ZData',p{:,3},...
+                % Plot beads
+                p     = prevPos{oIdx};
+                c     = curPos{oIdx};
+                obj.handles.graphical.chain(oIdx).beads = line(...
+                    'XData',p(:,1),...                                   
+                    'YData',p(:,2),...
+                    'ZData',p(:,3),...
                     'Marker','o',...
                     'LineStyle',lineStyle,...
                     'Color','w',...
-                    'Color',obj.chainColors(cIdx,:),...
+                    'Color',obj.chainColors(oIdx,:),...
                     'Tag','chain',...
                     'MarkerSize',6,...
-                    'MarkerFaceColor',obj.chainColors(cIdx,:),...
+                    'MarkerFaceColor',obj.chainColors(oIdx,:),...
                     'Parent',obj.handles.graphical.mainAxes,...
-                    'Visible','off');
+                    'Visible','on');
                 
-                %TODO: fix such that the if loop is discarded
-                % Plot connectors
-                if any([obj.params.chain(cIdx).springForce,...
-                        obj.params.chain(cIdx).bendingElasticityForce,...
-                        obj.params.domain.lennardJonesForce])
-                                                                        
-                   cm = obj.objectManager.GetConnectionMap(cIdx);% obj.handles.classes.rouse(cIdx).connectionMap.indices.in.list;
-                   cm = cm{cIdx}.indices.in.list;
-                    for mIdx = 1:size(cm,1);
-                        lineData.x = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
-                                      obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
-                        lineData.y = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
-                                      obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];
-                        lineData.z = [obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,1)),...
-                                      obj.handles.classes.rouse(cIdx).position.cur(cm(mIdx,2))];  
-                          obj.handles.graphical.chain(cIdx).connectors(mIdx)= line(...
-                            'XData',lineData.x,...
-                            'YData',lineData.y,...
-                            'ZData',lineData.z,...
-                            'Color',obj.chainColors(cIdx,:),...
-                            'Parent',obj.handles.graphical.mainAxes,...
-                            'Tag','connector');     
-                    end
-
-                end
-                end
+                % Plot connectors                  
+                cm = objParams{oIdx}.connectedBeads;                               
+                   
+                if ~isempty(cm)
+                   obj.handles.graphical.chain(oIdx).connectors=line(...
+                               [c(cm(:,1),1);c(cm(:,2),1)],...
+                               [c(cm(:,1),2);c(cm(:,2),2)],...
+                               [c(cm(:,1),3);c(cm(:,2),3)],...
+                                'Tag','connector',...
+                                'Color','y',...
+                                'LineWidth',4,...
+                                'Visible','on');
+                else 
+                  % Create a phantom connector, a place holder for future
+                % connections 
+                   obj.handles.graphical.chain(oIdx).connectors=line(...
+                                                                   [0;0],...
+                                                                   [0;0],...
+                                                                   [0;0],...
+                                                                   'Tag','connector',...
+                                                                   'Color','w',...
+                                                                   'Visible','off');  
+                end              
             end 
+        end
+        
+        function SetAxesLimits(obj)% fix
+            if strcmpi(obj.params.domainShape,'none')
+            bias = obj.params.domainWidth+2;
+            set(obj.handles.graphical.mainAxes,'XLim',[obj.chainsCenterOfMass.x-bias obj.chainsCenterOfMass.x+bias],...
+                'YLim',[obj.chainsCenterOfMass.y-bias obj.chainsCenterOfMass.y+bias],...
+                'ZLim',[obj.chainsCenterOfMass.z-bias obj.chainsCenterOfMass.z+bias]);
+            else
+            bias = obj.params.domainWidth+5;
+            
+            set(obj.handles.graphical.mainAxes,...
+                'XLim',[0-bias, 0+bias],...
+                'YLim',[0-bias, 0+bias],...
+                'ZLim',[0-bias, 0+bias]);
+            end
+             daspect([1 1 1])
+%              drawnow
         end
         
     end
