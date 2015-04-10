@@ -24,11 +24,11 @@ classdef ChainParams<handle
         function obj = ChainParams
             obj.dimension              = 3;       % inherited from framework
             obj.beta                   = 2;       % for rouse, place 2. 
-            obj.b                      = sqrt(3); % std of distance between beads
+            obj.b                      = 1*sqrt(3); % std of distance between beads
             obj.dt                     = 1e-2;    % inherited from framework
             obj.diffusionConst         = 1;
             obj.numBeads               = 64;
-            obj.connectedBeads         = [];
+            obj.connectedBeads         = [1 32];
             obj.bendingElasticityForce = false;
             obj.springForce            = true;
             obj.minBeadDistance        = 0;
@@ -36,12 +36,14 @@ classdef ChainParams<handle
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
             obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains  
             obj.springConst            = (obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);
-            obj.bendingConst           = 40; 
+            obj.bendingConst           = 1; 
             
             % set spring constant for the connected beads
             for cIdx = 1:size(obj.connectedBeads,1)
-                obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2))=obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2));
-                obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
+                obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2))=...
+                    obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2));
+                obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1))=...
+                    obj.springConst(obj.connectedBeads(cIdx,2), obj.connectedBeads(cIdx,1));
             end
             
             % Define force parameters 

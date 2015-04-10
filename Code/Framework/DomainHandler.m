@@ -119,7 +119,7 @@ classdef DomainHandler<handle
                                 % To avoid numerical error, move the prev point
                                 % slightly on the vector between the new point and the
                                 % intersectionPoint
-                                prevPos(outIdx(oIdx),:) = intersectionPoint+(obj.params.domainWidth/10000)*biasNorm;
+                                prevPos(outIdx(oIdx),:) = intersectionPoint+(obj.params.domainWidth/1e10)*biasNorm;
                                 
 %                             end
                         else

@@ -11,6 +11,9 @@ classdef ObjectManager<handle
         handles         
         objectList % keeps the numbers of groups of objects 
         objParams  % parameters for the objects in the simulation 
+        tempObjParams = ChainParams;
+        particleDist % pairwise distance between all particles
+        connectivity % connectivity matrix of all particles
     end
     
     methods 
@@ -26,7 +29,7 @@ classdef ObjectManager<handle
             for cIdx = 1:numel(obj.objParams)
               % Initizlie Rouse chains 
               obj.handles.chain(cIdx) = Rouse(obj.objParams(cIdx));
-              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);
+              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);              
               obj.numObjects                 = obj.numObjects+1;
               obj.objectList{obj.numObjects} = obj.numObjects;
             end
@@ -59,13 +62,14 @@ classdef ObjectManager<handle
             for oIdx = 1:numel(objList)
                 % Get all positions for the current group 
                 indList = obj.objectList{objList(oIdx)};
+%                 [prev{oIdx},cur{oIdx},~,~] = obj.GetObjectsAsOne(oIdx);
                 for pIdx = 1:numel(indList)
                   prev{oIdx} = [prev{oIdx};obj.handles.chain(indList(pIdx)).position.prev];
                   cur{oIdx} = [cur{oIdx};obj.handles.chain(indList(pIdx)).position.cur];
                 end
             end
             
-        end        
+        end
         
         function params = GetObjectParameters(obj,objList)
             % get parameters for objects 
@@ -84,17 +88,15 @@ classdef ObjectManager<handle
             cNb  = 0;% cummulative number of beads
             for oIdx = 1:numel(objList)
                 % get the number of beads for the object, cut the curPos
-                % and send it to SetCurrentPosition with the objNum
-                
+                % and send it to SetCurrentPosition with the objNum                
                 nb      = 0;
                 indList = obj.objectList{objList(oIdx)};
                 for nIdx = 1:numel(indList)
                  nb   = nb+obj.handles.chain(indList).params.numBeads;
                 end
-                c = curPos(cNb+1:cNb+nb,:);
-                obj.SetCurrentParticlePosition(oIdx,c);
-                cNb = cNb+nb;% increase cummulative count 
-                                
+                c = curPos(cNb+1:cNb+nb,:);% take only the relevant part for the object
+                obj.SetCurrentParticlePosition(objList(oIdx),c);
+                cNb = cNb+nb;% increase cummulative count                                 
             end
         end
         
@@ -103,15 +105,14 @@ classdef ObjectManager<handle
             cNb  = 0;% cummulative number of beads
             for oIdx = 1:numel(objList)
                 % get the number of beads for the object, cut the curPos
-                % and send it to SetCurrentPosition with the objNum
-                
+                % and send it to SetCurrentPosition with the objNum                
                 nb      = 0;
                 indList = obj.objectList{objList(oIdx)};
                 for nIdx = 1:numel(indList)
                  nb   = nb+obj.handles.chain(indList).params.numBeads;
                 end
                 p = prevPos(cNb+1:cNb+nb,:);
-                obj.SetPreviousParticlePosition(oIdx,p);
+                obj.SetPreviousParticlePosition(objList(oIdx),p);
                 cNb = cNb+nb;% increase cummulative count 
                                 
             end
@@ -119,14 +120,15 @@ classdef ObjectManager<handle
         
         function SetCurrentParticlePosition(obj,objNum,curPos)
             % objNum is the object number as appears in the objectList. It
-            % could be a group of objects. currently an integer. 
+            % could be a group of objects. currently only one integer. 
             % Divide the curPos matrix between the members of the
             % object group by their order of appearance in the group 
-            objList = (obj.objectList{objNum});
-            cNb     = 0;% cummulative number of beads 
-            for oIdx = 1:numel(objList)                                
-                oNb = obj.handles.chain(objList(oIdx)).params.numBeads;
-                obj.handles.chain(objList(oIdx)).position.cur = curPos(cNb+1:cNb+oNb,:);
+            
+            memberList = obj.objectList{objNum};% members of the object
+            cNb        = 0;% cummulative number of object nodes 
+            for oIdx = 1:numel(memberList)                                
+                oNb = obj.handles.chain(memberList(oIdx)).params.numBeads;
+                obj.handles.chain(memberList(oIdx)).position.cur = curPos(cNb+1:cNb+oNb,:);
                 cNb = cNb+oNb;% increase cummulative count 
             end            
         end
@@ -168,9 +170,13 @@ classdef ObjectManager<handle
         function Step(obj,objNum)
             % Advance the objects one step in the simulation , apply forces
             % etc. 
-            objList = obj.objectList{objNum};
-            for oIdx = 1:numel(objList)
-                obj.handles.chain(objList(oIdx)).Step
+            [~,curPos,obj.connectivity,~] = obj.GetObjectsAsOne(1:obj.numObjects);
+            obj.particleDist = ForceManager.GetParticleDistance(curPos);
+            for oIdx = 1:numel(objNum)
+                objList = obj.objectList{objNum(oIdx)};% members of the objects
+                for pIdx = 1:numel(objList)
+                    obj.handles.chain(objList(pIdx)).Step% advance each member one step
+                end
             end
         end
         
@@ -178,24 +184,38 @@ classdef ObjectManager<handle
             % Arrange the information of the objects into one structure to
             % be passed to Domain and apply global forces on them. will
             % also be used when merging objects 
-            prevPosition    = [];
-            curPosition     = [];
-            connectivityMap = [];
+            cNb = 0; % cummulative number of beads
+%             nCb = 0; % number of connnected beads
+            for oIdx = 1:numel(objList)
+                  indList = obj.objectList{objList(oIdx)};
+                  for pIdx = 1:numel(indList)
+                      cNb = cNb+ obj.handles.chain(indList(pIdx)).params.numBeads; 
+                  end
+            end
+            
+            prevPosition    = zeros(cNb,3);
+            curPosition     = zeros(cNb,3);
+            connectivityMap = false(cNb);
             cBeads          = []; % cumulative connected beads 
-            springConst     = []; % spring constants 
-            params          = ChainParams;
+            springConst     = zeros(cNb); % spring constants 
+            params          = obj.tempObjParams; 
             fixedBeads      = [];
             cNumBeads       = 0; %cumulative number of beads 
             for oIdx = 1:numel(objList)
                   indList = obj.objectList{objList(oIdx)};
                   for pIdx = 1:numel(indList)
-                      numBeads  = obj.handles.chain(indList(pIdx)).params.numBeads;                      
-                      prevPosition(end+1:end+numBeads,:) = [obj.handles.chain(indList(pIdx)).position.prev];
-                      curPosition(end+1:end+numBeads,:)  = [obj.handles.chain(indList(pIdx)).position.cur];
-                      connectivityMap(end+1:end+numBeads,end+1:end+numBeads) = obj.handles.chain(indList(pIdx)).connectionMap.map;
+                      numBeads  = obj.handles.chain(indList(pIdx)).params.numBeads;
+                      pos       = obj.handles.chain(indList(pIdx)).position;
+                      prevPosition(cNumBeads+1:cNumBeads+numBeads,:) = pos.prev;
+                      curPosition(cNumBeads+1:cNumBeads+numBeads,:)  = pos.cur;
+                      connectivityMap(cNumBeads+1:cNumBeads+numBeads,cNumBeads+1:cNumBeads+numBeads) =...
+                          obj.handles.chain(indList(pIdx)).connectionMap.map;
                       connectedBeads = obj.handles.chain(indList(pIdx)).params.connectedBeads;
-                      cBeads(end+1:end+size(connectedBeads,1),:)         = connectedBeads + cNumBeads;
-                      springConst(end+1:end+numBeads,end+1:end+numBeads) = obj.handles.chain(indList(pIdx)).params.springConst;
+                      if ~isempty(connectedBeads)
+                          cBeads(end+1:end+size(connectedBeads,1),:)         = connectedBeads + cNumBeads;
+                      end
+                      springConst(cNumBeads+1:cNumBeads+numBeads,cNumBeads+1:cNumBeads+numBeads) = ...
+                          obj.handles.chain(indList(pIdx)).params.springConst;
                       fBeads    = obj.handles.chain(indList(pIdx)).params.fixedBeadNum;
                       fixedBeads(end+1:end+numel(fBeads)) = fBeads;
                       cNumBeads = cNumBeads+numBeads;
@@ -206,9 +226,18 @@ classdef ObjectManager<handle
             params.springConst    = springConst;
             params.fixedBeadNum   = fixedBeads;
             params.connectedBeads = cBeads;
-            connectivityMap = logical(connectivityMap);
+            connectivityMap       = logical(connectivityMap);
             
         end
         
+        function ObjectInteraction(obj)
+            % Check for possible interaction between objects and update
+            % their data accordingly 
+            encounterDist = 0.1;
+            % search for close beads and connect them, update the
+            % connectivity accordingly 
+            obj.connectivity = obj.connectivity | obj.particleDist<encounterDist;
+            
+        end
     end
 end

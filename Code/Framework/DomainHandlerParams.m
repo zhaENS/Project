@@ -27,17 +27,17 @@ classdef DomainHandlerParams<handle
             obj.domainWidth            = 20;
             obj.domainHeight           = 10;
             obj.domainCenter           = [0 0 0];
-            obj.showDomain             = true;
+            obj.showDomain             = true; % move to graphics
             
             % forces of the domain 
             obj.LJPotentialWidth       = 0.5;
             obj.LJPotentialDepth       = 0.2;
-            obj.diffusionConst         = 0.1;   % assigned by framework
+            obj.diffusionConst         = 0;   % assigned by framework
             obj.lennardJonesForce      = false;
             obj.diffusionForce         = true;            
             obj.dt                     = 0;   % assigned by Framework
             obj.reflectionType         = 'preserveEnergy';
-            obj.maxReflectionsPerParticle  = 30;
+            obj.maxReflectionsPerParticle  = 50;
                         
             obj.forceParams                = ForceManagerParams;
             obj.SetForceParams;

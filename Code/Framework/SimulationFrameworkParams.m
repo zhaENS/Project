@@ -27,7 +27,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
             obj.simulator.numSteps             = Inf;   % for inf place inf
             obj.simulator.dt                   = 1e-2;  % time step 
-            obj.simulator.numChains            = 1;   
+            obj.simulator.numChains            = 2;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
@@ -35,8 +35,9 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.notifyCycleLength    = 30;    % number of simulation cycles after which an email is sent 
             obj.simulator.recipeFileName       = 'debugRecipe';
             obj.simulator.recipesFolder        = ''; 
+            
             % Control domain forces
-            obj.simulator.diffusionConst       = 0.1;
+            obj.simulator.diffusionConst       = 1;
             obj.simulator.LJPotentialWidth     = 0.3;
             obj.simulator.LJPotentialDepth     = 0.2;
         end

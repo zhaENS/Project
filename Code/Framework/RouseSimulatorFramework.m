@@ -160,64 +160,45 @@ classdef RouseSimulatorFramework<handle
         
         function Step(obj,varargin)
             % Next simulation step 
-            numObjects        = obj.objectManager.numObjects;
+            objList        = 1:obj.objectManager.numObjects;
                         
-            % Apply object forces
-            for oIdx = 1:numObjects                                
-                obj.objectManager.Step(oIdx)% update current object position
-            end
+            % Advance one step and apply object forces
+            obj.objectManager.Step(objList)% update current object position
             
-            % Apply domain (global) forces            
+            % Apply domain (global) forces on all objects in the domain 
             dp                = obj.handles.classes.domain.params.forceParams;% Get domain parameters
-            [prevParticlePosition,curParticlePosition,connectivityMap,cp]= obj.objectManager.GetObjectsAsOne(1:numObjects);
+            [prevParticlePosition,curParticlePosition,connectivityMap,cp]= obj.objectManager.GetObjectsAsOne(objList);
             
-            curParticlePosition = obj.handles.classes.domain.ApplyForces(curParticlePosition,connectivityMap,...                
+            curParticlePosition = obj.handles.classes.domain.ApplyForces(...
+                                             curParticlePosition,connectivityMap,...                
                                              cp.springConst,dp.diffusionConst,cp.bendingConst,...
                                              dp.LJPotentialWidth,dp.LJPotentialDepth,...
                                              cp.minBeadDistance,cp.fixedBeadNum,obj.params.simulator.dt);
-             % Reflect particles 
+             % Reflect all particles 
              [~,newPos] = obj.handles.classes.domain.Reflect(prevParticlePosition,...
-                                                           curParticlePosition);
+                                                             curParticlePosition);
                                                        
-            % Deal the positions after reflection between the objects in
+            % Deal the positions after reflection between the objects and their members in
             % the domain 
-            obj.objectManager.DealCurrentPosition(1:numObjects,newPos);
-            obj.objectManager.DealPreviousPosition(1:numObjects,newPos);
-            prob = 0.995;
-            for oIdx = 1:numObjects
+            obj.objectManager.DealCurrentPosition(objList,newPos);
+            obj.objectManager.DealPreviousPosition(objList,newPos);
+            
+            
+            % Check for object-object interaction 
+%             obj.objectManager.ObjectInteraction
+            
+            %=== test dynamic connectivity ====
+            prob = 0.990;
+            for oIdx = objList
                 r = rand(1);
                 if r>prob
                     obj.objectManager.ConnectParticles(oIdx,1,64);
                 elseif r<(1-prob)
-                    obj.objectManager.DisconnectParticles(oIdx,1,64)
+                    obj.objectManager.DisconnectParticles(oIdx,1,64)                                              
                 end
             end
-%             for oIdx = 1:numObjects    
-%                 % Get object data
-%                 [prevPos, curPos]  = obj.objectManager.GetPosition(oIdx);
-%                  cMap              = obj.objectManager.GetConnectionMap(oIdx);
-%                  objParams         = obj.objectManager.GetObjectParameters(oIdx);
-%                  
-%                                  
-%                 prevParticlePosition = prevPos{1};
-%                 curParticlePosition  = curPos{1};
-%                 
-%                 connectivityMap     = cMap{1}.map;
-%                 cp                  = objParams{1};                                          
-%                 curParticlePosition = obj.handles.classes.domain.ApplyForces(curParticlePosition,connectivityMap,...                
-%                                              cp.springConst,dp.diffusionConst,cp.bendingConst,...
-%                                              dp.LJPotentialWidth,dp.LJPotentialDepth,...
-%                                              cp.minBeadDistance,cp.fixedBeadNum,obj.params.simulator.dt);
-%                                       
-%                 
-%                 % Reflect particles 
-%                 [~,newPos]= obj.handles.classes.domain.Reflect(prevParticlePosition,...
-%                                                            curParticlePosition);
-%                                                        
-%                 obj.objectManager.SetCurrentParticlePosition(oIdx,newPos); 
-%                 obj.objectManager.SetPreviousParticlePosition(oIdx,newPos); 
-%             end
-             
+            % ==================================
+            
             % Show simulation
             obj.handles.classes.graphics.ShowSimulation
             

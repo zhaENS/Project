@@ -6,9 +6,12 @@ classdef ForceManager<handle
     % forceManager is a child of a physical object like a chain or a
     % particle system
     % connectivityMap should be logical
-    % TODO: add a listener to object parameter change
     % TODO: add an option to recreate the noise values from previously used
     %       seed or simulation parameters
+    %TODO: condsider constructing a master ForceManager to calculate the
+    % forces for all particles in the domain and then deal them between
+    % objects, this will make calculation of the distances done only once
+    % every loop for all objects 
     properties
         %  Names of forces acting on the particle system      
         springForce            = false;
@@ -53,10 +56,7 @@ classdef ForceManager<handle
             % particledist is the pairwise distance between the particles
             % NxN matrix
             % connectivityMap is a binary graph representing which particle
-            % is connected to which other particle
-            
-            % Calculate the edges vectors in all dimension
-            obj.edges   = GetEdgesVectors_mex(particlePosition,connectivityMap);
+            % is connected to which other particle                        
             
             % get pair-wise distance between particles
             particleDistances    = obj.GetParticleDistance(particlePosition);
@@ -75,7 +75,7 @@ classdef ForceManager<handle
             diffusionForces = obj.GetDiffusionForce(particlePosition,diffusionConst,dt);
             
             % Bending forces
-            bendingForces = obj.GetBendingElasticityForce(obj.edges,connectivityMap,bendingConst);
+            bendingForces = obj.GetBendingElasticityForce(particlePosition,connectivityMap,bendingConst);
             % The effect of applying forces is addative
             newParticlePosition = -springForces*dt*particlePosition+...
                                    ljForces*dt+...
@@ -120,13 +120,17 @@ classdef ForceManager<handle
             end
         end
         
-        function force  = GetBendingElasticityForce(obj,edgeMat,connectivityMat,bendingConst)% needs clean up
+        function force  = GetBendingElasticityForce(obj,particlePosition,connectivityMat,bendingConst)% needs clean up
             
-            force = zeros(size(connectivityMat,1),size(edgeMat,3));
+            force = zeros(size(particlePosition,1),size(particlePosition,2));
             if obj.bendingElasticityForce
-                force = BendingElasticityForce_mex(edgeMat(:,:,1),edgeMat(:,:,2), edgeMat(:,:,3), connectivityMat,bendingConst);
-            end
-            
+                % Calculate the edges vectors in all dimension
+                edgeMat = GetEdgesVectors_mex(particlePosition,connectivityMat);
+                force   = BendingElasticityForce_mex(edgeMat(:,:,1),...
+                                                     edgeMat(:,:,2),...
+                                                     edgeMat(:,:,3),...
+                                                     connectivityMat,bendingConst);
+            end            
         end
     end
     
