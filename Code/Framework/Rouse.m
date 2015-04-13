@@ -22,8 +22,7 @@ classdef Rouse<handle
     
     % The function G_n(t) is the random fluctuation for the bead n, it is a
     % Gaussian with zero mean and 2*k*T/s std
-    properties 
-%         params
+    properties         
         handles
         position
         connectionMap
@@ -268,11 +267,11 @@ classdef Rouse<handle
             obj.position.cur = obj.position.prev;
         end                        
                                         
-        function Step(obj)
+        function Step(obj,beadDist)
             
             % Apply forces on the beads to get the new bead position    
             forceParams = obj.params.forceParams;
-            newPos   = obj.handles.classes.forceManager.Apply(obj.position.cur,obj.connectionMap.map,...                                            
+            newPos   = obj.handles.classes.forceManager.Apply(beadDist,obj.position.cur,obj.connectionMap.map,...                                            
                                              forceParams.springConst,forceParams.diffusionConst,forceParams.bendingConst,...
                                              forceParams.LJPotentialWidth,forceParams.LJPotentialDepth,...
                                              forceParams.minParticleDistance,forceParams.fixedParticleNum,forceParams.dt);

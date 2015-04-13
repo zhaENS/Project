@@ -155,7 +155,9 @@ classdef SimulationFrameworkGraphics<handle
         end
                 
         function UpdateChainPosition(obj)
-            
+               %TODO: plotting should be able to take into account
+               %composite objects and not only chains 
+               %TODO: 
                 numObjects      = obj.handles.framework.objectManager.numObjects;
                 [~, curPos]     = obj.handles.framework.objectManager.GetPosition(1:numObjects);
                 chainParams     = obj.handles.framework.objectManager.GetObjectParameters(1:numObjects);

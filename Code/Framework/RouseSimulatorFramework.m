@@ -117,8 +117,9 @@ classdef RouseSimulatorFramework<handle
                     obj.PreRunActions                    
                     while obj.runSimulation
                         % perform actions before the current step
-                        obj.PreStepActions                                               
-                        obj.Step;% advance one step of the polymer chain                           
+                        obj.PreStepActions
+                        % advance one step of the polymer chain    
+                        obj.Step;                       
                         % perform action post the current step 
                         obj.PostStepActions                                              
                     end
@@ -164,12 +165,14 @@ classdef RouseSimulatorFramework<handle
                         
             % Advance one step and apply object forces
             obj.objectManager.Step(objList)% update current object position
-            
+             objList        = 1:obj.objectManager.numObjects;
+
             % Apply domain (global) forces on all objects in the domain 
             dp                = obj.handles.classes.domain.params.forceParams;% Get domain parameters
-            [prevParticlePosition,curParticlePosition,connectivityMap,cp]= obj.objectManager.GetObjectsAsOne(objList);
+            [prevParticlePosition,curParticlePosition,connectivityMap,particleDist,cp]= ...
+                obj.objectManager.GetObjectsAsOne(objList);
             
-            curParticlePosition = obj.handles.classes.domain.ApplyForces(...
+            curParticlePosition = obj.handles.classes.domain.ApplyForces(particleDist,...
                                              curParticlePosition,connectivityMap,...                
                                              cp.springConst,dp.diffusionConst,cp.bendingConst,...
                                              dp.LJPotentialWidth,dp.LJPotentialDepth,...
@@ -182,23 +185,7 @@ classdef RouseSimulatorFramework<handle
             % the domain 
             obj.objectManager.DealCurrentPosition(objList,newPos);
             obj.objectManager.DealPreviousPosition(objList,newPos);
-            
-            
-            % Check for object-object interaction 
-%             obj.objectManager.ObjectInteraction
-            
-            %=== test dynamic connectivity ====
-            prob = 0.990;
-            for oIdx = objList
-                r = rand(1);
-                if r>prob
-                    obj.objectManager.ConnectParticles(oIdx,1,64);
-                elseif r<(1-prob)
-                    obj.objectManager.DisconnectParticles(oIdx,1,64)                                              
-                end
-            end
-            % ==================================
-            
+                                    
             % Show simulation
             obj.handles.classes.graphics.ShowSimulation
             

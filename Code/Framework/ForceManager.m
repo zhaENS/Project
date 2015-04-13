@@ -44,10 +44,10 @@ classdef ForceManager<handle
             end
         end
         
-        function newParticlePosition = Apply(obj,particlePosition,connectivityMap,...
-                                             springConst,diffusionConst,bendingConst,...
-                                             LJPotentialWidth,LJPotentialDepth,...
-                                             minParticleDistance,fixedParticleNum,dt)
+        function newParticlePosition = Apply(obj,particleDistances,particlePosition,connectivityMap,...
+                                                         springConst,diffusionConst,bendingConst,...
+                                                         LJPotentialWidth,LJPotentialDepth,...
+                                                         minParticleDistance,fixedParticleNum,dt)
                 
             % Apply chosen forces on the N vertices/particles of an object
             % object must contain the position of its vertices in any
@@ -59,7 +59,7 @@ classdef ForceManager<handle
             % is connected to which other particle                        
             
             % get pair-wise distance between particles
-            particleDistances    = obj.GetParticleDistance(particlePosition);
+%             particleDistances    = obj.GetParticleDistance(particlePosition);
             obj.particleDistance = particleDistances;% save property
             
             % obtain the edges length
@@ -84,6 +84,51 @@ classdef ForceManager<handle
                                    particlePosition;
         end
         
+        function newParticlePosition = ApplyComposite(obj,particleDistances,particlePosition,connectivityMap,...
+                                                         springConst,diffusionConst,bendingConst,...
+                                                         LJPotentialWidth,LJPotentialDepth,...
+                                                         minParticleDistance,fixedParticleNum,dt)
+                                                     
+            % Apply forces on a composite structure composed of several chains with different parameters                          
+            
+            % obtain the edges length
+            % this is the distance between all particles in the composite
+            % object
+            edgeLength    = particleDistances;%obj.GetEdgesLength(particleDistances,connectivityMap);
+            
+            % Spring force
+            
+            % get the force for each object, then add the force of the
+            % interaction 
+            
+            springForces  = obj.GetSpringForce(edgeLength,springConst,connectivityMap,minParticleDistance,fixedParticleNum);
+            
+            
+            %===============================
+            
+            % Bending forces
+            bendingForces = obj.GetBendingElasticityForce(particlePosition,connectivityMap,bendingConst);
+            % zero out forces for object with no bending elasticity force
+            % defined
+            
+            
+            % Lenard-jones force
+            ljForces      = obj.GetLenardJonesForce(particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth);
+            
+            % Thermal (diffusion) force
+            diffusionForces = obj.GetDiffusionForce(particlePosition,diffusionConst,dt);
+            
+
+            % The effect of applying forces is addative
+            newParticlePosition = -springForces*dt*particlePosition+...
+                                   ljForces*dt+...
+                                   bendingForces*dt+...
+                                   diffusionForces+...
+                                   particlePosition;
+                                       
+        end
+        
+        
         function force  = GetSpringForce(obj,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum)
             % Calculate the spring force between N particles in any dimension M.
             % particleDist    - NxN matrix of pairwise particle distances
@@ -93,7 +138,7 @@ classdef ForceManager<handle
             % fixedParticleNum - particles in the system which do not move
             force = zeros(size(connectivityMap));
             if obj.springForce
-                connectivityMap           = (connectivityMap);
+%                 connectivityMap           = (connectivityMap);
                 L                         = (1-minParticleDist./particleDist).*connectivityMap;
                 L(~connectivityMap)       = 0;
                 sumForces                 = sum(L,2);
