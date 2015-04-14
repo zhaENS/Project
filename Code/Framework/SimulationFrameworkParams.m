@@ -32,7 +32,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
             obj.simulator.notifyByEmail        = false;
-            obj.simulator.notifyCycleLength    = 30;    % number of simulation cycles after which an email is sent 
+            obj.simulator.notifyCycleLength    = 32;    % number of simulation cycles after which an email is sent 
             obj.simulator.recipeFileName       = 'debugRecipe';
             obj.simulator.recipesFolder        = ''; 
             
