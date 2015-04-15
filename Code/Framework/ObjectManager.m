@@ -9,15 +9,18 @@ classdef ObjectManager<handle
     
     %TODO: make a mapping from particle number to chain number
     properties
-        numObjects % number of objects in the class at any time
+        numObjects   % number of objects in the class at any time
         handles         
-        objectList % keeps the numbers of groups of objects 
-        objParams  % parameters for the objects in the simulation 
+        objectList   % keeps the numbers of groups of objects 
+        objParams    % parameters for the objects in the simulation 
         tempObjParams = ChainParams;
         tempObj       = Rouse(ChainParams);
-        particleDist % pairwise distance between all particles
-        connectivity % connectivity matrix of all particles
+        particleDist % pairwise distance between all particles (All)
+        connectivity % connectivity matrix of particles (All)
+        curPos       % current particle position (All)
+        prevPos      % previous particle position (All)
         objectInds   % indices where objects appear in the general list 
+        map = struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
     end
     
     methods 
@@ -35,18 +38,27 @@ classdef ObjectManager<handle
             for cIdx = 1:numel(obj.objParams)
               % Initizlie Rouse chains 
               obj.handles.chain(cIdx) = Rouse(obj.objParams(cIdx));
-              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);              
+              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);
+              
+              % Register the chain as an object 
+%               obj.map.objNum(cIdx)   = cIdx; % object numbers
+              obj.map.chainNum(cIdx) = {cIdx}; % chain numbers 
+              obj.map.inds(cIdx)     = {(cNb+1):(cNb+obj.objParams(cIdx).numBeads)};% chain indices in the general representation
+              
               obj.numObjects                 = obj.numObjects+1;
               obj.objectList{obj.numObjects} = obj.numObjects;
-              inds = (cNb+1):(cNb+obj.objParams(cIdx).numBeads);
-              obj.connectivity(inds,inds) = obj.handles.chain(cIdx).connectionMap.map;
+%               inds = (cNb+1):(cNb+obj.objParams(cIdx).numBeads);
+              
+              % set initial connectivity map 
+              obj.connectivity(obj.map.inds{cIdx},obj.map.inds{cIdx}) = obj.handles.chain(cIdx).connectionMap.map;
+              
               % update object indices 
-              obj.objectInds{cIdx} = inds;
+              obj.objectInds{cIdx} = obj.map.inds{cIdx};% to be removed
               cNb = cNb+obj.objParams(cIdx).numBeads;
-            end
-            
-            [~,curPos,obj.connectivity,~,~] = obj.GetObjectsAsOne(1:obj.numObjects); 
-            obj.particleDist = ForceManager.GetParticleDistance(curPos);% get all distances
+            end            
+                        
+            [obj.prevPos,obj.curPos,obj.connectivity,~,~] = obj.GetObjectsAsOne(1:obj.numObjects); 
+            obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);% get all distances
         end        
         
         function Add(obj,newObject)
@@ -55,6 +67,8 @@ classdef ObjectManager<handle
             obj.numObjects                     = obj.numObjects+1;
             obj.handles.object(obj.numObjects) = newObject;
             obj.objectList{obj.numObjects}     = obj.numObjects;
+            % Modify the map 
+          
         end
         
         function Merge(obj,objList)
@@ -65,17 +79,31 @@ classdef ObjectManager<handle
             
             objGroup       = 1:obj.numObjects;
             objStaying     = setdiff(objGroup,objList);
-            toMerge        = (obj.objectList(objList));
+            toMerge        = obj.objectList(objList);
             obj.objectList = obj.objectList(objStaying);
             % update indices
             indsToMerge    = cell2mat(obj.objectInds(objList));
+            
+            % remove the merged obj from the list 
             obj.objectInds = obj.objectInds(objStaying);
             
             % group the indices in objList 
             obj.objectList{end+1} = cell2mat(toMerge(:)');
             obj.objectInds{end+1} = indsToMerge;
             obj.numObjects = numel(obj.objectList);
-
+           
+            % Modify the map 
+            % The object list in map now points to several chains 
+            
+            % Get the chain numbers of the objects to be merged 
+% %             chainNum = obj.map.chainNum(objList);
+%             obj.map.chainNum = obj.map.objNum(objStaying);
+%             
+%             % Add an object to the end of the list, and point to the chains
+%             obj.map.objNum(end+1) =  chainNum;
+            % 
+            
+            
         end
         
         function Split(obj,objNum)
@@ -94,47 +122,40 @@ classdef ObjectManager<handle
         end
         
         function [prev,cur] = GetPosition(obj,objList)
-            % Get positoins on objects in objList
+            % Get position of objects in objList
             % the number of position depends on the grouping given in
             % objectList
             prev = cell(1,numel(objList));
             cur  = cell(1,numel(objList)); 
             for oIdx = 1:numel(objList)
                 % Get all positions for the current group 
-                indList = obj.objectList{objList(oIdx)};
-                for pIdx = 1:numel(indList)
-                  prev{oIdx} = [prev{oIdx};obj.handles.chain(indList(pIdx)).position.prev];
-                  cur{oIdx} = [cur{oIdx};obj.handles.chain(indList(pIdx)).position.cur];
-                end
+                inds    = obj.objectInds{oIdx};
+                prev{oIdx} = obj.prevPos(inds,:);
+                cur{oIdx}  = obj.curPos(inds,:);
             end            
         end        
         
         function [prev,cur] = GetMembersPosition(obj,objNum)
-            % Get positoins o members of the object objNum
-
-            indList = obj.objectList{objNum};
+            % Get positoins o members of the object objNum            
+            indList = obj.objectList{objNum};% members indices
             prev = cell(1,numel(indList));
-            cur  = cell(1,numel(indList)); 
-           
-                % Get all positions for the current group 
-                
-                for pIdx = 1:numel(indList)
-                  prev{pIdx} = obj.handles.chain(indList(pIdx)).position.prev;
-                  cur{pIdx} = obj.handles.chain(indList(pIdx)).position.cur;
-                end
+            cur  = cell(1,numel(indList));
+            
+            % Get all positions for the current group            
+            for pIdx = 1:numel(indList)
+                prev{pIdx} = obj.handles.chain(indList(pIdx)).position.prev;
+                cur{pIdx}  = obj.handles.chain(indList(pIdx)).position.cur;
+            end
            
         end 
         
         function [prevPos,curPos] = GetPositionAsOne(obj,objList)
             % Get current and previous position for all objects in objList
             % as one long list
-            prevPos = [];
-            curPos  = [];
-            for oIdx = 1:numel(objList)
-                [p, c]  = obj.GetPosition(objList(oIdx));
-                prevPos = [prevPos;p{1}];
-                curPos  = [curPos;c{1}];
-            end
+            inds    = [obj.objectInds{objList}];
+            prevPos = obj.prevPos(inds,:);
+            curPos  = obj.curPos(inds,:);
+            
         end
         
         function params = GetObjectParameters(obj,objList)
@@ -162,6 +183,9 @@ classdef ObjectManager<handle
                 end
                 c = curPos(cNb+1:cNb+nb,:);% take only the relevant part for the object
                 obj.SetCurrentParticlePosition(objList(oIdx),c);
+                % update the general list 
+                inds = obj.objectInds{objList(oIdx)};
+                obj.curPos(inds,:) = c;
                 cNb = cNb+nb;% increase cummulative count                                 
             end
         end
@@ -179,8 +203,10 @@ classdef ObjectManager<handle
                 end
                 p = prevPos(cNb+1:cNb+nb,:);
                 obj.SetPreviousParticlePosition(objList(oIdx),p);
-                cNb = cNb+nb;% increase cummulative count 
-                                
+                % update the general list 
+                inds = obj.objectInds{objList(oIdx)};
+                obj.prevPos(inds,:) = p;
+                cNb = cNb+nb;% increase cummulative count                                 
             end
         end
         
@@ -249,7 +275,7 @@ classdef ObjectManager<handle
             % Get the pairwise distances of particles in objList
             % the objects indices in objList corrospond to objects listed
             % in obj.objectList
-            objList = sort(objList);
+%             objList = sort(objList);
             particleDistance = [];
             numX = 0;
             numY = 0;
@@ -267,51 +293,70 @@ classdef ObjectManager<handle
         end
         
         function ConnectParticles(obj,objNum,particle1,particle2)
-           obj.handles.chain(objNum).ConnectBeads(particle1,particle2);
+            % Connect two particles
+            % particle1 and particle2 are number of particles in the object            
+            objList = obj.objectList{objNum};% chain members of the object
+            
+%             % get the chain 
+%             map.particleChain(particle1)
+%             map.particleChain(particle2)
+            
+            for pIdx = 1:numel(objList)
+               % if the particles belong to the same chain
+              obj.handles.chain(objList(pIdx)).ConnectBeads(particle1,particle2);             
+                % for composite object change the connectivity             
+            end
+            
         end
         
         function DisconnectParticles(obj,objNum,particle1,particle2)
-            obj.handles.chain(objNum).DisconnectBeads(particle1,particle2);
+            for pIdx = 1:size(particle1,1)
+              obj.handles.chain(objNum).DisconnectBeads(particle1(pIdx),particle2(pIdx));
+            end
         end
                 
         function Step(obj,objNum)
-            % Advance the objects one step in the simulation , apply forces
+            % Advance the objects one step in the simulation, apply forces
             % etc. 
-            [~,curPos]       = obj.GetPositionAsOne(1:obj.numObjects);
-            obj.particleDist = ForceManager.GetParticleDistance(curPos);
+%             [obj.prevPos,obj.curPos]       = obj.GetPositionAsOne(1:obj.numObjects);             
+            obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);
             
-            cNb = 0; % cummulative number of particles 
-            for oIdx = 1:numel(objNum)
+%             cNb = 0; % cummulative number of particles 
+            for oIdx = 1:numel(objNum)% for each object
                 objList = obj.objectList{objNum(oIdx)};% members of the objects
                
                 if numel(objList)==1
-                    for pIdx = 1:numel(objList)
-                        beadInds     = (cNb+1):(cNb+obj.handles.chain(objList(pIdx)).params.numBeads);
+%                     for pIdx = 1:numel(objList)
+                        beadInds     = obj.objectInds{objNum(oIdx)};% get the indices of the object %(cNb+1):(cNb+obj.handles.chain(objList(1)).params.numBeads);
                         beadDistance = obj.particleDist(beadInds,beadInds);%TODO: examine what happens if the order of objects changes
-                        obj.handles.chain(objList(pIdx)).Step(beadDistance)% advance each member one step
-                        cNb  = cNb+obj.handles.chain(objList(pIdx)).params.numBeads;
-                    end
+                        obj.handles.chain(objList(1)).Step(beadDistance)% advance each member one step
+%                         cNb  = cNb+obj.handles.chain(objList(1)).params.numBeads;
+%                     end
+                        newPos = obj.handles.chain(objList(1)).position.cur;
                 else
                     % for composite object made of several sub-objects
-                   connectivityMap  = obj.GetConnectionMapAsOne(oIdx);
-                   particleDistance = obj.GetParticleDistance(oIdx); 
-                   [~,curPos]       = obj.GetMembersPosition(oIdx);
-                   springConst      = obj.GetSpringConstAsOne(oIdx);
-                   minParticleDist  = obj.GetMinParticleDistAsOne(oIdx);
+                   connectivityMap  = obj.GetConnectionMapAsOne(objNum(oIdx));
+                   particleDistance = obj.GetParticleDistance(objNum(oIdx)); 
+                   [~,curMemberPos] = obj.GetMembersPosition(objNum(oIdx));
+                   springConst      = obj.GetSpringConstAsOne(objNum(oIdx));
+                   minParticleDist  = obj.GetMinParticleDistAsOne(objNum(oIdx));
                    % split parameters to pass to the forceManager
-                   par = obj.GetObjectParameters(oIdx);
+                   par = obj.GetObjectParameters(objNum(oIdx));
                    par = par{1};
                    fp  = [par.forceParams];
-                   newPos = ForceManager.ApplyCompositeInternalForces(curPos,particleDistance,connectivityMap,...
+                   newPos = ForceManager.ApplyCompositeInternalForces(curMemberPos,particleDistance,connectivityMap,...
                                                          [fp.springForce],[fp.bendingElasticityForce],...
                                                          springConst,[fp.bendingConst],...                                                         
-                                                         minParticleDist,[],0.1);%TODO: split parameters
+                                                         minParticleDist,[],0.1);
                                                      
-                   % Deal the new pos to the object 
-                   obj.DealCurrentPosition(oIdx,newPos);
-                   obj.DealPreviousPosition(oIdx,newPos);
+                 
                 end
+                % Deal the new pos to the object 
+                   obj.DealCurrentPosition(oIdx,newPos);
+                % obj.DealPreviousPosition(oIdx,newPos);
             end
+              
+%             [obj.prevPos,obj.curPos]       = obj.GetPositionAsOne(1:obj.numObjects);
             % Check for possible interaction between objects
             obj.ObjectInteraction;
         end
@@ -451,27 +496,59 @@ classdef ObjectManager<handle
 %             prob = 0.990;
 %             for oIdx = objList
 %                 r = rand(1);
+%                 c= randperm(32);
 %                 if r>prob
-%                     obj.ConnectParticles(oIdx,1,64);
-%                 elseif r<(1-prob)
-%                     obj.DisconnectParticles(oIdx,1,64)                                              
+% %                     cBeads = obj.handles.chain(oIdx).params.connectedBeads;
+% %                     if ~isempty(cBeads)
+% %                     obj.DisconnectParticles(oIdx,cBeads(:,1),cBeads(:,2))                     
+% %                     end
+%                     obj.ConnectParticles(oIdx,c(1),c(2));
+%                 elseif r<(0.01)
+%                     cBeads = obj.handles.chain(oIdx).params.connectedBeads;
+%                     if ~isempty(cBeads)
+%                     obj.DisconnectParticles(oIdx,cBeads(:,1),cBeads(:,2));
+%                     end
 %                 end
 %             end
 %             % ==================================
             
-            % ============ test merging structures ==========
-           prob = 0.99;
+%             % ============ test merging structures ==========
+           prob = 0.90;
                 r = rand(1);
                 if r>prob
                      if obj.numObjects>1
-                      obj.connectivity(1,end) = true;
-                      obj.connectivity(end,1) = true;                   
-                      obj.Merge([1 obj.numObjects]);
+                      % choose 2 random particles 
+%                       c = randperm(obj.numObjects);
+%                       % find the object indices matching the connected
+%                       % beads 
+%                       obj1 = ceil(c(1)/32);
+%                       obj2 = ceil(c(2)/32);
+% %                       if c(1)~=c(2)
+%                           % choose 2 random beads 
+%                           b = randperm(32);
+%                           bead1 = (c(1)-1)*32+b(1);
+%                           bead2 = (c(2)-1)*32+b(2);
+% %                           if obj1==obj2
+% %                               obj.handles.chain(obj1).ConnectBeads(
+% %                           end
+%                     % the the head of the last object and the tail of the
+                      % previous one should be connected 
+                      % get indices 
+                      if obj.numObjects~=1
+                      indsEnd  = obj.objectInds{obj.numObjects};
+                      indsBend = obj.objectInds{obj.numObjects-1};
+                      obj.connectivity(indsBend(end),indsEnd(1)) = true;
+                      obj.connectivity(indsEnd(1),indsBend(end)) = true;
+                      
+                      obj.Merge([obj.numObjects-1 obj.numObjects]);
                       disp('merge')
+                      end
                     end
                 elseif r<(1-prob)
-%                     obj.connectivity(1,end) = false;
-%                     obj.connectivity(end,1) = false;
+                    
+%                     obj.connectivity(1,3*32) = false;
+%                     obj.connectivity(96,1) = false;
+                    
 %                     obj.Split(obj.numObjects);  
 %                     disp('split')
                 end

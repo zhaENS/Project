@@ -163,26 +163,25 @@ classdef RouseSimulatorFramework<handle
             % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
                         
-            % Advance one step and apply object forces
-            %TODO: make sure objects activates internal forces only 
-            
-            obj.objectManager.Step(objList)% update current object position
+            % Advance one step and apply object forces                        
+            obj.objectManager.Step(objList)% update current and previous object position
             
             % Update object list
             objList        = 1:obj.objectManager.numObjects;
             
             % Apply domain (global) forces on all objects in the domain 
             dp                = obj.handles.classes.domain.params.forceParams;% Get domain parameters
-            
-            [prevParticlePosition,curParticlePosition,~,particleDist,cp]= obj.objectManager.GetObjectsAsOne(objList);
-            
+            prevParticlePosition    = obj.objectManager.prevPos; % prev position 
+            curParticlePosition     = obj.objectManager.curPos;  % new pos after internal forces
+            particleDist            = obj.objectManager.particleDist; % ddistance before internal forces
+            fixedParticleNum        = [];% to do: insert the correct indices
             % Apply external forces from the domain and reflect
             curParticlePosition = obj.handles.classes.domain.ApplylForces(curParticlePosition,...
                                                                          particleDist,...
                                                                          dp.lennardJonesForce,dp.diffusionForce,...
                                                                          dp.diffusionConst,...    
                                                                          dp.LJPotentialWidth,dp.LJPotentialDepth,...
-                                                                         cp.fixedBeadNum,obj.params.simulator.dt);
+                                                                         fixedParticleNum,obj.params.simulator.dt);
                                          
 %              % Reflect all particles 
              [~,newPos] = obj.handles.classes.domain.Reflect(prevParticlePosition,...

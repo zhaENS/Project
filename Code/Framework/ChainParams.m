@@ -35,7 +35,7 @@ classdef ChainParams<handle
             obj.fixedBeadNum           = [];
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
             obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains  
-            obj.springConst            = (obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);% defined as a matrix for all beads
+            obj.springConst            = 3*(obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);% defined as a matrix for all beads
             obj.bendingConst           = 1; 
             
             % set spring constant for the connected beads

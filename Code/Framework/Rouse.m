@@ -45,7 +45,7 @@ classdef Rouse<handle
             % the class
             obj.SetInputParams;
             
-            obj.InitializeForceManger;
+%             obj.InitializeForceManger;
             
             obj.InitializeRouseStruct;
                         
@@ -64,8 +64,8 @@ classdef Rouse<handle
         
         function InitializeRouseStruct(obj)
             % Initialize positions
-            obj.position.cur             = zeros(obj.params.numBeads,3); 
-            obj.position.prev            = zeros(obj.params.numBeads,3);
+            obj.position.cur             = randn(obj.params.numBeads,3); 
+            obj.position.prev            = randn(obj.params.numBeads,3);
 
             obj.InitializeBeadConnectionMap;
             obj.SetInitialChainPosition; % should be moved out of the initialization process
