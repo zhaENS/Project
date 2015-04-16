@@ -3,14 +3,12 @@ classdef DomainHandler<handle
     
     % TODO: allow insertion of a polygonal domain or a mesh from meshlab in
     % a *.stl file format, expand Reflect function accordingly 
+    % TODO: fix reflection for all domain shapes
     properties 
         handles
         params
         points
-    end
-    
-    events
-    end
+    end    
     
     methods 
         function obj = DomainHandler(domainParams)
@@ -19,16 +17,9 @@ classdef DomainHandler<handle
                       
             obj.handles.graphical.domain   = [];
             obj.handles.graphical.light    = [];  
-            obj.handles.graphical.mainAxes = obj.params.parentAxes;
-            
-            % Add forceManager to affect objects in the domain            
-            obj.InitializeForceManager
+            obj.handles.graphical.mainAxes = obj.params.parentAxes;            
         end                        
         
-        function InitializeForceManager(obj)
-            % Initialize forces class
-            obj.handles.classes.forceManager  = ForceManager(obj.params.forceParams);            
-        end
         
         function SetDefaultParams(obj)%obsolete
             obj.params.domainShape    = 'Sphere'; % sphere| cylinder | twoPlates | none
@@ -52,11 +43,13 @@ classdef DomainHandler<handle
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
         end        
         
-        function newParticlePosition = ApplylForces(obj,curParticlePosition,...
+        function newParticlePosition = ApplylForces(obj,prevParticlePosition,...
+                                                        curParticlePosition,...
                                                         particleDist,...
                                                         ljForce,diffusionForce,...
                                                         diffusionConst,LJPotentialWidth,LJPotentialDepth,...
                                                         fixedParticleNum,dt)
+                                                    
             % Apply forces on object in the domain, reflect them if
             % neccessary and return their new position 
             newParticlePosition = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,diffusionConst,...
@@ -64,11 +57,11 @@ classdef DomainHandler<handle
                                                                   LJPotentialWidth,LJPotentialDepth,...
                                                                   fixedParticleNum,dt);
                                  
-%             newParticlePosition = obj.Reflect(curParticlePosition,newParticlePosition);
+            [~,newParticlePosition] = obj.Reflect(prevParticlePosition,newParticlePosition);
                            
         end        
         
-        function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2)%TODO: fix reflection for all domain shapes
+        function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2)
               % Reflect a particle previously at pos1 and currently at
               % pos2 depending on the domain shape 
               % pos1 and pos2  are  NxDim arrays of particle positions 
@@ -112,11 +105,8 @@ classdef DomainHandler<handle
                             t   = sqrt(sum(cp-intersectionPoint).^2);
                             n   = intersectionPoint+ t*ds;% the new position
                             
-%                             obj.PlotReflection(pp,cp,intersectionPoint,n,domainNorm);
                             biasNorm = (n-intersectionPoint)/norm(n-intersectionPoint);
-                            %
-                            %
-%                             for dIdx = 1:obj.params.dimension
+
                                 curPos(outIdx(oIdx),:)  = n;
                                 % To avoid numerical error, move the prev point
                                 % slightly on the vector between the new point and the
@@ -141,11 +131,8 @@ classdef DomainHandler<handle
                             d       = (cp-pp)/sqrt(sum(cp-pp).^2);
                             r       = d-2*dot(d,domainNorm)*domainNorm;
                             n       = intersectionPoint+r*sqrt(sum(intersectionPoint-cp).^2)/sqrt(sum(r.^2));
-                            curPos = n;
-                            prevPos = intersectionPoint;
-%                             
-%                             curPos  = struct('x',n(1),'y',n(2),'z',n(3));
-%                             prevPos = struct('x',intersectionPoint(1),'y',intersectionPoint(2),'z',intersectionPoint(3));
+                            curPos  = n;
+                            prevPos = intersectionPoint;                            
                             obj.PlotReflection(pp,cp,intersectionPoint,n,domainNorm);
                         end
                         
@@ -162,16 +149,9 @@ classdef DomainHandler<handle
                             obj.PlotReflection(prevPos,curPos,intersectionPoint,n,domainNorm);
                             curPos  = n;
                             prevPos = intersectionPoint;
-%                             newPos  = struct('x',[],'y',[],'z',[]);
-%                             prevPos = struct('x',[],'y',[],'z',[]);
-%                             for dIdx = 1:obj.params.dimension
-%                                 newPos.(dimName{dIdx})  = n(dIdx);
-%                                 prevPos.(dimName{dIdx}) = intersectionPoint(dIdx);
-%                             end
                         end
                         
                     else
-                        %                 newPos  = cp;
                         prevPos = pp;
                     end
                     

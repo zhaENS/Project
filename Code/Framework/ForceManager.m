@@ -82,9 +82,7 @@ classdef ForceManager<handle
                                    bendingForces*dt+...
                                    diffusionForces+...
                                    particlePosition;
-        end        
-        
-                    
+        end                                    
                     
     end
     

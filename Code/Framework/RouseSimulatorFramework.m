@@ -3,7 +3,7 @@ classdef RouseSimulatorFramework<handle
     %TODO: move the initialization of the chains to allow initialization on
     %      the fly
     %TODO: add a listener that draws emails from the server, to allow
-    %controlling the simulations from a distance
+    %      controlling the simulations from a distance
     %TODO: save noise terms seeds to allow resimulations
     %TODO: save parameters and a short explanation with the results   
     %TODO: remove the option to plot online. plotting is always offline.
@@ -44,34 +44,23 @@ classdef RouseSimulatorFramework<handle
         
         function OrganizeParams(obj,frameworkParams)% move to params class
             obj.params                             = frameworkParams;           
-%             obj.params.chain.dt                    = obj.params.simulator.dt;
-%             obj.params.chain.dimension             = obj.params.simulator.dimension;
-%             obj.params.domain.showDomain           = obj.params.simulator.showSimulation;  
-%             obj.params.domain.dimension            = obj.params.simulator.dimension;
-%             obj.params.domain.dt                    = obj.params.simulator.dt;
-%             obj.params.dataRecorder.recipeFileName = obj.params.simulator.recipeFileName;
-%             obj.params.dataRecorder.encounterDist  = obj.params.simulator.encounterDist;
+
         end
         
         function InitializeClasses(obj)
             
             obj.InitializeDomain;                        
             
-            obj.InitializeObjects;
+            obj.InitializeObjectManager;
                         
             obj.InitializeDataRecorder;
             
             obj.InitializeGraphics;
-        end
+        end                              
         
-        function SetInputParams(obj,varargin)
-            if mod(numel(varargin),2)~=0
-                error('value pair input must come in pairs')
-            end
-            for pIdx = 1:2:numel(varargin);
-                obj.params.(varargin{pIdx}) = varargin{pIdx+1};
-            end
-        end                        
+        function InitializeDataRecorder(obj)
+            obj.handles.classes.dataRecorder = SimulationDataRecorder(obj.params.dataRecorder);
+        end
         
         function InitializeGraphics(obj)
           % Initialize framework's graphics 
@@ -79,7 +68,12 @@ classdef RouseSimulatorFramework<handle
           obj.handles.classes.graphics.CreateControls;
         end
         
-        function InitializeObjects(obj)
+        function InitializeDomain(obj)
+             % Parameters for the domain are set in the organizeParams             
+             obj.handles.classes.domain  = DomainHandler(obj.params.domain);
+        end   
+        
+        function InitializeObjectManager(obj)
             % Initialize objectManager
             obj.objectManager = ObjectManager(obj.params.chain);
             obj.objectManager.InitializeObjects(obj.handles.classes.domain);
@@ -99,11 +93,7 @@ classdef RouseSimulatorFramework<handle
          end
              functionName = strtrim(t(funcStartPos2(end)+1:funcEndPos1(end)-1));
              obj.recipe.(functionName) = t(funcEndPos2(end)+1:end);     
-        end
-               
-        function InitializeDataRecorder(obj)
-            obj.handles.classes.dataRecorder = SimulationDataRecorder(obj.params.dataRecorder);
-        end
+        end               
         
         function Run(obj)
             % Run the simulation according to the specified simulationType
@@ -159,38 +149,36 @@ classdef RouseSimulatorFramework<handle
             eval(obj.recipe.PreStepActions);
         end
         
-        function Step(obj,varargin)
+        function Step(obj,varargin)%TODO: consider joining Domain to objectManager
             % Next simulation step 
-            objList        = 1:obj.objectManager.numObjects;
+            objList        = 1:obj.objectManager.map.count;% numObjects;
                         
             % Advance one step and apply object forces                        
             obj.objectManager.Step(objList)% update current and previous object position
             
             % Update object list
-            objList        = 1:obj.objectManager.numObjects;
+            objList        = 1:obj.objectManager.map.count;%numObjects;
             
             % Apply domain (global) forces on all objects in the domain 
-            dp                = obj.handles.classes.domain.params.forceParams;% Get domain parameters
+            dp                      = obj.handles.classes.domain.params.forceParams;% Get domain parameters
             prevParticlePosition    = obj.objectManager.prevPos; % prev position 
             curParticlePosition     = obj.objectManager.curPos;  % new pos after internal forces
             particleDist            = obj.objectManager.particleDist; % ddistance before internal forces
-            fixedParticleNum        = [];% to do: insert the correct indices
+            fixedParticleNum        = [];% ToDo: insert the correct indices
+            
             % Apply external forces from the domain and reflect
-            curParticlePosition = obj.handles.classes.domain.ApplylForces(curParticlePosition,...
-                                                                         particleDist,...
-                                                                         dp.lennardJonesForce,dp.diffusionForce,...
-                                                                         dp.diffusionConst,...    
-                                                                         dp.LJPotentialWidth,dp.LJPotentialDepth,...
-                                                                         fixedParticleNum,obj.params.simulator.dt);
-                                         
-%              % Reflect all particles 
-             [~,newPos] = obj.handles.classes.domain.Reflect(prevParticlePosition,...
-                                                             curParticlePosition);
+            curParticlePosition = obj.handles.classes.domain.ApplylForces(prevParticlePosition,...
+                                                                          curParticlePosition,...
+                                                                          particleDist,...
+                                                                          dp.lennardJonesForce,dp.diffusionForce,...
+                                                                          dp.diffusionConst,...    
+                                                                          dp.LJPotentialWidth,dp.LJPotentialDepth,...
+                                                                          fixedParticleNum,obj.params.simulator.dt);                                         
                                                        
             % Deal the positions after reflection between the objects and their members in
             % the domain 
-            obj.objectManager.DealCurrentPosition(objList,newPos);
-            obj.objectManager.DealPreviousPosition(objList,newPos);
+            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
+            obj.objectManager.DealPreviousPosition(objList,curParticlePosition);
                                     
             % Show simulation
             obj.handles.classes.graphics.ShowSimulation
@@ -236,28 +224,12 @@ classdef RouseSimulatorFramework<handle
             eval(obj.recipe.PostSimulationBatchActions);            
             obj.handles.classes.dataRecorder.ClearAllSimulationData;            
 %             obj.simulationRound = 0;               
-        end        
+        end                                        
         
-        function InitializeDomain(obj)
-            
-             % parameters for the domain are set in the organizeParams
-             
-             obj.handles.classes.domain  = DomainHandler(obj.params.domain);
-             
-%             if obj.params.domain.showDomain
-%                 % move these commands to future Plotter class               
-%                obj.params.domain.parentAxes     = obj.handles.graphical.mainAxes;
-%                obj.handles.classes.domain.ConstructDomain;
-%                set(obj.handles.graphical.mainAxes,'NextPlot','Add')                 
-%                set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
-%             end
-        end                           
-        
-        function Record(obj)%TODO: verify data passage 
+        function Record(obj)%TODO: verify data passes correctly 
             % Add samples to the recorded distributions in
             % distributionHandler
             if obj.params.simulator.recordData
-%                obj.handles.classes.distributionHandler.Add% add to the frequency array of the distributionHandler
                obj.handles.classes.dataRecorder.Add;
             end
         end                                                
