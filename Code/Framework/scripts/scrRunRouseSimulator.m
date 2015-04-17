@@ -10,6 +10,7 @@ dbstop if error
 % xmlStr = fileread('SimulationFrameworkParams.xml');
 % params = xml_parse(xmlStr);
 params = SimulationFrameworkParams;
+
 % SimulatorParams
 profile on 
 r = RouseSimulatorFramework(params);

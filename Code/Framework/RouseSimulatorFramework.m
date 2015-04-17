@@ -4,11 +4,13 @@ classdef RouseSimulatorFramework<handle
     %      the fly
     %TODO: add a listener that draws emails from the server, to allow
     %      controlling the simulations from a distance
-    %TODO: save noise terms seeds to allow resimulations
+    %TODO: save noise terms seeds to allow re-simulations
     %TODO: save parameters and a short explanation with the results   
     %TODO: remove the option to plot online. plotting is always offline.
     %      remove parentAxes property from domainHandlerParams
-    %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params     
+    %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params 
+    %TODO: build a simple GUI
+    %TODO: insert the correct indices for fixed particles in Step 
     properties
         handles     
         objectManager
@@ -151,19 +153,19 @@ classdef RouseSimulatorFramework<handle
         
         function Step(obj,varargin)%TODO: consider joining Domain to objectManager
             % Next simulation step 
-            objList        = 1:obj.objectManager.map.count;% numObjects;
+            objList        = 1:obj.objectManager.numObjects;
                         
             % Advance one step and apply object forces                        
             obj.objectManager.Step(objList)% update current and previous object position
             
             % Update object list
-            objList        = 1:obj.objectManager.map.count;%numObjects;
+            objList        = 1:obj.objectManager.numObjects;
             
             % Apply domain (global) forces on all objects in the domain 
             dp                      = obj.handles.classes.domain.params.forceParams;% Get domain parameters
-            prevParticlePosition    = obj.objectManager.prevPos; % prev position 
-            curParticlePosition     = obj.objectManager.curPos;  % new pos after internal forces
-            particleDist            = obj.objectManager.particleDist; % ddistance before internal forces
+            prevParticlePosition    = obj.objectManager.prevPos;      % prev position 
+            curParticlePosition     = obj.objectManager.curPos;       % new pos after internal forces
+            particleDist            = obj.objectManager.particleDist; % distance before applying internal forces
             fixedParticleNum        = [];% ToDo: insert the correct indices
             
             % Apply external forces from the domain and reflect
