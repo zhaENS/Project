@@ -102,13 +102,13 @@ classdef ForceManager<handle
             
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,...
-                                                                   connectivityMap,bendingConst);
+                                                                   connectivityMap,bendingConst,fixedParticleNum);
             %zero-out fixed particle position 
-            bendingForces(fixedParticleNum,:) = 0;
+%             bendingForces(fixedParticleNum,:) = 0;
             dx = (springForces+ bendingForces)*dt;
             
             % zero out forces for fixed beads
-            dx(fixedParticleNum,:) = 0;
+%             dx(fixedParticleNum,:) = 0;
             newParticlePosition = particlePosition+dx;
                                    
          end
@@ -185,7 +185,7 @@ classdef ForceManager<handle
             else
                 bendingElasticityForceFlag = false;
              end            
-            bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForceFlag,particlePosition,connectivityMap,bendingConst(1));
+            bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForceFlag,particlePosition,connectivityMap,bendingConst(1),fixedParticleNum);
             % zero out forces for object with no bending elasticity force
             % active
             bendingForces([indsObj{~bendingElasticityForce}],:) = 0;
@@ -193,7 +193,7 @@ classdef ForceManager<handle
             % The effect of applying forces is addative
             dx =(springForces+bendingForces)*dt;                               
             % zero-out fixed particles position change
-            dx(fixedParticleNum,:) = 0;         
+%             dx(fixedParticleNum,:) = 0;         
             
             newParticlePosition = particlePosition+dx; 
                                    
@@ -216,13 +216,13 @@ classdef ForceManager<handle
                 L(~connectivityMap)       = 0;
                 sumForces                 = sum(L,2);
                 force                     = -springConst.*(diag(sumForces)-L); % set the maindiagonal                
-                force(fixedParticleNum,:) = 0;% zero out forces for fixed particles
-                force(:,fixedParticleNum) = 0;% zero out forces for fixed particles
                 force                     = force*particlePosition;
+                force(fixedParticleNum,:) = 0;% zero out forces for fixed particles
+%                 force(:,fixedParticleNum) = 0;% zero out forces for fixed particles
             end
         end
         
-        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,connectivityMat,bendingConst)
+        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,connectivityMat,bendingConst,fixedParticleNum)
             % Get bending elasticity force
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
@@ -232,6 +232,9 @@ classdef ForceManager<handle
                                                      edgeMat(:,:,2),...
                                                      edgeMat(:,:,3),...
                                                      connectivityMat,bendingConst);
+              % zero out forces for
+              % fixed particles
+               force(fixedParticleNum,:) = 0;
             end            
         end
         

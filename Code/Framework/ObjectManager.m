@@ -20,11 +20,12 @@ classdef ObjectManager<handle
         objParams    % parameters for the objects in the simulation 
                 
         % Properties af all objects as one 
-        particleDist % pairwise distance between all particles (All)
-        connectivity % connectivity matrix of particles (All)
-        curPos       % current particle position (All)
-        prevPos      % previous particle position (All)       
-        map          % struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
+        particleDist   % pairwise distance between all particles (All)
+        connectivity   % connectivity matrix of particles (All)
+        fixedParticles % fixed particles (All) 
+        curPos         % current particle position (All)
+        prevPos        % previous particle position (All)       
+        map            % struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
     end
     
     methods 
@@ -40,7 +41,8 @@ classdef ObjectManager<handle
         
         function InitializeObjects(obj,domainClass)
             % Initialize the objects 
-            
+            % update the general list of properties treating all objects as
+            % one 
             cNb = 0;% cumulative number of particles 
             for cIdx = 1:numel(obj.objParams)
                 
@@ -54,6 +56,10 @@ classdef ObjectManager<handle
               
               % Set connectivity 
               obj.connectivity(inds,inds) = obj.handles.chain(cIdx).connectionMap.map;
+              
+              % set fixed particle num (TODO: consider listing for each
+              % object individually)
+              obj.fixedParticles          = [obj.fixedParticles, {obj.objParams(cIdx).fixedBeadNum + cNb}];
               
               % update the position list
               obj.prevPos = [obj.prevPos; obj.handles.chain(cIdx).position.prev];
@@ -244,6 +250,12 @@ classdef ObjectManager<handle
 %             end
         end
         
+        function fixedParticles = GetFixedParticles(obj,objList)
+            % get the list of fixed particles 
+            memberList     = obj.map.GetObjectMembers(objList);
+            fixedParticles = [obj.fixedParticles{memberList}];
+        end
+        
         function particleDistance = GetParticleDistance(obj,objList)
             % Get the pairwise distances of particles in objList
             % the objects indices in objList corrospond to objects listed
@@ -319,6 +331,7 @@ classdef ObjectManager<handle
                    [~,curMemberPos] = obj.GetMembersPosition(objNum(oIdx));
                    springConst      = obj.GetSpringConstAsOne(objNum(oIdx));
                    minParticleDist  = obj.GetMinParticleDistAsOne(objNum(oIdx));
+                   fixedParticleNum = obj.GetFixedParticles(objNum(oIdx));
                    
                    % split parameters to pass to the forceManager
                    par = obj.GetObjectParameters(objNum(oIdx));
@@ -326,11 +339,11 @@ classdef ObjectManager<handle
                    fp  = [par.forceParams];
                    
                    %TODO: work out fixed bead num for composite objects
-                   fixedBeadNum = [];
+                  
                    newPos = ForceManager.ApplyCompositeInternalForces(curMemberPos,particleDistance,connectivityMap,...
                                                          [fp.springForce],[fp.bendingElasticityForce],...
                                                          springConst,[fp.bendingConst],...                                                         
-                                                         minParticleDist,fixedBeadNum,0.1);
+                                                         minParticleDist,fixedParticleNum,0.1);
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
@@ -339,7 +352,7 @@ classdef ObjectManager<handle
             end
             
             % Check for possible interaction between objects
-%             obj.ObjectInteraction;
+            obj.ObjectInteraction;
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
@@ -436,7 +449,7 @@ classdef ObjectManager<handle
                 o = 1:obj.map.count;% randperm(obj.numObjects);
                 obj1 = 1;
                
-                if r>0.9
+                if r>0.99
                      if obj.numObjects>1
                           obj2 = 2;% o(end-1);
 
@@ -454,13 +467,20 @@ classdef ObjectManager<handle
                      else
                
                      end
-                elseif r<(0.05)
+                elseif r<(0.01)
                         m = obj.map.GetObjectCount(1:obj.numObjects);
                          % split the biggest one 
-                        [~, oInd] = max(m);
+                        [numMem, oInd] = max(m);
+                        if numMem>1
+                        indsEnd   = obj.map.GetMemberInds(oInd,1);%obj.objectInds{obj.map.count};
+                        indsBend  = obj.map.GetMemberInds(oInd,2);%obj.objectInds{obj.map.count};
+                       obj.connectivity(indsBend(1),indsEnd(end)) = false;
+                       obj.connectivity(indsEnd(end),indsBend(1)) = false;
+                      
                         obj.SplitMember(oInd,obj.map.GetObjectCount(oInd))
-                        disp('split')
-               
+                        
+                        end
+               disp('split')
 %                 elseif r<(1-prob)
 %                     % remove connectivity                     
 %                      

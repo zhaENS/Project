@@ -23,12 +23,18 @@ classdef RouseSimulatorFramework<handle
     end
     
     properties (Access=private)
-%         chainColors 
         chainsCenterOfMass
         recipe = struct('PreSimulationBatchActions','',...
                         'PreRunActions','',...
                         'PostRunActions','',...
                         'PostSimulationBatchActions','');
+                    
+       SetRecipeParamsFlag            = false;
+       PreSimulationBatchActionsFlag  = false;
+       PreRunActionsFlag              = false;
+       PostRunActionsFlag             = false;
+       PostSimulationBatchActionsFlag = false;
+       
     end    
     
     methods 
@@ -166,7 +172,7 @@ classdef RouseSimulatorFramework<handle
             prevParticlePosition    = obj.objectManager.prevPos;      % prev position 
             curParticlePosition     = obj.objectManager.curPos;       % new pos after internal forces
             particleDist            = obj.objectManager.particleDist; % distance before applying internal forces
-            fixedParticleNum        = [];% ToDo: insert the correct indices
+            fixedParticleNum        = [obj.objectManager.fixedParticles{:}];% ToDo: insert the correct indices
             
             % Apply external forces from the domain and reflect
             curParticlePosition = obj.handles.classes.domain.ApplylForces(prevParticlePosition,...
