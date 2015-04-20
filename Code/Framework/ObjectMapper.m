@@ -5,6 +5,7 @@ classdef ObjectMapper<handle
         count  = 0;
         object 
         members % sequence of all members
+        indsToObj = containers.Map; % map member indices ther containing objects
     end
     
     events
@@ -32,6 +33,9 @@ classdef ObjectMapper<handle
                 objStruct.inds.memberCount  = cellfun(@numel,objStruct.inds.memberInds);
                 obj.members(obj.count)      = obj.count;  % permanent list of registered members
                 obj.object                  = [obj.object;objStruct];
+                
+                % create a map from indices to objects 
+                
             else % unused for now
                 % there is a possibility to insert inds as an already made object structure
                 obj.object = [obj.object;inds];
@@ -60,7 +64,7 @@ classdef ObjectMapper<handle
              mCount   = sum([obj.object(objList).count]); % total number of members 
              oInds    = [obj.object(objList).inds];       % object inds
              memCount = [oInds.memberCount];              % member count 
-             allInds  = [oInds.allInds];                  % indices from all members
+             allInds  = [oInds.allInds];                  % indices from all members (FIFO)
              pMemb    = [oInds.memberInds];               % indices of each member
              
              % Remove all objects in objList
@@ -144,7 +148,7 @@ classdef ObjectMapper<handle
         end
         
         function count = GetObjectCount(obj, objNum)
-            % Get the number of indices for all members of an object objNum
+            % Get the number of members for an object objNum
             count = [obj.object(objNum).count];
         end
         

@@ -33,13 +33,22 @@ classdef Rouse<handle
     
     properties (SetObservable)
         params
+        indsInParent
     end
    
     methods
-        function obj = Rouse(rouseParams)
+        function obj = Rouse(rouseParams,indsInParent,parentHandle)
             % Class constructor
 
             obj.params        = rouseParams;
+            
+            obj.indsInParent  = indsInParent; % the list of indices for position in ObjectManager
+            if exist('parentHandle','var')
+                % register a listener to the posChange event of
+                % objectManager
+                addlistener(parentHandle,'prevPosChange',@obj.UpdatePrevPosListenerCallback);
+                addlistener(parentHandle,'curPosChange',@obj.UpdateCurPosListenerCallback);
+            end
             
             % Adjust input parameters to match the structure expected in
             % the class
@@ -50,6 +59,14 @@ classdef Rouse<handle
             obj.InitializeRouseStruct;
                         
         end        
+        
+        function UpdatePrevPosListenerCallback(obj,sourceObj,evntData)
+            obj.position.prev = sourceObj.prevPos(obj.indsInParent,:);
+        end
+        
+        function UpdateCurPosListenerCallback(obj,sourceObj,eventData)
+            obj.position.cur = sourceObj.curPos(obj.indsInParent,:);
+        end
         
         function SetInputParams(obj)% clean up 
 
@@ -115,7 +132,7 @@ classdef Rouse<handle
                cMap(cm(bIdx,2),cm(bIdx,1))= true;
            end
            
-           obj.connectionMap.map                = cMap;
+           obj.connectionMap.map                = logical(cMap);
                       
            [obj.connectionMap.indices.in.map]   = find(cMap); % linear indices of positions of monomer pairs connected. 
            [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(cMap));
@@ -305,8 +322,8 @@ classdef Rouse<handle
             if flag 
                 % Add the pair entry to the end of the connectivity list 
                 obj.params.connectedBeads(end+1,:) = [bead1 bead2];
-                obj.connectionMap.map(bead1,bead2) = 1;
-                obj.connectionMap.map(bead2,bead1) = 1;
+                obj.connectionMap.map(bead1,bead2) = true;
+                obj.connectionMap.map(bead2,bead1) = true;
                 
                 % Update linear connectivity list
                 obj.UpdateLinearConnectivityMap
@@ -316,8 +333,8 @@ classdef Rouse<handle
         function DisconnectBeads(obj,bead1,bead2)
             
             % zero out the entries in the connectivity matrix 
-            obj.connectionMap.map(bead1,bead2) = 0;
-            obj.connectionMap.map(bead2,bead1) = 0;
+            obj.connectionMap.map(bead1,bead2) = false;
+            obj.connectionMap.map(bead2,bead1) = false;
              
             if ~isempty(obj.params.connectedBeads)
                 

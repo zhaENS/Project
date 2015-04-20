@@ -11,10 +11,12 @@ classdef RouseSimulatorFramework<handle
     %TODO: chain parameters should be initialized before the chains according to the number specified by the simulator params 
     %TODO: build a simple GUI
     %TODO: insert the correct indices for fixed particles in Step 
+    %TODO: fix reflection for general meshes shapes
+    
     properties
         handles     
         objectManager
-        beadDistance
+%         beadDistance
         runSimulation
         params
         simulationData  = struct('step',[],'stepTime',[]);      

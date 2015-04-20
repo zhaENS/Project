@@ -10,9 +10,9 @@ classdef ObjectManager<handle
     %TODO: make a mapping from particle number to chain number
     %TODO: fix connectivity for composite structures 
     %TODO: find a uniform interface for the Step of composite and simple objects 
-    % TODO: fix minDist for between objects
+    %TODO: fix minDist for between objects
     
-    properties
+    properties 
         numObjects   % number of objects in the class at any time Automatically updated)
         handles         
 %         objectList   % keeps the numbers of groups of objects 
@@ -28,6 +28,11 @@ classdef ObjectManager<handle
         map            % struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
     end
     
+    events
+        curPosChange
+        prevPosChange
+    end
+    
     methods 
         function obj = ObjectManager(objectsParams)
             % Class constructor
@@ -37,6 +42,8 @@ classdef ObjectManager<handle
             obj.map        = ObjectMapper;
             % register a listener to the countChange event of ObjectMapper
             obj.handles.listener.countChange = addlistener(obj.map,'countChange',@obj.UpdateCount);
+%             obj.handles.listener.connectivityChange = addlistener(obj,'connectivity','PreSet',@obj.ConnectivityChangeListenerCallback);
+            
         end
         
         function InitializeObjects(obj,domainClass)
@@ -47,9 +54,10 @@ classdef ObjectManager<handle
             for cIdx = 1:numel(obj.objParams)
                 
               % Initizlie Rouse chains 
-              obj.handles.chain(cIdx) = Rouse(obj.objParams(cIdx));
-              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);
               inds = (cNb+1):(cNb+obj.objParams(cIdx).numBeads);
+              obj.handles.chain(cIdx) = Rouse(obj.objParams(cIdx),inds,obj);
+              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);
+            
               
               % Register the chain as an object in the ObjectMapper class
               obj.map.AddObject(inds)
@@ -67,8 +75,9 @@ classdef ObjectManager<handle
               
               % Update cumulative object indices 
               cNb = cNb+obj.objParams(cIdx).numBeads;
-            end            
-              obj.connectivity = logical( obj.connectivity);              
+            end 
+           
+              obj.connectivity = (logical(obj.connectivity));
         end
         
         function Merge(obj,objList)
@@ -135,7 +144,7 @@ classdef ObjectManager<handle
             params = cell(1,numel(objList));
             for oIdx = 1:numel(objList)
                 % Get all positions for the current group 
-                memberList = obj.map.GetObjectMembers(objList(oIdx)); %object(objList(oIdx)).members; % obj.objectList{objList(oIdx)};% members
+                memberList = obj.map.GetObjectMembers(objList(oIdx)); % members
                 for pIdx = 1:numel(memberList)
                   params{oIdx} = [params{oIdx};obj.handles.chain(memberList(pIdx)).params];
                 end
@@ -148,6 +157,9 @@ classdef ObjectManager<handle
             % members of the objects in objList 
             % the function deals the position according to the order of
             % appearance in the curPos and the object list 
+%             notify(obj,'curPosChange')
+%             inds = obj.map.GetAllInds(objList);
+%             obj.curPos(inds,:) = curPos;
             
             cNb  = 0;% cummulative number of beads
             for oIdx = 1:numel(objList)
@@ -161,6 +173,11 @@ classdef ObjectManager<handle
         end
         
         function DealPreviousPosition(obj,objList,prevPos)
+%             notify(obj,'prevPosChange');
+              % Update the general list 
+%             inds = obj.map.GetAllInds(objList);
+%             obj.prevPos(inds,:) = prevPos;
+            
             % deal the curPos to the objects and their members 
             cNb  = 0;% cummulative number of beads
             for oIdx = 1:numel(objList)
@@ -280,6 +297,13 @@ classdef ObjectManager<handle
 %             end            
         end
         
+        function connectedParticles = GetConnectedParticles(obj,objNum)
+            % Get indices of connected particles (locally) for objNum
+            inds = obj.map.GetAllInds(objNum);
+            [connectedParticles(:,1),connectedParticles(:,2)] = find(triu(obj.connectivity(inds,inds)));
+                        
+        end
+        
         function ConnectParticles(obj,objNum,particle1,particle2)
             % Connect two particles
             % particle1 and particle2 are number of particles in the object            
@@ -347,12 +371,12 @@ classdef ObjectManager<handle
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
-                % obj.DealPreviousPosition(oIdx,newPos);
+                   obj.DealPreviousPosition(oIdx,newPos);
                  end
             end
             
             % Check for possible interaction between objects
-            obj.ObjectInteraction;
+%             obj.ObjectInteraction;
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
@@ -444,23 +468,24 @@ classdef ObjectManager<handle
 % %             % ==================================
             
 %             % ============ test merging structures ==========
-                prob = 0.95;
+                prob = 0.99;
                 r = rand(1);
-                o = 1:obj.map.count;% randperm(obj.numObjects);
+%                 o = 1:obj.map.count;% randperm(obj.numObjects);
                 obj1 = 1;
                
-                if r>0.99
+                if r>prob
                      if obj.numObjects>1
-                          obj2 = 2;% o(end-1);
+                          obj2 = 2;
 
-%                     % the the head of the last object and the tail of the
-                      % previous one should be connected 
+%                     % connect the head of the 2nd object and the tail of the
+                      % 1st one 
+                      
                       % get indices 
                       
-                      indsEnd  = obj.map.GetAllInds(obj1);%obj.objectInds{obj.map.count};
-                      indsBend = obj.map.GetAllInds(obj2);%obj.objectInds{obj.map.count-1};
-                      obj.connectivity(indsBend(1),indsEnd(end)) = true;
-                      obj.connectivity(indsEnd(end),indsBend(1)) = true;
+                      obj1Inds = (obj.map.GetAllInds(obj1));%obj.objectInds{obj.map.count};
+                      obj2Inds = (obj.map.GetAllInds(obj2));%obj.objectInds{obj.map.count-1};
+                      obj.connectivity(obj2Inds(1),obj1Inds(end)) = true;
+                      obj.connectivity(obj1Inds(end),obj2Inds(1)) = true;
                       
                       obj.Merge([obj1 obj2]);
                       disp('merge')
@@ -472,12 +497,12 @@ classdef ObjectManager<handle
                          % split the biggest one 
                         [numMem, oInd] = max(m);
                         if numMem>1
-                        indsEnd   = obj.map.GetMemberInds(oInd,1);%obj.objectInds{obj.map.count};
-                        indsBend  = obj.map.GetMemberInds(oInd,2);%obj.objectInds{obj.map.count};
-                       obj.connectivity(indsBend(1),indsEnd(end)) = false;
-                       obj.connectivity(indsEnd(end),indsBend(1)) = false;
-                      
-                        obj.SplitMember(oInd,obj.map.GetObjectCount(oInd))
+%                         indsEnd   = obj.map.GetMemberInds(oInd,1);%obj.objectInds{obj.map.count};
+%                         indsBend  = obj.map.GetMemberInds(oInd,2);%obj.objectInds{obj.map.count};
+%                        obj.connectivity(indsBend(1),indsEnd(end)) = false;
+%                        obj.connectivity(indsEnd(end),indsBend(1)) = false;
+%                       
+%                         obj.SplitMember(oInd,obj.map.GetObjectCount(oInd))
                         
                         end
                disp('split')
@@ -504,7 +529,12 @@ classdef ObjectManager<handle
             % search for close beads and connect them, update the
             % connectivity accordingly 
 %             obj.connectivity = obj.connectivity | obj.particleDist<encounterDist;
-          end
+               end
         end
+        
+        function ConnectivityChangeListenerCallback(obj,src,evtData,varargin)
+            disp('')
+        end
+        
     end
 end
