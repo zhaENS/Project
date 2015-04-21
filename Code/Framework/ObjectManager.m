@@ -336,17 +336,17 @@ classdef ObjectManager<handle
             % etc. 
             obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);
                          
-            for oIdx = 1:numel(objNum)% for each object
-                objList = obj.map.GetObjectMembers(oIdx);% members of the objects
+            for oIdx = 1:obj.numObjects% for each object
+                memberList = obj.map.GetObjectMembers(oIdx);% members of the objects
                
-                if numel(objList)==1
+                if numel(memberList)==1
                         % get the indices for the members of the object 
                         beadInds     = obj.map.GetMemberInds(objNum(oIdx),1);
                         beadDistance = obj.particleDist(beadInds,beadInds);
                         % advance each member one step
-                        obj.handles.chain(objList(1)).Step(beadDistance)   
+                        obj.handles.chain(memberList(1)).Step(beadDistance)   
                         % update the curPos list 
-                        obj.curPos(beadInds,:)  = obj.handles.chain(objList(1)).position.cur;
+                        obj.curPos(beadInds,:)  = obj.handles.chain(memberList(1)).position.cur;
 
                 else
                    % For composite object made of several sub-objects
@@ -362,8 +362,7 @@ classdef ObjectManager<handle
                    par = par{1};
                    fp  = [par.forceParams];
                    
-                   %TODO: work out fixed bead num for composite objects
-                  
+                   %TODO: work out fixed bead num for composite objects                  
                    newPos = ForceManager.ApplyCompositeInternalForces(curMemberPos,particleDistance,connectivityMap,...
                                                          [fp.springForce],[fp.bendingElasticityForce],...
                                                          springConst,[fp.bendingConst],...                                                         
@@ -371,12 +370,12 @@ classdef ObjectManager<handle
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
-                   obj.DealPreviousPosition(oIdx,newPos);
+%                    obj.DealPreviousPosition(oIdx,newPos);
                  end
             end
             
             % Check for possible interaction between objects
-%             obj.ObjectInteraction;
+            obj.ObjectInteraction;
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
@@ -468,35 +467,34 @@ classdef ObjectManager<handle
 % %             % ==================================
             
 %             % ============ test merging structures ==========
-                prob = 0.99;
+                prob = 0.9;
                 r = rand(1);
 %                 o = 1:obj.map.count;% randperm(obj.numObjects);
-                obj1 = 1;
+                obj1 = obj.numObjects;
                
                 if r>prob
                      if obj.numObjects>1
-                          obj2 = 2;
+                          obj2 = obj.numObjects-1;
 
 %                     % connect the head of the 2nd object and the tail of the
                       % 1st one 
                       
-                      % get indices 
-                      
+                      % get indices                       
                       obj1Inds = (obj.map.GetAllInds(obj1));%obj.objectInds{obj.map.count};
                       obj2Inds = (obj.map.GetAllInds(obj2));%obj.objectInds{obj.map.count-1};
                       obj.connectivity(obj2Inds(1),obj1Inds(end)) = true;
-                      obj.connectivity(obj1Inds(end),obj2Inds(1)) = true;
-                      
-                      obj.Merge([obj1 obj2]);
+                      obj.connectivity(obj1Inds(end),obj2Inds(1)) = true;    
+                      % TODO: fix sorting in Merge function 
+                      obj.Merge(sort([obj1 obj2]));
                       disp('merge')
                      else
                
                      end
                 elseif r<(0.01)
-                        m = obj.map.GetObjectCount(1:obj.numObjects);
+%                         m = obj.map.GetObjectCount(1:obj.numObjects);
                          % split the biggest one 
-                        [numMem, oInd] = max(m);
-                        if numMem>1
+%                         [numMem, oInd] = max(m);
+%                         if numMem>1
 %                         indsEnd   = obj.map.GetMemberInds(oInd,1);%obj.objectInds{obj.map.count};
 %                         indsBend  = obj.map.GetMemberInds(oInd,2);%obj.objectInds{obj.map.count};
 %                        obj.connectivity(indsBend(1),indsEnd(end)) = false;
@@ -504,8 +502,8 @@ classdef ObjectManager<handle
 %                       
 %                         obj.SplitMember(oInd,obj.map.GetObjectCount(oInd))
                         
-                        end
-               disp('split')
+%                         end
+%                disp('split')
 %                 elseif r<(1-prob)
 %                     % remove connectivity                     
 %                      

@@ -79,18 +79,19 @@ classdef DomainHandler<handle
                 % inside the domain 
             for oIdx = 1:numel(outIdx)
                  count    = 1; % counter for reflections 
-                 curPos(outIdx(oIdx),:)  = pos2(outIdx(oIdx),:);
-                 prevPos(outIdx(oIdx),:) = pos1(outIdx(oIdx),:);
-                while ~obj.InDomain(curPos(outIdx(oIdx),:))
+                 ind      = outIdx(oIdx);
+                 curPos(ind,:)  = pos2(ind,:);
+                 prevPos(ind,:) = pos1(ind,:);
+                while ~obj.InDomain(curPos(ind,:))
                     % Reflect the particle
                     if strcmpi(obj.params.domainShape,'none')% change 'none' to 'open'
                         % Do nothing
                     elseif strcmpi(obj.params.domainShape,'sphere')
                         
                         % Find intersection with the domain 
-                        intersectionPoint = obj.FindIntersectionPoint(prevPos(outIdx(oIdx),:),curPos(outIdx(oIdx),:));
+                        intersectionPoint = obj.FindIntersectionPoint(prevPos(ind,:),curPos(ind,:));
                         
-                        if all([obj.InDomain(prevPos(outIdx(oIdx),:)),~obj.InDomain(curPos(outIdx(oIdx),:)),isempty(intersectionPoint)]) %%|| sqrt(sum(intersectionPoint.^2))~=obj.params.domainWidth)
+                        if all([obj.InDomain(prevPos(ind,:)),~obj.InDomain(curPos(ind,:)),isempty(intersectionPoint)]) %%|| sqrt(sum(intersectionPoint.^2))~=obj.params.domainWidth)
                             error('something is wrong with the intersection point function')
                         end
                         
@@ -98,8 +99,8 @@ classdef DomainHandler<handle
                             domainNorm  = obj.GetDomainNormal(intersectionPoint);
                             
                             % Calculate reflected ray
-                            pp  = prevPos(outIdx(oIdx),:);
-                            cp  = curPos(outIdx(oIdx),:);
+                            pp  = prevPos(ind,:);
+                            cp  = curPos(ind,:);
                             di  = (intersectionPoint-pp)/sqrt(sum(intersectionPoint-pp).^2);
                             ds  = -(2*dot(domainNorm,di)*domainNorm-di);
                             t   = sqrt(sum(cp-intersectionPoint).^2);
@@ -107,11 +108,11 @@ classdef DomainHandler<handle
                             
                             biasNorm = (n-intersectionPoint)/norm(n-intersectionPoint);
 
-                                curPos(outIdx(oIdx),:)  = n;
+                                curPos(ind,:)  = n;
                                 % To avoid numerical error, move the prev point
                                 % slightly on the vector between the new point and the
                                 % intersectionPoint
-                                prevPos(outIdx(oIdx),:) = intersectionPoint+(obj.params.domainWidth/1e10)*biasNorm;
+                                prevPos(ind,:) = intersectionPoint+(obj.params.domainWidth/1e5)*biasNorm;
                                 
 %                             end
                         else
@@ -157,8 +158,8 @@ classdef DomainHandler<handle
                     
                     count = count+1;
                     if count>obj.params.maxReflectionsPerParticle
-                        error('%s%s%s','Reflection count is bigger than',obj.params.maxReflectionsPerParticle,...
-                            'Terminating');                        
+                        error('%s%s%s','Reflection count is bigger than ',num2str(obj.params.maxReflectionsPerParticle),...
+                            '- Terminating');                        
                     end
                 end
             end
