@@ -179,7 +179,7 @@ classdef SimulationFrameworkGraphics<handle
 %                         'ZData',c(:,3),...
 %                         'Visible','on');
                 
-                color =obj.chainColors(oIdx,:);% transform to the first member's color 
+                  color =obj.chainColors(member(1),:);% transform to the first member's color 
                     for mIdx = 1:numMembers                        
                         inds = obj.handles.framework.objectManager.map.GetMemberInds(oIdx,mIdx);
                         c    = curPos(inds,:);

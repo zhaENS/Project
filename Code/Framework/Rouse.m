@@ -22,7 +22,7 @@ classdef Rouse<handle
     
     % The function G_n(t) is the random fluctuation for the bead n, it is a
     % Gaussian with zero mean and 2*k*T/s std
-    properties         
+    properties
         handles
         position
         connectionMap
@@ -48,6 +48,7 @@ classdef Rouse<handle
                 % objectManager
                 addlistener(parentHandle,'prevPosChange',@obj.UpdatePrevPosListenerCallback);
                 addlistener(parentHandle,'curPosChange',@obj.UpdateCurPosListenerCallback);
+                addlistener(parentHandle,'connectivityChange',@obj.UpdateConnectivityListenerCallback);
             end
             
             % Adjust input parameters to match the structure expected in
@@ -60,12 +61,20 @@ classdef Rouse<handle
                         
         end        
         
-        function UpdatePrevPosListenerCallback(obj,sourceObj,evntData)
+        function UpdatePrevPosListenerCallback(obj,sourceObj,varargin)
+            % pull the prevPosition from ObjectManager
             obj.position.prev = sourceObj.prevPos(obj.indsInParent,:);
         end
         
-        function UpdateCurPosListenerCallback(obj,sourceObj,eventData)
+        function UpdateCurPosListenerCallback(obj,sourceObj,varargin)
+            % pull the curPosition from ObjectManager
             obj.position.cur = sourceObj.curPos(obj.indsInParent,:);
+        end
+        
+        function UpdateConnectivityListenerCallback(obj,sourceObj,varargin)
+            % pull the connectivityMap from ObjectManager
+            obj.connectionMap.map= sourceObj.connectivity(obj.indsInParent,obj.indsInParent);
+            
         end
         
         function SetInputParams(obj)% clean up 

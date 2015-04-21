@@ -5,7 +5,8 @@ classdef ObjectMapper<handle
         count  = 0;
         object 
         members % sequence of all members
-        indsToObj = containers.Map; % map member indices ther containing objects
+        allIndsToObj    = containers.Map('KeyType','double','ValueType','double'); % map member indices ther containing objects
+        allIndsToMember = containers.Map('KeyType','double','ValueType','double');
     end
     
     events
@@ -24,22 +25,54 @@ classdef ObjectMapper<handle
             % Add a member to the end of the list with the membes inds 
             obj.count          = obj.count+1;
             if ~isstruct(inds)
-                objStruct                  = ObjectMapper.NewObjectStruct;
-                objStruct.count            = 1;
-                objStruct.members          = obj.count;% the index in the general list
+                objStruct                    = ObjectMapper.NewObjectStruct;
+                objStruct.count              = 1;
+                objStruct.members            = obj.count;% the index in the general list
                 
-                objStruct.inds.allInds      = [objStruct.inds.allInds,inds];
-                objStruct.inds.memberInds{1}= inds;
-                objStruct.inds.memberCount  = cellfun(@numel,objStruct.inds.memberInds);
-                obj.members(obj.count)      = obj.count;  % permanent list of registered members
-                obj.object                  = [obj.object;objStruct];
+                objStruct.inds.allInds       = [objStruct.inds.allInds,inds];
+                objStruct.inds.memberInds{1} = inds;
+                objStruct.inds.memberCount   = cellfun(@numel,objStruct.inds.memberInds);
+                obj.members(obj.count)       = obj.count;  % permanent list of registered members
+                obj.object                   = [obj.object;objStruct];
                 
-                % create a map from indices to objects 
+%                 % create a map from indices to objects 
+%                 keySet           = inds;
+%                 valueSet         = obj.count*ones(1,numel(keySet));
+%                 addMap           =  containers.Map(keySet,valueSet,'UniformValues',false);
+%                 obj.allIndsToObj = [obj.allIndsToObj;addMap];
+%                 
+%                 for iIdx = 1:numel(inds)
+%                     % indices to object number
+% %                     obj.allIndsToObj(inds(iIdx))   = obj.count;
+%                     % indices to member
+%                     obj.allIndsToMember(inds(iIdx))= obj.members(obj.count);
+%                 end
+            else
+                % Insert inds as a ready-made object structure
                 
-            else % unused for now
-                % there is a possibility to insert inds as an already made object structure
+                % add the object structure 
                 obj.object = [obj.object;inds];
                 
+%                 % Update mappings 
+%                 allInds  = inds.inds.allInds;% get object indices 
+%                 keySet   = allInds;
+%                 valueSet = obj.count*ones(1,numel(keySet));
+%                 addMap   = containers.Map(keySet,valueSet,'UniformValues',false);
+%                 obj.allIndsToObj = [obj.allIndsToObj;addMap];
+%                 
+%                 for iIdx = 1:numel(allInds)
+%                     % update the indsToObj map 
+%                   obj.allIndsToObj(allInds(iIdx)) = obj.count; % register to the last object                 
+%                 end
+                
+%                 % update indsToMember map
+%                 memb = inds.members;
+%                 for mIdx = 1:numel(memb)
+%                     memInds = inds.inds.memberInds{mIdx};
+%                     for iIdx = 1:numel(memInds)
+%                         obj.allIndsToMember(memInds(iIdx))= memb(mIdx);
+%                     end
+%                 end
             end
         end
         
@@ -48,11 +81,22 @@ classdef ObjectMapper<handle
             
              stay = setdiff(1:obj.count,objList);
              
+             % update the indsToObj map 
+%              allInds = obj.GetAllInds(objList);
+%              % remove the keys from the map  
+%              for iIdx = 1:numel(allInds)
+%                  % update allInds to object
+%                  remove(obj.allIndsToObj,allInds(iIdx));
+%                  % update all inds to member 
+%                  remove(obj.allIndsToMember,allInds(iIdx));
+%              end
+             
              % Remove the objects
              obj.object = obj.object(stay);
-             
+                                       
              % Decrease object count
-             obj.count  = obj.count-numel(objList);
+             obj.count  = obj.count-numel(objList);                          
+             
         end
         
         function MergeObjects(obj,objList)
@@ -60,9 +104,9 @@ classdef ObjectMapper<handle
              % RemoveObjects->AddObject
              
              % copy data
-             memb     = [obj.object(objList).members];
+             memb     = sort([obj.object(objList).members]);
              mCount   = sum([obj.object(objList).count]); % total number of members 
-             oInds    = [obj.object(objList).inds];       % object inds
+             oInds    = ([obj.object(objList).inds]);       % object inds
              memCount = [oInds.memberCount];              % member count 
              allInds  = [oInds.allInds];                  % indices from all members (FIFO)
              pMemb    = [oInds.memberInds];               % indices of each member
@@ -82,6 +126,7 @@ classdef ObjectMapper<handle
              
              % add it to the end of the object list 
              obj.AddObject(objStruct);
+                          
         end
         
         function BreakObject(obj,objNum)
@@ -104,13 +149,25 @@ classdef ObjectMapper<handle
         
         function RemoveMember(obj,objNum,memberNum)
             % Remove a member from a specific object                      
-                        
+%             memberInds = obj.object(objNum).inds.memberInds{memberNum};
+            
+            % remove the member's data from the object 
             obj.object(objNum).inds.memberInds  = obj.object(objNum).inds.memberInds(setdiff(1:obj.object(objNum).count,memberNum));
             obj.object(objNum).inds.allInds     = [obj.object(objNum).inds.memberInds{:}];
             obj.object(objNum).inds.memberCount = cellfun(@numel,obj.object(objNum).inds.memberInds);
             obj.object(objNum).count            = obj.object(objNum).count-1;
             obj.object(objNum).members          = setdiff(obj.object(objNum).members,obj.object(objNum).members(memberNum));
-
+            
+%             % update the inds list 
+%             allInds = memberInds;
+%             % remove the keys from the container
+%             for iIdx = 1:numel(allInds)
+%              % update all inds to object map 
+%                 remove(obj.allIndsToObj,allInds(iIdx));
+%             % update all inds to member 
+%                 remove(obj.allIndsToMember,allInds(iIdx));
+%             end
+            
         end
         
         function SplitMember(obj,objNum,memberNum)
@@ -138,6 +195,7 @@ classdef ObjectMapper<handle
         
         function inds = GetAllInds(obj,objList)
             % Get all indices from different objects in one list
+            objList = sort(objList);
             aInds = [obj.object(objList).inds];
             inds  = [aInds.allInds];
         end
@@ -145,6 +203,36 @@ classdef ObjectMapper<handle
         function inds = GetMemberInds(obj,objNum,memberNum)
             % Get the indices of members of an object in one list
             inds = [obj.object(objNum).inds.memberInds{memberNum}];
+        end
+        
+        function objNum = GetObjectFromInd(obj,ind)
+            % get the object number as a fucntion of the index
+             flag   = true;
+%              next   = 1;
+             objNum = 1;
+             numObj = obj.count;
+             while flag
+                 % go over each object and test for inclusion of ind
+                 inds = obj.GetAllInds(objNum);
+                 flag = ~ismember(ind,inds);
+                 if flag% if not there go to the next object 
+                     objNum = objNum+1;
+                     if objNum>numObj
+                         error('the specified index is not in the list')
+                     end
+                 end
+             end
+             
+%             objNum = obj.allIndsToObj(ind);
+        end
+        
+        function objNum = GetObjectFromMember(obj,memberNum)% unfinished
+            % get object number from member number (global member number)
+        end
+        
+        function memberNum = GetMemberFromInd(obj,ind)
+            % get member number as a functio of the index
+            memberNum = obj.allIndsToMember(ind);
         end
         
         function count = GetObjectCount(obj, objNum)
