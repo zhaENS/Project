@@ -5,8 +5,8 @@ classdef ObjectMapper<handle
         count  = 0;
         object 
         members % sequence of all members
-        allIndsToObj    = containers.Map('KeyType','double','ValueType','double'); % map member indices ther containing objects
-        allIndsToMember = containers.Map('KeyType','double','ValueType','double');
+%         allIndsToObj    = containers.Map('KeyType','double','ValueType','double'); % map member indices ther containing objects
+%         allIndsToMember = containers.Map('KeyType','double','ValueType','double');
     end
     
     events
@@ -102,15 +102,20 @@ classdef ObjectMapper<handle
         function MergeObjects(obj,objList)
             % Merge two or more objects and their members into one
              % RemoveObjects->AddObject
-             
-             % copy data
-             memb     = sort([obj.object(objList).members]);
+%              objList = sort(objList);
+             % copy data            
+             memb     = ([obj.object(objList).members]);
+             % make sure the list is sorted in ascending manner
+             [memb,sInds] = sort(memb,'ascend');             
              mCount   = sum([obj.object(objList).count]); % total number of members 
              oInds    = ([obj.object(objList).inds]);       % object inds
+%              oInds    = oInds(sInds);
              memCount = [oInds.memberCount];              % member count 
+%              memCount = memCount(sInds);
              allInds  = [oInds.allInds];                  % indices from all members (FIFO)
              pMemb    = [oInds.memberInds];               % indices of each member
              
+            
              % Remove all objects in objList
              obj.RemoveObject(objList);
              
@@ -195,13 +200,14 @@ classdef ObjectMapper<handle
         
         function inds = GetAllInds(obj,objList)
             % Get all indices from different objects in one list
-            objList = sort(objList);
+            objList = (objList);
             aInds = [obj.object(objList).inds];
-            inds  = [aInds.allInds];
+            inds  = sort([aInds.allInds]);
         end
         
         function inds = GetMemberInds(obj,objNum,memberNum)
             % Get the indices of members of an object in one list
+            memberNum = sort(memberNum);
             inds = [obj.object(objNum).inds.memberInds{memberNum}];
         end
         

@@ -43,7 +43,7 @@ classdef ObjectManager<handle
             
             % register a listener to the countChange event of ObjectMapper
             obj.handles.listener.countChange        = addlistener(obj.map,'countChange',@obj.UpdateCount);
-            obj.handles.listener.connectivityChange = addlistener(obj,'connectivity','PostSet',@obj.ConnectivityChangeListenerCallback);
+%             obj.handles.listener.connectivityChange = addlistener(obj,'connectivity','PostSet',@obj.ConnectivityChangeListenerCallback);
             
         end
         
@@ -86,7 +86,7 @@ classdef ObjectManager<handle
             % Remove the objects in objectList from the list of active
             % ojects, wrap the objects as one, and add them to the end of
             % the list. 
-            objList = sort(objList);
+%             objList = (objList);
             obj.map.MergeObjects(objList);
                        
         end
@@ -255,6 +255,7 @@ classdef ObjectManager<handle
             % displaying the connectivity between these objects.            
             % This function returns the connectivity map only after it was first
             % initialized
+%             objList = sort(objList);
             inds          = obj.map.GetAllInds(objList);
             connectionMap = obj.connectivity(inds,inds);
 
@@ -292,12 +293,14 @@ classdef ObjectManager<handle
             obj2 = obj.map.GetObjectFromInd(particle2);
             
             % change general connectivity % notifies listeners
-            obj.connectivity(particle1,particle2) = true;
-            obj.connectivity(particle2,particle1) = true;
-            
+            obj.connectivity(particle1,particle2 ) = true;
+            obj.connectivity(particle2,particle1)  = true;
+              
             if obj1~=obj2
-                obj.Merge([obj1,obj2])
+                obj.Merge(sort([obj1,obj2]))
             else
+                disp('same obj')
+                notify(obj,'connectivityChange');
                 % get the member index 
 %                 memb1 = obj.map.allIndsToMember(particle1);
 %                 memb2 = obj.map.allIndsToMember(particle2);
@@ -371,7 +374,7 @@ classdef ObjectManager<handle
             end
             
             % Check for possible interaction between objects
-            obj.ObjectInteraction;
+%             obj.ObjectInteraction;
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
@@ -463,13 +466,13 @@ classdef ObjectManager<handle
 % %             % ==================================
             
 %             % ============ test merging structures ==========
-                prob = 0.99;
+                prob = 0.95;
                 r = rand(1);
 %                 o = 1:obj.map.count;% randperm(obj.numObjects);
 %                 obj1 = obj.numObjects;
                 rp = randperm(numel(obj.map.GetAllInds(1:obj.numObjects)));
                 if r>prob
-                     if obj.numObjects>1
+%                      if obj.numObjects>1
 %                           obj2 = obj.numObjects-1;
                          obj.ConnectParticles(rp(1),rp(2));
                     % connect the head of the 2nd object and the tail of the
@@ -483,9 +486,9 @@ classdef ObjectManager<handle
 %                       % TODO: fix sorting in Merge function 
 %                       obj.Merge(sort([obj1 obj2]));
                       disp('merge')
-                     else
+%                      else
                
-                     end
+%                      end
                 elseif r<(1-prob)
 %                         m = obj.map.GetObjectCount(1:obj.numObjects);
 %                          % split the biggest one 

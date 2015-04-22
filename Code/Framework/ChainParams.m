@@ -22,10 +22,10 @@ classdef ChainParams<handle
     
     methods
         function obj = ChainParams
-            obj.dimension              = 3;       % inherited from framework
-            obj.beta                   = 2;       % for rouse, place 2. 
+            obj.dimension              = 3;         % inherited from framework
+            obj.beta                   = 2;         % for rouse, place 2. 
             obj.b                      = 1*sqrt(3); % std of distance between beads
-            obj.dt                     = 1e-2;    % inherited from framework
+            obj.dt                     = 1e-2;      % inherited from framework
             obj.diffusionConst         = 1;
             obj.numBeads               = 32;
             obj.connectedBeads         = [];

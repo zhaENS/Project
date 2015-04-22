@@ -193,6 +193,8 @@ classdef RouseSimulatorFramework<handle
             % Show simulation
             obj.handles.classes.graphics.ShowSimulation
             
+            
+             obj.objectManager.ObjectInteraction;
             % Update simulation data
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
                 obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
