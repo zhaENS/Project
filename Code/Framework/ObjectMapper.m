@@ -34,45 +34,11 @@ classdef ObjectMapper<handle
                 objStruct.inds.memberCount   = cellfun(@numel,objStruct.inds.memberInds);
                 obj.members(obj.count)       = obj.count;  % permanent list of registered members
                 obj.object                   = [obj.object;objStruct];
-                
-%                 % create a map from indices to objects 
-%                 keySet           = inds;
-%                 valueSet         = obj.count*ones(1,numel(keySet));
-%                 addMap           =  containers.Map(keySet,valueSet,'UniformValues',false);
-%                 obj.allIndsToObj = [obj.allIndsToObj;addMap];
-%                 
-%                 for iIdx = 1:numel(inds)
-%                     % indices to object number
-% %                     obj.allIndsToObj(inds(iIdx))   = obj.count;
-%                     % indices to member
-%                     obj.allIndsToMember(inds(iIdx))= obj.members(obj.count);
-%                 end
+
             else
-                % Insert inds as a ready-made object structure
-                
+                % Insert inds as a ready-made object structure                
                 % add the object structure 
-                obj.object = [obj.object;inds];
-                
-%                 % Update mappings 
-%                 allInds  = inds.inds.allInds;% get object indices 
-%                 keySet   = allInds;
-%                 valueSet = obj.count*ones(1,numel(keySet));
-%                 addMap   = containers.Map(keySet,valueSet,'UniformValues',false);
-%                 obj.allIndsToObj = [obj.allIndsToObj;addMap];
-%                 
-%                 for iIdx = 1:numel(allInds)
-%                     % update the indsToObj map 
-%                   obj.allIndsToObj(allInds(iIdx)) = obj.count; % register to the last object                 
-%                 end
-                
-%                 % update indsToMember map
-%                 memb = inds.members;
-%                 for mIdx = 1:numel(memb)
-%                     memInds = inds.inds.memberInds{mIdx};
-%                     for iIdx = 1:numel(memInds)
-%                         obj.allIndsToMember(memInds(iIdx))= memb(mIdx);
-%                     end
-%                 end
+                obj.object = [obj.object;inds];                
             end
         end
         
@@ -207,6 +173,8 @@ classdef ObjectMapper<handle
         
         function inds = GetMemberInds(obj,objNum,memberNum)
             % Get the indices of members of an object in one list
+            % the member number is relative to the list appearing in the
+            % containing object 
             memberNum = sort(memberNum);
             inds = [obj.object(objNum).inds.memberInds{memberNum}];
         end
@@ -232,11 +200,28 @@ classdef ObjectMapper<handle
 %             objNum = obj.allIndsToObj(ind);
         end
         
-        function objNum = GetObjectFromMember(obj,memberNum)% unfinished
+        function objNum = GetObjectFromMember(obj,memberList)
             % get object number from member number (global member number)
+            numMember = numel(memberList);
+            objList   = zeros(numMember,1);
+            for mIdx = 1:numMember
+                flag  = true;
+                objNum = 1; 
+                while flag                     
+                    flag = ~ismember(memberList(mIdx),obj.object(objNum).members);
+                     if ~flag % if not a member of the object
+                         objNum = objNum+1;
+                         if objNum>obj.count % if not exceeds number of objects 
+                             error('memberList is not on the list of members of any object');
+                         end
+                     else % if member of the object
+                         objList(objNum) = objNum; % record the object number 
+                     end
+                end                
+            end
         end
         
-        function memberNum = GetMemberFromInd(obj,ind)
+        function memberNum = GetMemberFromInd(obj,ind)% TODO: correct
             % get member number as a functio of the index
             memberNum = obj.allIndsToMember(ind);
         end

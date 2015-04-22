@@ -27,7 +27,7 @@ classdef ChainParams<handle
             obj.b                      = 1*sqrt(3); % std of distance between beads
             obj.dt                     = 1e-2;      % inherited from framework
             obj.diffusionConst         = 1;
-            obj.numBeads               = 32;
+            obj.numBeads               = 332;
             obj.connectedBeads         = [];
             obj.bendingElasticityForce = false;
             obj.springForce            = true;

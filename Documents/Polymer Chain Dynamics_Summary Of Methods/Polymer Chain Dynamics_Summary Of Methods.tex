@@ -132,8 +132,23 @@ t_{1,2}=\frac{-\alpha \pm \sqrt{\alpha^2-\beta (\langle A,A \rangle -R^2)}}{\bet
 \end{equation*}
 then we take the $t$ such that $0<t<1$, to make sure the intersection is in the right direction and is between points $A$ and $B$.
 
+\section{Object Manager}
+\subsection{objects and members}
+objects in the framework can be one or several chains connected in an arbitrary manner. Objects are treated as a single unit when forces are applied. 
+there are generally two types of objects in the simulation framework, wither  chain(s) or domains. 
 
+Provisional: domains and chains should share a similar core such that chains could act as domains 
 
+\subsection{Step process}
+first all objects (chains) move one step according to the internal forces (spring, bending)
+Then the external forces (diffusion, Lennard-Johns) are applied to all objects. 
+The total displacement of each particle is considered by the additive contribution of the external and internal forces. 
+
+Provisional: The step process should be such that all external forces are applied iteratively on all the object they contain (including chains and domains), all the internal domains should apply forces on their internal objects ans so forth. 
+
+\section{Object Mapper}
+this class serves as the mapping between object indexes, their member chains and the members' particles. 
+several mapping exist: object-> members, object->particle, particle-> object,  particle->member, member-> particle, particle->member
 
 
 \end{document} 

@@ -177,27 +177,12 @@ classdef ObjectManager<handle
         end
         
         function DealPreviousPosition(obj,objList,prevPos)
-%           
-%            Update the general list 
+          %   Update the general list 
+          %   deal the prevPos to all the object members
              inds = obj.map.GetAllInds(objList);
              obj.prevPos(inds,:) = prevPos;
              notify(obj,'prevPosChange'); % notify all registered listeners
             
-%             % deal the curPos to the objects and their members 
-%             cNb  = 0;% cummulative number of beads
-%             for oIdx = 1:numel(objList)
-%                 % get the number of beads for the object, cut the curPos
-%                 % and send it to SetCurrentPosition with the objNum                
-% 
-%                 nb = obj.map.GetMemberCount(objList(oIdx),1:obj.map.GetObjectCount(objList(oIdx)));
-%                 p = prevPos(cNb+1:cNb+nb,:);
-%                 obj.SetPreviousParticlePosition(objList(oIdx),p);
-%                 % update the general list 
-% %                 inds = obj.map.GetAllInds(objList(oIdx));
-% % %                 inds = obj.objectInds{objList(oIdx)};
-% %                 obj.prevPos(inds,:) = p;
-%                 cNb = cNb+nb;% increase cummulative count                                 
-%             end
         end
         
         function SetCurrentParticlePosition(obj,objNum,curPos)%unused
@@ -284,7 +269,21 @@ classdef ObjectManager<handle
                         
         end
         
-        function ConnectParticles(obj,particle1,particle2)
+        function objDistance = GetObjectDistance(obj,objList)
+            % Get the pairwise distance between all members of the
+            % specified objects in objlist 9 by the order of their
+            % appearance
+            inds = obj.map.GetAllInds(objList);
+            objDistance = obj.particleDist(inds,inds);
+            
+        end
+        
+        function memberDist = GetMemberDistance(obj,memberList)
+            %get the pairwise distances between members in memberList
+            inds = obj.map.GetAll
+        end
+        
+        function ConnectParticles(obj,particle1,particle2)% should move to ObjectInteractionManager
             % Connect two particles
             % particle1 and particle2 are number of particles in the general list   
             
@@ -320,7 +319,7 @@ classdef ObjectManager<handle
             
         end
         
-        function DisconnectParticles(obj,objNum,particle1,particle2)%TODO: apply to composite objects as well
+        function DisconnectParticles(obj,objNum,particle1,particle2)%should move to ObjectInteractionManager
             % Disconnect pairs of particles in an object objNum
             % the particle indices should be relative to the ones in objNum
             for pIdx = 1:size(particle1,1)
@@ -439,7 +438,7 @@ classdef ObjectManager<handle
             obj.numObjects = sourceObj.count;
         end
         
-        function ObjectInteraction(obj)
+        function ObjectInteraction(obj)% move to objectInteractionManager
             % Check for possible interaction between objects and update
             % their data accordingly 
             

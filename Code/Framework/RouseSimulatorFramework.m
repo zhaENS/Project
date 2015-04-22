@@ -12,14 +12,16 @@ classdef RouseSimulatorFramework<handle
     %TODO: build a simple GUI
     %TODO: insert the correct indices for fixed particles in Step 
     %TODO: fix reflection for general meshes shapes
+    %TODO: consider moving Domain to the ObjectManager
     
     properties
         handles     
-        objectManager
-%         beadDistance
-        runSimulation
-        params
-        simulationData  = struct('step',[],'stepTime',[]);      
+        objectManager      % data and object manipulation
+        dataRecorder       % simulation data module
+        simulationGraphics % graphical module
+        runSimulation      % flag 
+        params             % object parameters
+        simulationData  = struct('step',[],'stepTime',[]); % simulation data (should move to dataRecorder)
         batchRound      = 0;
         simulationRound = 0; 
     end
@@ -53,7 +55,7 @@ classdef RouseSimulatorFramework<handle
         end
         
         function OrganizeParams(obj,frameworkParams)% move to params class
-            obj.params                             = frameworkParams;           
+            obj.params = frameworkParams;           
 
         end
         
@@ -69,13 +71,13 @@ classdef RouseSimulatorFramework<handle
         end                              
         
         function InitializeDataRecorder(obj)
-            obj.handles.classes.dataRecorder = SimulationDataRecorder(obj.params.dataRecorder);
+            obj.dataRecorder = SimulationDataRecorder(obj.params.dataRecorder);
         end
         
         function InitializeGraphics(obj)
           % Initialize framework's graphics 
-          obj.handles.classes.graphics = SimulationFrameworkGraphics(obj);   
-          obj.handles.classes.graphics.CreateControls;
+          obj.simulationGraphics = SimulationFrameworkGraphics(obj);   
+          obj.simulationGraphics.CreateControls;
         end
         
         function InitializeDomain(obj)
@@ -136,7 +138,7 @@ classdef RouseSimulatorFramework<handle
             % Actios performed before a simulation batch      
             obj.batchRound      = obj.batchRound+1;
             obj.simulationRound = 0;
-            obj.handles.classes.dataRecorder.CreateNewSimulationBatch
+            obj.dataRecorder.CreateNewSimulationBatch
             
             % evaluate the recipe file at the PreSimulationBatchActions
             eval(obj.recipe.PreSimulationBatchActions)
@@ -149,8 +151,8 @@ classdef RouseSimulatorFramework<handle
             
             eval(obj.recipe.PreRunActions);
             
-            obj.handles.classes.dataRecorder.NewSimulation(obj.objectManager.handles.chain,obj.params);%(obj.handles.classes.rouse,obj.params);                        
-            obj.handles.classes.dataRecorder.SetSimulationStartTime;
+            obj.dataRecorder.NewSimulation(obj.objectManager.handles.chain,obj.params);%(obj.handles.classes.rouse,obj.params);                        
+            obj.dataRecorder.SetSimulationStartTime;
             obj.simulationData(obj.batchRound,obj.simulationRound).step     = 1;
             obj.simulationData(obj.batchRound,obj.simulationRound).stepTime = 0;
         end
@@ -191,10 +193,11 @@ classdef RouseSimulatorFramework<handle
             obj.objectManager.DealPreviousPosition(objList,curParticlePosition);
                                     
             % Show simulation
-            obj.handles.classes.graphics.ShowSimulation
+            obj.simulationGraphics.ShowSimulation
             
-            
+            % check for interaction between objects             
              obj.objectManager.ObjectInteraction;
+             
             % Update simulation data
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
                 obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
@@ -214,8 +217,8 @@ classdef RouseSimulatorFramework<handle
             
             eval(obj.recipe.PostRunActions);
             
-            obj.handles.classes.dataRecorder.SetSimulationEndTime;
-            obj.handles.classes.dataRecorder.SaveResults;% save results
+            obj.dataRecorder.SetSimulationEndTime;
+            obj.dataRecorder.SaveResults;% save results
             
             if obj.params.simulator.notifyByEmail
                 if mod(obj.simulationRound,obj.params.simulator.notifyCycleLength)==0
@@ -234,7 +237,7 @@ classdef RouseSimulatorFramework<handle
         function PostSimulationBatchActions(obj)
             % actions performed post simulation batch
             eval(obj.recipe.PostSimulationBatchActions);            
-            obj.handles.classes.dataRecorder.ClearAllSimulationData;            
+            obj.dataRecorder.ClearAllSimulationData;            
 %             obj.simulationRound = 0;               
         end                                        
         
@@ -242,7 +245,7 @@ classdef RouseSimulatorFramework<handle
             % Add samples to the recorded distributions in
             % distributionHandler
             if obj.params.simulator.recordData
-               obj.handles.classes.dataRecorder.Add;
+               obj.dataRecorder.Add;
             end
         end                                                
         

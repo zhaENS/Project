@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  21 APR 2015 12:59
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  22 APR 2015 15:52
 entering extended mode
 **Polymer*Chain*Dynamics_Summary*Of*Methods.tex
 
@@ -184,7 +184,7 @@ Overfull \hbox (5.9008pt too wide) in paragraph at lines 65--67
  [all/external/internal/none] 
  []
 
-[3] [4] [5] [6]
+[3] [4] [5] [6] [7]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Summ
 ary Of Methods\Polymer Chain Dynamics_Summary Of Methods.aux") ) 
 Here is how much of TeX's memory you used:
@@ -205,10 +205,10 @@ TeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><d:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on "Polymer Chain Dynamics_Summary Of Methods.pdf" (7 pages, 124
-301 bytes).
+Output written on "Polymer Chain Dynamics_Summary Of Methods.pdf" (8 pages, 126
+371 bytes).
 PDF statistics:
- 62 PDF objects out of 1000 (max. 8388607)
+ 65 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
