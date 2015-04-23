@@ -93,7 +93,7 @@ numBead \times step]$
 \item{\textbf{springs-}} The vectors defining the springs.
 \begin{enumerate}
 \item{\textbf{angleBetweenSprings-}} this is a sparse representation of a 3D matrix defining the angle between bead $i$, $j$, and $k$. The convention is the position $(i,j,k)$ represent the angle between bead $i$, $j$, and $k$, where $i$ is the row, $j$ is the column, and $k$ is the depth (height) of the matrix. Strings are defined by a vector composed of subtracting the bead position $i$ from $i+1$.
-\item{\textbf{length}}- the length of the springs is the norm of each of the vectors defining the  springs
+\item{\textbf{length}}- the length of the springs is the norm of each of the vectors defining the springs
 \end{enumerate}
 
 
@@ -108,7 +108,11 @@ numBead \times step]$
 
 \subsection{Noise} 
 The noise terms can be determined to be any type of noise distribution, with mean and variance as parameters. The default values are drawn from a Gaussian distribution with mean zero and variance 1. 
-To save computation time for each step, the noise terms are determined every 10,000 simulation steps. 
+To save computation time for each step, the noise terms are determined every N simulation steps. 
+
+\subsection{Initialization of beads on the domain's boundary}
+How can we define a random initial position for a chain in which several beads are constrained to lay on the domain's boundary? for a set of constrained beads $ i,j,k,...$ , at the first step we have to find initial points on the domain's boundary such that a chain can pass through them. This is accomplished by starting from any point on the boundary and randomly diffusing on the boundary a number of steps equivalent to the number of steps between consecutive constrained beads.  At the next step we use this set of points on the boundary that we have collected and we iteratively connect them by a Brownian bridge which is completely contained within the domain. Each addition of an edge in the random path we have to test for inclusion in the domain.
+
 
 \section{The Recipe files}
 The recipe files are used to allow the user to insert simulation specific commands without changing the content of the code. Recipe files allow the user to insert 4 functions, which are executed in: PreSimulationBatchActions, PreRunActions, PostRunActions, PostSimulationBatchActions. of the simulation framework. 

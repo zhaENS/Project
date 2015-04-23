@@ -27,7 +27,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
             obj.simulator.numSteps             = Inf;   % for inf place Inf
             obj.simulator.dt                   = 1e-2;  % time step 
-            obj.simulator.numChains            = 1;   
+            obj.simulator.numChains            = 10;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;

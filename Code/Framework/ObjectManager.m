@@ -465,7 +465,7 @@ classdef ObjectManager<handle
 % %             % ==================================
             
 %             % ============ test merging structures ==========
-                prob = 0.95;
+                prob = 0.99;
                 r = rand(1);
 %                 o = 1:obj.map.count;% randperm(obj.numObjects);
 %                 obj1 = obj.numObjects;

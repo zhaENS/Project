@@ -113,16 +113,13 @@ classdef SimulationFrameworkGraphics<handle
                                                 -obj.params.domain.domainHeight:obj.params.domainHeight,50);
                   obj.handles.graphical.domain.points.x  = -obj.params.domain.domainWidth*ones(size(obj.handles.graphical.domain.points.z));
                   
-            elseif strcmpi(obj.params.domain.domainShape,'none')
+            elseif strcmpi(obj.params.domain.domainShape,'open')
                     obj.handles.graphical.domain.points.x = [];
                     obj.handles.graphical.domain.points.y = [];
                     obj.handles.graphical.domain.points.z = [];
             else 
                 error('unsupported domain type');
-            end
-            
-%             delete(obj.handles.graphical.domain);
-%             delete(obj.handles.graphical.light);
+            end            
             
              m = mesh(obj.handles.graphical.domain.points.x,...
                      obj.handles.graphical.domain.points.y,...
@@ -334,7 +331,7 @@ classdef SimulationFrameworkGraphics<handle
         end
         
         function SetAxesLimits(obj)% fix
-            if strcmpi(obj.params.domainShape,'none')
+            if strcmpi(obj.params.domainShape,'open')
             bias = obj.params.domainWidth+2;
             set(obj.handles.graphical.mainAxes,'XLim',[obj.chainsCenterOfMass.x-bias obj.chainsCenterOfMass.x+bias],...
                 'YLim',[obj.chainsCenterOfMass.y-bias obj.chainsCenterOfMass.y+bias],...

@@ -16,25 +16,28 @@ classdef ChainParams<handle
         springConst@double
         bendingConst@double
         stickyBeads@double
+        beadsOnBoundary@double
         allowSelfAffinity@logical
         forceParams        
     end
     
     methods
+        
         function obj = ChainParams
             obj.dimension              = 3;         % inherited from framework
             obj.beta                   = 2;         % for rouse, place 2. 
             obj.b                      = 1*sqrt(3); % std of distance between beads
             obj.dt                     = 1e-2;      % inherited from framework
             obj.diffusionConst         = 1;
-            obj.numBeads               = 332;
+            obj.numBeads               = 32;
             obj.connectedBeads         = [];
             obj.bendingElasticityForce = false;
             obj.springForce            = true;
             obj.minBeadDistance        = 0*ones(obj.numBeads);
-            obj.fixedBeadNum           = [];
+            obj.fixedBeadNum           = [];    % beads which do not move 
+            obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
-            obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains  
+            obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains          
             obj.springConst            = 1.0*(obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);% defined as a matrix for all beads
             obj.bendingConst           = 1; 
             

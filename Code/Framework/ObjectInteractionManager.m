@@ -7,7 +7,7 @@ classdef ObjectInteractionManager<handle
         objectManager
     end
     
-    events 
+        events 
     end
     
     methods

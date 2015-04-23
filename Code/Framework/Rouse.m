@@ -22,8 +22,7 @@ classdef Rouse<handle
     
     % The function G_n(t) is the random fluctuation for the bead n, it is a
     % Gaussian with zero mean and 2*k*T/s std
-    properties
-        handles
+    properties        
         position
         connectionMap
         mobilityMatrices
@@ -53,9 +52,7 @@ classdef Rouse<handle
             
             % Adjust input parameters to match the structure expected in
             % the class
-            obj.SetInputParams;
-            
-%             obj.InitializeForceManger;
+            obj.SetInputParams;            
             
             obj.InitializeRouseStruct;
                         
@@ -96,12 +93,7 @@ classdef Rouse<handle
             obj.InitializeBeadConnectionMap;
             obj.SetInitialChainPosition; % should be moved out of the initialization process
 
-        end
-        
-        function InitializeForceManger(obj)
-        % Add forceManager to affect objects in the domain
-            obj.handles.classes.forceManager  = ForceManager(obj.params.forceParams); 
-        end
+        end        
         
         function CalculateRelaxationTime(obj)
             % the relaxation time of the first mode of the Rouse chain 
@@ -271,18 +263,32 @@ classdef Rouse<handle
             % set the initial chain position such that all beads are inside
             % the domain, else it is randomly placed.
             if exist('domainHandler','var')
-           
-                % The bead positions               
-                for bIdx = 2:obj.params.numBeads
+                if isempty(obj.params.beadsOnBoundary)
+                % The bead positions
+                for bIdx = 2:obj.params.numBeads 
                     inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:));     
                     tempPos  = obj.position.prev(bIdx,:);
                    while ~inDomain 
-                     x = obj.params.b*randc(1,obj.params.dimension);
-                       tempPos = obj.position.prev(bIdx-1,:)+x;
+                       x        = sqrt(2*obj.params.diffusionConst*obj.params.dt)*randn(1,obj.params.dimension);
+                       tempPos  = obj.position.prev(bIdx-1,:)+x;
                        inDomain = domainHandler.InDomain(tempPos);
                    end   
                     obj.position.prev(bIdx,:)= tempPos;
-               end
+                end
+                
+                else % if there are beads constrained to lay on the boundary 
+                    
+                    % 1. diffuse on the boundary from an initial point to
+                    % set position for the constrained beads
+                    % 2. iteratively pass a Brownian bridge between these
+                    % points
+                    numSteps   = range(obj.params.beadsOnBoundary); % this serves as the number of steps to walk on the boundary 
+                    % get initial points 
+                    initialPoint = domainHandler.GetRandomBoundarySample(1);
+                    % diffuse from the initial point numSteps
+                    % draw two angles from a normal wrapped distribution and advance accordingly
+                    
+                end
             
             else                
                 % The bead positions

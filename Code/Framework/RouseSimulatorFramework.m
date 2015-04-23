@@ -13,7 +13,17 @@ classdef RouseSimulatorFramework<handle
     %TODO: insert the correct indices for fixed particles in Step 
     %TODO: fix reflection for general meshes shapes
     %TODO: consider moving Domain to the ObjectManager
-    
+    % TODO: find a uniform framework for domains and chains
+    % TODO: integrate the domain with the object manager.
+    % TODO: allow connection of sticky beads
+    % TODO: expand ChainParams.m to include parameters for attaching and detaching either from domain or from other chains
+    % TODO: complete diffusion constrained on domain
+    % TODO: complete diffusion constrained on chains
+    % TODO: add documentation
+    % TODO: check graph representation for object mapper
+    % TODO: allow some bonds to be stiff, find a way to simulate a stiff connector chain efficiently
+    % TODO: add reflect outside the domain
+    % TODO: add constrained diffusing objects to exert force on the objects
     properties
         handles     
         objectManager      % data and object manipulation

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  22 APR 2015 15:52
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.19)  23 APR 2015 15:00
 entering extended mode
 **Polymer*Chain*Dynamics_Summary*Of*Methods.tex
 
@@ -138,7 +138,7 @@ ing, these monomers
 
 [1
 
-]
+] [2]
 Chapter 1.
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 25.
 ("d:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
@@ -146,7 +146,7 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 25.
- [2
+ [3
 
 ]
 Overfull \hbox (97.29277pt too wide) in paragraph at lines 33--34
@@ -184,7 +184,13 @@ Overfull \hbox (5.9008pt too wide) in paragraph at lines 65--67
  [all/external/internal/none] 
  []
 
-[3] [4] [5] [6] [7]
+[4] [5] [6] [7]
+Overfull \hbox (0.50937pt too wide) in paragraph at lines 154--156
+\OT1/cmr/m/n/12 and the mem-bers' par-ti-cles. sev-eral map-ping ex-ist: object
+-> mem-bers, object-
+ []
+
+[8]
 ("D:\Ofir\Work\ENS\Polymer Chain Dynamics\Documents\Polymer Chain Dynamics_Summ
 ary Of Methods\Polymer Chain Dynamics_Summary Of Methods.aux") ) 
 Here is how much of TeX's memory you used:
@@ -194,7 +200,7 @@ Here is how much of TeX's memory you used:
  4508 multiletter control sequences out of 15000+200000
  13356 words of font info for 51 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,6n,26p,643b,239s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,6n,26p,729b,239s stack positions out of 5000i,500n,10000p,200000b,50000s
 <d:/Program Fil
 es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/Program Files (
@@ -205,10 +211,10 @@ TeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><d:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/Program Files (x86)/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files (x86)/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on "Polymer Chain Dynamics_Summary Of Methods.pdf" (8 pages, 126
-371 bytes).
+Output written on "Polymer Chain Dynamics_Summary Of Methods.pdf" (9 pages, 128
+691 bytes).
 PDF statistics:
- 65 PDF objects out of 1000 (max. 8388607)
+ 68 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

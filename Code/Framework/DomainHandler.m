@@ -18,11 +18,10 @@ classdef DomainHandler<handle
             obj.handles.graphical.domain   = [];
             obj.handles.graphical.light    = [];  
             obj.handles.graphical.mainAxes = obj.params.parentAxes;            
-        end                        
-        
+        end                                
         
         function SetDefaultParams(obj)%obsolete
-            obj.params.domainShape    = 'Sphere'; % sphere| cylinder | twoPlates | none
+            obj.params.domainShape    = 'Sphere'; % sphere| cylinder | twoPlates | open
             obj.params.domainWidth    = 1;
             obj.params.domainHeight   = 50;
             obj.params.dimension      = 3;
@@ -84,7 +83,7 @@ classdef DomainHandler<handle
                  prevPos(ind,:) = pos1(ind,:);
                 while ~obj.InDomain(curPos(ind,:))
                     % Reflect the particle
-                    if strcmpi(obj.params.domainShape,'none')% change 'none' to 'open'
+                    if strcmpi(obj.params.domainShape,'open')
                         % Do nothing
                     elseif strcmpi(obj.params.domainShape,'sphere')
                         
@@ -181,15 +180,10 @@ classdef DomainHandler<handle
 %                     % vector, to reach the intersection point
 %                     t(1) = (-B+sqrt(B^2-4*A*C))/(2*A);
 %                     t(2) = (-B-sqrt(B^2-4*A*C))/(2*A);
-                      %=== test ====
+                    
                      A  = prevPos;
                      B  = curPos; 
                      C  = (B-A);%./norm(B-A);
-%                      dotCA = dot(C,A);
-%                      dotCC = dot(C,C);
-%                      dotAA = dot(A,A);
-%                      t(1) = (-2*dotCA+sqrt(4*dotCA^2 -4*dotCC*(dotAA-R^2)))/(2*dotCC);
-%                      t(2) = (-2*dotCA-sqrt(4*dotCA^2 -4*dotCC*(dotAA-R^2)))/(2*dotCC);
                      
                      gamma = dot(A,A);
                      alpha = dot (A,B) -gamma;
@@ -207,23 +201,6 @@ classdef DomainHandler<handle
                             
                         end
                        intersectionPoint = prevPos+min(t)*(C);
-                       % Make sure the intersection point is exactly on the
-                       % boundary (roundoff and truncation error might lead
-                       % to it being over the domain's boundary)
-%                        er = (sqrt(sum(intersectionPoint.^2))-obj.params.domainWidth);
-%                        if er~=0
-%                            x = intersectionPoint(1);
-%                            y = intersectionPoint(2);
-%                            z = intersectionPoint(3);                           
-%                            alpha(1) = (-2*(x+y+z)+sqrt(4*((x+y+z).^2) -12*((x.^2+y.^2+z.^2)-((R^2-2*er*R + er^2)))))/6;
-%                            alpha(2) = (-2*(x+y+z)-sqrt(4*((x+y+z).^2) -12*((x.^2+y.^2+z.^2)-((R^2-2*er*R + er^2)))))/6;
-%                            intersectionPoint = intersectionPoint+0.5*(min(real(alpha)));% zero out the last digit
-% %                            intersectionPoint = (intersectionPoint/(sqrt(sum(intersectionPoint.^2)))) * obj.params.domainWidth;
-%                        end
-%                         er = (sqrt(sum(intersectionPoint.^2))-obj.params.domainWidth);
-%                         if er~=0
-%                             error('prob')
-%                         end
                     else
                         intersectionPoint = [];
                     end
@@ -250,27 +227,18 @@ classdef DomainHandler<handle
             numParticles = size(vecIn,1);
             inIdx        = true(numParticles,1);
             if strcmpi(obj.params.domainShape,'Sphere')
-%                  v       = zeros(size(vecIn));
-%             for dIdx = 1:obj.params.dimension
-%                 v(:,dIdx)  = (vecIn.(dimName{dIdx}));                
-%             end
-%             v = vecIn
             % the vector norm
             n     = sqrt(sum(vecIn.^2,2));
             inIdx = n<=obj.params.domainWidth;
             
             elseif strcmpi(obj.params.domainShape,'cylinder')
-%                  v       = zeros(numel(vecIn.x),obj.params.dimension);
-%                 for dIdx = 1:2
-%                     v(:,dIdx)  = (vecIn.(dimName{dIdx}));                
-%                 end
                 
             % the vector norm
             n     = sqrt(sum(vecIn.^2,2));
             inIdx = n<=obj.params.domainWidth;
             elseif strcmpi(obj.params.domainShape,'twoPlates')
                   inIdx = vecIn.x<obj.params.domainWidth;                 
-            elseif strcmpi(obj.params.domainShape,'none')
+            elseif strcmpi(obj.params.domainShape,'open')
                 % Do nothing
                 
             end
@@ -293,12 +261,35 @@ classdef DomainHandler<handle
                elseif intPoint(1)<-obj.params.domainWidth+1e-7 && intPoint(1)>-obj.params.domainWidth-1e-7
                    domainNorm = [1 0 0];
                end
+           elseif  strcmpi(obj.params.domainShape,'open')
+               domainNorm = [];
            end
           
            
         end
+        
+        function boundaryPoints = GetRandomBoundarySample(obj,numPoints)%TODO: add support for other domain shapes
+            % numPoints random sample of the domain 
+            boundaryPoints = [];
+            if strcmpi(obj.params.domainShape,'open')
+                % normaly random distributed points
+                boundaryPoints = randn(numPoints,obj.params.dimension);
+            elseif strcmpi(obj.params.domainShape,'sphere')
+                % There is an analytical representation of the sphere 
+                % random sample 
+                u     = rand(numPoints,1);
+                v     = rand(numPoints,1);
+                phi   = 2*pi*u;
+                theta = acos(2*v -1);
+                boundaryPoints(:,1) = obj.params.domainWidth.*sin(theta).*cos(phi);
+                boundaryPoints(:,2) = obj.params.domainWidth.*sin(theta).*sin(phi);
+                boundaryPoints(:,3) = obj.params.domainWidth.*cos(theta);
                 
-        function PlotReflection(obj,prevPos,curPos,intPos,newPos,domainNorm)
+            end
+            
+        end
+        
+        function PlotReflection(obj,prevPos,curPos,intPos,newPos,domainNorm)% unused
             % the new pos is the point after reflection 
             
             % drw a line between the prev (in) point and cur (out) point

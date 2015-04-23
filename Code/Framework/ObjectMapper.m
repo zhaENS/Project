@@ -14,6 +14,7 @@ classdef ObjectMapper<handle
     end
     
     methods
+        
         function obj = ObjectMapper()
             % Class constructor
             
@@ -36,7 +37,7 @@ classdef ObjectMapper<handle
                 obj.object                   = [obj.object;objStruct];
 
             else
-                % Insert inds as a ready-made object structure                
+                % Insert inds as a ready-made object structure
                 % add the object structure 
                 obj.object = [obj.object;inds];                
             end
@@ -45,17 +46,7 @@ classdef ObjectMapper<handle
         function RemoveObject(obj,objList)
             % Remove an object from the list, do not alter the member list 
             
-             stay = setdiff(1:obj.count,objList);
-             
-             % update the indsToObj map 
-%              allInds = obj.GetAllInds(objList);
-%              % remove the keys from the map  
-%              for iIdx = 1:numel(allInds)
-%                  % update allInds to object
-%                  remove(obj.allIndsToObj,allInds(iIdx));
-%                  % update all inds to member 
-%                  remove(obj.allIndsToMember,allInds(iIdx));
-%              end
+             stay = setdiff(1:obj.count,objList);             
              
              % Remove the objects
              obj.object = obj.object(stay);
