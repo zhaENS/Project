@@ -227,11 +227,16 @@ classdef ForceManager<handle
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
                 % Calculate the edges vectors in all dimension
-                edgeMat = GetEdgesVectors_mex(particlePosition,connectivityMat);
-                force   = BendingElasticityForce_mex(edgeMat(:,:,1),...
+                 edgeMat = GetEdgesVectors(particlePosition,connectivityMat);
+                 force   = BendingElasticityForce(edgeMat(:,:,1),...
                                                      edgeMat(:,:,2),...
                                                      edgeMat(:,:,3),...
                                                      connectivityMat,bendingConst);
+%                 edgeMat = GetEdgesVectors_mex(particlePosition,connectivityMat);
+%                 force   = BendingElasticityForce_mex(edgeMat(:,:,1),...
+%                                                      edgeMat(:,:,2),...
+%                                                      edgeMat(:,:,3),...
+%                                                      connectivityMat,bendingConst);
               % zero out forces for
               % fixed particles
                force(fixedParticleNum,:) = 0;
@@ -250,7 +255,8 @@ classdef ForceManager<handle
             % calculate Lenard jones force between particles
             force = zeros(size(particlePosition));
             if ljForce
-                force = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
+                force = LennardJones(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
+%                 force = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
             end
         end
         
@@ -271,8 +277,9 @@ classdef ForceManager<handle
         function particleDistance = GetParticleDistance(particlePosition)
             % Get pair-wise particel distance using the mex function
             % pdist2mex
-            particleDistance = pdist2mex(particlePosition',...
-                particlePosition','euc',[],[],[]);
+            particleDistance = pdist2(particlePosition,particlePosition);
+%             particleDistance = pdist2mex(particlePosition',...
+%                 particlePosition','euc',[],[],[]);
         end
         
     end

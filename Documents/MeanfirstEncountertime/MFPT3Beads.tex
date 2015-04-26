@@ -1,0 +1,58 @@
+\documentclass{report}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+%\usepackage{hyperref}
+\usepackage{color}
+\title{Simultaneous Mean First Encounter Time for 3 beads of the Rouse chain}
+\begin{document}
+	\maketitle
+ Given a Rouse chain, composed of $N$ beads, let the position of any bead be $R_i(t)$ , $i=1..N$. 	We wish to calculate the mean first simultaneous encounter time (MFET) of 3 beads $1,N',N$, with $1<N'<N$
+  
+	\begin{equation}\label{eq_encounterCondition}
+	\tau=inf \{t ; |R_1(t)-R_N(t)|< \epsilon , |R_1(2)-R_{N'}(t)|<\epsilon \}
+	\end{equation}
+	Given the harmonic potential induced by the springs in the Rouse chain 
+	\begin{equation}
+	\phi(R_1,R_2,...,R_N)_{Rouse}=\frac{2}{\kappa}\sum_{n=1}^N (R_n-R_{n-1})^2
+	\end{equation}
+	with $\kappa$ the spring constant, the Rouse system is defined as 
+	\begin{equation}\label{eq_RouseSystem}
+	\dot{R}_n(t) = -D\nabla_{R_n}\phi_{Rouse} +\sqrt{2D}\dot{w}_n(t)
+	\end{equation}
+
+ We transform the Rouse system (\ref{eq_RouseSystem}) and the condition \ref{eq_encounterCondition} to their normal coordinates representation.
+ \begin{equation}\label{eq_normalTransform}
+ u_p(t)=\sum_{n=1}^N \alpha ^n_p R_n(t)
+ \end{equation} 
+ where 
+ \begin{equation}
+ \alpha_p^n = \begin{cases}
+\sqrt{\frac{1}{N}}, & p=0 \\
+\sqrt{\frac{2}{N}}\cos((n-1/2)\frac{p\pi}{N})  & otherwise
+ \end{cases}
+ \end{equation}
+ the backward transformation is defined as 
+ \begin{equation}\label{eq_backTransform}
+ R_n(t) =\sum_{p=0}^{N-1}\alpha_p^n u_p(t)
+ \end{equation}
+ 	The rouse system (\ref{eq_RouseSystem}) is now represented as 
+ 	
+ \begin{equation}\label{eq_RouseSystemNormalCoordinates}
+ \dot{u}_p(t)=-D_p\kappa_pu_p(t)+\sqrt{2D_p}\dot{w}_p(t)
+ \end{equation}
+ 
+ with $D_p=D, \kappa_p = 4\kappa \sin^2(p\pi /2N), p=1,2,..,N-1$
+ 
+The simultaneous encounter condition (\ref{eq_encounterCondition}) can now be defined in terms of $u_p$. The conditions $|R_1(t)-R_N(t)|<\epsilon$, and  $|R_1(t)-R_{N'}(t)|<\epsilon$
+
+\begin{equation}\label{eq_encounterConditionNormalCoordinates1}
+|\sum_{p=0}^{N-1}\alpha_p^1 u_p(t)-\alpha_p^Nu_p(t)|=|\sum_{p=0}^{N-1}(\alpha_p^1-\alpha_p^N)u_p(t)|
+\end{equation}
+\begin{equation}\label{eq_encounterConditionNormalCoordinates2}
+|\sum_{p=0}^{N-1}\alpha_p^1 u_p(t)-\alpha_p^{N'}u_p(t)| =|\sum_{p=0}^{N-1}(\alpha_p^1-\alpha_p^{N'})u_p(t)|
+\end{equation}
+
+
+
+\end{document}
