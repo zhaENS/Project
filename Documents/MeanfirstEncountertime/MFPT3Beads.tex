@@ -26,7 +26,7 @@
  u_p(t)=\sum_{n=1}^N \alpha ^n_p R_n(t)
  \end{equation} 
  where 
- \begin{equation}
+ \begin{equation}\label{eq_eigenValues}
  \alpha_p^n = \begin{cases}
 \sqrt{\frac{1}{N}}, & p=0 \\
 \sqrt{\frac{2}{N}}\cos((n-1/2)\frac{p\pi}{N})  & otherwise
@@ -47,12 +47,16 @@
 The simultaneous encounter condition (\ref{eq_encounterCondition}) can now be defined in terms of $u_p$. The conditions $|R_1(t)-R_N(t)|<\epsilon$, and  $|R_1(t)-R_{N'}(t)|<\epsilon$
 
 \begin{equation}\label{eq_encounterConditionNormalCoordinates1}
-|\sum_{p=0}^{N-1}\alpha_p^1 u_p(t)-\alpha_p^Nu_p(t)|=|\sum_{p=0}^{N-1}(\alpha_p^1-\alpha_p^N)u_p(t)|
+|\sum_{p=0}^{N-1}\alpha_p^1 u_p(t)-\alpha_p^Nu_p(t)|=|\sum_{p=0}^{N-1}(\alpha_p^1-\alpha_p^N)u_p(t)|=0
 \end{equation}
 \begin{equation}\label{eq_encounterConditionNormalCoordinates2}
-|\sum_{p=0}^{N-1}\alpha_p^1 u_p(t)-\alpha_p^{N'}u_p(t)| =|\sum_{p=0}^{N-1}(\alpha_p^1-\alpha_p^{N'})u_p(t)|
+|\sum_{p=0}^{N-1}\alpha_p^1 u_p(t)-\alpha_p^{N'}u_p(t)| =|\sum_{p=0}^{N-1}(\alpha_p^1-\alpha_p^{N'})u_p(t)|=0
 \end{equation}
 
+substituting (\ref{eq_eigenValues}) into (\ref{eq_encounterConditionNormalCoordinates1}), and (\ref{eq_encounterConditionNormalCoordinates2}) we find 
+\begin{equation}
+\sum_{p=0}^{N-1}\sqrt{\frac{2}{N}}(\cos(0.5p\pi /N)-\cos((N'-0.5)p\pi /N))u_p(t) = 0
+\end{equation}
 
 
 \end{document}

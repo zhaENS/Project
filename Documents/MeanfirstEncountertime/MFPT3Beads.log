@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.4.25)  26 APR 2015 17:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.4.25)  27 APR 2015 20:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -226,10 +226,10 @@ LaTeX Warning: No \author given.
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [1] (./MFPT3Beads.aux) ) 
 Here is how much of TeX's memory you used:
- 2442 strings out of 495020
- 32197 string characters out of 6181324
- 89332 words of memory out of 5000000
- 5628 multiletter control sequences out of 15000+600000
+ 2443 strings out of 495020
+ 32213 string characters out of 6181324
+ 90340 words of memory out of 5000000
+ 5629 multiletter control sequences out of 15000+600000
  10283 words of font info for 41 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,8n,26p,240b,189s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -245,7 +245,7 @@ s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1
 s/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 msy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
 b>
-Output written on MFPT3Beads.pdf (2 pages, 109357 bytes).
+Output written on MFPT3Beads.pdf (2 pages, 109718 bytes).
 PDF statistics:
  55 PDF objects out of 1000 (max. 8388607)
  39 compressed objects within 1 object stream
