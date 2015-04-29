@@ -5,6 +5,8 @@ classdef ObjectMapper<handle
         count  = 0;
         object 
         members % sequence of all members
+%         allIndsToObj    = containers.Map('KeyType','double','ValueType','double'); % map member indices ther containing objects
+%         allIndsToMember = containers.Map('KeyType','double','ValueType','double');
     end
     
     events
@@ -132,7 +134,7 @@ classdef ObjectMapper<handle
         
         function objStruct = GetMemberAsObject(obj,objNum,memberNum)
             % Wrap a member data as an object structure
-            % the member number is relative to the order of appearance in the containing object  
+             
             objStruct = ObjectMapper.NewObjectStruct;            
             % get member values 
             objStruct.count            = 1; % number of members
@@ -178,22 +180,22 @@ classdef ObjectMapper<handle
 %             objNum = obj.allIndsToObj(ind);
         end
         
-        function objList = GetObjectFromMember(obj,memberList)
+        function objNum = GetObjectFromMember(obj,memberList)
             % get object number from member number (global member number)
             numMember = numel(memberList);
             objList   = zeros(numMember,1);
             for mIdx = 1:numMember
-                flag  = false;
+                flag  = true;
                 objNum = 1; 
-                while ~flag                     
-                    flag = ismember(memberList(mIdx),obj.object(objNum).members);
-                     if flag % if is a member of the object
-                         objList(mIdx) = objNum; % record the object number 
-                     else % if member of the object                         
-                         objNum = objNum+1; % 
+                while flag                     
+                    flag = ~ismember(memberList(mIdx),obj.object(objNum).members);
+                     if ~flag % if not a member of the object
+                         objNum = objNum+1;
                          if objNum>obj.count % if not exceeds number of objects 
                              error('memberList is not on the list of members of any object');
                          end
+                     else % if member of the object
+                         objList(objNum) = objNum; % record the object number 
                      end
                 end                
             end
@@ -203,9 +205,9 @@ classdef ObjectMapper<handle
             % get member number as a functio of the index
             memberNum = zeros(numel(indList),1);
             for iIdx = 1:numel(indList)
-             objFlag = false;
+             objFlag = true;
              oIdx    = 1;             
-             while ~objFlag 
+             while objFlag 
                 memFlag = false;
                 mIdx    = 1;
                 oCount  = obj.object(oIdx).count;
@@ -216,19 +218,15 @@ classdef ObjectMapper<handle
                          memberNum(iIdx) = obj.object(oIdx).members(mIdx);
                          objFlag         = true;
                      else 
-                         
-                         mIdx = mIdx+1;% move to the next member 
-                         
-                         if mIdx>oCount% step out and move to the next object
+                         mIdx = mIdx+1;
+                         if mIdx>oCount% step out and move to the next member
                              memFlag = true;
                          end
                      end                                         
-                 end                     
-                     if oIdx==obj.count
-                         objFlag = true;
-%                          error('inds are not on the list')                     
-                     else
-                         oIdx = oIdx+1;
+                 end
+                     oIdx = oIdx+1;
+                     if oIdx>obj.count
+                         error('inds are not on the list')                     
                      end 
               end
             end      
@@ -247,14 +245,6 @@ classdef ObjectMapper<handle
         function members = GetObjectMembers(obj,objNum)
             % Get the member indices of object objNum
             members = obj.object(objNum).members;
-        end
-        
-        function memberNum = GetMemberNumInObject(obj,objNum,memberList)
-            % Get the member number according to the order of appearance in
-            % object. The member number is as appears in the general member
-            % list 
-            [~,memberNum] = ismember(memberList,obj.object(objNum).members);
-            
         end
         
         function CountChangeCallback(obj,varargin)

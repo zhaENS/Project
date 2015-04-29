@@ -299,14 +299,9 @@ classdef ObjectManager<handle
         
         function connectedParticles = GetMembersConnectedParticles(obj,memberList,connectivityState)
                 % List the connected particles 
-                  cMat = obj.GetMembersConnectivityMap(memberList);
-            if nargin==2
-              connectivityState = 'full'; % include nearest neighbors 
-            end
-
+                  cMat = obj.GetMembersConnectivity(memberList);
             if strcmpi(connectivityState,'offDiagonals')
-                  cMat = cMat & ~diag(true(1,size(cMat,1)-1),1);
-            end
+ 
                   [connectedParticles(:,1), connectedParticles(:,2)] = obj.ListConnectivity(cMat);
         end
         
@@ -343,7 +338,7 @@ classdef ObjectManager<handle
             obj.connectivity(particle2,particle1) = true;
               
             if obj1~=obj2
-                obj.Merge(([obj1,obj2]))
+                obj.Merge(sort([obj1,obj2]))
             else
                 disp('same obj')
                 notify(obj,'connectivityChange');
@@ -373,15 +368,22 @@ classdef ObjectManager<handle
                       notify(obj, 'connectivityChange')                      
                       
                   else   
-                    % Find connected  beads without nearest neighbors 
-                    cParticles = obj.GetMembersConnectedParticles([memb1, memb2],'offDiagonals');
+                    % Find connected  beads
+                    cParticles = obj.GetMembersConnectedParticles([memb1, memb2]);
                     % get the connectivity between members
+%                     memberConnectivity = obj.GetMembersConnectivityMap([memb1 memb2]);
                     if isempty(cParticles)
-                        % split the member from the object                        
-                        membNumInObj = obj.map.GetMemberNumInObject(obj1,memb1);
+                        % split the member from the object
+                        
+                        membNumInObj = obj.map.GetMemberNumInObject(obj1,memb1);% find(obj.map.object(obj1).members == memb1);
                         obj.SplitMember(obj1,membNumInObj);
-                    end                                        
-                  end                 
+                    end
+                    
+%                     memberList = obj.GetMemberFromInds(cParticles);
+                    
+                  end
+                 % check if the 
+                 notify(obj,'connectivityChange');
              end
         end
                 
@@ -525,12 +527,11 @@ classdef ObjectManager<handle
                 r = rand(1);
 %                 o = 1:obj.map.count;% randperm(obj.numObjects);
 %                 obj1 = obj.numObjects;
-                rp = randperm(numel(obj.map.GetAllInds(1:obj.numObjects)));
-%                 rp = [1 100]; 
+%                 rp = randperm(numel(obj.map.GetAllInds(1:obj.numObjects)));
+                rp = [1 100]; 
                 if r>prob
 %                      if obj.numObjects>1
 %                           obj2 = obj.numObjects-1;
-                    if  ~obj.connectivity(rp(1),rp(2))
                          obj.ConnectParticles(rp(1),rp(2));
                     % connect the head of the 2nd object and the tail of the
 %                       1st one 
@@ -543,15 +544,11 @@ classdef ObjectManager<handle
 %                       % TODO: fix sorting in Merge function 
 %                       obj.Merge(sort([obj1 obj2]));
                       disp('merge')
-                    end
 %                      else
                
 %                      end
                 elseif r<(1-prob)
-                    if obj.connectivity(rp(1),rp(2))
                      obj.DisconnectParticles(rp(1),rp(2));
-                       disp('split')
-                    end
 %                         m = obj.map.GetObjectCount(1:obj.numObjects);
 %                          % split the biggest one 
 %                         [numMem, oInd] = max(m);
@@ -577,7 +574,7 @@ classdef ObjectManager<handle
 %                       obj.connectivity(indsEnd(1),indsEnd(end)) = false;
 %                       % split the last member added
 %                       obj.SplitMember(obj2,objCount);
-
+%                        disp('split')
                     
                    
               

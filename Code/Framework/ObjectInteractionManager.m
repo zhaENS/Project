@@ -23,6 +23,9 @@ classdef ObjectInteractionManager<handle
         function DisconnectParticles(obj,particleList)
         end
         
+        function SplitMember(obj, objNum,memberNum)
+        end
+        
         
     end
 end

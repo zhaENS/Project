@@ -154,5 +154,16 @@ Provisional: The step process should be such that all external forces are applie
 this class serves as the mapping between object indexes, their member chains and the members' particles. 
 several mapping exist: object-> members, object->particle, particle-> object,  particle->member, member-> particle, particle->member
 
+\subsection{FindConnectedBeads}
+The function takes as argument the connectivity map of an object or a group of objects, and looks for connected particles outside the super and sub diagonal of the map. 
 
+\subsection{ConnectParticles}
+
+
+\subsection{DisconnectParticles}
+Two connected particle can be disconnected. Before disconnecting the particles we examine if the particles are members of the same chain, if not then we try to split the chain given that there are no other connections between the chain.
+since two connected members are part of the same object, we try to split the object assuming there are no other connections between the chains.
+
+\subsection{SplitMember}
+The split function splits a member from a composite object containing 2 or more members. The member that has been split from the object is assigned a new object at the end of the object list.  
 \end{document} 

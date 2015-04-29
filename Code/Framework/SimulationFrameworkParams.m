@@ -25,9 +25,9 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.runSimulation        = false; % a flag indicating whether to allow the simulation to run at initiation 
             obj.simulator.numSimulationBatches = 1;     % number of simulation batches
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
-            obj.simulator.numSteps             = 1000;   % for inf place Inf
+            obj.simulator.numSteps             = 100;   % for inf place Inf
             obj.simulator.dt                   = 1e-2;  % time step 
-            obj.simulator.numChains            = 1;   
+            obj.simulator.numChains            = 2;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = false; 
             obj.simulator.recordData           = false;
