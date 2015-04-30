@@ -61,7 +61,7 @@ classdef ObjectMapper<handle
              % copy data            
              memb     = ([obj.object(objList).members]);
              % make sure the list is sorted in ascending manner
-             [memb,sInds] = sort(memb,'ascend');             
+             [memb,~] = sort(memb,'ascend');             
              mCount   = sum([obj.object(objList).count]); % total number of members 
              oInds    = ([obj.object(objList).inds]);       % object inds
 %              oInds    = oInds(sInds);
@@ -159,22 +159,25 @@ classdef ObjectMapper<handle
         
         function objNum = GetObjectFromInd(obj,ind)
             % get the object number as a fucntion of the index
+            numInd = numel(ind);
+            objNum = zeros(numInd,1);
+            for iIdx = 1:numInd
              flag   = true;
 %              next   = 1;
-             objNum = 1;
+             objNum(iIdx) = 1;
              numObj = obj.count;
              while flag
                  % go over each object and test for inclusion of ind
-                 inds = obj.GetAllInds(objNum);
-                 flag = ~ismember(ind,inds);
+                 inds = obj.GetAllInds(objNum(iIdx));
+                 flag = ~ismember(ind(iIdx),inds);
                  if flag% if not there go to the next object 
-                     objNum = objNum+1;
+                     objNum(iIdx) = objNum(iIdx)+1;
                      if objNum>numObj
                          error('the specified index is not in the list')
                      end
                  end
              end
-             
+            end
 %             objNum = obj.allIndsToObj(ind);
         end
         

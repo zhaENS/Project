@@ -34,8 +34,8 @@ classdef DomainHandlerParams<handle
             obj.LJPotentialWidth       = 0.01;
             obj.LJPotentialDepth       = 0.01;
             obj.diffusionConst         = 0;   % assigned by framework
-            obj.lennardJonesForce      = true;
-            obj.diffusionForce         = false;            
+            obj.lennardJonesForce      = false;
+            obj.diffusionForce         = true;            
             obj.dt                     = 0;   % assigned by Framework
             obj.reflectionType         = 'preserveEnergy';
             obj.maxReflectionsPerParticle  = 100;
