@@ -83,6 +83,7 @@ classdef ObjectManager<handle
             % Remove the objects in objectList from the list of active
             % ojects, wrap the objects as one, and add them to the end of
             % the list. 
+%             objList = sort(objList);
             obj.map.MergeObjects(objList);
                        
         end
@@ -115,7 +116,7 @@ classdef ObjectManager<handle
         
         function [prev,cur] = GetMembersPosition(obj,objNum)
             % Get positoins of members of the object objNum            
-            memberList = obj.map.GetObjectMembers(objNum);%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
+            memberList = sort(obj.map.GetObjectMembers(objNum));%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
             prev    = cell(1,numel(memberList));
             cur     = cell(1,numel(memberList));            
             
@@ -130,6 +131,7 @@ classdef ObjectManager<handle
         function [prevPos,curPos] = GetPositionAsOne(obj,objList)
             % Get current and previous position for all objects in objList
             % as one long list
+            objList = (objList);
             inds    = obj.map.GetAllInds(objList);% [obj.objectInds{objList}];
             prevPos = obj.prevPos(inds,:);
             curPos  = obj.curPos(inds,:);
@@ -155,7 +157,7 @@ classdef ObjectManager<handle
             % the function deals the position according to the order of
             % appearance in the curPos and the object list 
             
-            inds = obj.map.GetAllInds(objList);
+            inds = sort(obj.map.GetAllInds(objList));
             obj.curPos(inds,:) = curPos;% update the position
             notify(obj,'curPosChange'); % notify all registered listeners
 
@@ -164,8 +166,8 @@ classdef ObjectManager<handle
         function DealPreviousPosition(obj,objList,prevPos)
           %   Update the general list 
           %   deal the prevPos to all the object members
-             inds = obj.map.GetAllInds(objList);
-             obj.prevPos(inds,:) = prevPos;
+             inds = sort(obj.map.GetAllInds(objList));
+             obj.prevPos(inds,:)= prevPos;
              notify(obj,'prevPosChange'); % notify all registered listeners
             
         end
@@ -225,7 +227,7 @@ classdef ObjectManager<handle
             % displaying the connectivity between these objects.            
             % This function returns the connectivity map only after it was first
             % initialized
-%             objList = sort(objList);
+            objList       = (objList);
             inds          = obj.map.GetAllInds(objList);
             connectionMap = obj.connectivity(inds,inds);
 
@@ -263,7 +265,7 @@ classdef ObjectManager<handle
             if strcmpi(connectivityState,'full')
                    cMat = obj.connectivity(inds,inds);
                    [connectedParticles(:,1),connectedParticles(:,2)]= obj.ListConnectivity(cMat);
-                 
+            
             elseif strcmpi(connectivityState,'offDiagonals')
                 % first find off diagonal 
                 nnConnectivity = ~diag(true(1,numel(inds)-1),1);
@@ -276,8 +278,13 @@ classdef ObjectManager<handle
 %                     nnConnectivity(cumsum(c(1:cIdx)),:)= false;
 %                 end                
                 cMat = obj.connectivity(inds,inds)& nnConnectivity;
-                [connectedParticles(:,1),connectedParticles(:,2)] = obj.ListConnectivity(cMat);
-            end                         
+                [connectedParticles(:,1),connectedParticles(:,2)] = obj.ListConnectivity(cMat);                
+            end
+            
+            if ~isempty(connectedParticles)
+                connectedParticles(:,1) = obj.map.object(objNum).inds.allInds(connectedParticles(:,1));
+                connectedParticles(:,2) = obj.map.object(objNum).inds.allInds(connectedParticles(:,2));
+            end
         end
         
         function connectionMap = GetMembersConnectivityMap(obj,memberList)
@@ -285,6 +292,7 @@ classdef ObjectManager<handle
             % numbers are the ones appearing in the global member list 
            
             % Find the objects the members belong to
+            memberList = (memberList);
             objNum = obj.map.GetObjectFromMember(memberList);
             
             % Find the indices of the members in these objects 
@@ -343,7 +351,7 @@ classdef ObjectManager<handle
             obj.connectivity(particle2,particle1) = true;
               
             if objNum(1)~=objNum(2)
-                obj.Merge(sort(objNum))
+                obj.Merge((objNum))
                   disp('Merge')
             else
                 disp('Same obj')
@@ -359,9 +367,7 @@ classdef ObjectManager<handle
             
              % Check if the particles come from the same object 
              objNum = obj.map.GetObjectFromInd([particle1, particle2]);
-%              obj2 = obj.map.GetObjectFromInd(particle2);
-             obj.connectivity(particle1, particle2) = false;
-             obj.connectivity(particle2, particle1) = false;
+%              obj2 = obj.map.GetObjectFromInd(particle2);             
              
              if objNum(1)~=objNum(2)
                  disp('particles are not connected')                               
@@ -369,19 +375,21 @@ classdef ObjectManager<handle
                  % find the members of the particles 
                  memb1 = obj.map.GetMemberFromInd(particle1);
                  memb2 = obj.map.GetMemberFromInd(particle2);
+                 obj.connectivity(particle1, particle2) = false;
+                 obj.connectivity(particle2, particle1) = false;
                   if memb1== memb2
                       % if it is the same member, update the connectivity map 
                       notify(obj, 'connectivityChange')                      
-                      disp('split same object')
+                      disp('disconnect beads of the same member')
                   else   
                     % Find connected  beads without nearest neighbors 
                     cParticles = obj.GetMembersConnectedParticles([memb1, memb2],'offDiagonals');
                     % get the connectivity between members
                     if isempty(cParticles)
                         % split the member from the object                        
-                        membNumInObj = obj.map.GetMemberNumInObject(objNum(1),memb1);
+                        membNumInObj = obj.map.GetMemberNumInObject(objNum(1),max(memb1,memb2));
                         obj.SplitMember(objNum(1),membNumInObj);
-                        disp('split')
+                        disp('split members ')
                     end                                        
                   end                 
              end
@@ -523,14 +531,17 @@ classdef ObjectManager<handle
 % %             % ==================================
             
 %             % ============ test merging structures ==========
-                prob = 0.9;
+                prob = 0.95;
                 r = rand(1);
 %                 o = 1:obj.map.count;% randperm(obj.numObjects);
 %                 obj1 = obj.numObjects;
                 
 %                 rp = [1 100]; 
                 if r>prob
+                    
+%                     pp = [1:32; 33:64]; 
                     rp = randperm(size(obj.connectivity,1));
+%                     rp = [pp(1,rp(1)), pp(2,rp(2))];
 %                      if obj.numObjects>1
 %                           obj2 = obj.numObjects-1;
                     if  ~obj.connectivity(rp(1),rp(2))
@@ -550,15 +561,17 @@ classdef ObjectManager<handle
 %                      else
                
 %                      end
-                elseif r<(1-prob+0.1)
+                elseif r<(1-prob)/2
                     % get the list of connected particles, chose a pair and
                     % disconnect it 
                     [connected] = obj.GetObjectConnectedParticles(obj.map.count,'offDiagonals');
                     if ~isempty(connected)
                      % choose a pair 
-                     rn = randperm(size(connected,1));
-                     rp = connected(rn(1),:);
-                     obj.DisconnectParticles(rp(1),rp(2));                                        
+%                      rn = randperm(size(connected,1));
+%                      rp = connected(rn(1),:);
+                     for cIdx = 1:size(connected,1)
+                         obj.DisconnectParticles(connected(cIdx,1),connected(cIdx,2));
+                     end
                     end
 %                         m = obj.map.GetObjectCount(1:obj.numObjects);
 %                          % split the biggest one 

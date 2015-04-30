@@ -163,7 +163,7 @@ classdef SimulationFrameworkGraphics<handle
                     % get the members of the object 
                     numMembers = obj.handles.framework.objectManager.map.GetObjectCount(oIdx);
 
-                    member = obj.handles.framework.objectManager.map.object(oIdx).members; % member index in the general list
+                    member = obj.handles.framework.objectManager.map.GetObjectMembers(oIdx); % member index in the general list
 
                     color =obj.chainColors(member(1),:);% transform to the first member's color 
                     for mIdx = 1:numMembers                        

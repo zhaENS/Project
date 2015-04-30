@@ -61,13 +61,12 @@ classdef ObjectMapper<handle
              % copy data            
              memb     = ([obj.object(objList).members]);
              % make sure the list is sorted in ascending manner
-             [memb,~] = sort(memb,'ascend');             
-             mCount   = sum([obj.object(objList).count]); % total number of members 
-             oInds    = ([obj.object(objList).inds]);       % object inds
-%              oInds    = oInds(sInds);
+             [memb,sIdx] = sort(memb,'ascend');             
+             mCount   = numel(memb); % total number of members 
+             oInds    = ([obj.object(objList).inds]);       % object inds           
              memCount = [oInds.memberCount];              % member count 
 %              memCount = memCount(sInds);
-             allInds  = [oInds.allInds];                  % indices from all members (FIFO)
+             allInds  = ([oInds.allInds]);                  % indices from all members (FIFO)
              pMemb    = [oInds.memberInds];               % indices of each member
              
             
@@ -80,9 +79,9 @@ classdef ObjectMapper<handle
              % fill the new struct
              objStruct.members          = memb;
              objStruct.count            = mCount;
-             objStruct.inds.memberCount = memCount;
-             objStruct.inds.allInds     = allInds;
-             objStruct.inds.memberInds  = pMemb;
+             objStruct.inds.memberCount = memCount(sIdx);
+             objStruct.inds.allInds     = sort(allInds);
+             objStruct.inds.memberInds  = pMemb(sIdx);
              
              % add it to the end of the object list 
              obj.AddObject(objStruct);
@@ -144,17 +143,17 @@ classdef ObjectMapper<handle
         
         function inds = GetAllInds(obj,objList)
             % Get all indices from different objects in one list
-            objList = (objList);
-            aInds = [obj.object(objList).inds];
-            inds  = sort([aInds.allInds]);
+            objList = sort(objList);
+            aInds   = [obj.object(objList).inds];
+            inds    = ([aInds.allInds]);
         end
         
         function inds = GetMemberInds(obj,objNum,memberNum)
             % Get the indices of members of an object in one list
             % the member number is relative to the list appearing in the
             % containing object 
-            memberNum = sort(memberNum);
-            inds = [obj.object(objNum).inds.memberInds{memberNum}];
+            memberNum = (memberNum);
+            inds      = [obj.object(objNum).inds.memberInds{memberNum}];
         end
         
         function objNum = GetObjectFromInd(obj,ind)
