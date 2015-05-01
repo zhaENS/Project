@@ -83,7 +83,7 @@ classdef ObjectManager<handle
             % Remove the objects in objectList from the list of active
             % ojects, wrap the objects as one, and add them to the end of
             % the list. 
-            objList = (objList);
+            
             obj.map.MergeObjects(objList);
                        
         end
@@ -116,7 +116,7 @@ classdef ObjectManager<handle
         
         function [prev,cur] = GetMembersPosition(obj,objNum)
             % Get positoins of members of the object objNum            
-            memberList = obj.map.GetObjectMembers(objNum);%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
+            memberList = (obj.map.GetObjectMembers(objNum));%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
             prev    = cell(1,numel(memberList));
             cur     = cell(1,numel(memberList));            
             
@@ -156,9 +156,25 @@ classdef ObjectManager<handle
             % members of the objects in objList 
             % the function deals the position according to the order of
             % appearance in the curPos and the object list 
+            for oIdx = 1:numel(objList)% for each object
+                % get its members 
+                membList = obj.map.GetObjectMembers(objList(oIdx));
+                % assuming curPos is ordered such that it matches the order
+                % of the members 
+                % get the member's inds 
+                membNumInObj = obj.map.GetMemberNumInObject(objList(oIdx),membList);
+                obj.map.GetMemberInds(objList(oIdx),membList)
+                for mIdx = 1:numel(membList)                    
+                    % get the member's ind in its object 
+                    membNumInObj = obj.map.GetMemberNumInObject(objList(oIdx),membList(mIdx));
+                    % get the member indices 
+                    mInds = obj.map.GetMemberInds(objList(oIdx),membNumInObj);
+                    obj.curPos(mInds,:) = curPos(mInds,:);
+                end
+            end
             
-            inds = sort(obj.map.GetAllInds(objList);
-            obj.curPos(inds,:) = curPos;% update the position
+%             inds = (obj.map.GetAllInds(objList));
+%             obj.curPos(inds,:) = curPos;% update the position
             notify(obj,'curPosChange'); % notify all registered listeners
 
         end
@@ -166,8 +182,26 @@ classdef ObjectManager<handle
         function DealPreviousPosition(obj,objList,prevPos)
           %   Update the general list 
           %   deal the prevPos to all the object members
-             inds = obj.map.GetAllInds(objList);
-             obj.prevPos(inds,:)= prevPos;
+          for oIdx = 1:numel(objList)% for each object
+                % get its members 
+                membList = obj.map.GetObjectMembers(objList(oIdx));
+                % assuming curPos is ordered such that it matches the order
+                % of the members 
+                % get the member's inds 
+                for mIdx = 1:numel(membList)                    
+                    % get the member's ind in its object 
+                    membNumInObj = obj.map.GetMemberNumInObject(objList(oIdx),membList(mIdx));
+                    % get the member indices 
+                    mInds = obj.map.GetMemberInds(objList(oIdx),membNumInObj);
+                    obj.prevPos(mInds,:) = prevPos(mInds,:);
+                end
+          end
+          
+          
+          
+          
+%              inds = (obj.map.GetAllInds(objList));
+%              obj.prevPos(inds,:)= prevPos;
              notify(obj,'prevPosChange'); % notify all registered listeners
             
         end
@@ -367,9 +401,7 @@ classdef ObjectManager<handle
             
              % Check if the particles come from the same object 
              objNum = obj.map.GetObjectFromInd([particle1, particle2]);
-%              obj2 = obj.map.GetObjectFromInd(particle2);
-             obj.connectivity(particle1, particle2) = false;
-             obj.connectivity(particle2, particle1) = false;
+%              obj2 = obj.map.GetObjectFromInd(particle2);             
              
              if objNum(1)~=objNum(2)
                  disp('particles are not connected')                               
@@ -377,6 +409,8 @@ classdef ObjectManager<handle
                  % find the members of the particles 
                  memb1 = obj.map.GetMemberFromInd(particle1);
                  memb2 = obj.map.GetMemberFromInd(particle2);
+                 obj.connectivity(particle1, particle2) = false;
+                 obj.connectivity(particle2, particle1) = false;
                   if memb1== memb2
                       % if it is the same member, update the connectivity map 
                       notify(obj, 'connectivityChange')                      
@@ -561,15 +595,17 @@ classdef ObjectManager<handle
 %                      else
                
 %                      end
-                elseif r<(1-prob)
+                elseif r<(1-prob)/2
                     % get the list of connected particles, chose a pair and
                     % disconnect it 
                     [connected] = obj.GetObjectConnectedParticles(obj.map.count,'offDiagonals');
                     if ~isempty(connected)
                      % choose a pair 
-                     rn = randperm(size(connected,1));
-                     rp = connected(rn(1),:);
-                     obj.DisconnectParticles(rp(1),rp(2));                                        
+%                      rn = randperm(size(connected,1));
+%                      rp = connected(rn(1),:);
+                     for cIdx = 1:size(connected,1)
+                         obj.DisconnectParticles(connected(cIdx,1),connected(cIdx,2));
+                     end
                     end
 %                         m = obj.map.GetObjectCount(1:obj.numObjects);
 %                          % split the biggest one 

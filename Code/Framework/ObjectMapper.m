@@ -143,9 +143,9 @@ classdef ObjectMapper<handle
         
         function inds = GetAllInds(obj,objList)
             % Get all indices from different objects in one list
-            objList = sort(objList);
+            objList = (objList);
             aInds   = [obj.object(objList).inds];
-            inds    = ([aInds.allInds]);
+            inds    = sort([aInds.allInds]);
         end
         
         function inds = GetMemberInds(obj,objNum,memberNum)
