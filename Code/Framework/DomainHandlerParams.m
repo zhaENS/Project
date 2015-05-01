@@ -25,7 +25,7 @@ classdef DomainHandlerParams<handle
         
         function obj = DomainHandlerParams
             obj.domainShape            = 'sphere'; %[sphere | cylinder |twoplates| open
-            obj.domainWidth            = 10;
+            obj.domainWidth            = 5;
             obj.domainHeight           = 5;
             obj.domainCenter           = [0 0 0];
             obj.showDomain             = true; % move to graphics
@@ -34,8 +34,8 @@ classdef DomainHandlerParams<handle
             obj.LJPotentialWidth       = 0.01;
             obj.LJPotentialDepth       = 0.01;
             obj.diffusionConst         = 0;   % assigned by framework
-            obj.lennardJonesForce      = true;
-            obj.diffusionForce         = false;            
+            obj.lennardJonesForce      = false;
+            obj.diffusionForce         = true;            
             obj.dt                     = 0;   % assigned by Framework
             obj.reflectionType         = 'preserveEnergy';
             obj.maxReflectionsPerParticle  = 100;

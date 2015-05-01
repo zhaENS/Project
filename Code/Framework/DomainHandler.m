@@ -4,6 +4,8 @@ classdef DomainHandler<handle
     % TODO: allow insertion of a polygonal domain or a mesh from meshlab in
     % a *.stl file format, expand Reflect function accordingly 
     % TODO: fix reflection for all domain shapes
+    % TODO: prepare reflection function such that it will output location on
+    %      the boundary and allow attachment
     properties 
         handles
         params
