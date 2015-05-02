@@ -22,7 +22,7 @@ classdef DomainHandlerParams<handle
     end
     
     methods
-        
+         
         function obj = DomainHandlerParams
             obj.domainShape            = 'sphere'; %[sphere | cylinder |twoplates| open
             obj.domainWidth            = 5;
