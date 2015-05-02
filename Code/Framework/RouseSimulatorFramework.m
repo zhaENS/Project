@@ -198,7 +198,7 @@ classdef RouseSimulatorFramework<handle
                                                                           fixedParticleNum,obj.params.simulator.dt);                                         
                                                        
             % Deal the positions after reflection between the objects and their members in
-            % the domain 
+            % the domain             
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
             obj.objectManager.DealPreviousPosition(objList,curParticlePosition);
                                     
@@ -206,7 +206,7 @@ classdef RouseSimulatorFramework<handle
             obj.simulationGraphics.ShowSimulation
             
             % check for interaction between objects             
-%              obj.objectManager.ObjectInteraction;
+             obj.objectManager.ObjectInteraction;
              
             % Update simulation data
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...

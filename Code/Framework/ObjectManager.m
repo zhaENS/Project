@@ -83,7 +83,7 @@ classdef ObjectManager<handle
             % Remove the objects in objectList from the list of active
             % ojects, wrap the objects as one, and add them to the end of
             % the list. 
-%             objList = sort(objList);
+            
             obj.map.MergeObjects(objList);
                        
         end
@@ -100,7 +100,7 @@ classdef ObjectManager<handle
             
         end
         
-        function [prev,cur] = GetPosition(obj,objList)
+        function [prev,cur] = GetPosition(obj,objList)%obsolete
             % Get position of objects in objList
             % the number of position depends on the grouping given in
             % objectList
@@ -116,14 +116,18 @@ classdef ObjectManager<handle
         
         function [prev,cur] = GetMembersPosition(obj,objNum)
             % Get positoins of members of the object objNum            
-            memberList = sort(obj.map.GetObjectMembers(objNum));%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
+            memberList = (obj.map.GetObjectMembers(objNum));%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
             prev    = cell(1,numel(memberList));
             cur     = cell(1,numel(memberList));            
             
             % Get all positions for the current group            
             for pIdx = 1:numel(memberList)
-                prev{pIdx} = obj.handles.chain(memberList(pIdx)).position.prev;
-                cur{pIdx}  = obj.handles.chain(memberList(pIdx)).position.cur;
+                % get member indices in the general map
+                inds       = obj.map.GetMemberInds(objNum,pIdx);
+                prev{pIdx} = obj.prevPos(inds,:);
+                cur{pIdx}  = obj.curPos(inds,:);
+%                 prev{pIdx} = obj.handles.chain(memberList(pIdx)).position.prev;
+%                 cur{pIdx}  = obj.handles.chain(memberList(pIdx)).position.cur;
             end
            
         end 
@@ -134,8 +138,7 @@ classdef ObjectManager<handle
             objList = (objList);
             inds    = obj.map.GetAllInds(objList);% [obj.objectInds{objList}];
             prevPos = obj.prevPos(inds,:);
-            curPos  = obj.curPos(inds,:);
-            
+            curPos  = obj.curPos(inds,:);            
         end
         
         function params = GetObjectParameters(obj,objList)
@@ -157,7 +160,19 @@ classdef ObjectManager<handle
             % the function deals the position according to the order of
             % appearance in the curPos and the object list 
             
-            inds = sort(obj.map.GetAllInds(objList));
+%             for oIdx = 1:numel(objList)% for each object
+%                 % get its members 
+% %                 membList = obj.map.GetObjectMembers(objList(oIdx));
+%                 % assuming curPos is ordered such that it matches the order
+%                 % of the members 
+%                 % get the member's inds 
+% %                 membNumInObj = obj.map.GetMemberNumInObject(objList(oIdx),membList);
+%                 oCount = obj.map.GetObjectCount(objList(oIdx));
+%                 mInds  = obj.map.GetMemberInds(objList(oIdx),1:oCount);
+%                 obj.curPos(mInds,:) = curPos;             
+%             end
+            
+            inds = (obj.map.GetAllInds(objList));
             obj.curPos(inds,:) = curPos;% update the position
             notify(obj,'curPosChange'); % notify all registered listeners
 
@@ -166,7 +181,22 @@ classdef ObjectManager<handle
         function DealPreviousPosition(obj,objList,prevPos)
           %   Update the general list 
           %   deal the prevPos to all the object members
-             inds = sort(obj.map.GetAllInds(objList));
+%           for oIdx = 1:numel(objList)% for each object
+%                 % get its members 
+% %                 membList = obj.map.GetObjectMembers(objList(oIdx));
+%                 % assuming curPos is ordered such that it matches the order
+%                 % of the members 
+%                 % get the member's inds 
+%                  oCount = obj.map.GetObjectCount(objList(oIdx));
+%                  mInds  = obj.map.GetMemberInds(objList(oIdx),1:oCount);
+%                  obj.prevPos(mInds,:) = prevPos;
+%                 
+%           end
+          
+          
+          
+          
+             inds = (obj.map.GetAllInds(objList));
              obj.prevPos(inds,:)= prevPos;
              notify(obj,'prevPosChange'); % notify all registered listeners
             
@@ -434,12 +464,12 @@ classdef ObjectManager<handle
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
-                   obj.DealPreviousPosition(oIdx,newPos);
+%                    obj.DealPreviousPosition(oIdx,newPos);
                  end
             end
             
             % Check for possible interaction between objects
-            obj.ObjectInteraction;
+%             obj.ObjectInteraction;
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
