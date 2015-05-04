@@ -22,7 +22,7 @@ classdef Rouse<handle
     
     % The function G_n(t) is the random fluctuation for the bead n, it is a
     % Gaussian with zero mean and 2*k*T/s std
-    properties        
+    properties
         position
         connectionMap
         mobilityMatrices
