@@ -10,12 +10,11 @@
 \tableofcontents
 
 \section{Simulation Framework}\label{secSimulatorFramework}
-The beads- In our system of a chain of beads connected by harmonic springs, the beads represent monomers of a polymer chain.in our setting, these monomers can be thought of as the nucleusomes.
+The beads- In our system of a chain of beads connected by harmonic springs, the beads represent monomers of a polymer chain. 
 Nucleosome- In Eukaryote cell, the nucleusome packs around 2 meters of DNA material into an accessible package called the nucleusome. It size is roughly $10\mu m$.
 
 \chapter{Classes}\label{classes}
-In this chapter we review the different classes of the simulation framework and give details about the input/output of each method along with the properties of the class and concise explanation regarding the role of each of its methods
-The sections' titles are brought here with the classes names as appearing in the code. 
+In this chapter we review the different classes of the simulation framework and give details about the input/output of each method along with the properties of the class and concise explanation regarding the role of each of its methods.
 
 \section{RouseSimulatorFramework}\label{secRouseSimulatorFramework}
 This class is the backbone of the simulation framework. It coordinates the action between all classes participating in the simulations. The class receives the parameters of each of its participating classes, distributes them and initializes each class.
@@ -32,7 +31,6 @@ This class is the backbone of the simulation framework. It coordinates the actio
 
 \item{\textbf{PostRunActions}} activates a sequence of predefined commands after each simulation round. In the present release the post run action is predefined to record simulation end time using \textit{SimulatorDataRecorder.SetsimulationEndTime} method, save results using \textit{SimulatorDataRecorder.SaveResults} method and notify about the simulation successful ending by email using \textit{SendMail} function, located in the 3rdParty folder.
 \end{itemize}
-
 
 \section{SimulationDataRecorder}\label{secSimulatorDataRecorder}
 Handles recording of the simulation data.
@@ -74,11 +72,9 @@ numBead \times step]$
 \item{\textbf{ClearCurrentSimulationData}} Clears the data from the class properties
  \end{itemize}
  
- 
 \section{Rouse}\label{secRouse}
 
 \subsection{Properties}
-
 \begin{itemize}
 \item{\textbf{time-}} time of the simulation, defined as $step\times\Delta t$
 \item{\textbf{step-}} simulation step
@@ -111,8 +107,19 @@ The noise terms can be determined to be any type of noise distribution, with mea
 To save computation time for each step, the noise terms are determined every N simulation steps. 
 
 \subsection{Initialization of beads on the domain's boundary}
-How can we define a random initial position for a chain in which several beads are constrained to lay on the domain's boundary? for a set of constrained beads $ i,j,k,...$ , at the first step we have to find initial points on the domain's boundary such that a chain can pass through them. This is accomplished by starting from any point on the boundary and randomly diffusing on the boundary a number of steps equivalent to the number of steps between consecutive constrained beads.  At the next step we use this set of points on the boundary that we have collected and we iteratively connect them by a Brownian bridge which is completely contained within the domain. Each addition of an edge in the random path we have to test for inclusion in the domain.
+For a set of beads $ i,j,k,...$ constrained to the surface $\partial S$ of a sphere $S$, we have to find initial points on $\partial S$ such that a chain can pass through them. This is accomplished by picking positions for the constrained bead by diffusing on $\partial S$ and then connect these positions with a Brownian bridges, completely contained within $S$. This procedure can be summarized as: 
+For a surface of spherical domain $\partial S$, initialization of a chain with $N_b$ beads $b_1,b_2,...b_{N_b}$ is done as follows
+\begin{enumerate}
+\item list all constrain beads in ascending order $C=\{a_1,a_2,,...,a_{N_c}\}, \quad a_i>a_{i-1}$
+\item Choose a random position on $\partial S$ for $b_{a_1}$.
+\item For $i$ from 2 to $N_c$, choose a position for $b_{a_i}$ by diffusion on the boundary $a_i -a_{i-1}$ steps (see \ref{subsubSec_diffusionOntheSurface} ).
+\item For $i$ from 2 to $N_c$, if $a_{i}-a_{i-1} >1$, construct a Brownian bridge $B(b_{a_{i-1}},b_{a_i})\in S$ 
+\item if $a_1>1$, sequentially build a path from $b_{a_1}$ to a random point in $S$
+\item if $a_{N_c}<N_b$, sequentially build a path from $b_{a_{N_c}}$ to a random point in $S$ 
+\end{enumerate}
 
+\subsubsection{Diffusion on the surface of a sphere}\label{subsubSec_diffusionOntheSurface}
+We apply simple rules of diffusion for walking on the surface of a sphere $\partial S$. The coordinates of each particle, $(x,y,z)$ are transformed to spherical coordinates $(\phi,\theta,\rho)$, where we keep $\rho$ constant throughout. The random walk is then a 'random walk' of the angles $\theta(t)$ and $\phi(t)$, with $\phi$ the angle between the path's ray and the positive z axis, and $theta$ is the angle between the projection of the path's ray onto the x-y plane and the positive x axis. 
 
 \section{The Recipe files}
 The recipe files are used to allow the user to insert simulation specific commands without changing the content of the code. Recipe files allow the user to insert 4 functions, which are executed in: PreSimulationBatchActions, PreRunActions, PostRunActions, PostSimulationBatchActions. of the simulation framework. 
