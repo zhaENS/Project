@@ -140,8 +140,7 @@ classdef RouseSimulatorFramework<handle
                 end
                 % perform actions post simulation batch
                 obj.PostSimulationBatchActions
-            end
-           
+            end           
         end         
         
         function PreSimulationBatchActions(obj)
