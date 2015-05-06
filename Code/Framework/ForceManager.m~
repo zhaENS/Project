@@ -115,10 +115,9 @@ classdef ForceManager<handle
         
         function newParticlePosition = ApplyExternalForces(particlePosition,...
                                                             particleDistances,diffusionConst,...
-                                                            ljForce,diffusionForce,morseForce,...                                                            
+                                                            ljForce,diffusionForce,...                                                            
                                                             LJPotentialWidth,LJPotentialDepth,...
-                                                            morsePotentialDepth, morsePotentialWidth,morseForceType,...
-                                                            minParticleDist,fixedParticleNum,dt)
+                                                            fixedParticleNum,dt)
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
              
@@ -128,17 +127,10 @@ classdef ForceManager<handle
             % Thermal (diffusion) force
             diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt);
             
-            
-            % Morse force                        
-            morseForce = ForceManager.GetMorseForce(morseForce,morsePotentialDepth,morsePotentialWidth,...
-                                         minParticleDist, particlePosition,particleDistances,morseForceType);
-            
             % zero-out forces for fixed particles
-             dx = (ljForces*dt+ morseForce*dt+ diffusionForces);
+             dx = (ljForces*dt+ diffusionForces);
              dx(fixedParticleNum,:) = 0;
              
-
-            
              % get new position
              newParticlePosition = particlePosition+dx;
                                                                                  
@@ -268,17 +260,8 @@ classdef ForceManager<handle
             end
         end
         
-        function force = GetMorseForce(morseForce,morsePotentialDepth,...
-                            morsePotentialWidth,morseEqDistance, particlePosition,particleDistance,forceType)
-            force = zeros(size(particlePosition));
-            if morseForce
-             edgeMat = GetEdgesVectors_mex(particlePosition,true(size(particleDistance,1)));
-             edgesX = edgeMat(:,:,1);
-             edgesY = edgeMat(:,:,2);
-             edgesZ = edgeMat(:,:,3);
-             [force] = MorseForce(morsePotentialDepth,morsePotentialWidth, morseEqDistance, ...
-                 edgesX,edgesY,edgesZ, particleDistance,forceType);
-            end
+        function force = GetMorseForce(morseForce,
+            [force] = MorseForce(De,alpha, re, edgesX,edgesY,edgesZ, particleDistance,forceType)
         end
         
         function edgesVec   = GetEdgesVectors(particlePosition, connectivityMap)

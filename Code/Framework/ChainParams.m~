@@ -31,8 +31,8 @@ classdef ChainParams<handle
             obj.diffusionConst         = 1;
             obj.numBeads               = 32;
             obj.connectedBeads         = [];
-            obj.bendingElasticityForce = false;
-            obj.springForce            = false;
+            obj.bendingElasticityForce = true;
+            obj.springForce            = true;
             obj.minBeadDistance        = 0*ones(obj.numBeads);
             obj.fixedBeadNum           = [];    % beads which do not move 
             obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
@@ -64,7 +64,7 @@ classdef ChainParams<handle
             obj.forceParams.diffusionConst         = obj.diffusionConst;
             obj.forceParams.fixedParticleNum       = obj.fixedBeadNum;
             obj.forceParams.springConst            = obj.springConst;        
-            obj.forceParams.minParticleEqDistance  = obj.minBeadDistance;
+            obj.forceParams.minParticleEqDistance    = obj.minBeadDistance;
             
         end
     end

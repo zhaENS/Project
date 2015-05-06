@@ -5,17 +5,19 @@ classdef ForceManagerParams<handle
         lennardJonesForce      = false;
         diffusionForce         = false;
         bendingElasticityForce = false;
-        
+        morseForce             = false;
         % Parameters for the forces
         bendingConst           = 0;
         springConst            = 0;
         diffusionConst         = 0;
         LJPotentialWidth       = 0;
         LJPotentialDepth       = 0;
-        minParticleDistance    = 0;
+        minParticleEqDistance  = 0;
         dt                     = 0; % the time to activate the force
         fixedParticleNum       = [];
-                
+        morsePotentialDepth    = 0;
+        morsePotentialWidth    = 0;
+        morseForceType         = '';
         edges % matrices representing the edges between connected particles
         particleDistance % pairwise distance between particles
     end    
