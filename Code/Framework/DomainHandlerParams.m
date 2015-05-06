@@ -37,11 +37,11 @@ classdef DomainHandlerParams<handle
             obj.LJPotentialWidth       = 0.3;
             obj.LJPotentialDepth       = 0.3;
             obj.diffusionConst         = 0;   % assigned by framework
-            obj.lennardJonesForce      = true;
+            obj.lennardJonesForce      = false;
             obj.diffusionForce         = false;   
-            obj.morseForce             = false; 
-            obj.morsePotentialDepth    = .1;
-            obj.morsePotentialWidth    = .1;
+            obj.morseForce             = true; 
+            obj.morsePotentialDepth    = .01;
+            obj.morsePotentialWidth    = .01;
             obj.morseForceType         = 'attractive'; % type of morse force [attractive|repulsive|full]
             obj.minParticleEqDistance  = 0.2; % min particle equilibrium distance
             obj.dt                     = 0;   % assigned by Framework

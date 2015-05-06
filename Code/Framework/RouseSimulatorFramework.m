@@ -25,6 +25,7 @@ classdef RouseSimulatorFramework<handle
     % TODO: allow some bonds to be stiff, find a way to simulate a stiff connector chain efficiently
     % TODO: add reflect outside the domain
     % TODO: add constrained diffusing objects to exert force on the objects
+    % TODO: consider joining Domain to objectManager
     properties
         handles     
         objectManager      % data and object manipulation
@@ -171,7 +172,7 @@ classdef RouseSimulatorFramework<handle
             eval(obj.recipe.PreStepActions);
         end
         
-        function Step(obj,varargin)%TODO: consider joining Domain to objectManager
+        function Step(obj,varargin)
             % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
                         
