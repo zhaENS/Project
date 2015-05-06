@@ -231,7 +231,7 @@ classdef DomainHandler<handle
             if strcmpi(obj.params.domainShape,'Sphere')
             % the vector norm
             n     = sqrt(sum(vecIn.^2,2));
-            inIdx = n<=obj.params.domainWidth;
+            inIdx = (n-obj.params.domainWidth).^2 <eps;
             
             elseif strcmpi(obj.params.domainShape,'cylinder')
                 
