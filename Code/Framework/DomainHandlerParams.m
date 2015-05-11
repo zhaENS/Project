@@ -34,12 +34,12 @@ classdef DomainHandlerParams<handle
             obj.showDomain             = true; % move to graphics
             
             % forces of the domain 
-            obj.LJPotentialWidth       = 0.3;
-            obj.LJPotentialDepth       = 0.3;
+            obj.LJPotentialWidth       = 0.2;
+            obj.LJPotentialDepth       = 0.2;
             obj.diffusionConst         = 0;   % assigned by framework
             obj.lennardJonesForce      = false;
-            obj.diffusionForce         = false;   
-            obj.morseForce             = true; 
+            obj.diffusionForce         = true;   
+            obj.morseForce             = false; 
             obj.morsePotentialDepth    = .01;
             obj.morsePotentialWidth    = .01;
             obj.morseForceType         = 'attractive'; % type of morse force [attractive|repulsive|full]

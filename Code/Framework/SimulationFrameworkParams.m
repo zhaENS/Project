@@ -10,10 +10,10 @@ classdef SimulationFrameworkParams<handle
     
     methods
         
-        function obj = SimulationFrameworkParams
+        function obj = SimulationFrameworkParams(chainParams)
             % class constructor 
             obj.SetSimulatorParams;
-            obj.SetChainParams;
+            obj.SetChainParams(chainParams);
             obj.SetDomainParams;
             obj.SetDataRecorderParams;
             obj.SetPlotHandlerParams;
@@ -27,7 +27,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.numSimulations       = 1;     % number of simulations in each batch
             obj.simulator.numSteps             = 1000;   % for inf place Inf
             obj.simulator.dt                   = 1e-2;  % time step 
-            obj.simulator.numChains            = 5;   
+            obj.simulator.numChains            = 1;   
             obj.simulator.encounterDist        = 0.1;   % The distance for which two monomer are considered to have met 
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
@@ -37,19 +37,32 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.recipesFolder        = ''; 
             
             % Control domain forces
-            obj.simulator.diffusionConst       = 0.1;
+            obj.simulator.diffusionConst       = 0.7;
 %             obj.simulator.LJPotentialWidth     = 0.3;
 %             obj.simulator.LJPotentialDepth     = 0.3;
         end
         
-        function SetChainParams(obj)%TODO: change force params accordingly
+        function SetChainParams(obj,chainParams)%TODO: change force params accordingly
             % Assign parameters for each chain 
-            for cIdx = 1:obj.simulator.numChains
+            % chain params should be a vector of ChainParams structures 
+            
+            if exist('chainParams','var')
+                % change te simulation numChains parmeter
+                obj.simulator.numChains = numel(chainParams);                
+                obj.chain               = chainParams;                
+            else
+                
+             for cIdx = 1:obj.simulator.numChains
                 obj.chain(cIdx) = ChainParams;
+             end
+             
+            end
+            
+            for cIdx = 1:obj.simulator.numChains
                 % inherit the framework parameters 
                 obj.chain(cIdx).diffusionConst = obj.simulator.diffusionConst;
-                obj.chain(cIdx).dimension = obj.simulator.dimension;            
-                obj.chain(cIdx).dt        = obj.simulator.dt;
+                obj.chain(cIdx).dimension      = obj.simulator.dimension;            
+                obj.chain(cIdx).dt             = obj.simulator.dt;
                 obj.chain(cIdx).SetForceParams;
             end
         end

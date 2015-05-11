@@ -166,18 +166,16 @@ classdef SimulationFrameworkGraphics<handle
                     member = obj.handles.framework.objectManager.map.GetObjectMembers(oIdx); % member index in the general list
 
                     color = obj.chainColors(member(1),:);% transform to the first member's color 
-                    tubeFlag = false;
+                    tubeFlag = true;
                     for mIdx = 1:numMembers                        
                         inds = obj.handles.framework.objectManager.map.GetMemberInds(oIdx,mIdx);
                         c    = curPos(inds,:);
                         if tubeFlag 
-                            hold on
-                                [x,y,z,sh] = tubeplot([c(:,1),c(:,2),c(:,3)]',0.1);
+%                             hold on
+                                [x,y,z] = tubeplot([c(:,1),c(:,2),c(:,3)]',0.1);
                                 
-%                                 sh = surf(obj.handles.graphical.mainAxes,x,y,z);
-                                obj.handles.graphical.chain(member(mIdx)).beads = sh;
-                                hold off
-                                drawnow
+                                sh = surf(obj.handles.graphical.mainAxes,get(sh,'XData'),get(sh,'YData'),get(sh,'ZData'));
+%                                 hold off
                         else
 
                         % Plot beads                   
@@ -286,12 +284,12 @@ classdef SimulationFrameworkGraphics<handle
                 % Plot beads
                 p     = prevPos{oIdx};
                 c     = curPos{oIdx};
-                tubeFlag = false;
+                tubeFlag = true;
                 if tubeFlag 
                     hold on
                     [~,~,~,sh] = tubeplot([c(:,1),c(:,2),c(:,3)]',0.1);
                     obj.handles.graphical.chain(oIdx).beads = sh;
-%                     surf(obj.handles.graphical.mainAxes,get(sh,'XData'),get(sh,'YData'),get(sh,'ZData')); 
+                    surf(obj.handles.graphical.mainAxes,get(sh,'XData'),get(sh,'YData'),get(sh,'ZData')); 
                     hold off
                 else
                     

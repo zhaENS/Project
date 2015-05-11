@@ -591,7 +591,7 @@ classdef ObjectManager<handle
 %                      else
                
 %                      end
-                elseif r<(1-prob)/2
+                elseif r<(1-prob)
                     % get the list of connected particles, chose a pair and
                     % disconnect it 
                     [connected] = obj.GetObjectConnectedParticles(obj.map.count,'offDiagonals');
