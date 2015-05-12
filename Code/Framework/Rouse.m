@@ -34,11 +34,18 @@ classdef Rouse<handle
         params
         indsInParent
     end
-   
+    
+    events
+        step 
+    end
+    
     methods
         function obj = Rouse(rouseParams,indsInParent,parentHandle)
             % Class constructor
-
+            % the chain parent object is the objectManager 
+            % the inds in parent represent a list of integer in
+            % objectManager;
+            
             obj.params        = rouseParams;
             
             obj.indsInParent  = indsInParent; % the list of indices for position in ObjectManager
@@ -265,7 +272,7 @@ classdef Rouse<handle
             if exist('domainHandler','var')
                 if isempty(obj.params.beadsOnBoundary)
                 % The bead positions
-                for bIdx = 2:obj.params.numBeads 
+                for bIdx = 2:obj.params.numBeads                                             
                     inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:));     
                     tempPos  = obj.position.prev(bIdx,:);
                    while ~inDomain 
@@ -274,6 +281,7 @@ classdef Rouse<handle
                        inDomain = domainHandler.InDomain(tempPos);
                    end   
                     obj.position.prev(bIdx,:)= tempPos;
+                    obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
                 end
                 
                 else % if there are beads constrained to lay on the boundary 
@@ -308,8 +316,7 @@ classdef Rouse<handle
                                               forceParams.springConst,forceParams.bendingConst,...                                           
                                               forceParams.minParticleEqDistance,forceParams.fixedParticleNum,forceParams.dt);
                                          
-            obj.position.cur = newPos;
-            
+            obj.position.cur = newPos;                       
         end
         
         function SetPrevBeadPosition(obj,pos)% obsolete, externaly used

@@ -34,7 +34,7 @@ classdef ChainParams<handle
             obj.numBeads               = 32;
             obj.connectedBeads         = [];
             obj.bendingElasticityForce = false;
-            obj.springForce            = true;           
+            obj.springForce            = false;           
             obj.fixedBeadNum           = [];    % beads which do not move 
             obj.fixedBeadsPosition     = [];    % position for the fixed beads (can be on the boundary)
             obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
@@ -58,7 +58,8 @@ classdef ChainParams<handle
              obj.minBeadDistance        = 0*ones(obj.numBeads);
              
             % Define force parameters 
-            obj.forceParams  = ForceManagerParams;            
+            obj.forceParams  = ForceManagerParams;
+            obj.SetForceParams;
         end
         
         function ParseInputParams(obj,varargin)
@@ -70,7 +71,7 @@ classdef ChainParams<handle
                 
                 for vIdx = 1:(numel(v)/2)
                     obj.(v{2*vIdx-1})= v{2*vIdx};
-                end  
+                end            
         end
         
         function SetForceParams(obj)

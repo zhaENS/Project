@@ -11,39 +11,6 @@
 \title{Three-Dimensional Reconstruction Using the Encounter Probabilities}
 \begin{document}
 \maketitle
-\section{Using optimization methods}
-Given an encounter probability profile of the first bead in a Rouse chain of $N$ bead, we use the expected encounter model in the Rouse chain to give estimate on the 3D organization of the chain. Given the encounter profile $e$, we minimize the goal function of the form
-\begin{eqnarray}
-&& min\{f(d)\}\\
-&& Ad\leq b\\
-&& A_{eq}d=b_{eq}\\
-&& l_b\leq d\leq u_b\\
-&& c(d)\leq0\\
-&& c_{eq}(d)=0
-\end{eqnarray}
-where $d$ is a vector of the distances of bead from bead 1, $f=\sum{d_j}$, $A\in M_{[N\times N]}$ is a matrix such that
-\begin{equation}
-A_{ii} =
-\left\{
-	\begin{array}{ll}
-		 -1 & \mbox{if } \exists j \quad ;\|e_j-e_i\|\leq \epsilon \\
-		 0 & \mbox{else} 
-	\end{array}
-\right.
-\end{equation}
-\begin{equation}
-A_{ij} =
-\left\{
-	\begin{array}{ll}
-		1/|J|  & \mbox{if } \|e_j-e_i\|\leq \epsilon \\
-		0 & \mbox{else } 
-	\end{array}
-\right.
-\end{equation}
-for small $\epsilon$ of choice, and $J$ is the group of all indices $j$ such that $\|e_j-e_i\|\leq \epsilon$ for each $i$. The vector $b$ is the zero vector,  $b=0$, $l_b$ is the lower bound, set to be a vector of all ones, $u_b$ is the upper bound set to be a vector of all $N$. The non linear constraint 
-\begin{equation}
-c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^2
-\end{equation}
 
 \section{Using inverted probabilities assuming a Rouse chain}
 The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the distance between beads on the chain. The main observation here is that if we estimate the nearest neighbors encounter probability for each bead, we can construct the whole connectivity map of the polymer. It will later be left to show that the non-nearest bneighbor encounter probability will serve as correction factors.
@@ -91,7 +58,7 @@ N>0,\quad 0<\lambda<-\mu,\quad \lambda<\frac{1}{k_{sB}},\quad \frac{1}{\lambda}+
 The filter's parameters are then $k_{sB}, k_{pB}$
 We have to change the shape of the neighborhood for the convolution operations, to take into account the shape of the encounter frequency vs. distance matrix. 
 
-\subsection{Smoothing by solving the inverse source problem}
+\subsection{Smoothing by solving the inverse source problem}\label{subsection_SmoothingbyInverseHeat}
 A fundamental solution to the 1D heat (diffusion) equation is the Gaussian
 \begin{equation*}
 G(x,t,y,\tau) =\frac{H(t-\tau)}{\sqrt{4\pi (t-\tau)}}\exp\left(-\frac{(x-y)^2}{4(t-\tau)}\right)
@@ -121,17 +88,56 @@ and the additional condition
 \begin{equation*}
 \int_0^1 u(x,t)dx = E(t),\quad 0\leq t\leq T
 \end{equation*}
-\subsection{The steps}
 
+
+\subsection{The steps}\label{subsection_theSmoothingSteps}
+For a HiC read of $N$ equally spaced segments. 
 \begin{enumerate}
 \item Obtain the encounter histogram of the HiC data.
-\item Arrange the encounters as $3D$ matrix $E$, with $x$-axes as bead index $b=1,...,N$, $y$-axes as the distance $d=-N..N$ along the chain, and the $z$-axes the number of encounters $E(b,d)$. Arranging the HiC data from left to right, we distinguish between 'right' encounter matrix, $e_r(b,d)$ for $d>0$ and 'left' encounter matrix $e_l(b,-d)$ for $d<0$ such that $E=e_l(b,-d)\bigoplus e_r(b,d)$ which is  $N\times 2N$ matrix. 
-\item Smooth $e_r(b,d)$ and $e_l(b,-d)$ using the procedure described in \ref{subsubsection_muLambdaSmoothing}.
+\item Arrange the encounters as $3D$ matrix $E$, with $x$-axes as bead index $b=1,...,N$, $y$-axes as the distance $d=-(N-1),..(N-1)$ along the chain, and the $z$-axes the number of encounters $E(b,d)$. Arranging the HiC data from left to right, we distinguish between 'right' encounter matrix, $e_r(b,d)$ for $d>0$ and 'left' encounter matrix $e_l(b,-d)$ for $d<0$ such that $E=e_l(b,-d)\bigoplus e_r(b,d)$ which is  $N\times 2N$ matrix. 
+\item Smooth $e_r(b,d)$ and $e_l(b,-d)$ using the procedure described in.
 \item Normalize each row of the smoothed encounter histogram to get probabilities [Read about bias]
-\item Analyze $e_l(b,-d)$ and $e_r(b,d)$ using the procedure described in [Missing subsection] to construct the connectivity graph.
 \end{enumerate}
 
+\section{Reconstruction}
 
+
+\section{Ideas and preliminary work}\label{section_ideasAndPreliminaryWork}
+This section contains preliminary ideas and work. some sections are not edited and the information in them should be double-checked. 
+
+\subsection{Using optimization methods}\label{subsection_optimizationMethods}
+Given an encounter probability profile of the first bead in a Rouse chain of $N$ bead, we use the expected encounter model in the Rouse chain to give estimate on the 3D organization of the chain. Given the encounter profile $e$, we minimize the goal function of the form
+\begin{eqnarray}
+&& min\{f(d)\}\\
+&& Ad\leq b\\
+&& A_{eq}d=b_{eq}\\
+&& l_b\leq d\leq u_b\\
+&& c(d)\leq0\\
+&& c_{eq}(d)=0
+\end{eqnarray}
+where $d$ is a vector of the distances of bead from bead 1, $f=\sum{d_j}$, $A\in M_{[N\times N]}$ is a matrix such that
+\begin{equation}
+A_{ii} =
+\left\{
+	\begin{array}{ll}
+		 -1 & \mbox{if } \exists j \quad ;\|e_j-e_i\|\leq \epsilon \\
+		 0 & \mbox{else} 
+	\end{array}
+\right.
+\end{equation}
+\begin{equation}
+A_{ij} =
+\left\{
+	\begin{array}{ll}
+		1/|J|  & \mbox{if } \|e_j-e_i\|\leq \epsilon \\
+		0 & \mbox{else } 
+	\end{array}
+\right.
+\end{equation}
+for small $\epsilon$ of choice, and $J$ is the group of all indices $j$ such that $\|e_j-e_i\|\leq \epsilon$ for each $i$. The vector $b$ is the zero vector,  $b=0$, $l_b$ is the lower bound, set to be a vector of all ones, $u_b$ is the upper bound set to be a vector of all $N$. The non linear constraint 
+\begin{equation}
+c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^2
+\end{equation}
 
 \bibliographystyle{plain}
 \bibliography{3DStructureFromEncounterProbabilityBibliography} % the bibliography.bib file 

@@ -69,10 +69,10 @@ classdef ForceManager<handle
             springForces  = obj.GetSpringForce(edgeLength,springConst,connectivityMap,minParticleDistance,fixedParticleNum);
             
             % Lenard-jones force
-            ljForces      = obj.GetLenardJonesForce(particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth);
+            ljForces      = obj.GetLenardJonesForce(particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum);
             
             % Thermal (diffusion) force
-            diffusionForces = obj.GetDiffusionForce(particlePosition,diffusionConst,dt);
+            diffusionForces = obj.GetDiffusionForce(particlePosition,diffusionConst,dt,fixedParticleNum);
             
             % Bending forces
             bendingForces = obj.GetBendingElasticityForce(particlePosition,connectivityMap,bendingConst);
@@ -103,17 +103,15 @@ classdef ForceManager<handle
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,...
                                                                    connectivityMap,bendingConst,fixedParticleNum);
-            %zero-out fixed particle position 
-%             bendingForces(fixedParticleNum,:) = 0;
+
+
             dx = (springForces+ bendingForces)*dt;
             
-            % zero out forces for fixed beads
-%             dx(fixedParticleNum,:) = 0;
             newParticlePosition = particlePosition+dx;
                                    
          end
         
-        function newParticlePosition = ApplyExternalForces(particlePosition,...
+        function [newParticlePosition,diffusionForces,ljForces,morseForce] = ApplyExternalForces(particlePosition,...
                                                             particleDistances,diffusionConst,...
                                                             ljForce,diffusionForce,morseForce,...                                                            
                                                             LJPotentialWidth,LJPotentialDepth,...
@@ -123,15 +121,15 @@ classdef ForceManager<handle
              % for its vertices represented by newParticlePosition
              
              % Lenard-jones force             
-            ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth);
+            ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum);
             
             % Thermal (diffusion) force
-            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt);
+            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum);
             
             
             % Morse force                        
             morseForce = ForceManager.GetMorseForce(morseForce,morsePotentialDepth,morsePotentialWidth,...
-                                         minParticleDist, particlePosition,particleDistances,morseForceType);
+                                         minParticleDist, particlePosition,particleDistances,morseForceType,fixedParticleNum);
             
             % zero-out forces for fixed particles
              dx = (ljForces*dt+ morseForce*dt+ diffusionForces);
@@ -199,13 +197,9 @@ classdef ForceManager<handle
             bendingForces([indsObj{~bendingElasticityForce}],:) = 0;
             
             % The effect of applying forces is addative
-            dx =(springForces+bendingForces)*dt;                               
-            % zero-out fixed particles position change
-%             dx(fixedParticleNum,:) = 0;         
+            dx = (springForces+bendingForces)*dt;
             
-            newParticlePosition = particlePosition+dx; 
-                                   
-                                       
+            newParticlePosition = particlePosition+dx;                                                                           
         end    
         
         function force  = GetSpringForce(springForce,particlePosition,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum)
@@ -217,16 +211,12 @@ classdef ForceManager<handle
             % fixedParticleNum - particles in the system which do not move
             force = zeros(size(particlePosition));
             if springForce
-                 % obtain the edges length
-%                 edgeLength    = ForceManager.GetEdgesLength(particleDist,connectivityMap);
-%                 connectivityMap           = (connectivityMap);
                 L                         = (1-minParticleDist./particleDist).*connectivityMap;
                 L(~connectivityMap)       = 0;
                 sumForces                 = sum(L,2);
                 force                     = -springConst.*(diag(sumForces)-L); % set the maindiagonal                
                 force                     = force*particlePosition;
                 force(fixedParticleNum,:) = 0;% zero out forces for fixed particles
-%                 force(:,fixedParticleNum) = 0;% zero out forces for fixed particles
             end
         end
         
@@ -235,11 +225,7 @@ classdef ForceManager<handle
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
                 % Calculate the edges vectors in all dimension
-%                  edgeMat = GetEdgesVectors(particlePosition,connectivityMat);
-%                  force   = BendingElasticityForce(edgeMat(:,:,1),...
-%                                                      edgeMat(:,:,2),...
-%                                                      edgeMat(:,:,3),...
-%                                                      connectivityMat,bendingConst);
+
                 edgeMat = GetEdgesVectors_mex(particlePosition,connectivityMat);
                 force   = BendingElasticityForce_mex(edgeMat(:,:,1),...
                                                      edgeMat(:,:,2),...
@@ -251,25 +237,27 @@ classdef ForceManager<handle
             end            
         end
         
-        function force  = GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt)
+        function force  = GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum)
             % get thermal (diffusion) force
             force = zeros(size(particlePosition));
             if diffusionForce
                 force = randn(size(particlePosition))*sqrt(2*diffusionConst*dt);
-            end            
+            end 
+            force(fixedParticleNum,:) = 0;
         end
         
-        function force  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth)
+        function force  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth,fixedParticleNum)
             % calculate Lenard jones force between particles
             force = zeros(size(particlePosition));
             if ljForce
 %                 force = LennardJones(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
                 force = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
             end
+            force(fixedParticleNum,:) = 0;
         end
         
         function force = GetMorseForce(morseForce,morsePotentialDepth,...
-                            morsePotentialWidth,morseEqDistance, particlePosition,particleDistance,forceType)
+                            morsePotentialWidth,morseEqDistance, particlePosition,particleDistance,forceType,fixedParticleNum)
             force = zeros(size(particlePosition));
             if morseForce
              edgeMat = GetEdgesVectors_mex(particlePosition,true(size(particleDistance,1)));
@@ -279,6 +267,7 @@ classdef ForceManager<handle
              [force] = MorseForce(morsePotentialDepth,morsePotentialWidth, morseEqDistance, ...
                  edgesX,edgesY,edgesZ, particleDistance,forceType);
             end
+            force(fixedParticleNum,:) = 0;
         end
         
         function edgesVec   = GetEdgesVectors(particlePosition, connectivityMap)

@@ -314,7 +314,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             [left,right] = obj.InterpolateZeroValues(left,right);                                  
             
             % smooth 'left' and 'right' parts 
-            [left,right] = obj.CurveFitByInverseHeatEq(left,right);
+            [left,right] = obj.CurveFitByInverseHeatEq(left,right)
             
             obj.encounterMat = [fliplr(left), zeros(size(left,1),1), right];
             obj.encounterMat(obj.encounterMat<0) = 0; % zero out negative values 
@@ -332,7 +332,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
         
         function [left,right] = InterpolateZeroValues(obj,left,right)
             % Interpolate zero values in the signal                        
-            for lIdx = 1:size(obj.encounterMat,1)
+            for lIdx = minNumPts:size(obj.encounterMat,1)
                 left(lIdx,1:lIdx-1) = InterpolateZeroValuesInSignal(left(lIdx,1:lIdx-1),...
                                       obj.params.interpolation.zeroInterpolationMethod);
                 left(lIdx,lIdx:end) = 0; % zero out the ends
@@ -340,7 +340,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             end
             
             right(isnan(right)) = 0;
-            for rIdx = 1:size(right,1)
+            for rIdx = 1:size(right,1)-minNumPts
                 right(rIdx,1:end-rIdx+1)     = InterpolateZeroValuesInSignal(right(rIdx,1:end-rIdx+1),...
                                             obj.params.interpolation.zeroInterpolationMethod);
                 right(rIdx,end-rIdx+2:end)   = 0; 
@@ -357,33 +357,8 @@ classdef CalculateBeadDistancesByRouseModel<handle
             
         end
         
-        function [left,right] = CurveFitByInverseHeatEq(obj,left,right)
-            % Smoothing parameters             
-            regOrder    = 2;   % regularization order [0,1,2]
-            lambda      = 2.7; % regularization constant
-            alpha       = -1;
-            numSpacePts = 3;
-            initCond    = 3;
-            minNumPts   = 5; % min number of points to perform analysis (smoothing)
-                        
-                        
-            % perform smoothing
-            for lIdx = minNumPts:size(obj.encounterMat,1)
-               if ~all(left(lIdx,:)==0)% perform smoothing for non zero signals
-                % smooth using the inverse heat equation                
-                  [~,rL] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',left(lIdx,1:lIdx-1),regOrder,lambda,alpha,numSpacePts,initCond,false); 
-                  left(lIdx,1:lIdx-1) = rL./sum(rL);
-               end
-            end
-            
-            for rIdx =1:size(right)-minNumPts
-               if ~all(right(rIdx,:)==0)
-                  [~,rR] = BoundaryElementHeatEquation('TestBemHeatEq_optimized',right(rIdx,1:end-rIdx+1),regOrder,lambda,alpha,numSpacePts,initCond,false); 
-                  right(rIdx,1:end-rIdx+1)=rR./sum(rR);
-               end
-            end
-            
-        end
+        function 
+            eb
         
         function EstimateNearestNeighborEncounterProbability(obj)
             % Use the encounter proability matrix to get an estimation of

@@ -266,7 +266,11 @@ classdef ObjectManager<handle
         function fixedParticles = GetFixedParticles(obj,objList)
             % get the list of fixed particles 
             memberList     = obj.map.GetObjectMembers(objList);
-            fixedParticles = [obj.fixedParticles{memberList}];
+            fixedParticles = [obj.objParams(memberList).fixedBeadNum];
+            for mIdx = 2:numel(memberList)
+                fixedParticles(mIdx) = fixedParticles(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
+            end
+%             fixedParticles = [obj.fixedParticles{memberList}];
         end
         
         function particleDistance = GetParticleDistance(obj,objList)
@@ -470,6 +474,7 @@ classdef ObjectManager<handle
             
             % Check for possible interaction between objects
 %             obj.ObjectInteraction;
+   
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
