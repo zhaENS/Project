@@ -28,8 +28,8 @@ classdef DomainHandlerParams<handle
          
         function obj = DomainHandlerParams
             obj.domainShape            = 'sphere'; %[sphere | cylinder |twoplates| open
-            obj.domainWidth            = 5;
-            obj.domainHeight           = 5;
+            obj.domainWidth            = 15;
+            obj.domainHeight           = 15;
             obj.domainCenter           = [0 0 0];
             obj.showDomain             = true; % move to graphics
             

@@ -5,40 +5,44 @@ numSteps = 1000;
 % 
 % % create chain and domain and register them in the ObjectManager
 % % create a chain 
-cp            = ChainParams('numBeads',100,'dt',0.01);
-% dp            = DomainHandlerParams;
-% domain        = DomainHandler(dp);
-% objectManager = ObjectManager(cp);
-% objectManager.InitializeObjects(domain)
-% domainForceParams = dp.forceParams;
-% figure, 
+cp     = ChainParams('numBeads',100,'dt',0.01);
 
 params = SimulationFrameworkParams(cp);
+params.simulator.numSteps = 1;% one step for initialization 
 
-% SimulatorParams
-% profile on 
+% initialize simulator framework
 r = RouseSimulatorFramework(params);
+
 [~,initialChainPosition] = r.objectManager.GetMembersPosition(1);
 initialChainPosition     = initialChainPosition{1};
+
 % Initialize histones
-histoneParams.dt             = r.params.simulator.dt;
-histoneParams.numHistones    = 10;
-histoneParams.diffusionConst = 0.1;
-h                            = Histone(histoneParams, initialChainPosition);
+h                        = Histone('dt',r.params.simulator.dt,'numHistones',1,'diffusionConst',1,'ljForce',false,...
+                                   'diffusionForce',true,'ljPotentialWidth',0.1,'ljPotentialDepth',0.1);
+h.Initialize(initialChainPosition);
 
-% Test with one histone 
+% get axes
 mAxes = r.simulationGraphics.handles.graphical.mainAxes;
-% add initial histone position 
-histHandle = line('XData',h.curPos(:,1),'YData',h.curPos(:,2),'ZData',h.curPos(:,3),'marker','o','MarkerFaceColor','y','MarkerSize',10,'Parent',mAxes,'LineStyle','none');
 
-    r.Run;
+% initialize histone graphics
+histHandle = line('XData',h.curPos(:,1),...
+                  'YData',h.curPos(:,2),...
+                  'ZData',h.curPos(:,3),...
+                  'marker','o',...
+                  'MarkerFaceColor','y',...
+                  'MarkerSize',10,...
+                  'Parent',mAxes,...
+                  'LineStyle','none');
+
+    r.Run;% run initial simulator step 
+    
     for sIdx = 1:numSteps
-        r.Step;
+        r.Step; % advance one simulation step 
         [~,chainPos] = r.objectManager.GetMembersPosition(1);
-        chainPos = chainPos{1};
-        h.Step(chainPos);
+        chainPos     = chainPos{1};
+        h.Step(chainPos); % move the histones
         
-        % add the histone to the graphics         
+        % update histone graphics         
         set(histHandle,'XData',h.curPos(:,1),'YData',h.curPos(:,2),'ZData',h.curPos(:,3))        
     end    
 end

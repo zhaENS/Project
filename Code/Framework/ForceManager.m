@@ -246,12 +246,12 @@ classdef ForceManager<handle
             force(fixedParticleNum,:) = 0;
         end
         
-        function force  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth,fixedParticleNum)
+        function [force, forceDirection]  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth,fixedParticleNum)
             % calculate Lenard jones force between particles
             force = zeros(size(particlePosition));
             if ljForce
 %                 force = LennardJones(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
-                force = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
+                [force, forceDirection] = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
             end
             force(fixedParticleNum,:) = 0;
         end

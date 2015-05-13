@@ -34,7 +34,7 @@ classdef ChainParams<handle
             obj.numBeads               = 32;
             obj.connectedBeads         = [];
             obj.bendingElasticityForce = false;
-            obj.springForce            = false;           
+            obj.springForce            = true;           
             obj.fixedBeadNum           = [];    % beads which do not move 
             obj.fixedBeadsPosition     = [];    % position for the fixed beads (can be on the boundary)
             obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
