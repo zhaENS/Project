@@ -105,7 +105,43 @@ numBead \times step]$
 \subsection{Noise} 
 The noise terms can be determined to be any type of noise distribution, with mean and variance as parameters. The default values are drawn from a Gaussian distribution with mean zero and variance 1. 
 To save computation time for each step, the noise terms are determined every N simulation steps. 
+ 
+\section{The Recipe files}
+The recipe files are used to allow the user to insert simulation specific commands without changing the content of the code. Recipe files allow the user to insert 4 functions, which are executed in: PreSimulationBatchActions, PreRunActions, PostRunActions, PostSimulationBatchActions. of the simulation framework. 
 
+\section{Chains' Association and Dissociation} 
+To explain the data structure's dynamics for chain association and dissociation, we first make several definitions.
+
+A system of $N$ chains will be written as:  $[C^{(1)},C^{(2)},...,C^{(N)} ]$, the coordinates of the beads in $C^{(i)}$ will be written as $X^{i}$. For each chain $C^{(i)}$ there exist a subset of 'sticky' beads $S^{(i)}$ that are allowed to interact with a subset $S^{(j)},\quad j\in [1,N]$.For the present notation we do not allow self interactions. A subscript will indicate a member of the group, i.e $X^{(i)}_k$ will indicate the $k^{th}$ coordinate in the coordinates of chain $i$, $S^{(i)}_k$ will indicate the $k^{th}$ coordinate in the subset of interacting beads of chain $i$, etc... 
+
+An \textit{association} between a chain $i$ and $j$ is the interaction between a member of $S^{(i)}$ and $S^{(j)}$ and will be denoted by  
+$C^{(i)}\oplus C^{(j)}$, that is $\exists \alpha \in S^{(i)},\beta \in S^{(j)}; |X^{(i)}_\alpha-X^{(j)}_\beta |<\epsilon$, with $\epsilon$ the interaction distance.
+
+A \textit{dissociation} of the structure 
+
+\section{Initialization}\label{section_Initialization}
+
+All objects are initialized before simulation starts. Some objects might be initialized dynamically upon need. 
+All objects are contained within some domain. Even, an unconstrained chain is contained within an open domain, for which no reflection is implemented.
+Chains are always associated with some domain, whether they are contained in it and constrained to stay inside according to the domains reflection rules or are interacting with it's surface from outside.
+
+\subsection{Domain initialization}\label{subsection_domainInitialization}
+A variable number of domains can be initialized. All domain are handled by the DomainHandler class. The list of functionality of domains is given in the DomainHandler class section. In short, domain exert on chains and object external forces such as diffusion, Lennard-Jones and Morse forces, and are responsible for relocating the particles after interaction between the particles and the domain (e.g in case of reflection)
+
+To initialize a domain we have to register it in the DomainHandler class. The initialization of a domain is done by providing the DomainHandler a structure containing DomainHandlerParameters classes, one for each domain. 
+For example, assume we would like to initialize two domains, one is a spherical domain with radius 5 and the second a cylindrical domain of radius 1 and hight 10. In addition, assume that we want chains to be reflected only from the spherical domain and the the cylindrical and we also want the cylindrical domain to not affect the particles by diffusion.
+\begin{tiny}
+
+domainParams(1) =DomainHandlerParams('domainShape','sphere','domainWidth',10,'diffusionForce',true);\\
+domainParams(2) = DomainHandlerParams('domainShape','cylinder','reflectionType','off',...\\
+                                      'diffusionForce',false,'domainWidth',1,'domainHeight',50);
+\end{tiny}
+                         
+These parameters will later be fed to the SimulatorFrameworkParams for initialization along with the parameters of the chains (to be explained in later subsection)
+
+
+\subsection{Chain initialization}\label{subsection_chainInitialization}
+ 
 \subsection{Initialization of beads on the domain's boundary}
 For a set of beads $ i,j,k,...$ constrained to the surface $\partial S$ of a sphere $S$, we have to find initial points on $\partial S$ such that a chain can pass through them. This is accomplished by picking positions for the constrained bead by diffusing on $\partial S$ and then connect these positions with a Brownian bridges, completely contained within $S$. This procedure can be summarized as: 
 For a surface of spherical domain $\partial S$, initialization of a chain with $N_b$ beads $b_1,b_2,...b_{N_b}$ is done as follows
@@ -119,21 +155,8 @@ For a surface of spherical domain $\partial S$, initialization of a chain with $
 \end{enumerate}
 
 \subsubsection{Diffusion on the surface of a sphere}\label{subsubSec_diffusionOntheSurface}
-We apply simple rules of diffusion for walking on the surface of a sphere $\partial S$. The coordinates of each particle, $(x,y,z)$ are transformed to spherical coordinates $(\phi,\theta,\rho)$, where we keep $\rho$ constant throughout. The random walk is then a 'random walk' of the angles $\theta(t)$ and $\phi(t)$, with $\phi$ the angle between the path's ray and the positive z axis, and $theta$ is the angle between the projection of the path's ray onto the x-y plane and the positive x axis. 
+We apply simple rules of diffusion for walking on the surface of a sphere $\partial S$. The coordinates of each particle, $(x,y,z)$ are transformed to spherical coordinates $(\phi,\theta,\rho)$, where we keep $\rho$ constant throughout. The random walk is then a 'random walk' of the angles $\theta(t)$ and $\phi(t)$, with $\phi$ the angle between the path's ray and the positive z axis, and $theta$ is the angle between the projection of the path's ray onto the x-y plane and the positive x axis.
 
-\section{The Recipe files}
-The recipe files are used to allow the user to insert simulation specific commands without changing the content of the code. Recipe files allow the user to insert 4 functions, which are executed in: PreSimulationBatchActions, PreRunActions, PostRunActions, PostSimulationBatchActions. of the simulation framework. 
-
-\section{Chains' Association and Dissociation} 
-To explain the data structure's dynamics for chain association and dissociation, we first make several definitions.
-
-A system of $N$ chains will be written as:  $[C^{(1)},C^{(2)},...,C^{(N)} ]$, the coordinates of the beads in $C^{(i)}$ will be written as $X^{i}$. For each chain $C^{(i)}$ there exist a subset of 'sticky' beads $S^{(i)}$ that are allowed to interact with a subset $S^{(j)},\quad j\in [1,N]$.For the present notation we do not allow self interactions. A subscript will indicate a member of the group, i.e $X^{(i)}_k$ will indicate the $k^{th}$ coordinate in the coordinates of chain $i$, $S^{(i)}_k$ will indicate the $k^{th}$ coordinate in the subset of interacting beads of chain $i$, etc... 
-
-An \textit{association} between a chain $i$ and $j$ is the interaction between a member of $S^{(i)}$ and $S^{(j)}$ and will be denoted by  
-$C^{(i)}\oplus C^{(j)}$, that is $\exists \alpha \in S^{(i)},\beta \in S^{(j)}; |X^{(i)}_\alpha-X^{(j)}_\beta |<\epsilon$, with $\epsilon$ the interaction distance.
-
-A \textit{dissociation} of the structure 
- 
 
 \section{Domain Reflection}
 \subsection{Sphere}

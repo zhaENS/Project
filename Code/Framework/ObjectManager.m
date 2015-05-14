@@ -54,9 +54,8 @@ classdef ObjectManager<handle
               % Initizlie Rouse chains 
               inds = (cNb+1):(cNb+obj.objParams(cIdx).numBeads);
               obj.handles.chain(cIdx) = Rouse(obj.objParams(cIdx),inds,obj);
-              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);
-            
-              
+              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass(obj.objParams(cIdx).initializeInDomain));
+                          
               % Register the chain as an object in the ObjectMapper class
               obj.map.AddObject(inds)
               
@@ -116,7 +115,7 @@ classdef ObjectManager<handle
         
         function [prev,cur] = GetMembersPosition(obj,objNum)
             % Get positoins of members of the object objNum            
-            memberList = (obj.map.GetObjectMembers(objNum));%[obj.map.object(objNum).members];% obj.objectList{objNum};% members indices
+            memberList = (obj.map.GetObjectMembers(objNum));% members indices
             prev    = cell(1,numel(memberList));
             cur     = cell(1,numel(memberList));            
             
@@ -126,8 +125,7 @@ classdef ObjectManager<handle
                 inds       = obj.map.GetMemberInds(objNum,pIdx);
                 prev{pIdx} = obj.prevPos(inds,:);
                 cur{pIdx}  = obj.curPos(inds,:);
-%                 prev{pIdx} = obj.handles.chain(memberList(pIdx)).position.prev;
-%                 cur{pIdx}  = obj.handles.chain(memberList(pIdx)).position.cur;
+
             end
            
         end 
@@ -267,8 +265,10 @@ classdef ObjectManager<handle
             % get the list of fixed particles 
             memberList     = obj.map.GetObjectMembers(objList);
             fixedParticles = [obj.objParams(memberList).fixedBeadNum];
-            for mIdx = 2:numel(memberList)
-                fixedParticles(mIdx) = fixedParticles(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
+            if ~isempty(fixedParticles)
+                for mIdx = 2:numel(memberList)
+                    fixedParticles(mIdx) = fixedParticles(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
+                end
             end
 %             fixedParticles = [obj.fixedParticles{memberList}];
         end

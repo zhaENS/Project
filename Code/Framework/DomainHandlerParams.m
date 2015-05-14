@@ -15,10 +15,11 @@ classdef DomainHandlerParams<handle
         morseForceType@char          % type of morse force [attractive|repulsive|full]
         minParticleEqDistance@double % minimum equilibrium distance 
         diffusionConst@double % diffusion constant 
-        reflectionType@char   % current only option: preserveEnergy
+        reflectionType@char   % current only option: [preserveEnergy | off]
         domainCenter@double   % position in space for the center default [0 0 0] 3d
         showDomain@logical    % flag to show or hide the domain 
         dt@double             % simulation step time 
+        permeability@double   % how permiable is the domain surface range:[0-1] % to be used in the future 
         maxReflectionsPerParticle@double % the maximal number of times a particle can be reflected in a single reflection loop
         parentAxes
         forceParams
@@ -26,14 +27,16 @@ classdef DomainHandlerParams<handle
     
     methods
          
-        function obj = DomainHandlerParams
+        function obj = DomainHandlerParams(varargin)% consider adding shape primatives for the geometry of the domain
+            % default parameters 
             obj.domainShape            = 'sphere'; %[sphere | cylinder |twoplates| open
             obj.domainWidth            = 15;
             obj.domainHeight           = 15;
             obj.domainCenter           = [0 0 0];
-            obj.showDomain             = true; % move to graphics
+            obj.showDomain             = true; % obsolete- move to graphics
             
-            % forces of the domain 
+            % Forces of the domain ( will be moved to ForceParams in the
+            % future)
             obj.LJPotentialWidth       = 0.2;
             obj.LJPotentialDepth       = 0.2;
             obj.diffusionConst         = 0;   % assigned by framework
@@ -44,12 +47,28 @@ classdef DomainHandlerParams<handle
             obj.morsePotentialWidth    = .01;
             obj.morseForceType         = 'attractive'; % type of morse force [attractive|repulsive|full]
             obj.minParticleEqDistance  = 0.2; % min particle equilibrium distance
-            obj.dt                     = 0;   % assigned by Framework
-            obj.reflectionType         = 'preserveEnergy';
+            obj.dt                     = 0;   % assigned by Framework            
+            obj.reflectionType         = 'preserveEnergy'; % reflection type 
             obj.maxReflectionsPerParticle  = 100;
-                        
+            obj.permeability               = []; % how permeable is the surface (saved for future use)      
             obj.forceParams                = ForceManagerParams;
+            
+            % set input parameters            
+            obj.ParseInputParams(varargin);
+            
             obj.SetForceParams;
+        end
+        
+        function ParseInputParams(obj,varargin)
+            % parse name-value pair input parameters
+            v = varargin{:};
+            if mod(numel(varargin{:}),2)~=0
+                error('name-value pair argument must be inserted')
+            end
+            
+            for vIdx = 1:(numel(v)/2)
+                obj.(v{2*vIdx-1})= v{2*vIdx};
+            end
         end
         
         function SetForceParams(obj)

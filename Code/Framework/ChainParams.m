@@ -15,17 +15,18 @@ classdef ChainParams<handle
         fixedBeadNum@double
         fixedBeadsPosition@double
         springConst@double
-        bendingConst@double
-        stickyBeads@double
-        beadsOnBoundary@double
-        allowSelfAffinity@logical
+        bendingConst@double      
+        stickyBeads@double        % indices of beads capeable of sticking to other sticky beads or domain
+        beadsOnBoundary@double    % indices of beads attached to the boundary at initialization
+        allowSelfAffinity@logical % allow beads to attach to other beads on the chain
+        initializeInDomain@double % the index of the domain to initialize the chain in 
         forceParams        
     end
     
     methods
         
         function obj = ChainParams(varargin)
-            % default 
+            % default parameters
             obj.dimension              = 3;         % inherited from framework
             obj.beta                   = 2;         % for rouse, place 2. 
             obj.b                      = 1*sqrt(3); % std of distance between beads
@@ -41,6 +42,7 @@ classdef ChainParams<handle
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
             obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains                      
             obj.bendingConst           = 1;             
+            obj.initializeInDomain     = 1; % default initialize in the first domain created
             
             if ~isempty(varargin)
                 % parse input 

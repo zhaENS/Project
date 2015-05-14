@@ -12,6 +12,7 @@ classdef ForceManager<handle
     % forces for all particles in the domain and then deal them between
     % objects, this will make calculation of the distances done only once
     % every loop for all objects 
+    % TODO: pass force params to the Apply functions 
     properties
         %  Names of forces acting on the particle system      
         springForce            = false;
@@ -82,16 +83,16 @@ classdef ForceManager<handle
                                    bendingForces*dt+...
                                    diffusionForces+...
                                    particlePosition;
-        end                                    
-                    
+        end                                                        
     end
     
     methods (Static)
         
-         function newParticlePosition = ApplyInternalForces(particlePosition,particleDistances,connectivityMap,...
-                                                               springForce,bendingElasticityForce,...
-                                                               springConst,bendingConst,...
-                                                               minParticleDistance,fixedParticleNum,dt)
+         function [newParticlePosition,springForces,bendingForces] = ApplyInternalForces(particlePosition,...
+                                                                   particleDistances,connectivityMap,...
+                                                                   springForce,bendingElasticityForce,...
+                                                                   springConst,bendingConst,...
+                                                                   minParticleDistance,fixedParticleNum,dt)
                                             
              % Apply object's internal forces to get the new position of
              % its vertices, represented by newParticlePosition                         
@@ -116,7 +117,7 @@ classdef ForceManager<handle
                                                             ljForce,diffusionForce,morseForce,...                                                            
                                                             LJPotentialWidth,LJPotentialDepth,...
                                                             morsePotentialDepth, morsePotentialWidth,morseForceType,...
-                                                            minParticleDist,fixedParticleNum,dt)
+                                                            minParticleDist,fixedParticleNum,dt)%TODO: pass force parameters
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
              
@@ -140,7 +141,7 @@ classdef ForceManager<handle
              % get new position
              newParticlePosition = particlePosition+dx;
                                                                                  
-        end
+        end 
         
        function newParticlePosition = ApplyCompositeInternalForces(pos,particleDistance,connectivityMap,...
                                                                         springForce,bendingElasticityForce,...

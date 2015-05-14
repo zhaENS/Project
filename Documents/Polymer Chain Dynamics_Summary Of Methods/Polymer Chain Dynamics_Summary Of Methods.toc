@@ -11,17 +11,20 @@
 \contentsline {subsection}{\numberline {1.3.1}Properties}{5}
 \contentsline {subsection}{\numberline {1.3.2}Methods}{6}
 \contentsline {subsection}{\numberline {1.3.3}Noise}{6}
-\contentsline {subsection}{\numberline {1.3.4}Initialization of beads on the domain's boundary}{6}
-\contentsline {subsubsection}{Diffusion on the surface of a sphere}{7}
-\contentsline {section}{\numberline {1.4}The Recipe files}{7}
-\contentsline {section}{\numberline {1.5}Chains' Association and Dissociation}{7}
-\contentsline {section}{\numberline {1.6}Domain Reflection}{8}
-\contentsline {subsection}{\numberline {1.6.1}Sphere}{8}
-\contentsline {section}{\numberline {1.7}Object Manager}{8}
-\contentsline {subsection}{\numberline {1.7.1}objects and members}{8}
-\contentsline {subsection}{\numberline {1.7.2}Step process}{8}
-\contentsline {section}{\numberline {1.8}Object Mapper}{9}
-\contentsline {subsection}{\numberline {1.8.1}FindConnectedBeads}{9}
-\contentsline {subsection}{\numberline {1.8.2}ConnectParticles}{9}
-\contentsline {subsection}{\numberline {1.8.3}DisconnectParticles}{9}
-\contentsline {subsection}{\numberline {1.8.4}SplitMember}{9}
+\contentsline {section}{\numberline {1.4}The Recipe files}{6}
+\contentsline {section}{\numberline {1.5}Chains' Association and Dissociation}{6}
+\contentsline {section}{\numberline {1.6}Initialization}{7}
+\contentsline {subsection}{\numberline {1.6.1}Domain initialization}{7}
+\contentsline {subsection}{\numberline {1.6.2}Chain initialization}{7}
+\contentsline {subsection}{\numberline {1.6.3}Initialization of beads on the domain's boundary}{7}
+\contentsline {subsubsection}{Diffusion on the surface of a sphere}{8}
+\contentsline {section}{\numberline {1.7}Domain Reflection}{8}
+\contentsline {subsection}{\numberline {1.7.1}Sphere}{8}
+\contentsline {section}{\numberline {1.8}Object Manager}{9}
+\contentsline {subsection}{\numberline {1.8.1}objects and members}{9}
+\contentsline {subsection}{\numberline {1.8.2}Step process}{9}
+\contentsline {section}{\numberline {1.9}Object Mapper}{9}
+\contentsline {subsection}{\numberline {1.9.1}FindConnectedBeads}{10}
+\contentsline {subsection}{\numberline {1.9.2}ConnectParticles}{10}
+\contentsline {subsection}{\numberline {1.9.3}DisconnectParticles}{10}
+\contentsline {subsection}{\numberline {1.9.4}SplitMember}{10}

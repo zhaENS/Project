@@ -66,9 +66,8 @@ classdef RouseSimulatorFramework<handle
            obj.ReadRecipeFile           
         end
         
-        function OrganizeParams(obj,frameworkParams)% move to params class
+        function OrganizeParams(obj,frameworkParams)% obsolete-move to params class
             obj.params = frameworkParams;           
-
         end
         
         function InitializeClasses(obj)
@@ -93,8 +92,10 @@ classdef RouseSimulatorFramework<handle
         end
         
         function InitializeDomain(obj)
-             % Parameters for the domain are set in the organizeParams             
-             obj.handles.classes.domain  = DomainHandler(obj.params.domain);
+             % Parameters for domains are set in the organizeParams
+            
+            obj.handles.classes.domain  = DomainHandler(obj.params.domain);
+            
         end   
         
         function InitializeObjectManager(obj)
@@ -183,22 +184,19 @@ classdef RouseSimulatorFramework<handle
             objList        = 1:obj.objectManager.numObjects;
             
             % Apply domain (global) forces on all objects in the domain 
-            dp                      = obj.handles.classes.domain.params.forceParams;% Get domain parameters
+%             dp                      = obj.handles.classes.domain.params.forceParams;% Get domain parameters
             prevParticlePosition    = obj.objectManager.prevPos;      % prev position 
             curParticlePosition     = obj.objectManager.curPos;       % new pos after internal forces
             particleDist            = obj.objectManager.particleDist; % distance before applying internal forces
-            fixedParticleNum        = [obj.objectManager.fixedParticles{:}];% ToDo: insert the correct indices
+            fixedParticleNum        = [obj.objectManager.fixedParticles{:}];
             
-            % Apply external forces from the domain and reflect
-            curParticlePosition = obj.handles.classes.domain.ApplylForces(prevParticlePosition,...
-                                                                          curParticlePosition,...
-                                                                          particleDist,...
-                                                                          dp.lennardJonesForce,dp.diffusionForce,dp.morseForce,...
-                                                                          dp.diffusionConst,...    
-                                                                          dp.LJPotentialWidth,dp.LJPotentialDepth,...
-                                                                          dp.morsePotentialDepth,dp.morsePotentialWidth,dp.morseForceType,...
-                                                                          dp.minParticleEqDistance,fixedParticleNum,...
-                                                                          obj.params.simulator.dt);                                         
+            
+%             % Apply external forces from all domains and reflect
+            curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
+                                                                  curParticlePosition,...
+                                                                  particleDist,fixedParticleNum);
+
+                                     
                                                        
             % Deal the positions after reflection between the objects and their members in
             % the domain             
@@ -209,7 +207,7 @@ classdef RouseSimulatorFramework<handle
             obj.simulationGraphics.ShowSimulation
             
             % check for interaction between objects             
-             obj.objectManager.ObjectInteraction;
+%              obj.objectManager.ObjectInteraction;
              
             % Update simulation data
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
