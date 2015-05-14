@@ -20,7 +20,7 @@ classdef ChainParams<handle
         beadsOnBoundary@double    % indices of beads attached to the boundary at initialization
         allowSelfAffinity@logical % allow beads to attach to other beads on the chain
         initializeInDomain@double % the index of the domain to initialize the chain in 
-        forceParams        
+        forceParams  = ForceManagerParams;     
     end
     
     methods
@@ -34,22 +34,25 @@ classdef ChainParams<handle
             obj.diffusionConst         = 1;
             obj.numBeads               = 32;
             obj.connectedBeads         = [];
-            obj.bendingElasticityForce = false;
-            obj.springForce            = true;           
-            obj.fixedBeadNum           = [];    % beads which do not move 
+            obj.fixedBeadNum           = [];    % beads which do not move    
             obj.fixedBeadsPosition     = [];    % position for the fixed beads (can be on the boundary)
             obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
-            obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains                      
-            obj.bendingConst           = 1;             
+            obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain     = 1; % default initialize in the first domain created
+            
+            % forces
+            obj.bendingElasticityForce = false;
+            obj.springForce            = true;                               
+            obj.bendingConst           = 1;             
+            
             
             if ~isempty(varargin)
                 % parse input 
                  obj.ParseInputParams(varargin);             
             end
             
-            obj.springConst = 1.0*(obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);% defined as a matrix for all beads
+            obj.springConst = (obj.dimension*obj.diffusionConst./obj.b^2)*ones(obj.numBeads);% defined as a matrix for all beads
             % set spring constant for the connected beads
             for cIdx = 1:size(obj.connectedBeads,1)
                 obj.springConst(obj.connectedBeads(cIdx,1), obj.connectedBeads(cIdx,2))=...
@@ -59,8 +62,7 @@ classdef ChainParams<handle
             end
              obj.minBeadDistance        = 0*ones(obj.numBeads);
              
-            % Define force parameters 
-            obj.forceParams  = ForceManagerParams;
+            % Define force parameters            
             obj.SetForceParams;
         end
         

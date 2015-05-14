@@ -7,9 +7,6 @@ classdef Rouse<handle
     % distance from the center of mass (sequentially in creating the
     % initial beads)
     % TODO: add Reset option (so the class doesn't have to be initialized again)
-    % TODO: add the possibility to change the Raouse matrix's eigenvalues,
-    %       making the model a beta model
-    %
     
     %========
     % Simulate the Rouse chain model
@@ -307,14 +304,14 @@ classdef Rouse<handle
             obj.position.cur = obj.position.prev;
         end                        
                                         
-        function Step(obj,beadDist)
+        function Step(obj,beadDist,dt)
             
             % Apply forces on the beads to get the new bead position    
             forceParams = obj.params.forceParams;
             newPos   = ForceManager.ApplyInternalForces(obj.position.cur,beadDist,obj.connectionMap.map,...  
                                               forceParams.springForce,forceParams.bendingElasticityForce,...
                                               forceParams.springConst,forceParams.bendingConst,...                                           
-                                              forceParams.minParticleEqDistance,forceParams.fixedParticleNum,forceParams.dt);
+                                              forceParams.minParticleEqDistance,forceParams.fixedParticleNum,dt);
                                          
             obj.position.cur = newPos;                       
         end

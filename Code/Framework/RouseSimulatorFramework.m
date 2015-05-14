@@ -176,9 +176,9 @@ classdef RouseSimulatorFramework<handle
         function Step(obj,varargin)
             % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
-                        
+            dt             = obj.params.simulator.dt;
             % Advance one step and apply object forces                        
-            obj.objectManager.Step(objList)% update current and previous object position
+            obj.objectManager.Step(objList,dt)% update current and previous object position
             
             % Update object list
             objList        = 1:obj.objectManager.numObjects;
@@ -194,7 +194,7 @@ classdef RouseSimulatorFramework<handle
 %             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                                                   curParticlePosition,...
-                                                                  particleDist,fixedParticleNum);
+                                                                  particleDist,fixedParticleNum,dt);
 
                                      
                                                        

@@ -4,14 +4,18 @@ close all
 numSteps = 500;
 % 
 % % create chain and domain and register them in the ObjectManager
-% create a domain 
-dp(1)     = DomainHandlerParams('domainShape','sphere','diffusionForce',true,'diffusionConst',0.05,...
-                                'lennardJonesForce',true);
 
-% create a Beam as a domain
-dp(2)     = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',3,...
-                                'domainHeight', 50,'diffusionForce',false,'lennardJonesForce',false,...
-                                'morseForce',false);
+% create a spherical domain 
+% assign a force to the domain 
+sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',0.5,...
+                                  'LJPotentialWidth',0.1,'LJPotentialDepth',0.1);
+dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces);
+                               
+
+% create a cylindrical Beam as a domain
+cylinderForces = ForceManagerParams('diffusionForce',false,'lennardJonesForce',false,'morseForce',false);                                
+dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',3,...
+                                     'domainHeight', 50,'forceParams',cylinderForces);
                                 
 
 % % create a chain 

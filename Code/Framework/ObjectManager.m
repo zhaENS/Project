@@ -156,19 +156,7 @@ classdef ObjectManager<handle
             % curPos is an Nxdim  matrix of positions to be dealt to the
             % members of the objects in objList 
             % the function deals the position according to the order of
-            % appearance in the curPos and the object list 
-            
-%             for oIdx = 1:numel(objList)% for each object
-%                 % get its members 
-% %                 membList = obj.map.GetObjectMembers(objList(oIdx));
-%                 % assuming curPos is ordered such that it matches the order
-%                 % of the members 
-%                 % get the member's inds 
-% %                 membNumInObj = obj.map.GetMemberNumInObject(objList(oIdx),membList);
-%                 oCount = obj.map.GetObjectCount(objList(oIdx));
-%                 mInds  = obj.map.GetMemberInds(objList(oIdx),1:oCount);
-%                 obj.curPos(mInds,:) = curPos;             
-%             end
+            % appearance in the curPos and the object list             
             
             inds = (obj.map.GetAllInds(objList));
             obj.curPos(inds,:) = curPos;% update the position
@@ -179,21 +167,7 @@ classdef ObjectManager<handle
         function DealPreviousPosition(obj,objList,prevPos)
           %   Update the general list 
           %   deal the prevPos to all the object members
-%           for oIdx = 1:numel(objList)% for each object
-%                 % get its members 
-% %                 membList = obj.map.GetObjectMembers(objList(oIdx));
-%                 % assuming curPos is ordered such that it matches the order
-%                 % of the members 
-%                 % get the member's inds 
-%                  oCount = obj.map.GetObjectCount(objList(oIdx));
-%                  mInds  = obj.map.GetMemberInds(objList(oIdx),1:oCount);
-%                  obj.prevPos(mInds,:) = prevPos;
-%                 
-%           end
-          
-          
-          
-          
+
              inds = (obj.map.GetAllInds(objList));
              obj.prevPos(inds,:)= prevPos;
              notify(obj,'prevPosChange'); % notify all registered listeners
@@ -429,7 +403,7 @@ classdef ObjectManager<handle
              end
         end
                 
-        function Step(obj,objNum)%TODO: find a uniform interface for composite and simple structures
+        function Step(obj,objNum,dt)%TODO: find a uniform interface for composite and simple structures
             % Advance the objects one step in the simulation, apply forces
             % etc. 
             obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);
@@ -442,7 +416,7 @@ classdef ObjectManager<handle
                         beadInds     = obj.map.GetMemberInds(objNum(oIdx),1);
                         beadDistance = obj.particleDist(beadInds,beadInds);
                         % advance each member one step
-                        obj.handles.chain(memberList(1)).Step(beadDistance)   
+                        obj.handles.chain(memberList(1)).Step(beadDistance,dt)   
                         % update the curPos list 
                         obj.curPos(beadInds,:)  = obj.handles.chain(memberList(1)).position.cur;
 
@@ -464,11 +438,10 @@ classdef ObjectManager<handle
                    newPos = ForceManager.ApplyCompositeInternalForces(curMemberPos,particleDistance,connectivityMap,...
                                                          [fp.springForce],[fp.bendingElasticityForce],...
                                                          springConst,[fp.bendingConst],...                                                         
-                                                         minParticleDist,fixedParticleNum,0.1);
+                                                         minParticleDist,fixedParticleNum,dt);
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
-%                    obj.DealPreviousPosition(oIdx,newPos);
                  end
             end
             

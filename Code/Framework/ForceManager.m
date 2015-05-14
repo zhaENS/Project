@@ -99,7 +99,7 @@ classdef ForceManager<handle
             
             % Spring force
             springForces  = ForceManager.GetSpringForce(springForce,particlePosition,particleDistances,springConst,...
-                                               connectivityMap,minParticleDistance,fixedParticleNum);
+                                                        connectivityMap,minParticleDistance,fixedParticleNum);
             
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,...
@@ -288,7 +288,6 @@ classdef ForceManager<handle
         function particleDistance = GetParticleDistance(particlePosition)
             % Get pair-wise particel distance using the mex function
             % pdist2mex
-%             particleDistance = pdist2(particlePosition,particlePosition);
             particleDistance = pdist2mex(particlePosition',...
                 particlePosition','euc',[],[],[]);
         end

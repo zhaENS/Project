@@ -22,41 +22,42 @@ classdef DomainHandlerParams<handle
         permeability@double   % how permiable is the domain surface range:[0-1] % to be used in the future 
         maxReflectionsPerParticle@double % the maximal number of times a particle can be reflected in a single reflection loop
         parentAxes
-        forceParams
+        forceParams = ForceManagerParams;
     end
     
     methods
          
         function obj = DomainHandlerParams(varargin)% consider adding shape primatives for the geometry of the domain
-            % default parameters 
-            obj.domainShape            = 'sphere'; %[sphere | cylinder |twoplates| open
-            obj.domainWidth            = 15;
-            obj.domainHeight           = 15;
-            obj.domainCenter           = [0 0 0];
-            obj.showDomain             = true; % obsolete- move to graphics
             
-            % Forces of the domain ( will be moved to ForceParams in the
-            % future)
-            obj.LJPotentialWidth       = 0.2;
-            obj.LJPotentialDepth       = 0.2;
-            obj.diffusionConst         = 0;   % assigned by framework
-            obj.lennardJonesForce      = false;
-            obj.diffusionForce         = true;   
-            obj.morseForce             = false; 
-            obj.morsePotentialDepth    = .01;
-            obj.morsePotentialWidth    = .01;
-            obj.morseForceType         = 'attractive'; % type of morse force [attractive|repulsive|full]
-            obj.minParticleEqDistance  = 0.2; % min particle equilibrium distance
-            obj.dt                     = 0;   % assigned by Framework            
-            obj.reflectionType         = 'preserveEnergy'; % reflection type 
+            % Default parameters 
+            obj.domainShape                = 'sphere'; %[sphere | cylinder |twoplates| open
+            obj.domainWidth                = 15;
+            obj.domainHeight               = 15;
+            obj.domainCenter               = [0 0 0];
+            obj.showDomain                 = true; % obsolete- move to graphics
+            obj.reflectionType             = 'preserveEnergy'; % reflection type 
             obj.maxReflectionsPerParticle  = 100;
-            obj.permeability               = []; % how permeable is the surface (saved for future use)      
-            obj.forceParams                = ForceManagerParams;
+            obj.permeability               = 0; % how permeable is the surface (saved for future use)  
+            
+%             % Forces of the domain ( will be moved to ForceParams in the
+%             % future)
+%             obj.LJPotentialWidth       = 0.2;
+%             obj.LJPotentialDepth       = 0.2;
+%             obj.diffusionConst         = 0;   % assigned by framework
+%             obj.lennardJonesForce      = false;
+%             obj.diffusionForce         = true;   
+%             obj.morseForce             = false; 
+%             obj.morsePotentialDepth    = .01;
+%             obj.morsePotentialWidth    = .01;
+%             obj.morseForceType         = 'attractive'; % type of morse force [attractive|repulsive|full]
+%             obj.minParticleEqDistance  = 0.2; % min particle equilibrium distance
+%             obj.dt                     = 0;   % assigned by Framework            
+    
             
             % set input parameters            
             obj.ParseInputParams(varargin);
             
-            obj.SetForceParams;
+%             obj.SetForceParams;
         end
         
         function ParseInputParams(obj,varargin)

@@ -160,7 +160,7 @@ classdef Histone<handle
             %             chainLength   = cumsum(sqrt(sum(vertices.^2,2)),1);
             [vert1,vert2] = obj.FindPointOnPolygon(prevPos,vertices);
             if isempty(vert1) || isempty(vert2)
-                error('')
+                error('particle not on the polygon')
             end
             %             vert1      = 1;
             %             vert2      = 2;

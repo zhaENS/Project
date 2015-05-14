@@ -41,7 +41,7 @@ classdef DomainHandler<handle
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
         end        
                 
-        function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum)                                                
+        function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,dt)                                                
                % Apply forces on particles in the domain to obtain their
                % new position 
                % currently this function supports domains which do not
@@ -55,7 +55,7 @@ classdef DomainHandler<handle
                                     dp.diffusionConst,dp.lennardJonesForce,dp.diffusionForce, dp.morseForce,...
                                     dp.LJPotentialWidth,dp.LJPotentialDepth,...
                                     dp.morsePotentialDepth, dp.morsePotentialWidth,dp.morseForceType,...
-                                    dp.minParticleEqDistance,fixedParticleNum,dp.dt);
+                                    dp.minParticleEqDistance,fixedParticleNum,dt);
                                 
                                 
                                 
