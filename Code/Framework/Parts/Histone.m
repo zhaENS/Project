@@ -21,7 +21,7 @@ classdef Histone<handle
         prevPosVertex1
         prevPosVertex2
         
-        params = struct('numHistones',[],...
+        params = struct('numHistones',[],...% to be moved out
                         'dt',[],...
                         'minHistoneDist',[],...
                         'diffusionForce',[],...
@@ -73,7 +73,7 @@ classdef Histone<handle
             end
         end
         
-        function Step(obj,chainPosition)
+        function Step(obj,chainPosition,dt)
             % move by 1D diffusion
             % project onto new chain position
             chainPos          = chainPosition;
@@ -95,7 +95,7 @@ classdef Histone<handle
             
             % Update the histone position on the new chain position 
             obj.UpdateHistonePositionOnChain(chainPos);
-            
+            fp = obj.params.forceParams;
             for hIdx = 1:obj.params.numHistones
               
                  dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
@@ -107,7 +107,7 @@ classdef Histone<handle
 %                     obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
                 
                 % get diffusion force
-                diffusionForce = ForceManager.GetDiffusionForce(obj.params.diffusionForce,obj.curPos(hIdx,:),obj.params.diffusionConst,obj.params.dt,[]);
+                diffusionForce = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos(hIdx,:),fp.diffusionConst,dt,[]);
                 
                 % project the diffusion force on the current chain segment
                 % to get the position                 
@@ -236,7 +236,7 @@ classdef Histone<handle
                 vert1   = vertNum;
                 vert2   = vertNum+1;
                 vertNum = vertNum+1;
-                if vertNum>=numVert
+                if vertNum>numVert
                     flag = true;
                     vert1 = [];
                     vert2 = [];

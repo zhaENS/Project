@@ -10,11 +10,11 @@ classdef SimulationFrameworkParams<handle
     
     methods
         
-        function obj = SimulationFrameworkParams(chainParams,domainParams)
+        function obj = SimulationFrameworkParams()
             % class constructor 
             obj.SetSimulatorParams;
-            obj.SetChainParams(chainParams);
-            obj.SetDomainParams(domainParams);
+%             obj.SetChainParams(chainParams);
+%             obj.SetDomainParams(domainParams);
             obj.SetDataRecorderParams;
             obj.SetPlotHandlerParams;
         end
@@ -60,10 +60,10 @@ classdef SimulationFrameworkParams<handle
             
             for cIdx = 1:obj.simulator.numChains
                 % inherit the framework parameters 
-                obj.chain(cIdx).diffusionConst = obj.simulator.diffusionConst;
-                obj.chain(cIdx).dimension      = obj.simulator.dimension;            
-                obj.chain(cIdx).dt             = obj.simulator.dt;
-                obj.chain(cIdx).SetForceParams;
+                obj.chain(cIdx).forceParams.diffusionConst = obj.simulator.diffusionConst;
+                obj.chain(cIdx).dimension                  = obj.simulator.dimension;            
+                obj.chain(cIdx).forceParams.dt             = obj.simulator.dt;
+%                 obj.chain(cIdx).SetForceParams;
             end
         end
         
@@ -74,12 +74,12 @@ classdef SimulationFrameworkParams<handle
             % Inherit framework parameters
             for dIdx = 1:numel(obj.domain)
                 obj.domain(dIdx).dimension        = obj.simulator.dimension;
-                obj.domain(dIdx).diffusionConst   = obj.simulator.diffusionConst;
+                obj.domain(dIdx).forceParams.diffusionConst   = obj.simulator.diffusionConst;
                 obj.domain(dIdx).showDomain       = obj.simulator.showSimulation;
-                obj.domain(dIdx).dt               = obj.simulator.dt;
+                obj.domain(dIdx).forceParams.dt   = obj.simulator.dt;
                 %             obj.domain.LJPotentialWidth = obj.simulator.LJPotentialWidth;
                 %             obj.domain.LJPotentialDepth = obj.simulator.LJPotentialDepth;
-                obj.domain(dIdx).SetForceParams;% update the force parameters of the domain 
+%                 obj.domain(dIdx).SetForceParams;% update the force parameters of the domain 
             end
            
         end

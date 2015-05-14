@@ -50,17 +50,17 @@ classdef DomainHandler<handle
                
                % experimental- apply forces iteratively from each domain 
                for dIdx = 1:obj.numDomains
+                   domainNumber = dIdx;
                    dp = obj.params(dIdx);
+                   fp = dp.forceParams;
                    curParticlePosition = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,...
-                                    dp.diffusionConst,dp.lennardJonesForce,dp.diffusionForce, dp.morseForce,...
-                                    dp.LJPotentialWidth,dp.LJPotentialDepth,...
-                                    dp.morsePotentialDepth, dp.morsePotentialWidth,dp.morseForceType,...
-                                    dp.minParticleEqDistance,fixedParticleNum,dt);
-                                
-                                
-                                
+                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,...
+                                    fp.LJPotentialWidth,fp.LJPotentialDepth,...
+                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
+                                    fp.minParticleEqDistance,fixedParticleNum,dt);
+                                                                                               
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
-                     [~,curParticlePosition] = obj.Reflect(prevParticlePosition,curParticlePosition,dIdx);
+                     [~,curParticlePosition] = obj.Reflect(prevParticlePosition,curParticlePosition,domainNumber);
                    end
                end
                
