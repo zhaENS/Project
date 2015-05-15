@@ -14,12 +14,12 @@ dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereFo
 
 % create a cylindrical Beam as a domain
 cylinderForces = ForceManagerParams('diffusionForce',false,'lennardJonesForce',false,'morseForce',false);                                
-dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',3,...
+dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',1,...
                                      'domainHeight', 50,'forceParams',cylinderForces);
                                 
 
 % % create a chain 
-cp     = ChainParams('numBeads',32,'dt',0.01,'initializeInDomain',1,'springForce',true,'bendingElasticityForce',false);
+cp     = ChainParams('numBeads',132,'dt',0.01,'initializeInDomain',1,'springForce',true,'bendingElasticityForce',false);
 % cp(2)     = ChainParams('numBeads',100,'dt',0.01,'initializeInDomain',1);
 
 params = SimulationFrameworkParams(cp,dp);
