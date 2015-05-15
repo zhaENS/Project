@@ -39,14 +39,13 @@ classdef ChainParams<handle
             obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
             obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains
-            obj.initializeInDomain     = 1; % default initialize in the first domain created
+            obj.initializeInDomain     = 1;     % default initialize in the first domain created
             
             % forces
             obj.bendingElasticityForce = false;
             obj.springForce            = true;                               
             obj.bendingConst           = 1;             
-            
-            
+                        
             if ~isempty(varargin)
                 % parse input 
                  obj.ParseInputParams(varargin);             
@@ -63,7 +62,7 @@ classdef ChainParams<handle
              obj.minBeadDistance        = 0*ones(obj.numBeads);
              
             % Define force parameters            
-            obj.SetForceParams;
+%             obj.SetForceParams;
         end
         
         function ParseInputParams(obj,varargin)

@@ -266,9 +266,13 @@ classdef Rouse<handle
             % is an optional input, if inserted, the function uses it to
             % set the initial chain position such that all beads are inside
             % the domain, else it is randomly placed.
+            
+            %TODO: change to use the ForceManager
+            
             if exist('domainHandler','var')
                 if isempty(obj.params.beadsOnBoundary)
                 % The bead positions
+                
                 for bIdx = 2:obj.params.numBeads                                             
                     inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:),obj.params.initializeInDomain);     
                     tempPos  = obj.position.prev(bIdx,:);

@@ -12,9 +12,10 @@ dbstop if error
 
 
 % Initialize domains
-domainParams(1) = DomainHandlerParams('domainShape','sphere','domainWidth',10,'diffusionForce',true);
-domainParams(2) = DomainHandlerParams('domainShape','cylinder','reflectionType','off',...
-                                      'diffusionForce',false,'domainWidth',1,'domainHeight',50);
+domainForces    = ForceManagerParams('dt',0.01,'diffusionForce',true,'diffusionConst',1);
+domainParams(1) = DomainHandlerParams('domainShape','sphere','domainWidth',10,'forceParams',domainForces);
+% domainParams(2) = DomainHandlerParams('domainShape','cylinder','reflectionType','off',...
+%                                       'diffusionForce',false,'domainWidth',1,'domainHeight',50);
                                   
 % Initialize chains 
 chainParams(1) = ChainParams('numBeads',10,'initializeInDomain',1);
@@ -33,7 +34,9 @@ chainParams(4) = ChainParams('numBeads',32','initializeInDomain',1);
 % chainParams(4).fixedBeadNum = [5 10 15 20 25 30];
 % chainParams(4).fixedBeadsPosition = randn(6,3);
                                      
-params = SimulationFrameworkParams(chainParams,domainParams);
+params = SimulationFrameworkParams;
+params.SetDomainParams(domainParams);
+params.SetChainParams(chainParams);
 
 % SimulatorParams
 % profile on 
