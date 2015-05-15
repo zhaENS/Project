@@ -10,16 +10,14 @@ classdef SimulationFrameworkParams<handle
     
     methods
         
-        function obj = SimulationFrameworkParams()
+        function obj = SimulationFrameworkParams(varargin)
             % class constructor 
-            obj.SetSimulatorParams;
-%             obj.SetChainParams(chainParams);
-%             obj.SetDomainParams(domainParams);
+            obj.SetSimulatorParams(varargin);            
             obj.SetDataRecorderParams;
             obj.SetPlotHandlerParams;
         end
         
-        function SetSimulatorParams(obj)
+        function SetSimulatorParams(obj,varargin)
             % Simulator framework params
             obj.simulator.dimension            = 3;
             obj.simulator.runSimulation        = false; % a flag indicating whether to allow the simulation to run at initiation 
@@ -40,6 +38,20 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.diffusionConst       = 0.1; %TODO: should be determined for each domain seperately
 %             obj.simulator.LJPotentialWidth     = 0.3;
 %             obj.simulator.LJPotentialDepth     = 0.3;
+
+           obj.ParseInputParams(varargin{:})
+        end
+
+        function ParseInputParams(obj,varargin)
+          % parse name-value pair simulator input parameters
+                v = varargin{:};
+                if mod(numel(varargin{:}),2)~=0
+                    error('name-value pair argument must be inserted')
+                end
+                
+                for vIdx = 1:(numel(v)/2)
+                    obj.simulator.(v{2*vIdx-1})= v{2*vIdx};
+                end            
         end
         
         function SetChainParams(obj,chainParams)%TODO: change force params accordingly

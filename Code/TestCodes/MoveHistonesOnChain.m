@@ -1,34 +1,36 @@
 function MoveHistonesOnChain
 % This test function moves histones on a Rouse chain 
 close all 
-numSteps = 200;
+numSteps = 500;
 % 
 % % create chain and domain and register them in the ObjectManager
+
+% Initialize simulator framework parameters
+simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'dt',0.01);
 
 % create a spherical domain 
 % assign a force to the domain 
 sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',1,...
-                                  'LJPotentialWidth',0.1,'LJPotentialDepth',0.1);
+                                  'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
 dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces);
                                
 
 % create a cylindrical Beam as a domain
 cylinderForces = ForceManagerParams('diffusionForce',false,'lennardJonesForce',false,'morseForce',false);                                
-dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',1,...
+dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',3,...
                                      'domainHeight', 50,'forceParams',cylinderForces);
                                 
 
 % % create a chain 
+chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,'springForce',true,'bendingElasticityForce',false,'bendingConst',1,'springConst',1);
+cp          = ChainParams('numBeads',600,'initializeInDomain',1,'forceParams',chainForces);
+cp(2)     = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
 
-chainForces = ForceManagerParams('dt',0.01,'springForce',true,'bendingElasticityForce',false,'bendingConst',1,'springConst',1);
-cp          = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
-% cp(2)     = ChainParams('numBeads',100,'dt',0.01,'initializeInDomain',1);
-
-% initialize simulator framework
-simulatorParams = SimulationFrameworkParams();
-simulatorParams.simulator.numSteps = 1;% one step for initialization 
+% register the object parameters in the simulator framework
 simulatorParams.SetDomainParams(dp);
 simulatorParams.SetChainParams(cp);
+
+% initialize simulator framework
 r = RouseSimulatorFramework(simulatorParams);
 
 % get the chain position to initialize the histone on it 
@@ -36,7 +38,7 @@ r = RouseSimulatorFramework(simulatorParams);
 initialChainPosition     = initialChainPosition{1};
 
 % Initialize histones with the chain position 
-histoneForce = ForceManagerParams('dt',r.params.simulator.dt,'diffusionConst',4,...
+histoneForce = ForceManagerParams('dt',simulatorParams.simulator.dt,'diffusionConst',1,...
                                   'lennardJonesForce',false,'diffusionForce',true,'LJPotentialWidth',0.1,'LJPotentialDepth',0.1);    
 h                        = Histone('numHistones',10,'forceParams',histoneForce);
                                   
@@ -67,7 +69,8 @@ daspect([1 1 1])
         inBeam = r.handles.classes.domain.InDomain(chainPos,2);
         if any(inBeam)            
             bendingElasticityConst = 1/simulatorParams.simulator.dt;
-            bForce = ForceManager.GetBendingElasticityForce(true,chainPos,r.objectManager.connectivity,bendingElasticityConst ,[]);
+            connectivityMat       = r.objectManager.GetConnectivityMapAsOne(1);
+            bForce = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
             % zero out forces outside the beam 
             bForce(~inBeam,:) = 0;
             % update the position of the chain 
