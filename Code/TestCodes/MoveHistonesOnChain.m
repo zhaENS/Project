@@ -12,7 +12,7 @@ simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'
 % assign a force to the domain 
 sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',1,...
                                   'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
-dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces);
+dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces,'domainWidth',5);
                                
 
 % create a cylindrical Beam as a domain
@@ -23,8 +23,8 @@ dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','
 
 % % create a chain 
 chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,'springForce',true,'bendingElasticityForce',false,'bendingConst',1,'springConst',1);
-cp          = ChainParams('numBeads',600,'initializeInDomain',1,'forceParams',chainForces);
-cp(2)     = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
+cp          = ChainParams('numBeads',300,'initializeInDomain',1,'forceParams',chainForces);
+% cp(2)     = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
 
 % register the object parameters in the simulator framework
 simulatorParams.SetDomainParams(dp);

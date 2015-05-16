@@ -16,8 +16,7 @@ classdef AnalyzeEncounterFrequencies<handle
         classes
         peaks
         results
-        params        
-        %         fitModel     = fittype(@(slope,bias,x)(bias.*x.^(-slope)))
+        params               
         creationDate = date;% class creation date      
     end
     
