@@ -95,10 +95,18 @@ classdef Histone<handle
             
             % Update the histone position on the new chain position 
             obj.UpdateHistonePositionOnChain(chainPos);
-            fp = obj.params.forceParams;
+            fp                 = obj.params.forceParams;
+            dirVec             = chainPos(obj.prevPosVertex2,:)- chainPos(obj.prevPosVertex1,:);
+            diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos,fp.diffusionConst,dt,[]);
+            diffusionForce     = sqrt(sum(diffusionForce.^2,2));    
+            % advence to a tentative location
+            newTempPos         = obj.curPos+bsxfun(@times,diffusionForce,dirVec);% (obj.curPos(hIdx,:)-obj.prevPos(hIdx,:));
+            obj.prevPosVertex1 = obj.curPosVertex1;
+            obj.prevPosVertex2 = obj.curPosVertex2; 
+            obj.prevPos        = obj.curPos;
             for hIdx = 1:obj.params.numHistones
               
-                 dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
+%                  dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
 %                 % previous position
 %                 obj.prevPos(hIdx,:) = chainPos(obj.prevPosVertex1(hIdx,:),:) +...
 %                     obj.prevPosSlope(hIdx,:).*dirVec;
@@ -107,20 +115,22 @@ classdef Histone<handle
 %                     obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
                 
                 % get diffusion force
-                diffusionForce = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos(hIdx,:),fp.diffusionConst,dt,[]);
+%                 diffusionForce = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos(hIdx,:),fp.diffusionConst,dt,[]);
                 
                 % project the diffusion force on the current chain segment
                 % to get the position                 
                
-                diffusionForce      = sqrt(sum(diffusionForce.^2)); 
-                newTempPos          = obj.curPos(hIdx,:)+diffusionForce.*dirVec;% (obj.curPos(hIdx,:)-obj.prevPos(hIdx,:));
-                newPos              = obj.MoveOnChain(obj.curPos(hIdx,:),newTempPos,chainPos,false);
-                obj.prevPos(hIdx,:) = obj.curPos(hIdx,:);
-                obj.curPos(hIdx,:)  = newPos;
-                % update the vertices 
-                obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
-                obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
-                [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
+%                 diffusionForce     = sqrt(sum(diffusionForce.^2)); 
+%                 newTempPos         = obj.curPos(hIdx,:)+diffusionForce.*dirVec(hIdx,:);% (obj.curPos(hIdx,:)-obj.prevPos(hIdx,:));
+%                 obj.prevPosVertex1 = obj.curPosVertex1;
+%                 obj.prevPosVertex2 = obj.curPosVertex2;                
+                [obj.curPos(hIdx,:),obj.curPosVertex1(hIdx),obj.curPosVertex2(hIdx)]= obj.MoveOnChain(obj.curPos(hIdx,:),newTempPos(hIdx,:),obj.prevPosVertex1(hIdx),obj.prevPosVertex2(hIdx), chainPos,false);
+%                 obj.prevPos(hIdx,:) = obj.curPos(hIdx,:);
+%                 obj.curPos(hIdx,:)  = newPos;
+%                 % update the vertices 
+%                 obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
+%                 obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
+%                 [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
                 
             end
         end
@@ -137,12 +147,15 @@ classdef Histone<handle
                 % current position
                 obj.curPos(hIdx,:)  = chainPos(obj.curPosVertex1(hIdx,:),:) + ...
                     obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
+%                 % update the vertices 
+%                 obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
+%                 obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
+%                 [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
             end
-
 
         end
         
-        function [newPos,vert1,vert2] = MoveOnChain(obj,prevPos,curPos,vertices,isCircular)%TODO: expand to Move on graph
+        function [newPos,vert1,vert2] = MoveOnChain(obj,prevPos,curPos,prevPosVertex1, prevPosVertex2,vertices,isCircular)%TODO: expand to Move on graph
             %             A = [vertices(1,1:2),1; vertices(2,1:2),1 ; prevPos(1,1:2),1];
             %             d = det(A);
             %             if d>eps
@@ -158,7 +171,9 @@ classdef Histone<handle
             % find the location of prevPos on the chain
             
             %             chainLength   = cumsum(sqrt(sum(vertices.^2,2)),1);
-            [vert1,vert2] = obj.FindPointOnPolygon(prevPos,vertices);
+%             [vert1,vert2] = obj.FindPointOnPolygon(prevPos,vertices);
+          vert1 = prevPosVertex1;
+          vert2 = prevPosVertex2;
             if isempty(vert1) || isempty(vert2)
                 error('particle not on the polygon')
             end
@@ -232,7 +247,7 @@ classdef Histone<handle
             
             while~flag
                 t       = (point - vertices(vertNum,:))./(vertices(vertNum+1,:)-vertices(vertNum,:));
-                flag    = all(abs(t-t(1))<1e-9);
+                flag    = all(abs(t-t(1))<1e-10);
                 vert1   = vertNum;
                 vert2   = vertNum+1;
                 vertNum = vertNum+1;
