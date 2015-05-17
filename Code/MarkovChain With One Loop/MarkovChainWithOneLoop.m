@@ -25,6 +25,7 @@ classdef MarkovChainWithOneLoop<handle
             obj.params.numBeads        = 64;
             obj.params.encounterDist   = 0.1; % the maximal distance two bead are considered to be in contact
             obj.params.connectorLength = 0.1;
+            obj.params.b               = 1;  % dist STD between beads 
             % calculate the attachment rate to any other bead (will be changed according to distance) when free
             
 %             % the PDF of the bead distance
@@ -45,8 +46,11 @@ classdef MarkovChainWithOneLoop<handle
             %              obj.params.alpha           = normcdf(obj.params.encounterDist,0,sqrt((1:obj.params.numBeads-1))*obj.params.connectorLength)-...
             %                                           normcdf(sqrt(3)*obj.params.encounterDist,0,0);
             %             obj.params.alpha           = 0.1*ones(1,obj.params.numBeads-1);
-            obj.params.alpha           = (1/sum((1:obj.params.numBeads-1).^(-1.5))).*((1:obj.params.numBeads-1).^(-1.5));
-            obj.params.beta            = ones(1,obj.params.numBeads-1)*(1/3);% the detachment rate
+            k                          = 2:obj.params.numBeads;
+            normConst = sum(((1./abs(1-k)).^1.5).*exp(-3*(obj.params.encounterDist.^2)./(2* obj.params.b^2 *abs(1-k))));
+            obj.params.alpha           = (1/normConst)*((1./abs(1-k)).^1.5).*exp(-3*(obj.params.encounterDist.^2)./(2* obj.params.b^2 *abs(1-k)));
+%             obj.params.alpha           = (1/sum((1:obj.params.numBeads-1).^(-1.5))).*((1:obj.params.numBeads-1).^(-1.5));
+            obj.params.beta            = 1;%-obj.params.alpha;%ones(1,obj.params.numBeads-1)*(1/3);% the detachment rate
             obj.params.mu              = ones(1,obj.params.numBeads-1)*(1/3); % rate of forming a smaller loop when attached (with the neighbor bead)
             obj.params.lambda          = ones(1,obj.params.numBeads-1)*(1/3); % rate of forming a bigger loop when attached (with the neighbor bead)
             obj.params.timePoints      = 0:0.01:(25-0.01);
@@ -100,8 +104,8 @@ classdef MarkovChainWithOneLoop<handle
             M(end,end) = -(obj.params.mu(1)+obj.params.beta(1));
             M          = M+diag(obj.params.mu,1); % set super diagonal
             M          = M+diag(obj.params.lambda,-1); % set sub-diagonal
-            M(2:end,1) = (1./sum((1:obj.params.numBeads-1).^(-1.5)))*(1:obj.params.numBeads-1)'.^(-1.5);% set first row
-            M(1,2:end) = obj.params.beta;% set first row;
+%             M(2:end,1) = obj.params.alpha;%(1./sum((1:obj.params.numBeads-1).^(-1.5)))*(1:obj.params.numBeads-1)'.^(-1.5);% set first row alpha(k)
+%             M(1,2:end) = obj.params.beta;% set first row;
             
             obj.transitionMatrix = M;
         end

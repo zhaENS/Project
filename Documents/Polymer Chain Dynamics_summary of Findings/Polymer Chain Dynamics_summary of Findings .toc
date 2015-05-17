@@ -13,6 +13,7 @@
 \contentsline {section}{\numberline {2.9}Estimating $E[P(1)]$ from the data}{15}{section.2.9}
 \contentsline {section}{\numberline {2.10}Determining the spring constant for peaks}{15}{section.2.10}
 \contentsline {section}{\numberline {2.11}Fitting the encounter data}{16}{section.2.11}
+\contentsline {section}{\numberline {2.12}Analysis of random loop model}{17}{section.2.12}
 \contentsline {chapter}{\numberline {3}Simulations}{19}{chapter.3}
 \contentsline {section}{\numberline {3.1}The Simulation Framework}{19}{section.3.1}
 \contentsline {section}{\numberline {3.2}Initial simulation settings}{21}{section.3.2}
