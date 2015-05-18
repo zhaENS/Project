@@ -96,42 +96,27 @@ classdef Histone<handle
             % Update the histone position on the new chain position 
             obj.UpdateHistonePositionOnChain(chainPos);
             fp                 = obj.params.forceParams;
-            dirVec             = chainPos(obj.prevPosVertex2,:)- chainPos(obj.prevPosVertex1,:);
+            dirVec             = chainPos(obj.curPosVertex2,:)- chainPos(obj.curPosVertex1,:);
             diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos,fp.diffusionConst,dt,[]);
             diffusionForce     = sqrt(sum(diffusionForce.^2,2));    
             % advence to a tentative location
             newTempPos         = obj.curPos+bsxfun(@times,diffusionForce,dirVec);% (obj.curPos(hIdx,:)-obj.prevPos(hIdx,:));
-            obj.prevPosVertex1 = obj.curPosVertex1;
-            obj.prevPosVertex2 = obj.curPosVertex2; 
+
             obj.prevPos        = obj.curPos;
+            obj.prevPosSlope   = obj.curPosSlope;
             for hIdx = 1:obj.params.numHistones
-              
-%                  dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
-%                 % previous position
-%                 obj.prevPos(hIdx,:) = chainPos(obj.prevPosVertex1(hIdx,:),:) +...
-%                     obj.prevPosSlope(hIdx,:).*dirVec;
-%                 % current position
-%                 obj.curPos(hIdx,:)  = chainPos(obj.curPosVertex1(hIdx,:),:) + ...
-%                     obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
-                
-                % get diffusion force
-%                 diffusionForce = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos(hIdx,:),fp.diffusionConst,dt,[]);
-                
-                % project the diffusion force on the current chain segment
-                % to get the position                 
-               
-%                 diffusionForce     = sqrt(sum(diffusionForce.^2)); 
-%                 newTempPos         = obj.curPos(hIdx,:)+diffusionForce.*dirVec(hIdx,:);% (obj.curPos(hIdx,:)-obj.prevPos(hIdx,:));
-%                 obj.prevPosVertex1 = obj.curPosVertex1;
-%                 obj.prevPosVertex2 = obj.curPosVertex2;                
-                [obj.curPos(hIdx,:),obj.curPosVertex1(hIdx),obj.curPosVertex2(hIdx)]= obj.MoveOnChain(obj.curPos(hIdx,:),newTempPos(hIdx,:),obj.prevPosVertex1(hIdx),obj.prevPosVertex2(hIdx), chainPos,false);
-%                 obj.prevPos(hIdx,:) = obj.curPos(hIdx,:);
-%                 obj.curPos(hIdx,:)  = newPos;
-%                 % update the vertices 
-%                 obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
-%                 obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
-%                 [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
-                
+                         
+                [obj.curPos(hIdx,:),vert1,vert2,obj.curPosSlope(hIdx)]= ...
+                    obj.MoveOnChain(obj.curPos(hIdx,:),newTempPos(hIdx,:),obj.curPosVertex1(hIdx),obj.curPosVertex2(hIdx), chainPos,false);
+                 if vert2 ~=obj.curPosVertex2 % particles changed edge                     
+                  % update previous
+                  obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
+                  obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx); 
+                  
+                  % update current
+                  obj.curPosVertex1(hIdx) = vert1; 
+                  obj.curPosVertex2(hIdx) = vert2; 
+                 end
             end
         end
         
@@ -139,139 +124,30 @@ classdef Histone<handle
             % Update the position of the histones after the chain has moved
 %             obj.prevPos = obj.prevPos+ bsxfun(@times,obj.prevPosSlope,chainPos(obj.prevPosVertex2,:)- chainPos(obj.prevPosVertex1,:));
 %                         obj.curPos = obj.curPos+ bsxfun(@times,obj.curPosSlope,chainPos(obj.curPosVertex2,:)- chainPos(obj.curPosVertex1,:));
-            for hIdx = 1:obj.params.numHistones
-                dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
-                % previous position
-                obj.prevPos(hIdx,:) = chainPos(obj.prevPosVertex1(hIdx,:),:) +...
-                    obj.prevPosSlope(hIdx,:).*dirVec;
-                % current position
-                obj.curPos(hIdx,:)  = chainPos(obj.curPosVertex1(hIdx,:),:) + ...
-                    obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
-%                 % update the vertices 
-%                 obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
-%                 obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
-%                 [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
-            end
+
+             % updqte the current position on the new chain position
+             curDirVec     = chainPos(obj.curPosVertex2,:)-chainPos(obj.curPosVertex1,:);
+             obj.curPos = chainPos(obj.curPosVertex1,:)+bsxfun(@times,obj.curPosSlope,curDirVec);
+             % update the previous chain position on the new chain position
+             prevDirVec  = chainPos(obj.prevPosVertex2,:)-chainPos(obj.prevPosVertex1,:);
+             obj.prevPos = chainPos(obj.prevPosVertex1,:)+bsxfun(@times,obj.prevPosSlope,prevDirVec);
+
+%             for hIdx = 1:obj.params.numHistones
+%                 dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
+%                 % previous position
+%                 obj.prevPos(hIdx,:) = chainPos(obj.prevPosVertex1(hIdx,:),:) +...
+%                     obj.prevPosSlope(hIdx,:).*dirVec;
+%                 % current position
+%                 obj.curPos(hIdx,:)  = chainPos(obj.curPosVertex1(hIdx,:),:) + ...
+%                     obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
+% %                 % update the vertices 
+% %                 obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
+% %                 obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
+% %                 [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
+%             end
 
         end
-        
-        function [newPos,vert1,vert2] = MoveOnChain(obj,prevPos,curPos,prevPosVertex1, prevPosVertex2,vertices,isCircular)%TODO: expand to Move on graph
-            %             A = [vertices(1,1:2),1; vertices(2,1:2),1 ; prevPos(1,1:2),1];
-            %             d = det(A);
-            %             if d>eps
-            %                 error('prevPos is not on the first edge')
-            %             end
-            % Get the exct position and trim the polygon such that the polygon and the
-            % path start from the same positon
-            
-            % start from the prevPos between prevPosVertex1 and
-            % prevPosVertex2 on the polygon with vertices in vertices
-            % find the direction according to curPos-prevPos and relocate
-            % the particle position to newPos between vert1 and vert2
-            
-            % project the curPos-prevPos on the segment of prevPos 
-            pPath      = curPos-prevPos;
-            % find the direction of motion (toward or away from polygon
-            % start)            
-            
-            motionDir  = sum((curPos-prevPos).*(vertices(prevPosVertex2,:)-vertices(prevPosVertex1)));
-            motionDir  = sign(motionDir);
-            pathLength = sqrt(sum(pPath.^2));
-            
-            % start from prevPos and subtract the path length from polygon
-            % length
-            flag = false;
-             vert1 = prevPosVertex1;
-             vert2 = prevPosVertex2;
-            if motionDir>0
-               vert0 = vert2;
-            else
-               vert0 = vert1;
-            end
-             cumDist = sqrt(sum((prevPos-vertices(vert0,:)).^2));
-             
-            while ~flag
-               
-               pathReminder = pathLength-cumDist;
-               flag         = pathReminder<0;
-               if ~flag %  move to the next segment                   
-                    vert1 = vert1+motionDir;
-                    vert2 = vert2+motionDir;% TODO: insert reflection function 
-                    cumDist = cumDist+ sqrt(sum((vertices(vert1,:)-vertices(vert2,:)).^2));
-               end
-            end
-            
-            edgeDir    = motionDir*(vertices(vert2,:)-vertices(vert1,:));
-            edgeLength = sqrt(sum((edgeDir).^2));
-            t          = pathReminder/edgeLength;
-            if vert2==prevPosVertex2 % if the particle did not switch edges
-                vert0 = prevPos;
-            else
-            if motionDir>0
-                vert0 = vertices(vert2,:);
-               
-            else
-               vert0 = vertices(vert1,:);
-            end
-            end
-            newPos     =vert0+ t*edgeDir;
-            
-%             % Length of the path
-%             l       = sqrt(sum((curPos-prevPos).^2));
-%             flag    = true;
-%             
-%             % find the location of prevPos on the chain
-%             
-%             %             chainLength   = cumsum(sqrt(sum(vertices.^2,2)),1);
-% %             [vert1,vert2] = obj.FindPointOnPolygon(prevPos,vertices);
-%           vert1 = prevPosVertex1;
-%           vert2 = prevPosVertex2;
-%             if isempty(vert1) || isempty(vert2)
-%                 error('particle not on the polygon')
-%             end
-%             %             vert1      = 1;
-%             %             vert2      = 2;
-%             polyLength = 0;
-%             numVert    = size(vertices,1);
-%             while flag
-%                 % iteratively calculate the length of the polygon
-%                 % and subtract it from the length of the path
-%                 r          = sqrt(sum((vertices(vert2,:)-vertices(vert1,:)).^2));  % length of segment
-%                 polyLength = polyLength + r;% cumulative length of polygon
-%                 d          = l-polyLength; % difference between path length and cumulative polygon length
-%                 if d<0 % if the difference is negative- stop
-%                     flag = false;
-%                 else
-%                     vert1 = vert2;
-%                     
-%                     if vert2==numVert
-%                         if isCircular
-%                             vert2 = 1;
-%                         else
-%                             %  quit with no result
-%                             error('the point is not on the specified polygon')
-%                         end
-%                     else
-%                         vert2 = vert2+1;% advance the index one more
-%                     end
-%                 end
-%             end
-%             
-%             % the actual point
-%             a      = vertices(vert1,:);
-%             b      = vertices(vert2,:);
-%             dirVec = (b-a)./sqrt(sum((b-a).^2));
-%             
-%             t      = (r+d)/r;
-%             % get the new point
-%             newPos = a+t*(dirVec);
-%             
-%             polyVert = vertices;
-%             if isCircular
-%                 polyVert = [polyVert; vertices(1,:)];
-%             end
-        end
-        
+                
         function ParseInputParams(obj,varargin)
             % parse the input parameters
             p = varargin{:};
@@ -311,6 +187,65 @@ classdef Histone<handle
             end
         end
         
+        function [newPos,vert1,vert2,posRatio] = MoveOnChain(prevPos,curPos,curPosVertex1, curPosVertex2,vertices,isCircular)%TODO: expand to Move on graph            
+            % start from the prevPos between prevPosVertex1 and
+            % prevPosVertex2 on the polygon with vertices in vertices
+            % find the direction according to curPos-prevPos and relocate
+            % the particle position to newPos between vert1 and vert2
+            
+            % project the curPos-prevPos on the segment of prevPos 
+            pPath      = curPos-prevPos;
+            % find the direction of motion (toward or away from polygon
+            % start)            
+            numPolyVert = size(vertices,1);% number of polygon vertices
+            motionDir   = sum(pPath.*(vertices(curPosVertex2,:)-vertices(curPosVertex1,:)));
+            motionDir   = sign(motionDir);
+            pathLength  = sqrt(sum(pPath.^2));
+            
+            % start from prevPos and subtract the path length from polygon
+            % length
+            flag = false;
+             vert1 = curPosVertex1;
+             vert2 = curPosVertex2;
+            if motionDir>0
+               vert0 = vert2;
+            else
+               vert0 = vert1;
+            end
+             cumDist = sqrt(sum((prevPos-vertices(vert0,:)).^2));
+             
+            while ~flag
+               
+               pathReminder = pathLength-cumDist;
+               flag         = pathReminder<0;
+               if ~flag %  move to the next segment                   
+                    vert1 = vert1+motionDir;
+                    vert2 = vert2+motionDir;% TODO: insert reflection function                     
+                    cumDist = cumDist+ sqrt(sum((vertices(vert1,:)-vertices(vert2,:)).^2));
+               end
+            end
+                        
+            edgeDir    = motionDir*(vertices(vert2,:)-vertices(vert1,:));  
+            edgeLength = sqrt(sum((vertices(vert2,:)-vertices(vert1,:)).^2));
+            posRatio   = (pathReminder+edgeLength)/edgeLength;% the position ratio between vertices
+            
+            if vert2==curPosVertex2 
+                % if the particle did not switch edges                
+                vert0 = vert1;               
+            else
+                % if the particle changed edges
+             if motionDir>0
+                 % motion in the 'positive' direction                
+                 vert0 = vert1;                            
+             else
+                 % motion in the 'negative' direction              
+                 vert0 = vert2;             
+             end
+            end
+            % update the new position 
+             newPos     = vertices(vert0,:)+ posRatio*edgeDir;
+        end
+
     end
     
 end
