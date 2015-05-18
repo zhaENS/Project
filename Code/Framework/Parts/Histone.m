@@ -164,60 +164,112 @@ classdef Histone<handle
             % Get the exct position and trim the polygon such that the polygon and the
             % path start from the same positon
             
-            % Length of the path
-            l       = sqrt(sum((curPos-prevPos).^2));
-            flag    = true;
+            % start from the prevPos between prevPosVertex1 and
+            % prevPosVertex2 on the polygon with vertices in vertices
+            % find the direction according to curPos-prevPos and relocate
+            % the particle position to newPos between vert1 and vert2
             
-            % find the location of prevPos on the chain
+            % project the curPos-prevPos on the segment of prevPos 
+            pPath      = curPos-prevPos;
+            % find the direction of motion (toward or away from polygon
+            % start)            
             
-            %             chainLength   = cumsum(sqrt(sum(vertices.^2,2)),1);
-%             [vert1,vert2] = obj.FindPointOnPolygon(prevPos,vertices);
-          vert1 = prevPosVertex1;
-          vert2 = prevPosVertex2;
-            if isempty(vert1) || isempty(vert2)
-                error('particle not on the polygon')
+            motionDir  = sum((curPos-prevPos).*(vertices(prevPosVertex2,:)-vertices(prevPosVertex1)));
+            motionDir  = sign(motionDir);
+            pathLength = sqrt(sum(pPath.^2));
+            
+            % start from prevPos and subtract the path length from polygon
+            % length
+            flag = false;
+             vert1 = prevPosVertex1;
+             vert2 = prevPosVertex2;
+            if motionDir>0
+               vert0 = vert2;
+            else
+               vert0 = vert1;
             end
-            %             vert1      = 1;
-            %             vert2      = 2;
-            polyLength = 0;
-            numVert    = size(vertices,1);
-            while flag
-                % iteratively calculate the length of the polygon
-                % and subtract it from the length of the path
-                r          = sqrt(sum((vertices(vert2,:)-vertices(vert1,:)).^2));  % length of segment
-                polyLength = polyLength + r;% cumulative length of polygon
-                d          = l-polyLength; % difference between path length and cumulative polygon length
-                if d<0 % if the difference is negative- stop
-                    flag = false;
-                else
-                    vert1 = vert2;
-                    
-                    if vert2==numVert
-                        if isCircular
-                            vert2 = 1;
-                        else
-                            %  quit with no result
-                            error('the point is not on the specified polygon')
-                        end
-                    else
-                        vert2 = vert2+1;% advance the index one more
-                    end
-                end
+             cumDist = sqrt(sum((prevPos-vertices(vert0,:)).^2));
+             
+            while ~flag
+               
+               pathReminder = pathLength-cumDist;
+               flag         = pathReminder<0;
+               if ~flag %  move to the next segment                   
+                    vert1 = vert1+motionDir;
+                    vert2 = vert2+motionDir;% TODO: insert reflection function 
+                    cumDist = cumDist+ sqrt(sum((vertices(vert1,:)-vertices(vert2,:)).^2));
+               end
             end
             
-            % the actual point
-            a      = vertices(vert1,:);
-            b      = vertices(vert2,:);
-            dirVec = (b-a)./sqrt(sum((b-a).^2));
-            
-            t      = (r+d)/r;
-            % get the new point
-            newPos = a+t*(dirVec);
-            
-            polyVert = vertices;
-            if isCircular
-                polyVert = [polyVert; vertices(1,:)];
+            edgeDir    = motionDir*(vertices(vert2,:)-vertices(vert1,:));
+            edgeLength = sqrt(sum((edgeDir).^2));
+            t          = pathReminder/edgeLength;
+            if vert2==prevPosVertex2 % if the particle did not switch edges
+                vert0 = prevPos;
+            else
+            if motionDir>0
+                vert0 = vertices(vert2,:);
+               
+            else
+               vert0 = vertices(vert1,:);
             end
+            end
+            newPos     =vert0+ t*edgeDir;
+            
+%             % Length of the path
+%             l       = sqrt(sum((curPos-prevPos).^2));
+%             flag    = true;
+%             
+%             % find the location of prevPos on the chain
+%             
+%             %             chainLength   = cumsum(sqrt(sum(vertices.^2,2)),1);
+% %             [vert1,vert2] = obj.FindPointOnPolygon(prevPos,vertices);
+%           vert1 = prevPosVertex1;
+%           vert2 = prevPosVertex2;
+%             if isempty(vert1) || isempty(vert2)
+%                 error('particle not on the polygon')
+%             end
+%             %             vert1      = 1;
+%             %             vert2      = 2;
+%             polyLength = 0;
+%             numVert    = size(vertices,1);
+%             while flag
+%                 % iteratively calculate the length of the polygon
+%                 % and subtract it from the length of the path
+%                 r          = sqrt(sum((vertices(vert2,:)-vertices(vert1,:)).^2));  % length of segment
+%                 polyLength = polyLength + r;% cumulative length of polygon
+%                 d          = l-polyLength; % difference between path length and cumulative polygon length
+%                 if d<0 % if the difference is negative- stop
+%                     flag = false;
+%                 else
+%                     vert1 = vert2;
+%                     
+%                     if vert2==numVert
+%                         if isCircular
+%                             vert2 = 1;
+%                         else
+%                             %  quit with no result
+%                             error('the point is not on the specified polygon')
+%                         end
+%                     else
+%                         vert2 = vert2+1;% advance the index one more
+%                     end
+%                 end
+%             end
+%             
+%             % the actual point
+%             a      = vertices(vert1,:);
+%             b      = vertices(vert2,:);
+%             dirVec = (b-a)./sqrt(sum((b-a).^2));
+%             
+%             t      = (r+d)/r;
+%             % get the new point
+%             newPos = a+t*(dirVec);
+%             
+%             polyVert = vertices;
+%             if isCircular
+%                 polyVert = [polyVert; vertices(1,:)];
+%             end
         end
         
         function ParseInputParams(obj,varargin)

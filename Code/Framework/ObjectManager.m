@@ -54,7 +54,7 @@ classdef ObjectManager<handle
               % Initizlie Rouse chains 
               inds = (cNb+1):(cNb+obj.objParams(cIdx).numBeads);
               obj.handles.chain(cIdx) = Rouse(obj.objParams(cIdx),inds,obj);
-              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass(obj.objParams(cIdx).initializeInDomain));
+              obj.handles.chain(cIdx).SetInitialChainPosition(domainClass);
                           
               % Register the chain as an object in the ObjectMapper class
               obj.map.AddObject(inds)
