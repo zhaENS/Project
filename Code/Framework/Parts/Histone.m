@@ -1,13 +1,12 @@
 classdef Histone<handle
-    % a class for a Histone object
+    % A class for a Histone object
     % histones are attached to chains by default and move on them by 1D
     % diffusion, the position in space is determined by the position of the
     % chain
     % the new chain position is passed to histone, the histone is then
     % projected onto the new position between the vertices it was on in the
     % previous step and then it is moved to its new position
-    
-    % TODO: fix FindPointOnPolygon to allow reflection at the ends 
+
     % TODO: omit the main loop to work on all the coordinates as a matrix 
     % TODO: expand MoveOnPolygon to MoveOnGraph
     
@@ -77,30 +76,13 @@ classdef Histone<handle
             % move by 1D diffusion
             % project onto new chain position
             chainPos          = chainPosition;
-%             particleDistances = ForceManager.GetParticleDistance(obj.curPos);
-            
-            % translate the prev and cur pos onto the new chain positon
-            % (after it moved)
-%                         obj.prevPos = obj.prevPos+ bsxfun(@times,obj.prevPosSlope,chainPos(obj.prevPosVertex2,:)- chainPos(obj.prevPosVertex1,:));
-%                         obj.curPos = obj.curPos+ bsxfun(@times,obj.curPosSlope,chainPos(obj.curPosVertex2,:)- chainPos(obj.curPosVertex1,:));
-            %             % Transform curPos to distance on 1D line
-            %
-            %
-            %             [newTempPos, diffusionForce,ljForce,~] = ForceManager.ApplyExternalForces(obj.curPos,...
-            %                                                           particleDistances,obj.params.diffusionConst,...
-            %                                                           ljForce,diffusionForce,morseForce,...
-            %                                                           LJPotentialWidth,LJPotentialDepth,...
-            %                                                           morsePotentialDepth, morsePotentialWidth,morseForceType,...
-            %                                                           minParticleDist,fixedParticleNum,dt);
             
             % Update the histone position on the new chain position 
             obj.UpdateHistonePositionOnChain(chainPos);
             fp                 = obj.params.forceParams;
-            dirVec             = chainPos(obj.curPosVertex2,:)- chainPos(obj.curPosVertex1,:);
             diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos,fp.diffusionConst,dt,[]);
-            diffusionForce     = sqrt(sum(diffusionForce.^2,2));    
             % advence to a tentative location
-            newTempPos         = obj.curPos+bsxfun(@times,diffusionForce,dirVec);% (obj.curPos(hIdx,:)-obj.prevPos(hIdx,:));
+            newTempPos         = obj.curPos+ diffusionForce;
 
             obj.prevPos        = obj.curPos;
             obj.prevPosSlope   = obj.curPosSlope;
@@ -108,7 +90,7 @@ classdef Histone<handle
                          
                 [obj.curPos(hIdx,:),vert1,vert2,obj.curPosSlope(hIdx)]= ...
                     obj.MoveOnChain(obj.curPos(hIdx,:),newTempPos(hIdx,:),obj.curPosVertex1(hIdx),obj.curPosVertex2(hIdx), chainPos,false);
-                 if vert2 ~=obj.curPosVertex2 % particles changed edge                     
+                                    
                   % update previous
                   obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
                   obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx); 
@@ -116,14 +98,12 @@ classdef Histone<handle
                   % update current
                   obj.curPosVertex1(hIdx) = vert1; 
                   obj.curPosVertex2(hIdx) = vert2; 
-                 end
+
             end
         end
         
         function UpdateHistonePositionOnChain(obj,chainPos)
             % Update the position of the histones after the chain has moved
-%             obj.prevPos = obj.prevPos+ bsxfun(@times,obj.prevPosSlope,chainPos(obj.prevPosVertex2,:)- chainPos(obj.prevPosVertex1,:));
-%                         obj.curPos = obj.curPos+ bsxfun(@times,obj.curPosSlope,chainPos(obj.curPosVertex2,:)- chainPos(obj.curPosVertex1,:));
 
              % updqte the current position on the new chain position
              curDirVec     = chainPos(obj.curPosVertex2,:)-chainPos(obj.curPosVertex1,:);
@@ -131,21 +111,6 @@ classdef Histone<handle
              % update the previous chain position on the new chain position
              prevDirVec  = chainPos(obj.prevPosVertex2,:)-chainPos(obj.prevPosVertex1,:);
              obj.prevPos = chainPos(obj.prevPosVertex1,:)+bsxfun(@times,obj.prevPosSlope,prevDirVec);
-
-%             for hIdx = 1:obj.params.numHistones
-%                 dirVec = chainPos(obj.prevPosVertex2(hIdx,:),:)- chainPos(obj.prevPosVertex1(hIdx,:),:);
-%                 % previous position
-%                 obj.prevPos(hIdx,:) = chainPos(obj.prevPosVertex1(hIdx,:),:) +...
-%                     obj.prevPosSlope(hIdx,:).*dirVec;
-%                 % current position
-%                 obj.curPos(hIdx,:)  = chainPos(obj.curPosVertex1(hIdx,:),:) + ...
-%                     obj.curPosSlope(hIdx,:).*(chainPos(obj.curPosVertex2(hIdx,:),:)- chainPos(obj.curPosVertex1(hIdx,:),:));
-% %                 % update the vertices 
-% %                 obj.prevPosVertex1(hIdx) = obj.curPosVertex1(hIdx);
-% %                 obj.prevPosVertex2(hIdx) = obj.curPosVertex2(hIdx);
-% %                 [obj.curPosVertex1(hIdx), obj.curPosVertex2(hIdx)] = obj.FindPointOnPolygon(obj.curPos(hIdx,:),chainPos);% TODO: fix for ends 
-%             end
-
         end
                 
         function ParseInputParams(obj,varargin)
@@ -218,32 +183,29 @@ classdef Histone<handle
                
                pathReminder = pathLength-cumDist;
                flag         = pathReminder<0;
-               if ~flag %  move to the next segment                   
+               if ~flag %  move particle to the next segment 
+                    
                     vert1 = vert1+motionDir;
-                    vert2 = vert2+motionDir;% TODO: insert reflection function                     
+                    vert2 = vert2+motionDir;
+                    % reflection
+                    if (vert2>numPolyVert) || (vert1<1)
+                      motionDir = -motionDir;
+                      vert1     = vert1+motionDir;
+                      vert2     = vert2+motionDir;
+                    end                                            
                     cumDist = cumDist+ sqrt(sum((vertices(vert1,:)-vertices(vert2,:)).^2));
                end
             end
                         
-            edgeDir    = motionDir*(vertices(vert2,:)-vertices(vert1,:));  
             edgeLength = sqrt(sum((vertices(vert2,:)-vertices(vert1,:)).^2));
-            posRatio   = (pathReminder+edgeLength)/edgeLength;% the position ratio between vertices
-            
-            if vert2==curPosVertex2 
-                % if the particle did not switch edges                
-                vert0 = vert1;               
+            if motionDir>0
+               posRatio   = (pathReminder+edgeLength)/edgeLength;% the position ratio between vertices
             else
-                % if the particle changed edges
-             if motionDir>0
-                 % motion in the 'positive' direction                
-                 vert0 = vert1;                            
-             else
-                 % motion in the 'negative' direction              
-                 vert0 = vert2;             
-             end
+                posRatio  = -pathReminder/edgeLength;
             end
+            
             % update the new position 
-             newPos     = vertices(vert0,:)+ posRatio*edgeDir;
+             newPos     = vertices(vert1,:)+ posRatio*(vertices(vert2,:)-vertices(vert1,:));
         end
 
     end
