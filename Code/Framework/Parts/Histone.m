@@ -15,33 +15,21 @@ classdef Histone<handle
         curPosVertex1
         curPosVertex2
         curPosSlope % position between vertices- used for transformation
+        
         prevPos
         prevPosSlope % position between vertices- used for transformation
         prevPosVertex1
         prevPosVertex2
         
-        params = struct('numHistones',[],...% to be moved out
-                        'dt',[],...
-                        'minHistoneDist',[],...
-                        'diffusionForce',[],...
-                        'diffusionConst',[],...                        
-                        'ljForce',[],...
-                        'LJPotentialWidth',[],...
-                        'LJPotentialDepth',[],...
-                        'morseForce',[],...
-                        'morsePotentialDepth',[],...
-                        'morsePotentialWidth',[],...
-                        'morseForceType',[],...
-                        'forceParams',ForceManagerParams);
-                        
+        params = HistoneParams;
+                    
     end
     
     methods
         
-        function obj = Histone(varargin)
-            % class constructor 
-            obj.ParseInputParams(varargin);
-                        
+        function obj = Histone(histoneParams)
+            % Class constructor 
+            obj.params = histoneParams;                        
         end
         
         function Initialize(obj,initialChainPosition)
@@ -81,11 +69,19 @@ classdef Histone<handle
             obj.UpdateHistonePositionOnChain(chainPos);
             fp                 = obj.params.forceParams;
             diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos,fp.diffusionConst,dt,[]);
-            % advence to a tentative location
-            newTempPos         = obj.curPos+ diffusionForce;
+            if fp.lennardJonesForce
+            histoneDist        = ForceManager.GetParticleDistance(obj.curPos);
+            lennardJonesForce  = ForceManager.GetLenardJonesForce(fp.lennardJonesForce,obj.curPos,histoneDist,fp.LJPotentialWidth,fp.LJPotentialDepth,[]);
+            else
+                lennardJonesForce = zeros(obj.params.numHistones,3);
+            end
+            
+            % Advence to a tentative location
+            newTempPos         = obj.curPos+ diffusionForce+lennardJonesForce*dt;
 
             obj.prevPos        = obj.curPos;
             obj.prevPosSlope   = obj.curPosSlope;
+            
             for hIdx = 1:obj.params.numHistones
                          
                 [obj.curPos(hIdx,:),vert1,vert2,obj.curPosSlope(hIdx)]= ...
@@ -106,8 +102,8 @@ classdef Histone<handle
             % Update the position of the histones after the chain has moved
 
              % updqte the current position on the new chain position
-             curDirVec     = chainPos(obj.curPosVertex2,:)-chainPos(obj.curPosVertex1,:);
-             obj.curPos = chainPos(obj.curPosVertex1,:)+bsxfun(@times,obj.curPosSlope,curDirVec);
+             curDirVec   = chainPos(obj.curPosVertex2,:)-chainPos(obj.curPosVertex1,:);
+             obj.curPos  = chainPos(obj.curPosVertex1,:)+bsxfun(@times,obj.curPosSlope,curDirVec);
              % update the previous chain position on the new chain position
              prevDirVec  = chainPos(obj.prevPosVertex2,:)-chainPos(obj.prevPosVertex1,:);
              obj.prevPos = chainPos(obj.prevPosVertex1,:)+bsxfun(@times,obj.prevPosSlope,prevDirVec);
@@ -122,8 +118,7 @@ classdef Histone<handle
             
             for pIdx = 1:numel(p)/2
                 obj.params.(p{2*pIdx-1}) = p{2*pIdx};
-            end
-            
+            end            
         end
     end
     
