@@ -95,7 +95,7 @@ classdef Rouse<handle
             obj.position.prev            = randn(obj.params.numBeads,3);
 
             obj.InitializeBeadConnectionMap;
-            obj.SetInitialChainPosition; % should be moved out of the initialization process
+%             obj.SetInitialChainPosition; % should be moved out of the initialization process
 
         end        
         
@@ -268,7 +268,7 @@ classdef Rouse<handle
             % the domain, else it is randomly placed.
             
             %TODO: change to use the ForceManager
-            
+%             fp = domainHandler.params(obj.params.initializeInDomain).forceParams;
             if exist('domainHandler','var')
                 if isempty(obj.params.beadsOnBoundary)
                 % The bead positions
@@ -277,8 +277,8 @@ classdef Rouse<handle
                     inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:),obj.params.initializeInDomain);     
                     tempPos  = obj.position.prev(bIdx,:);
                    while ~inDomain 
-                       x        = sqrt(2*obj.params.diffusionConst*obj.params.dt)*randn(1,obj.params.dimension);
-                       tempPos  = obj.position.prev(bIdx-1,:)+x;
+                       x        = obj.params.b*randn(1,obj.params.dimension);
+                       tempPos  = obj.position.prev(bIdx,:)+x;
                        inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);
                    end   
                     obj.position.prev(bIdx,:)= tempPos;
