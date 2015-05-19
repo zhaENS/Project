@@ -266,7 +266,7 @@ classdef DomainHandler<handle
                 normDirection = 'in';
             end
             
-            if strcpi(normDirection,'in')
+            if strcmpi(normDirection,'in')
                 direction = 1;
             else
                 direction = -1;

@@ -20,10 +20,11 @@
 \contentsline {subsubsection}{Diffusion on the surface of a sphere}{8}
 \contentsline {section}{\numberline {1.7}Domain Reflection}{8}
 \contentsline {subsection}{\numberline {1.7.1}Sphere}{8}
+\contentsline {subsection}{\numberline {1.7.2}Polygon}{9}
 \contentsline {section}{\numberline {1.8}Object Manager}{9}
 \contentsline {subsection}{\numberline {1.8.1}objects and members}{9}
-\contentsline {subsection}{\numberline {1.8.2}Step process}{9}
-\contentsline {section}{\numberline {1.9}Object Mapper}{9}
+\contentsline {subsection}{\numberline {1.8.2}Step process}{10}
+\contentsline {section}{\numberline {1.9}Object Mapper}{10}
 \contentsline {subsection}{\numberline {1.9.1}FindConnectedBeads}{10}
 \contentsline {subsection}{\numberline {1.9.2}ConnectParticles}{10}
 \contentsline {subsection}{\numberline {1.9.3}DisconnectParticles}{10}

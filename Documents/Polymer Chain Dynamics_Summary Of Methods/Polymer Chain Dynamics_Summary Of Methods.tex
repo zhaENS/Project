@@ -166,6 +166,20 @@ t_{1,2}=\frac{-\alpha \pm \sqrt{\alpha^2-\beta (\langle A,A \rangle -R^2)}}{\bet
 \end{equation*}
 then we take the $t$ such that $0<t<1$, to make sure the intersection is in the right direction and is between points $A$ and $B$.
 
+\subsection{Polygon}
+The collision detection and reflection of two or more particles moving on a polygon is done according to the following steps:
+\begin{enumerate}
+\item \textit{collision Detection}: we reduce the dimensionality of the problem to 1D collision detection. The polygon is parametrize in terms of arc-length (cumulative edge length). Two particles with positions $x_1(t), x_2(t)$ and $x_1(t+\Delta t), x_2(t+\Delta t)$ at time steps $t$ and $t+\Delta t$ are considered collided if the value 
+\begin{equation*}
+0 \leq t= \frac{\Delta t (x_2(t)-x_1(t)}{(x_1(t+\Delta t)-x_2(t+\Delta t))-(x_1(t)-x_2(t))}\leq \Delta t
+\end{equation*}
+which is equivalent to $0\leq t/\Delta t \leq 1$ 
+\item the collision position is determined in 1D simply as $x=v_tt$
+, for velocities of all particles for which the criteria in the previous point is met.
+\end{enumerate}
+
+
+
 \section{Object Manager}
 \subsection{objects and members}
 objects in the framework can be one or several chains connected in an arbitrary manner. Objects are treated as a single unit when forces are applied. 

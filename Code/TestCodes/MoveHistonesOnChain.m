@@ -22,11 +22,10 @@ cylinderForces = ForceManagerParams('diffusionForce',false,'lennardJonesForce',f
 dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',0.2,...
                                      'domainHeight', 25,'forceParams',cylinderForces);
 
-
 % % create a chain
 chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,'springForce',true,...
     'bendingElasticityForce',false,'bendingConst',1,'springConst',0.5,'minParticleEqDistance',0);
-cp          = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
+cp          = ChainParams('numBeads',200,'initializeInDomain',1,'forceParams',chainForces);
 % cp(2)     = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
 
 % register the object parameters in the simulator framework
@@ -65,7 +64,7 @@ if simulatorParams.simulator.showSimulation
     daspect(mAxes,[1 1 1])
     % create figure for the projection in the x-y plane 
     pFigure = figure;
-    pAxes   = axes('Parent',pFigure);
+    pAxes   = axes('Parent',pFigure,'XLim',get(mAxes,'XLim'), 'YLim',get(mAxes,'YLim'));
     % projected histone 
     pHistHandle = line('XData',h.curPos(:,1),...
                  'YData',h.curPos(:,2),...
@@ -87,16 +86,15 @@ end
 r.Run;% run initial simulator step
 
 for sIdx = 1:numSteps
-    % advance one simulation step
+    % Advance one simulation step
     r.Step;
     [~,chainPos] = r.objectManager.GetMembersPosition(1);
     chainPos     = chainPos{1};
     % move the histones
     h.Step(chainPos,simulatorParams.simulator.dt);
-    
-    % update histone graphics
+       
     if simulatorParams.simulator.showSimulation
-        
+        % update histone graphics
         set(histHandle,'XData',h.curPos(:,1),'YData',h.curPos(:,2),'ZData',h.curPos(:,3),'Parent',mAxes)
         
         % plot projected histone
@@ -112,15 +110,16 @@ for sIdx = 1:numSteps
         bendingElasticityConst = 1/simulatorParams.simulator.dt;
         connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
         bForce                 = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
+        
         % zero out forces outside the beam
         bForce(~inBeam,:) = 0;
+        
         % update the position of the chain
         chainPos(inBeam,:) = chainPos(inBeam,:) + bForce(inBeam,:)*simulatorParams.simulator.dt;
+
         % assign the new position to the chain
         r.objectManager.DealCurrentPosition(1,chainPos);
-        % update the position of the histones
-        %             h.UpdateHistonePositionOnChain(chainPos)  % update the histone position on the new chain position
-        % %             sIdx
+
     end        
 end
 profile viewer
