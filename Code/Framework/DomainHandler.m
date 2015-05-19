@@ -6,6 +6,8 @@ classdef DomainHandler<handle
     % TODO: fix reflection for all domain shapes
     % TODO: prepare reflection function such that it will output location on
     %      the boundary and allow attachment
+    % TODO: complete reflection 'out' in all domain shapes
+    % TODO: add polygon to the list of domains 
     properties 
         params
         points
@@ -67,19 +69,25 @@ classdef DomainHandler<handle
                newParticlePosition = curParticlePosition;
                
         end
-             
-        
-        function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2,domainNumber)
+                     
+        function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2,domainNumber, reflectDirection)%TODO: complete reflection out in all domain shapes
               % Reflect a particle previously at pos1 and currently at
               % pos2 depending on the domain shape 
               % pos1 and pos2  are  NxDim arrays of particle positions 
+              % domainNumber is the serial number of the domain registered in the class
+              % reflectDirection is either 'in' or 'out' indicating the direction of reflection,
+              % inside the domain or outside the domain
+              
+              if ~exist('reflectDirection','var')
+                  reflectDirection = 'in'; % assume reflection in the domain by default
+              end
+              
                 curPos  = pos2;
                 prevPos = pos1;
                 
                 numBeads = size(pos1,1);
                 inFlag   = true(numBeads,1);         
-                                     
-            
+                                                 
                 inIdx    = obj.InDomain(pos2,domainNumber); % find all particles in the domain 
                 outIdx   = find(~inIdx);       % find all particles outside the domain 
                 
@@ -99,12 +107,12 @@ classdef DomainHandler<handle
                         % Find intersection with the domain 
                         intersectionPoint = obj.FindIntersectionPoint(prevPos(ind,:),curPos(ind,:),domainNumber);
                         
-                        if all([obj.InDomain(prevPos(ind,:),domainNumber),~obj.InDomain(curPos(ind,:),domainNumber),isempty(intersectionPoint)]) %%|| sqrt(sum(intersectionPoint.^2))~=obj.params.domainWidth)
+                        if all([obj.InDomain(prevPos(ind,:),domainNumber),~obj.InDomain(curPos(ind,:),domainNumber),isempty(intersectionPoint)])
                             error('something is wrong with the intersection point function')
                         end
                         
                         if ~isempty(intersectionPoint)
-                            domainNorm  = obj.GetDomainNormal(intersectionPoint,domainNumber);
+                            domainNorm  = obj.GetDomainNormal(intersectionPoint,domainNumber,reflectDirection);
                             
                             % Calculate reflected ray
                             pp  = prevPos(ind,:);
@@ -244,25 +252,38 @@ classdef DomainHandler<handle
             end
         end
         
-        function domainNorm = GetDomainNormal(obj,intPoint,domainNumber)
-           % Assuming the domain is a shpere 
+        function domainNorm = GetDomainNormal(obj,point,domainNumber,normDirection)%TODO: finish indserting domain direction to TwoPlates
+           % get the normal vector to of the domain at location indicated by point
+           % the domain number is the serial number of the domain registered in teh class. 
+           % normDirection is either 'in', or 'out', indicating the normals pointing into the domain
+           % or outside            
+           % The normal vectors' norms are normalized to unity
+           
            if ~exist('domainNumber','var')
                domainNumber = 1;
            end
-           
-            % the normals are facing inward
+            if exist('normDirection','var')
+                normDirection = 'in';
+            end
+            
+            if strcpi(normDirection,'in')
+                direction = 1;
+            else
+                direction = -1;
+            end
+            
            if strcmpi(obj.params(domainNumber).domainShape,'sphere')
-               domainNorm = obj.params(domainNumber).domainCenter-intPoint;
+               domainNorm = direction* obj.params(domainNumber).domainCenter-point;
                domainNorm = domainNorm/sqrt(sum(domainNorm.^2));
                
            elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')
-               domainNorm    = obj.params(domainNumber).domainCenter-intPoint;
+               domainNorm    = direction*(obj.params(domainNumber).domainCenter-point);
                domainNorm(3) = 0;
                domainNorm = domainNorm/sqrt(sum(domainNorm.^2));
            elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
-               if intPoint(1)< obj.params(domainNumber).domainWidth+1e-7 && intPoint(1)> obj.params(domainNumber).domainWidth-1e-7 
+               if point(1)< obj.params(domainNumber).domainWidth+1e-7 && point(1)> obj.params(domainNumber).domainWidth-1e-7 
                    domainNorm = -[1,0 0];
-               elseif intPoint(1)<-obj.params(domainNumber).domainWidth+1e-7 && intPoint(1)>-obj.params(domainNumber).domainWidth-1e-7
+               elseif point(1)<-obj.params(domainNumber).domainWidth+1e-7 && point(1)>-obj.params(domainNumber).domainWidth-1e-7
                    domainNorm = [1 0 0];
                end
            elseif  strcmpi(obj.params(domainNumber).domainShape,'open')

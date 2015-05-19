@@ -1,25 +1,29 @@
 classdef ForceManagerParams<handle
     % parameter class for the forceManger class
+    %TODO: make a class for each force
     properties
-        springForce            = false;
-        lennardJonesForce      = false;
-        diffusionForce         = false;
-        bendingElasticityForce = false;
-        morseForce             = false;
+        % force type
+        springForce@logical
+        lennardJonesForce@logical
+        diffusionForce@logical
+        bendingElasticityForce@logical
+        morseForce@logical
+        mechanicalForce@logical % mechanical force acting on particles (push/pull/etc)
+        
         % Parameters for the forces
-        bendingConst           = 0;
-        springConst            = 0;
-        diffusionConst         = 0;
-        LJPotentialWidth       = 0;
-        LJPotentialDepth       = 0;
-        minParticleEqDistance  = 0;
-        dt                     = 0; % the time to activate the force
-        fixedParticleNum       = [];
-        morsePotentialDepth    = 0;
-        morsePotentialWidth    = 0;
-        morseForceType         = '';
-        edges % matrices representing the edges between connected particles
-        particleDistance % pairwise distance between particles
+        bendingConst@double
+        springConst@double
+        diffusionConst@double
+        LJPotentialWidth@double
+        LJPotentialDepth@double
+        minParticleEqDistance@double % can be a matrix representing pairwise min particle distance
+        dt@double % the time to activate the force
+        fixedParticleNum@double
+        morsePotentialDepth@double
+        morsePotentialWidth@double
+        morseForceType@char
+        edges@double %matrices representing the edges between connected particles
+        particleDistance@double % pairwise distance between particles (unused)
     end 
     
     methods 

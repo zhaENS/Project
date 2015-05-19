@@ -184,7 +184,6 @@ classdef RouseSimulatorFramework<handle
             objList        = 1:obj.objectManager.numObjects;
             
             % Apply domain (global) forces on all objects in the domain 
-%             dp                      = obj.handles.classes.domain.params.forceParams;% Get domain parameters
             prevParticlePosition    = obj.objectManager.prevPos;      % prev position 
             curParticlePosition     = obj.objectManager.curPos;       % new pos after internal forces
             particleDist            = obj.objectManager.particleDist; % distance before applying internal forces
