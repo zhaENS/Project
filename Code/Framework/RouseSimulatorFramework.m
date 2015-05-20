@@ -178,7 +178,7 @@ classdef RouseSimulatorFramework<handle
             objList        = 1:obj.objectManager.numObjects;
             dt             = obj.params.simulator.dt;
             % Advance one step and apply object forces                        
-            obj.objectManager.Step(objList,dt)% update current and previous object position
+            obj.objectManager.Step(objList,dt)% update current object position
             
             % Update object list
             objList        = 1:obj.objectManager.numObjects;
@@ -200,7 +200,7 @@ classdef RouseSimulatorFramework<handle
             % Deal the positions after reflection between the objects and their members in
             % the domain             
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-            obj.objectManager.DealPreviousPosition(objList,curParticlePosition);
+            obj.objectManager.DealPreviousPosition(objList,curParticlePosition);% update previous position 
                                     
             % Show simulation
             obj.simulationGraphics.ShowSimulation

@@ -53,13 +53,14 @@ classdef DomainHandler<handle
                % experimental- apply forces iteratively from each domain 
                for dIdx = 1:obj.numDomains
                    domainNumber = dIdx;
-                   dp = obj.params(dIdx);
-                   fp = dp.forceParams;
+                   dp           = obj.params(dIdx);
+                   fp           = dp.forceParams;
                    curParticlePosition = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,...
-                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,...
-                                    fp.LJPotentialWidth,fp.LJPotentialDepth,...
-                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
-                                    fp.minParticleEqDistance,fixedParticleNum,dt);
+                                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,fp.mechanicalForce,...
+                                                    fp.LJPotentialWidth,fp.LJPotentialDepth,...
+                                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
+                                                    fp.mechanicalForceCenter, fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
+                                                    fp.minParticleEqDistance,fixedParticleNum,dt);
                                                                                                
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
                      [~,curParticlePosition] = obj.Reflect(prevParticlePosition,curParticlePosition,domainNumber);
@@ -233,7 +234,7 @@ classdef DomainHandler<handle
             end
             
             numParticles = size(vecIn,1);
-            for dIdx = 1:obj.numDomains
+%             for dIdx = 1:obj.numDomains
                 inIdx        = true(numParticles,1);
                 if strcmpi(obj.params(domainNumber).domainShape,'Sphere')
                     % the vector norm
@@ -249,7 +250,7 @@ classdef DomainHandler<handle
                 elseif strcmpi(obj.params(domainNumber).domainShape,'open')
                     % Do nothing
                 end            
-            end
+%             end
         end
         
         function domainNorm = GetDomainNormal(obj,point,domainNumber,normDirection)%TODO: finish indserting domain direction to TwoPlates

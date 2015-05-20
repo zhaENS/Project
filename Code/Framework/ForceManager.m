@@ -114,9 +114,10 @@ classdef ForceManager<handle
         
         function [newParticlePosition,diffusionForces,ljForces,morseForce] = ApplyExternalForces(particlePosition,...
                                                             particleDistances,diffusionConst,...
-                                                            ljForce,diffusionForce,morseForce,...                                                            
+                                                            ljForce,diffusionForce,morseForce,mechanicalForce,...                                         
                                                             LJPotentialWidth,LJPotentialDepth,...
                                                             morsePotentialDepth, morsePotentialWidth,morseForceType,...
+                                                            mechaicalForceCenter, mechanicalForceDirection,mechanicalForceMagnitude,...
                                                             minParticleDist,fixedParticleNum,dt)%TODO: pass force parameters
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
@@ -132,8 +133,11 @@ classdef ForceManager<handle
             morseForce = ForceManager.GetMorseForce(morseForce,morsePotentialDepth,morsePotentialWidth,...
                                          minParticleDist, particlePosition,particleDistances,morseForceType,fixedParticleNum);
             
+                                     
+            mechanicalForce = ForceManager.GetMechanicalPointForce(mechanicalForce,particlePosition,mechaicalForceCenter,...
+                                                                   mechanicalForceDirection, mechanicalForceMagnitude);
             % zero-out forces for fixed particles
-             dx = (ljForces*dt+ morseForce*dt+ diffusionForces);
+             dx = (ljForces*dt+ morseForce*dt+ mechanicalForce*dt+diffusionForces);
              dx(fixedParticleNum,:) = 0;
              
 
@@ -269,6 +273,30 @@ classdef ForceManager<handle
                  edgesX,edgesY,edgesZ, particleDistance,forceType);
             end
             force(fixedParticleNum,:) = 0;
+        end
+        
+        function force = GetMechanicalPointForce(mechanicalForce,particlePosition,pointSourcePosition, forceDirection, forceMagnitude)
+                % forceMagnitude is between 0 and 1 
+                force = zeros(size(particlePosition));
+                if mechanicalForce
+                forceDir = bsxfun(@minus,particlePosition,pointSourcePosition);
+                if strcmpi(forceDirection,'in')
+                    forceDir = -forceDir;
+                end
+                % normalize the forceDirection 
+                forceDirNorm = sqrt(sum(forceDir.^2,2));
+                % find the distance between the particles and the source 
+                forceDir = bsxfun(@rdivide,forceDir,forceDirNorm);
+                distToSource = pdist2mex(particlePosition',...
+                               pointSourcePosition','euc',[],[],[]);
+               % multiply the     
+               if strcmpi(forceDirection,'in')
+                    force = 1-forceMagnitude./(1+distToSource);
+               elseif strcmpi(forceDirection,'out')
+                   force = forceMagnitude./(1+distToSource);
+               end
+                   force = bsxfun(@times,forceDir,force);
+                end
         end
         
         function edgesVec   = GetEdgesVectors(particlePosition, connectivityMap)

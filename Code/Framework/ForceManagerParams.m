@@ -22,6 +22,9 @@ classdef ForceManagerParams<handle
         morsePotentialDepth@double
         morsePotentialWidth@double
         morseForceType@char
+        mechanicalForceCenter@double % point source center
+        mechanicalForceDirection@char
+        mechanicalForceMagnitude@double
         edges@double %matrices representing the edges between connected particles
         particleDistance@double % pairwise distance between particles (unused)
     end 

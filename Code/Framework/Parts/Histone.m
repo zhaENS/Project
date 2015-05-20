@@ -69,15 +69,19 @@ classdef Histone<handle
             obj.UpdateHistonePositionOnChain(chainPos);
             fp                 = obj.params.forceParams;
             diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos,fp.diffusionConst,dt,[]);
+            
             if fp.lennardJonesForce
-            histoneDist        = ForceManager.GetParticleDistance(obj.curPos);
-            lennardJonesForce  = ForceManager.GetLenardJonesForce(fp.lennardJonesForce,obj.curPos,histoneDist,fp.LJPotentialWidth,fp.LJPotentialDepth,[]);
+             histoneDist        = ForceManager.GetParticleDistance(obj.curPos);
+             lennardJonesForce  = ForceManager.GetLenardJonesForce(fp.lennardJonesForce,obj.curPos,histoneDist,fp.LJPotentialWidth,fp.LJPotentialDepth,[]);
             else
                 lennardJonesForce = zeros(obj.params.numHistones,3);
             end
-            
-            % Advence to a tentative location
-            newTempPos         = obj.curPos+ diffusionForce+lennardJonesForce*dt;
+            % apply mechanical force from a point force 
+             mechanicalForce = ForceManager.GetMechanicalPointForce(fp.mechanicalForce,...
+                                 obj.curPos,fp.mechanicalForceCenter, fp.mechanicalForceDirection,...
+                                 fp.mechanicalForceMagnitude);
+            % Advance to a tentative location
+            newTempPos         = obj.curPos+ diffusionForce+lennardJonesForce*dt+mechanicalForce*dt;
 
             obj.prevPos        = obj.curPos;
             obj.prevPosSlope   = obj.curPosSlope;
@@ -94,7 +98,6 @@ classdef Histone<handle
                   % update current
                   obj.curPosVertex1(hIdx) = vert1; 
                   obj.curPosVertex2(hIdx) = vert2; 
-
             end
         end
         

@@ -269,21 +269,30 @@ classdef Rouse<handle
             
             %TODO: change to use the ForceManager
 %             fp = domainHandler.params(obj.params.initializeInDomain).forceParams;
+           
+            % set initial position for the first beads
+           flag = false;
+           while ~flag
+            obj.position.prev(1,:) = obj.params.b*randn(1,obj.params.dimension);
+            flag = domainHandler.InDomain(obj.position.prev(1,:),obj.params.initializeInDomain);      
+           end
+           
             if exist('domainHandler','var')
                 if isempty(obj.params.beadsOnBoundary)
-                % The bead positions
                 
-                for bIdx = 1:obj.params.numBeads                                             
-                    inDomain = domainHandler.InDomain(obj.position.prev(bIdx,:),obj.params.initializeInDomain);     
-                    tempPos  = obj.position.prev(bIdx,:);
-                   while ~inDomain 
-                       x        = obj.params.b*randn(1,obj.params.dimension);
-                       tempPos  = obj.position.prev(bIdx,:)+x;
-                       inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);
-                   end   
+                % The bead positions                
+                for bIdx = 2:obj.params.numBeads         
+                    inDomain = false;
+                    while ~inDomain  
+                     dx       = obj.params.b*randn(1,obj.params.dimension);
+                     tempPos  = obj.position.prev(bIdx-1,:)+dx;
+                     inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
+                    end                                          
                     obj.position.prev(bIdx,:)= tempPos;
-                    obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
+                    
                 end
+                obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
+                
                 
                 else % if there are beads constrained to lay on the boundary 
                     
@@ -297,7 +306,8 @@ classdef Rouse<handle
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
                     
-                end
+            end
+        
             
             else                
                 % The bead positions
@@ -317,7 +327,7 @@ classdef Rouse<handle
                                               forceParams.springConst,forceParams.bendingConst,...                                           
                                               forceParams.minParticleEqDistance,forceParams.fixedParticleNum,dt);
                                          
-            obj.position.cur = newPos;                       
+            obj.position.cur = newPos;  % update current position % the positions are updated after the domain has exerted its force on the chain                      
         end
         
         function SetPrevBeadPosition(obj,pos)% obsolete, externaly used
