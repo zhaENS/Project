@@ -11,17 +11,17 @@ simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'
 
 % create a spherical domain
 % assign a force to the domain
-sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',false,'diffusionConst',0.0001,...
+sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',false,'diffusionConst',0.001,...
                                   'mechanicalForce',true,'mechanicalForceDirection','out',...
-                                  'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.001,...
+                                  'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.01,...
                                   'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
 dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces,...
-                                   'domainWidth',0.2,'dimension',simulatorParams.simulator.dimension);
+                                   'domainWidth',0.1,'dimension',simulatorParams.simulator.dimension);
 
 
 % create a cylindrical Beam as a domain
 cylinderForces = ForceManagerParams('diffusionForce',false,'lennardJonesForce',false,'morseForce',false);
-dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',0.05,...
+dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',0.01,...
                                      'domainHeight', 10,'forceParams',cylinderForces);
 
 % % create a chain
@@ -67,7 +67,7 @@ if simulatorParams.simulator.showSimulation
     daspect(mAxes,[1 1 1])
     % create figure for the projection in the x-y plane 
     pFigure = figure;
-    pAxes   = axes('Parent',pFigure,'XLim',get(mAxes,'XLim'), 'YLim',get(mAxes,'YLim'));
+    pAxes   = axes('Parent',pFigure,'XLim',get(mAxes,'XLim'), 'YLim',get(mAxes,'YLim'),'FontSize',30);
     % projected histone 
     pHistHandle = line('XData',h.curPos(:,1),...
                      'YData',h.curPos(:,2),...
@@ -142,7 +142,7 @@ for sIdx = 1:numSteps
     end   
     % calculate the density of DNA and histones in the roi
     % find all beads in the roi     
-    chainLength = cumsum(sqrt(sum(chainPos.^2,2)));
+%     chainLength = cumsum(sqrt(sum(chainPos.^2,2)));
 %     chainLength = chainLength(end);
 %     beadsIn     = (chainPos(:,1)<=1 & chainPos(:,1)>=-1 & chainPos(:,2)>=-1 & chainPos(:,2)<=1);
 %     beadsOut    = ~beadsIn;
