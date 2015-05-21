@@ -205,8 +205,10 @@ classdef RouseSimulatorFramework<handle
             % Show simulation
             obj.simulationGraphics.ShowSimulation
             
-            % check for interaction between objects             
-%              obj.objectManager.ObjectInteraction;
+            % check for interaction between objects   
+            if obj.params.simulator.objectInteraction %TODO: move to objectinteractio parameters
+             obj.objectManager.ObjectInteraction;
+            end
              
             % Update simulation data
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...

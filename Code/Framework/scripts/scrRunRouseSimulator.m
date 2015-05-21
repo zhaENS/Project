@@ -9,37 +9,34 @@ dbstop if error
 % addpath(genpath(fullfile(curPath,'..','..','Utils')));
 % xmlStr = fileread('SimulationFrameworkParams.xml');
 % params = xml_parse(xmlStr);
-
+simulatorParams = SimulationFrameworkParams('dt',0.01,'dimension',3,'numSteps',Inf);
 
 % Initialize domains
-domainForces    = ForceManagerParams('dt',0.01,'diffusionForce',true,'diffusionConst',1);
+domainForces    = ForceManagerParams('dt',simulatorParams.simulator.dt,'diffusionForce',true,...
+                                     'diffusionConst',0.0001,'lennardJonesForce',false);
 domainParams(1) = DomainHandlerParams('domainShape','sphere','domainWidth',10,'forceParams',domainForces);
 % domainParams(2) = DomainHandlerParams('domainShape','cylinder','reflectionType','off',...
 %                                       'diffusionForce',false,'domainWidth',1,'domainHeight',50);
                                   
 % Initialize chains 
-chainParams(1) = ChainParams('numBeads',10,'initializeInDomain',1);
-% chainParams(1).fixedBeadNum = 5;
-% chainParams(1).fixedBeadsPosition = randn(1,3);
+chainForces    = ForceManagerParams('dt',simulatorParams.simulator.dt,'springForce',true,...
+                    'springConst',1,'bendingElasticityForce',false,'minParticleEqDistance',1,'bendingConst',1);
+chainParams(1) = ChainParams('numBeads',128,'initializeInDomain',1,'forceParams',chainForces,'b',1);
 
-chainParams(2) = ChainParams('numBeads',100,'initializeInDomain',1,'fixedBeadNum',[],'fixedBeadsPosition',[]);
-% chainParams(2).fixedBeadNum = [5 10 15 20 25 30];
-% chainParams(2).fixedBeadsPosition = randn(6,3);
+chainParams(2) = ChainParams('numBeads',128,'initializeInDomain',1,'fixedBeadNum',[],'fixedBeadsPosition',[],'forceParams',chainForces);
 
-chainParams(3) = ChainParams('numBeads',64,'initializeInDomain',1);
-% chainParams(3).fixedBeadNum = [1 4 12 27 32 56];
-% chainParams(3).fixedBeadsPosition = randn(6,3);
 
-chainParams(4) = ChainParams('numBeads',32','initializeInDomain',1);
-% chainParams(4).fixedBeadNum = [5 10 15 20 25 30];
-% chainParams(4).fixedBeadsPosition = randn(6,3);
+chainParams(3) = ChainParams('numBeads',128,'initializeInDomain',1,'forceParams',chainForces);
+
+
+chainParams(4) = ChainParams('numBeads',128,'initializeInDomain',1,'forceParams',chainForces);
                                      
-params = SimulationFrameworkParams;
-params.SetDomainParams(domainParams);
-params.SetChainParams(chainParams);
+% register parameters
+simulatorParams.SetDomainParams(domainParams);
+simulatorParams.SetChainParams(chainParams);
 
 % SimulatorParams
 % profile on 
-r = RouseSimulatorFramework(params);
+r = RouseSimulatorFramework(simulatorParams);
 r.Run
 % profile viewer

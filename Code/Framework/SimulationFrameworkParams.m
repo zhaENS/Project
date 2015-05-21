@@ -33,7 +33,7 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.notifyCycleLength    = 32;    % number of simulation cycles after which an email is sent 
             obj.simulator.recipeFileName       = 'debugRecipe';
             obj.simulator.recipesFolder        = ''; 
-            
+            obj.simulator.objectInteraction    = true; %TODO: move to objectInteraction class parameters
             % Control domain forces
             obj.simulator.diffusionConst       = 0.1; %TODO: should be determined for each domain seperately
 %             obj.simulator.LJPotentialWidth     = 0.3;

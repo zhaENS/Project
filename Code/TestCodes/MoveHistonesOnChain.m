@@ -2,18 +2,18 @@ function MoveHistonesOnChain
 % This test function moves histones on a Rouse chain
 close all
 % profile on
-numSteps = 1000;
+% numSteps = 1000;
 %
 % % create chain and domain and register them in the ObjectManager
 
 % Initialize simulator framework parameters
-simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'dt',0.01);
+simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'dt',0.01,'objectInteraction',false);
 
 % create a spherical domain
 % assign a force to the domain
-sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',0.0001,...
+sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',0.0005,...
                                   'mechanicalForce',true,'mechanicalForceDirection','out',...
-                                  'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.05,...
+                                  'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.1,...
                                   'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
 dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces,...
                                    'domainWidth',0.8,'dimension',simulatorParams.simulator.dimension);
@@ -43,7 +43,7 @@ initialChainPosition     = initialChainPosition{1};
 
 % Initialize histones with the chain position
 histoneForce = ForceManagerParams('dt',simulatorParams.simulator.dt,'diffusionConst',0.01,'mechanicalForce',true,...
-                       'mechanicalForceDirection','out','mechanicalForceMagnitude',0.05,'mechanicalForceCenter',[0 0 0],...
+                       'mechanicalForceDirection','out','mechanicalForceMagnitude',0.1,'mechanicalForceCenter',[0 0 0],...
                        'lennardJonesForce',false,'diffusionForce',false,'LJPotentialWidth',0.01,'LJPotentialDepth',0.01);
            
 histoneParams = HistoneParams('numHistones',300,'forceParams',histoneForce);
@@ -154,7 +154,11 @@ while r.runSimulation
     % calculate the histoneDensity        
     histoneDensity =  sum((h.curPos(:,1)<=(rectX+rectWidth) & h.curPos(:,1)>=rectX &...
                            h.curPos(:,2)<=(rectY+rectHeight) & h.curPos(:,2)>=rectY))/h.params.numHistones;
-    line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',histoneDensity,'Marker','.','Parent',dAxes)
+    line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',histoneDensity,'Marker','o','Parent',dAxes)
+    dnaDensity    = sum((chainPos(:,1)<=(rectX+rectWidth) & chainPos(:,1)>=rectX &...
+                          chainPos(:,2)<=(rectY+rectHeight) & chainPos(:,2)>=rectY))/cp.numBeads;
+    line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',dnaDensity,'Marker','o','Parent',dAxes,'markerFaceColor','g')
+                  
 end
 % profile viewer
 end

@@ -35,7 +35,7 @@ classdef ForceManagerParams<handle
                 % parse name-value pair input parameters
                 if ~isempty(varargin)
                     v = varargin;
-                    if mod(numel(varargin{:}),2)~=0
+                    if mod(numel(varargin),2)~=0
                         error('name-value pair argument must be inserted')
                     end
                     

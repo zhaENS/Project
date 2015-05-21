@@ -139,7 +139,7 @@ classdef SimulationFrameworkGraphics<handle
                 'Visible','on');
             
             
-            set( obj.handles.graphical.domain(dIdx).mesh,'FaceColor',[0.7 0.2, 0.4],'FaceAlpha',0.6);% temp
+            set( obj.handles.graphical.domain(dIdx).mesh,'FaceColor',[0.7 0.2, 0.4],'FaceAlpha',0.3);% temp
             
             obj.handles.graphical.domainLight = l;
             set(obj.handles.graphical.mainAxes,'NextPlot','ReplaceChildren')
