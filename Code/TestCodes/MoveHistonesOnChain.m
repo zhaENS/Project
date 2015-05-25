@@ -12,7 +12,7 @@ simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'
 % create a spherical domain
 % assign a force to the domain
 sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',0.0005,...
-                                  'mechanicalForce',true,'mechanicalForceDirection','out',...
+                                  'mechanicalForce',false,'mechanicalForceDirection','out',...
                                   'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.1,...
                                   'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
 dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces,...
@@ -27,7 +27,7 @@ dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','
 % % create a chain
 chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,'springForce',true,...
                     'bendingElasticityForce',false,'bendingConst',1,'springConst',1,'minParticleEqDistance',0);
-cp          = ChainParams('numBeads',500,'initializeInDomain',1,'forceParams',chainForces,'b',1);
+cp          = ChainParams('numBeads',200,'initializeInDomain',1,'forceParams',chainForces,'b',1);
 % cp(2)     = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
 
 % register the object parameters in the simulator framework
@@ -46,7 +46,7 @@ histoneForce = ForceManagerParams('dt',simulatorParams.simulator.dt,'diffusionCo
                        'mechanicalForceDirection','out','mechanicalForceMagnitude',0.1,'mechanicalForceCenter',[0 0 0],...
                        'lennardJonesForce',false,'diffusionForce',false,'LJPotentialWidth',0.01,'LJPotentialDepth',0.01);
            
-histoneParams = HistoneParams('numHistones',300,'forceParams',histoneForce);
+histoneParams = HistoneParams('numHistones',100,'forceParams',histoneForce);
 h             = Histone(histoneParams);
 
 h.Initialize(initialChainPosition);
@@ -129,7 +129,7 @@ while r.runSimulation
     % Apply bending elasticity forces for beads inside the beam
     inBeam = r.handles.classes.domain.InDomain(chainPos,2);
     if any(inBeam)
-        bendingElasticityConst = 1/simulatorParams.simulator.dt;
+        bendingElasticityConst = 2/simulatorParams.simulator.dt;
         connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
         bForce                 = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
         
