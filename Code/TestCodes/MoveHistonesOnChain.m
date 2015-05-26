@@ -11,23 +11,23 @@ simulatorParams = SimulationFrameworkParams('showSimulation',true,'numSteps',1,'
 
 % create a spherical domain
 % assign a force to the domain
-sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',0.0005,...
-                                  'mechanicalForce',false,'mechanicalForceDirection','out',...
-                                  'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.1,...
-                                  'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
+sphereForces = ForceManagerParams('lennardJonesForce',false,'diffusionForce',true,'diffusionConst',1,...
+    'mechanicalForce',false,'mechanicalForceDirection','out',...
+    'mechanicalForceCenter',[0 0 0],'mechanicalForceMagnitude',0.1,...
+    'LJPotentialWidth',0.1,'LJPotentialDepth',0.1,'dt',simulatorParams.simulator.dt);
 dp(1)        = DomainHandlerParams('domainShape','sphere','forceParams',sphereForces,...
-                                   'domainWidth',0.8,'dimension',simulatorParams.simulator.dimension);
+    'domainWidth',10,'dimension',simulatorParams.simulator.dimension);
 
 
 % create a cylindrical Beam as a domain
 cylinderForces = ForceManagerParams('diffusionForce',false,'lennardJonesForce',false,'morseForce',false);
-dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',0.1,...
-                                     'domainHeight', 10,'forceParams',cylinderForces);
+dp(2)          = DomainHandlerParams('domainShape','cylinder','reflectionType','off','domainWidth',0.5,...
+    'domainHeight', 10,'forceParams',cylinderForces);
 
 % % create a chain
 chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,'springForce',true,...
-                    'bendingElasticityForce',false,'bendingConst',1,'springConst',1,'minParticleEqDistance',0);
-cp          = ChainParams('numBeads',200,'initializeInDomain',1,'forceParams',chainForces,'b',1);
+    'bendingElasticityForce',false,'bendingConst',1,'springConst',1,'minParticleEqDistance',0);
+cp          = ChainParams('numBeads',224,'initializeInDomain',1,'forceParams',chainForces,'b',sqrt(3));
 % cp(2)     = ChainParams('numBeads',100,'initializeInDomain',1,'forceParams',chainForces);
 
 % register the object parameters in the simulator framework
@@ -42,10 +42,10 @@ r = RouseSimulatorFramework(simulatorParams);
 initialChainPosition     = initialChainPosition{1};
 
 % Initialize histones with the chain position
-histoneForce = ForceManagerParams('dt',simulatorParams.simulator.dt,'diffusionConst',0.01,'mechanicalForce',true,...
-                       'mechanicalForceDirection','out','mechanicalForceMagnitude',0.1,'mechanicalForceCenter',[0 0 0],...
-                       'lennardJonesForce',false,'diffusionForce',false,'LJPotentialWidth',0.01,'LJPotentialDepth',0.01);
-           
+histoneForce = ForceManagerParams('dt',simulatorParams.simulator.dt,'diffusionConst',0.01,'mechanicalForce',false,...
+    'mechanicalForceDirection','out','mechanicalForceMagnitude',0.1,'mechanicalForceCenter',[0 0 0],...
+    'lennardJonesForce',false,'diffusionForce',false,'LJPotentialWidth',0.01,'LJPotentialDepth',0.01);
+
 histoneParams = HistoneParams('numHistones',100,'forceParams',histoneForce);
 h             = Histone(histoneParams);
 
@@ -54,74 +54,74 @@ h.Initialize(initialChainPosition);
 % get axes
 if simulatorParams.simulator.showSimulation
     mAxes = r.simulationGraphics.handles.graphical.mainAxes;
-   
+    
     % initialize histone graphics %TODO: incorporate histone graphics in the simulationGraphics class
     histHandle = line('XData',h.curPos(:,1),...
-                      'YData',h.curPos(:,2),...
-                     'ZData',h.curPos(:,3),...
-                     'marker','o',...
-                     'MarkerFaceColor','y',...
-                     'MarkerSize',10,...
-                     'Parent',mAxes,...
-                     'LineStyle','none');
+        'YData',h.curPos(:,2),...
+        'ZData',h.curPos(:,3),...
+        'marker','o',...
+        'MarkerFaceColor','y',...
+        'MarkerSize',10,...
+        'Parent',mAxes,...
+        'LineStyle','none');
     daspect(mAxes,[1 1 1])
-    % create figure for the projection in the x-y plane 
+    % create figure for the projection in the x-y plane
     pFigure = figure;
     pAxes   = axes('Parent',pFigure,'XLim',get(mAxes,'XLim'), 'YLim',get(mAxes,'YLim'),'FontSize',30);
-    % projected histone 
+    % projected histone
     pHistHandle = line('XData',h.curPos(:,1),...
-                     'YData',h.curPos(:,2),...
-                     'Marker','o',...
-                     'MarkerFaceColor','y',...
-                     'MarkerSize',10,...
-                     'Parent',pAxes,...
-                     'LineStyle','none');
-   % projected Polymer 
-   pPolyHandle = line('XData',initialChainPosition(:,1),...
-                      'YDAta',initialChainPosition(:,2),...
-                      'Marker','o',...
-                      'MarkerFaceColor','none',...
-                      'MarkerEdgeColor','b',...
-                      'markerSize',7,...
-                      'Parent',pAxes,...
-                      'LineStyle','-');
-  
-   % create density axes 
-   dFig = figure;
-   dAxes = axes('Parent',dFig,'NextPlot','add');
-   xlabel(dAxes,'Time [sec]','FontSize',40);
-   ylabel(dAxes,'Density','FontSize',40)
-    % insert roi rectangle 
-   rectX      = -0.15; % buttom left corner
-   rectY      = -0.15; % buttom left corner
-   rectWidth  = 0.3;
-   rectHeight = 0.3;
-   % insert the projection to the 3d axes
+        'YData',h.curPos(:,2),...
+        'Marker','o',...
+        'MarkerFaceColor','y',...
+        'MarkerSize',10,...
+        'Parent',pAxes,...
+        'LineStyle','none');
+    % projected Polymer
+    pPolyHandle = line('XData',initialChainPosition(:,1),...
+        'YDAta',initialChainPosition(:,2),...
+        'Marker','o',...
+        'MarkerFaceColor','none',...
+        'MarkerEdgeColor','b',...
+        'markerSize',7,...
+        'Parent',pAxes,...
+        'LineStyle','-');
+    
+    % create density axes
+    dFig = figure;
+    dAxes = axes('Parent',dFig,'NextPlot','add');
+    xlabel(dAxes,'Time [sec]','FontSize',40);
+    ylabel(dAxes,'Density','FontSize',40)
+    % insert roi rectangle
+    rectWidth  = 2;
+    rectHeight = 2;
+    rectX      = -rectWidth/2; % buttom left corner
+    rectY      = -rectHeight/2; % buttom left corner
+
+    % insert the projection to the 3d axes
     patch([rectX, (rectX+rectWidth), (rectX+rectWidth), rectX],[rectY, rectY, (rectY+rectHeight), (rectY+rectHeight)],...
         'r', 'Parent',mAxes, 'FaceAlpha',0.5);
-   % insert the projection to the projection axes
+    % insert the projection to the projection axes
     patch([rectX, (rectX+rectWidth), (rectX+rectWidth), rectX],[rectY, rectY, (rectY+rectHeight), (rectY+rectHeight)],...
-        'r', 'Parent',pAxes, 'FaceAlpha',0.5);     
+        'r', 'Parent',pAxes, 'FaceAlpha',0.5);
 end
-% calculate initial histone density 
-initialHistDensity = sum((h.curPos(:,1)<=(rectX+rectWidth) & h.curPos(:,1)>=rectX &...
-                           h.curPos(:,2)<=(rectY+rectHeight) & h.curPos(:,2)>=rectY))/h.params.numHistones;
+
 r.Run;% run initial simulator step
 r.runSimulation = true;
+
 while r.runSimulation
-    % Advance one simulation step
+    % Advance one simulation step1
     r.Step;
     [~,chainPos] = r.objectManager.GetMembersPosition(1);
     chainPos     = chainPos{1};
     % move the histones
-    h.Step(chainPos,simulatorParams.simulator.dt);% update current position 
-       
+    h.Step(chainPos,simulatorParams.simulator.dt);% update current position
+    
     if simulatorParams.simulator.showSimulation
         % update histone graphics
-        set(histHandle,'XData',h.curPos(:,1),'YData',h.curPos(:,2),'ZData',h.curPos(:,3));        
+        set(histHandle,'XData',h.curPos(:,1),'YData',h.curPos(:,2),'ZData',h.curPos(:,3));
         % plot projected histone
         set(pHistHandle,'XData',h.curPos(:,1),'YData',h.curPos(:,2));
-        % plot projected polymer 
+        % plot projected polymer
         set(pPolyHandle,'XData',chainPos(:,1),'YData', chainPos(:,2))
         drawnow
     end
@@ -129,7 +129,7 @@ while r.runSimulation
     % Apply bending elasticity forces for beads inside the beam
     inBeam = r.handles.classes.domain.InDomain(chainPos,2);
     if any(inBeam)
-        bendingElasticityConst = 2/simulatorParams.simulator.dt;
+        bendingElasticityConst = 3/simulatorParams.simulator.dt;
         connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
         bForce                 = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
         
@@ -138,27 +138,21 @@ while r.runSimulation
         
         % update the position of the chain
         chainPos(inBeam,:) = chainPos(inBeam,:) + bForce(inBeam,:)*simulatorParams.simulator.dt;
-
+        
         % assign the new position to the chain
         r.objectManager.DealCurrentPosition(1,chainPos);
-
-    end   
-    % calculate the density of DNA and histones in the roi
-    % find all beads in the roi     
-%     chainLength = cumsum(sqrt(sum(chainPos.^2,2)));
-%     chainLength = chainLength(end);
-%     beadsIn     = (chainPos(:,1)<=1 & chainPos(:,1)>=-1 & chainPos(:,2)>=-1 & chainPos(:,2)<=1);
-%     beadsOut    = ~beadsIn;
+        
+    end
     
-    
-    % calculate the histoneDensity        
-    histoneDensity =  sum((h.curPos(:,1)<=(rectX+rectWidth) & h.curPos(:,1)>=rectX &...
-                           h.curPos(:,2)<=(rectY+rectHeight) & h.curPos(:,2)>=rectY))/h.params.numHistones;
-    line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',histoneDensity,'Marker','o','Parent',dAxes)
-    dnaDensity    = sum((chainPos(:,1)<=(rectX+rectWidth) & chainPos(:,1)>=rectX &...
-                          chainPos(:,2)<=(rectY+rectHeight) & chainPos(:,2)>=rectY))/cp.numBeads;
-    line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',dnaDensity,'Marker','o','Parent',dAxes,'markerFaceColor','g')
-                  
+    if simulatorParams.simulator.showSimulation
+        % calculate the histoneDensity
+        histoneDensity =  sum((h.curPos(:,1)<=(rectX+rectWidth) & h.curPos(:,1)>=rectX &...
+            h.curPos(:,2)<=(rectY+rectHeight) & h.curPos(:,2)>=rectY))/h.params.numHistones;
+        line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',histoneDensity,'Marker','o','Parent',dAxes)
+        dnaDensity    = sum((chainPos(:,1)<=(rectX+rectWidth) & chainPos(:,1)>=rectX &...
+            chainPos(:,2)<=(rectY+rectHeight) & chainPos(:,2)>=rectY))/cp.numBeads;
+        line('XData',r.simulationData.step*simulatorParams.simulator.dt,'YData',dnaDensity,'Marker','o','Parent',dAxes,'markerFaceColor','g')
+    end
 end
 % profile viewer
 end
