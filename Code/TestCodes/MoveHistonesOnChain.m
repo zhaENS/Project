@@ -2,6 +2,8 @@ function MoveHistonesOnChain
 % This test function moves histones on a Rouse chain
 close all
 % profile on
+close all
+close all
 % numSteps = 1000;
 %
 % % create chain and domain and register them in the ObjectManager
@@ -129,7 +131,7 @@ while r.runSimulation
     % Apply bending elasticity forces for beads inside the beam
     inBeam = r.handles.classes.domain.InDomain(chainPos,2);
     if any(inBeam)
-        bendingElasticityConst = 3/simulatorParams.simulator.dt;
+        bendingElasticityConst = 1/simulatorParams.simulator.dt;
         connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
         bForce                 = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
         

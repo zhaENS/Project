@@ -139,6 +139,74 @@ for small $\epsilon$ of choice, and $J$ is the group of all indices $j$ such tha
 c(d) = \sum_{i=1}^N \left(\frac{d_i^{-1.5}}{\sum_{i=1}^n d_i^{-1.5}}-e_i\right)^2
 \end{equation}
 
+\subsection{using delta functions}
+For the sake of simplicity, we will look at the encounter probability from the view point of the first bead in a chain of $N$ beads.
+To take into account the structure of the chain we take the probability density function of the vector between any two beads 
+\begin{equation*}
+Pr(R_1-R_j =r)=\left(\frac{3}{2\pi b^2 |1-j|}\right)^{3/2}\exp\left(-\frac{3r^2}{2|1-j|b^2}\right)
+\end{equation*} 
+and for the encounter $R_1=R_j$ we get 
+\begin{equation*}
+Pr(R_1=R_j)=\left(\frac{3}{2\pi b^2 |1-j|}\right)^{3/2}
+\end{equation*}
+Now assume that bead 1 and $j$ are connected by harmonic spring. Then, we make the additional changes to the encounter probability by introducing the random variable $\delta_{1j}$, which indicates whether bead 1 and $j$ are connected. 
+The probability of encounter then becomes 
+\begin{equation*}
+Pr(R_1=R_j)=(1-\delta_{1j})\left(\frac{3}{2\pi b^2 |1-j|}\right)^{3/2}+\delta_{1j}\left(\frac{3}{2\pi b^2}\right)^{3/2}
+\end{equation*}
+or 
+
+\begin{equation*}
+Pr(R_1=R_j)=\left(\frac{3}{2\pi b^2}\right)^{3/2}\left(\frac{1-\delta_{1j}\left(1-|1-j|^{3/2}\right)}{|1-j|^{3/2}}\right)
+\end{equation*}
+
+Given a signal, $e_1(d)$ of HiC encounter probability for bead 1 with beads $d=2,..,N$, we want to estimate the random vector 
+\begin{equation*}
+\Delta = [\delta_{13},\delta_{14},...,\delta_{1N} ]
+\end{equation*}
+For this end, we calculate the maximum likelihood estimator for $\delta$
+
+[Unfinished]
+
+\subsection{Using structural distribution function}
+We first make the assumption that the encounter probability of beads within a loop is well approximated with that of a chain. From the point of view of bead 1. The probability to encounter bead $j$ is given by a superposition of all distances possible between the two beads times the probability of their encounter in the context of a chain. Let the distance between bead 1 and $j$ be $\delta_{1j}$. Then,
+\begin{equation*}
+Pr(R_1-R_j=0)=Pr(\delta_{1j}=1)f(1)+Pr(\delta_{1j}=2)f(2)+...+Pr(\delta_{1j}=j-1)f(j-1)
+\end{equation*}
+with 
+\begin{equation*}
+f(d) = \left(\frac{3}{2\pi b^2 d}\right)^{3/2}
+\end{equation*}
+which can be written as $Pr(R_1-R_j=0)=\left<p,f\right> >0$, which indicates that the vectors $p$ and $f$ are independent. Note that we sum up to the maximal possible distance along the chain between the beads, i.e $j-1$.
+
+Treating $\delta$ as a continuous variable, now the maximal distance along the chain becomes $j$. We set $Pr(R_1-R_j=0)=P_{1j}$, thus
+\begin{equation*}
+Pr_{1j}= \int_{0}^{j} p(\delta)f(\delta)d\delta= \left(\frac{3}{2\pi b^2}\right)^{3/2}\int_0^{j} \frac{p(\delta)}{\delta^{3/2}}d\delta
+\end{equation*}
+Using integration by parts we get 
+\begin{equation}
+Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[ -2\frac{p(j)}{\sqrt{j}}+2\int_0^{j}\frac{p^{(1)}(\delta)}{\sqrt{\delta}}d\delta  \right]
+\end{equation}
+where here we assume that $\lim_{\delta\rightarrow 0}\frac{p(\delta)}{\delta}=0$, and $p^{(k)}$ signifies the $k^{th}$ derivative of $p(\delta)$
+
+Continuing with the integration by parts we get 
+\begin{equation*}
+\alpha\left[ -2\frac{p(j)}{\sqrt{j}}+2[2p^{(1)}(j)\sqrt{j}-2\int_0^{j}\frac{p^{(2)}(\delta)}{\sqrt{\delta}}d\delta]  \right]
+\end{equation*}
+And in the limit we have the formula:
+\begin{equation*}
+Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\sum_{k=1}^\infty (-1)^k p^{(k-1)}(j)\left(\sqrt{j}\right)^{2k-3} \frac{2^k}{\prod_{i=1}^k (2i-1)}
+\end{equation*} 
+
+We can now state some assumptions regarding the function $p(\delta)$.
+\begin{enumerate}
+	\item $p(\delta)$ is infinitely differentiable
+	\item $p(\delta)>0 \quad  \forall \delta >0$
+\end{enumerate}
+
+
+
+
 \bibliographystyle{plain}
 \bibliography{3DStructureFromEncounterProbabilityBibliography} % the bibliography.bib file 
 \end{document}

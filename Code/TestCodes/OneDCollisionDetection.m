@@ -10,7 +10,7 @@ chain    = cumsum(randn(numEdges,3));
 edgeLength = sqrt(sum(diff(chain,1).^2,2));
 p          = [0; cumsum(edgeLength)]; 
 
-% devide by the total length 
+% divide by the total length 
 p = p./p(end);
 
 % choose random position on the chain 
