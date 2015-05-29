@@ -13,7 +13,7 @@
 \maketitle
 
 \section{Using inverted probabilities assuming a Rouse chain}
-The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the distance between beads on the chain. The main observation here is that if we estimate the nearest neighbors encounter probability for each bead, we can construct the whole connectivity map of the polymer. It will later be left to show that the non-nearest bneighbor encounter probability will serve as correction factors.
+The procedure relies on the nearest neighbor connectivity. As with the previous method, we assume a Rouse polymer encounter probability formula, which drops with the distance between beads on the chain. The main observation here is that if we estimate the nearest neighbors encounter probability for each bead, we can construct the whole connectivity map of the polymer. It will later be left to show that the non-nearest neighbor encounter probability will serve as correction factors. (see also \ref{subsection_usingStructuralDistributionFunction})
 
 \subsection{Smoothing the encounter signal}
 To locate prominent features of the signal, we have to reduce noise accompanying the experimental data. There are several ways to smooth the encounter probability data. We list few plausible methods.
@@ -168,44 +168,71 @@ For this end, we calculate the maximum likelihood estimator for $\delta$
 
 [Unfinished]
 
-\subsection{Using structural distribution function}
-We first make the assumption that the encounter probability of beads within a loop is well approximated with that of a chain. From the point of view of bead 1. The probability to encounter bead $j$ is given by a superposition of all distances possible between the two beads times the probability of their encounter in the context of a chain. Let the distance between bead 1 and $j$ be $\delta_{1j}$. Then,
+\subsection{Using structural distribution function}\label{subsection_usingStructuralDistributionFunction}
+We first make the assumption that the encounter probability of beads within a loop is well approximated with that of a chain. From the point of view of bead 1. The probability to encounter bead $j$ is given by a superposition of all distances possible between the two beads times the probability of their encounter in the context of a chain. Let the distance along the chain between bead 1 and $j$ be $\beta_{1j}$. Then,
 \begin{equation*}
-Pr(R_1-R_j=0)=Pr(\delta_{1j}=1)f(1)+Pr(\delta_{1j}=2)f(2)+...+Pr(\delta_{1j}=j-1)f(j-1)
+Pr(R_1-R_j=0)=Pr(\beta_{1j}=1)f(1)+Pr(\beta_{1j}=2)f(2)+...+Pr(\beta_{1j}=j-1)f(j-1)
 \end{equation*}
-with 
+with the encounter probability function 
 \begin{equation*}
 f(d) = \left(\frac{3}{2\pi b^2 d}\right)^{3/2}
 \end{equation*}
-which can be written as $Pr(R_1-R_j=0)=\left<p,f\right> >0$, and indicates that the vectors $p$ and $f$ are independent, as expected. Note that we sum up to the maximal possible distance along the chain between the beads, i.e $j-1$.
+which can be written as $Pr(R_1-R_j=0)=\left<p_{1j},f\right> >0$, and indicates that the vectors $p$ and $f$ are independent, as expected. Note, that we sum up to the maximal possible distance along the chain between the beads, i.e $j-1$.
+The properties of the function $p_{ij}$ will be discussed later. For now it is important to note that $p_{ij}$ signifies the probability of finding the bead $i$ and $j$ at a distance $\beta$ apart, where the distance is the taken along the graph, with no consideration to edge length. The function $p_{ij}$  holds the structural information for the chain, including all possible looping. Since we are concerned with the encounter of the first bead with all the rest, the function $p_{1j}$ will be written as $p$. 
 
-Treating $\delta$ as a continuous variable, we set the first bead to be $R_0$, and the maximal distance along the chain becomes $j$. We set $Pr(R_0-R_j=0)=P_{0j}$, thus
+If we treat $\beta$ as a continuous variable and set the first bead to be $R_0$, the maximal distance along the chain will becomes $j$. We further set $Pr(R_0-R_j=0)=Pr_{0j}$ 
 \begin{equation*}
-Pr_{0j}= \int_{0}^{j} p(\delta)f(\delta)d\delta= \left(\frac{3}{2\pi b^2}\right)^{3/2}\int_0^{j} \frac{p(\delta)}{\delta^{3/2}}d\delta
+Pr_{0j}= \int_{0}^{j} p(\beta)f(\beta)d\beta= \left(\frac{3}{2\pi b^2}\right)^{3/2}\int_0^{j} \frac{p(\beta)}{\beta^{3/2}}d\beta
 \end{equation*}
-Using integration by parts we get 
+By integrating by parts we get 
 \begin{equation}
-Pr_{0j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -2\frac{p(j)}{\sqrt{j}}+2\int_0^{j}\frac{p^{(1)}(\delta)}{\sqrt{\delta}}d\delta  \right]
+Pr_{0j}=2\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -\frac{p(j)}{\sqrt{j}}+\int_0^{j}\frac{p^{(1)}(\beta)}{\sqrt{\beta}}d\beta  \right]
 \end{equation}
-where here we assume that $\lim_{\delta\rightarrow 0}\frac{p(\delta)}{\delta}=1$, and $p^{(k)}$ signifies the $k^{th}$ derivative of $p(\delta)$
+here we assume that 
+\begin{equation*}
+\begin{cases}
+p_{oj}(0)\rightarrow 1; & j\rightarrow +0\\
+\frac{p_{oj}(\beta)}{\beta}\rightarrow 1; & \beta \rightarrow 0 
+\end{cases}
+\end{equation*}
+ and $p^{(k)}$ signifies the $k^{th}$ derivative of $p(\delta)$
 This is a reasonable assumption, since the probability that two adjacent beads are connected as the distance decreases should be 1. 
 
 Continuing with the integration by parts we get 
 \begin{equation*}
-\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -2\frac{p(j)}{\sqrt{j}}+2[2p^{(1)}(j)\sqrt{j}-2\int_0^{j}\frac{p^{(2)}(\delta)}{\sqrt{\delta}}d\delta]  \right]
+2\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -\frac{p(j)}{\sqrt{j}}+2[p^{(1)}(j)\sqrt{j}-\int_0^{j}\frac{p^{(2)}(\beta)}{\sqrt{\beta}}d\beta]\right]
 \end{equation*}
 And in the limit we have the formula:
 \begin{equation*}
-Pr_{0j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\sum_{k=1}^\infty (-1)^k p^{(k-1)}(j)\left(\sqrt{j}\right)^{2k-3} \frac{2^k}{\prod_{i=1}^k (2i-1)}
+Pr_{0j}=2\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[ 1+\sum_{k=1}^\infty (-1)^k p^{(k-1)}(j)\left(\sqrt{j}\right)^{2k-3} \frac{2^k}{\prod_{i=1}^k (2i-1)}\right]
 \end{equation*} 
 
 We can now state some assumptions regarding the function $p(\delta)$.
 \begin{enumerate}
 	\item $p(\delta)$ is infinitely differentiable
 	\item $p(\delta)>0 \quad  \forall \delta >0$
+	\item $p_{oj}(0)\rightarrow \delta;  j\rightarrow +0$
+	\item $\frac{p_{oj}(\beta)}{\beta}\rightarrow 0; \beta \rightarrow 0$
 \end{enumerate}
 
 
+[NOTE, need to verify that the Gaussian fulfill these requirements]
+
+Given that we observe $e_j$, the encounter probability between bead 1 and $j$, we want to estimate the probability that bead 1 and $j$ are neighbors.
+We equate the encounter probability at 1 with this value 
+\begin{equation*}
+g_j = Pr_{1j}=2\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[ 1+\sum_{k=1}^\infty (-1)^k p^{(k-1)}(j)\left(\sqrt{j}\right)^{2k-3} \frac{2^k}{\prod_{i=1}^k (2i-1)}\right] 
+\end{equation*}
+Truncating the series of $p$ up to the first term 
+\begin{equation*}
+g_j = 2\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -\frac{p(j)}{\sqrt{j}}\right]
+\end{equation*}
+In general, we can consider the parameter $j$ as a variable and obtain an equation for $p$ 
+\begin{equation*}
+p(j)= \left(1-\frac{g_j}{2(3/2\pi b^2)^{1.5}}\right)\sqrt{j}
+\end{equation*}
+
+We can see from this result that the probability that if $g_j$ is the neighbor of bead 1. we get $p(1)=0.5$
 
 
 \bibliographystyle{plain}
