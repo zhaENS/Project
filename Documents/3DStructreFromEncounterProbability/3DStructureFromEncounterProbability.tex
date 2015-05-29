@@ -177,25 +177,26 @@ with
 \begin{equation*}
 f(d) = \left(\frac{3}{2\pi b^2 d}\right)^{3/2}
 \end{equation*}
-which can be written as $Pr(R_1-R_j=0)=\left<p,f\right> >0$, which indicates that the vectors $p$ and $f$ are independent. Note that we sum up to the maximal possible distance along the chain between the beads, i.e $j-1$.
+which can be written as $Pr(R_1-R_j=0)=\left<p,f\right> >0$, and indicates that the vectors $p$ and $f$ are independent, as expected. Note that we sum up to the maximal possible distance along the chain between the beads, i.e $j-1$.
 
-Treating $\delta$ as a continuous variable, now the maximal distance along the chain becomes $j$. We set $Pr(R_1-R_j=0)=P_{1j}$, thus
+Treating $\delta$ as a continuous variable, we set the first bead to be $R_0$, and the maximal distance along the chain becomes $j$. We set $Pr(R_0-R_j=0)=P_{0j}$, thus
 \begin{equation*}
-Pr_{1j}= \int_{0}^{j} p(\delta)f(\delta)d\delta= \left(\frac{3}{2\pi b^2}\right)^{3/2}\int_0^{j} \frac{p(\delta)}{\delta^{3/2}}d\delta
+Pr_{0j}= \int_{0}^{j} p(\delta)f(\delta)d\delta= \left(\frac{3}{2\pi b^2}\right)^{3/2}\int_0^{j} \frac{p(\delta)}{\delta^{3/2}}d\delta
 \end{equation*}
 Using integration by parts we get 
 \begin{equation}
-Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[ -2\frac{p(j)}{\sqrt{j}}+2\int_0^{j}\frac{p^{(1)}(\delta)}{\sqrt{\delta}}d\delta  \right]
+Pr_{0j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -2\frac{p(j)}{\sqrt{j}}+2\int_0^{j}\frac{p^{(1)}(\delta)}{\sqrt{\delta}}d\delta  \right]
 \end{equation}
-where here we assume that $\lim_{\delta\rightarrow 0}\frac{p(\delta)}{\delta}=0$, and $p^{(k)}$ signifies the $k^{th}$ derivative of $p(\delta)$
+where here we assume that $\lim_{\delta\rightarrow 0}\frac{p(\delta)}{\delta}=1$, and $p^{(k)}$ signifies the $k^{th}$ derivative of $p(\delta)$
+This is a reasonable assumption, since the probability that two adjacent beads are connected as the distance decreases should be 1. 
 
 Continuing with the integration by parts we get 
 \begin{equation*}
-\alpha\left[ -2\frac{p(j)}{\sqrt{j}}+2[2p^{(1)}(j)\sqrt{j}-2\int_0^{j}\frac{p^{(2)}(\delta)}{\sqrt{\delta}}d\delta]  \right]
+\left(\frac{3}{2\pi b^2}\right)^{3/2}\left[1 -2\frac{p(j)}{\sqrt{j}}+2[2p^{(1)}(j)\sqrt{j}-2\int_0^{j}\frac{p^{(2)}(\delta)}{\sqrt{\delta}}d\delta]  \right]
 \end{equation*}
 And in the limit we have the formula:
 \begin{equation*}
-Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\sum_{k=1}^\infty (-1)^k p^{(k-1)}(j)\left(\sqrt{j}\right)^{2k-3} \frac{2^k}{\prod_{i=1}^k (2i-1)}
+Pr_{0j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\sum_{k=1}^\infty (-1)^k p^{(k-1)}(j)\left(\sqrt{j}\right)^{2k-3} \frac{2^k}{\prod_{i=1}^k (2i-1)}
 \end{equation*} 
 
 We can now state some assumptions regarding the function $p(\delta)$.
