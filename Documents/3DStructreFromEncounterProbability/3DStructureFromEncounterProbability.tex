@@ -180,6 +180,28 @@ f(d) = \left(\frac{3}{2\pi b^2 d}\right)^{3/2}
 which can be written as $Pr(R_1-R_j=0)=\left<p_{1j},f\right> >0$, and indicates that the vectors $p$ and $f$ are independent, as expected. Note, that we sum up to the maximal possible distance along the chain between the beads, i.e $j-1$.
 The properties of the function $p_{ij}$ will be discussed later. For now it is important to note that $p_{ij}$ signifies the probability of finding the bead $i$ and $j$ at a distance $\beta$ apart, where the distance is the taken along the graph, with no consideration to edge length. The function $p_{ij}$  holds the structural information for the chain, including all possible looping. Since we are concerned with the encounter of the first bead with all the rest, the function $p_{1j}$ will be written as $p$. 
 
+\begin{equation*}
+Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\sum_{\beta=1}^{j-1}\frac{p(\beta)}{\beta^{2/3}}
+\end{equation*}
+Developing $p(\beta)$ as a Taylor series around $\beta=1$
+\begin{equation*}
+p_{1j}(x)=\sum_{k=0}^{\infty}\frac{p_{1j}^{(k)}(1)(x-1)^k}{k!}\approx p_{1j}(1)+\frac{dp_{1j}(1)}{d\beta}(x-1)
+\end{equation*}
+and plugging it into the sum
+\begin{equation*}
+Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}\sum_{\beta=1}^{j-1}\frac{p_{1j}(1)+\frac{dp_{1j}(1)}{d\beta} (\beta-1)}{\beta^{3/2}}
+\end{equation*}
+
+To calculate the probability that bead 1 and $j$ are nearest neighbors, we set $\beta=1$ to get
+\begin{equation*}
+Pr_{1j}=\left(\frac{3}{2\pi b^2}\right)^{3/2}p(1)\sum_{\beta=1}^{j-1}\frac{1}{\beta^{3/2}}
+\end{equation*}
+Now, assuming we observe in the HiC data the encounter probability $e_{1j}$ between bead 1 and $j$. We equate $e_{1j}$ with $Pr_{1j}$ to get 
+\begin{equation*}
+p_{1j}(1)=\frac{e_{1j}\left(\frac{2\pi b^2}{3}\right)^{3/2}}{\sum_{\beta=1}^{j-1}\beta^{-3/2}}
+\end{equation*}
+for $j=2,...N$. We can see that for $j=2$ in a linear Gaussian chain $P_{12}=1$, as expected. This equation gives us the scaling from the encounter probability seen in the data to the probability of the two beads being neighbors along the chain, over all conformations of the chain. 
+
 If we treat $\beta$ as a continuous variable and set the first bead to be $R_0$, the maximal distance along the chain will becomes $j$. We further set $Pr(R_0-R_j=0)=Pr_{0j}$ 
 \begin{equation*}
 Pr_{0j}= \int_{0}^{j} p(\beta)f(\beta)d\beta= \left(\frac{3}{2\pi b^2}\right)^{3/2}\int_0^{j} \frac{p(\beta)}{\beta^{3/2}}d\beta
