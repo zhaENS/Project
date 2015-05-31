@@ -288,7 +288,7 @@ classdef CalculateBeadDistancesByRouseModel<handle
             if obj.params.chain.recordPath
                  ChainDynamicsPlayer(obj.chain.handles.classes.chain);
             else
-                disp('encounters were not recorded, cannot display chain')
+                disp('encounters were not recorded, cannot display chain. Enable recordPath in the chain parameters')
             end
         end                    
         

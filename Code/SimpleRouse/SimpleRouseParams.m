@@ -42,12 +42,12 @@ function SetDefaultParams(obj)
 % default params
 % add listener to param change 
 obj.numRounds       = 1;  % number of simulation rounds 
-obj.numSimulations  = 20000; % number of simulations in each round
+obj.numSimulations  = 5000; % number of simulations in each round
 obj.dimension       = 3;
 obj.numBeads        = 64;
 obj.b               = sqrt(3);
 obj.diffusionConst  = 1;
-obj.connectedBeads  = []; % the beads connected other than the trivial connections. given by bead pairs
+obj.connectedBeads  = [33,64]; % the beads connected other than the trivial connections. given by bead pairs
 obj.encounterDist   = obj.b/5;
 obj.dt              = 0.1*(obj.b^2)/(12*obj.diffusionConst);
 obj.noiseSTD        = sqrt(2*obj.diffusionConst*obj.dt);
@@ -61,7 +61,7 @@ for cIdx = 1:size(obj.connectedBeads,1)
 end
 
 d                   = sqrt(2*obj.diffusionConst*obj.dt);
-obj.numSteps        = (.1)*(obj.b^2)/(6*(d^2)*sin(pi/(2*obj.numBeads))^2); % n times the number of steps until relaxation of the chain 
+obj.numSteps        = (.13)*(obj.b^2)/(6*(d^2)*sin(pi/(2*obj.numBeads))^2); % n times the number of steps until relaxation of the chain 
 obj.numSteps        = round(obj.numSteps);
 obj.stiffConnectors = [];    % fixed bead indices pairs for the number of loops
 obj.affineBeadsNum  = [];    % a fixed pair indices of affine beads
@@ -71,10 +71,10 @@ obj.recipeFolder    = fullfile(pwd,'SimpleRouse','Recipes');
 obj.recipeFileName  = 'simpleRouseDebugRecipe';
 obj.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 obj.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
-obj.calculateMSD    = true;  % indicate whether to calculate the MSD for each bead (slows down simulations)
+obj.calculateMSD    = false;  % indicate whether to calculate the MSD for each bead (slows down simulations)
 obj.plot            = false;  % TODO: should call the plotter  [obsolete]
 obj.recordPath      = false;  % record bead position (slows down simulations)
-obj.analyzeResults  = true;  % perform analysis post simulations 
+obj.analyzeResults  = false;  % perform analysis post simulations 
 obj.saveResults     = true;  
 
 end
