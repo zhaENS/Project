@@ -107,7 +107,7 @@ classdef SimulationFrameworkGraphics<handle
                         -dp.domainHeight:dp.domainHeight,50);
                     points.x  = -dp.domainWidth*ones(size(points.z));
                     
-                elseif strcmpi(obj.params.domain.domainShape,'open')
+                elseif strcmpi(dp.domainShape,'open')
                     points.x = [];
                     points.y = [];
                     points.z = [];

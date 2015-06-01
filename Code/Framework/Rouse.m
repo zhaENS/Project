@@ -193,7 +193,7 @@ classdef Rouse<handle
            end
            
             if exist('domainHandler','var')
-                if isempty(obj.params.beadsOnBoundary)
+              if isempty(obj.params.beadsOnBoundary)
                 
                 % The bead positions                
                 for bIdx = 2:obj.params.numBeads         
@@ -221,7 +221,7 @@ classdef Rouse<handle
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
                     
-            end
+             end
         
             
             else                

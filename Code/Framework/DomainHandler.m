@@ -243,7 +243,9 @@ classdef DomainHandler<handle
 
                 elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')                
                     % the vector norm
-                    n     = sqrt(sum(vecIn.^2,2));
+                    dc    = obj.params(domainNumber).domainCenter;
+                    dc    = [dc(1) dc(2) 0];
+                    n     = sqrt(sum(bsxfun(@minus,vecIn(:,1:2),dc(:,1:2)).^2,2));
                     inIdx = n<=obj.params(domainNumber).domainWidth;
                 elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
                     inIdx = vecIn.x<obj.params(domainNumber).domainWidth;
