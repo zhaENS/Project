@@ -71,7 +71,7 @@ classdef DomainHandler<handle
                
         end
                      
-        function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2,domainNumber, reflectDirection)%TODO: complete reflection out in all domain shapes
+        function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2,domainNumber,reflectDirection)%TODO: complete reflection out in all domain shapes
               % Reflect a particle previously at pos1 and currently at
               % pos2 depending on the domain shape 
               % pos1 and pos2  are  NxDim arrays of particle positions 
@@ -91,12 +91,12 @@ classdef DomainHandler<handle
                                                  
                 inIdx    = obj.InDomain(pos2,domainNumber); % find all particles in the domain 
                 outIdx   = find(~inIdx);       % find all particles outside the domain 
-                
+%                 dc       = obj.params(domainNumber).domainCenter;
                 % For each particle outside the domain, reflect until it is
                 % inside the domain 
             for oIdx = 1:numel(outIdx)
-                 count    = 1; % counter for reflections 
-                 ind      = outIdx(oIdx);
+                 count          = 1; % counter for reflections 
+                 ind            = outIdx(oIdx);
                  curPos(ind,:)  = pos2(ind,:);
                  prevPos(ind,:) = pos1(ind,:);
                 while ~obj.InDomain(curPos(ind,:),domainNumber)
@@ -185,7 +185,7 @@ classdef DomainHandler<handle
 
             if strcmpi(obj.params(domainNumber).domainShape,'sphere') || strcmpi(obj.params(domainNumber).domainShape,'cylinder')
                     % Find the intersection of a point and the surface of the domain
-                    
+%                      dc = obj.params(domainNumber).domainCenter;
                      R  = obj.params(domainNumber).domainWidth;% domain radius                    
                      A  = prevPos;
                      B  = curPos; 
@@ -194,8 +194,8 @@ classdef DomainHandler<handle
                      gamma = dot(A,A);
                      alpha = dot (A,B) -gamma;
                      beta  = dot(C,C);
-                     t(1)= (-alpha+sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
-                     t(2)= (-alpha-sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
+                     t(1)  = (-alpha+sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
+                     t(2)  = (-alpha-sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
                      
                      
                       % === end test ====
@@ -238,7 +238,8 @@ classdef DomainHandler<handle
                 inIdx        = true(numParticles,1);
                 if strcmpi(obj.params(domainNumber).domainShape,'Sphere')
                     % the vector norm
-                    n     = sqrt(sum(vecIn.^2,2));
+                    dc    = obj.params(domainNumber).domainCenter;
+                    n     = sqrt(sum(bsxfun(@minus,vecIn,dc).^2,2));
                     inIdx = (n<=(obj.params(domainNumber).domainWidth+eps));
 
                 elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')                

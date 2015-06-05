@@ -159,10 +159,8 @@ classdef RouseSimulatorFramework<handle
         function PreRunActions(obj)
             % Actions called before running the simulation        
             obj.simulationRound = obj.simulationRound+1;
-            obj.runSimulation   = true;            
-            
-            eval(obj.recipe.PreRunActions);
-            
+            obj.runSimulation   = true;                        
+            eval(obj.recipe.PreRunActions);            
             obj.dataRecorder.NewSimulation(obj.objectManager.handles.chain,obj.params);%(obj.handles.classes.rouse,obj.params);                        
             obj.dataRecorder.SetSimulationStartTime;
             obj.simulationData(obj.batchRound,obj.simulationRound).step     = 1;

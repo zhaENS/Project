@@ -2,17 +2,27 @@ function MoveHistonesOnChain
 % This test function moves histones on a Rouse chain
 close all
 % % create chain and domain and register them in the ObjectManager
-numRelaxationSteps = 2000;
-% relaxation time for the Rouse chain 
-% (b^2)/(6*(2*diffusionConst*dt)*sin(pi/(2*numBeads))^2)
-numRecordingSteps  = 10;
-numBeamSteps       = 100;
+numRelaxationSteps = 2500;
+
+% -Relaxation time for the Rouse chain defined by the longest relaxation time--
+% relaxation times - 300 beads ~= 1000 steps
+%                    400 beads ~= 2000 steps
+%                    500 beads ~= 3000 steps
+
+% (numBeads*b)^2 / (3*D*pi^2) %[Doi &  Edwards p.96 eq. 4.37)
+% using: b  = sqrt(3)~=1.7
+%        dt = 0.01
+%        D  = 1; diffusion const.
+% (500*sqrt(3))^2 /(3*pi^2 * 1)
+
+numRecordingSteps  = 1000;
+numBeamSteps       = 1000;
 saveConfiguration  = false;
-loadConfiguration  = true;
+loadConfiguration  = false;
 
 % Define the ROI for density estimation
-rectX      = -3;
-rectY      = -3;
+rectX      = -4;
+rectY      = -4;
 rectWidth  = 2*abs(rectX);
 rectHeight = 2*abs(rectY);
 
@@ -22,11 +32,12 @@ if loadConfiguration
     r.InitializeGraphics
 else
     % Initialize simulator framework parameters
-    simulatorParams = SimulationFrameworkParams('showSimulation',false,...
+    simulatorParams = SimulationFrameworkParams('showSimulation',true,...
                                                 'numSteps',numRelaxationSteps,...
+                                                'dimension', 3,...
                                                 'dt',0.01,...
-                                                'objectInteraction',false);
-    
+                                                'objectInteraction',false);                                                
+                                                                                        
     % create an open domain
     openSpaceForces = ForceManagerParams('lennardJonesForce',false,...
                                          'LJPotentialWidth',0.1,...
@@ -44,32 +55,33 @@ else
                                         'forceParams',openSpaceForces,...
                                         'domainWidth',100,...
                                         'dimension',simulatorParams.simulator.dimension);
+                                                                                                                
+    % % create a chain
+    chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,...
+                                     'springForce',true,...
+                                     'bendingElasticityForce',false,...
+                                     'bendingConst',1,...
+                                     'springConst',simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/sqrt(3)^2,...
+                                     'minParticleEqDistance',0);
     
+    cp          = ChainParams('numBeads',512,...
+                              'initializeInDomain',3,...
+                              'forceParams',chainForces,...
+                              'b',sqrt(3));
+                          
     % create a cylindrical Beam as a domain
     cylinderForces = ForceManagerParams('diffusionForce',false,...
                                         'lennardJonesForce',false,...
                                         'morseForce',false);
     
     dp(2)          = DomainHandlerParams('domainShape','cylinder',...
-                                        'reflectionType','off',...
-                                        'domainWidth',2,...
-                                        'domainHeight',70,...
-                                        'forceParams',cylinderForces);
+                                         'reflectionType','off',...
+                                         'domainWidth',2,...
+                                         'domainHeight',70,...
+                                         'forceParams',cylinderForces);
     
-    % % create a chain
-    chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,...
-                                    'springForce',true,...
-                                    'bendingElasticityForce',false,...
-                                    'bendingConst',1,...
-                                    'springConst',openSpaceForces.diffusionConst/1,...
-                                    'minParticleEqDistance',0);
-    
-    cp          = ChainParams('numBeads',500,...
-                              'initializeInDomain',1,...
-                              'forceParams',chainForces,...
-                              'b',1);
 
-    % create a sphere for visualization
+%     % create a sphere for visualization
     gSphereForce = ForceManagerParams('lennardJonesForce',false,...
                                       'diffusionForce',false,...
                                       'morseForce',false,...
@@ -77,7 +89,7 @@ else
     
     dp(3)        = DomainHandlerParams('domainWidth',sqrt(cp.numBeads/6)*cp.b,...% radius of Gyration
                                        'domainCenter',[0 0 0],...
-                                       'reflectionType','off',...
+                                       'reflectionType','preserveEnergy',...
                                        'forceParams',gSphereForce);
     
     % register the object parameters in the simulator framework
@@ -86,13 +98,12 @@ else
     
     % initialize simulator framework
     r = RouseSimulatorFramework(simulatorParams);
-    
     % Run until relaxation time
-    r.Run
+    r.Run      
+    % save configuration by name as chainPos
+    SaveConfiguration(r,saveConfiguration);
 end
 
-% save configuration by name as chainPos
-SaveConfiguration(r,saveConfiguration);
 
 % get the chain position to initialize the histone on it
 [~,initialChainPosition] = r.objectManager.GetMembersPosition(1);
@@ -110,23 +121,25 @@ histoneForce = ForceManagerParams('dt',r.params.simulator.dt,...
                                 'LJPotentialWidth',0,...
                                 'LJPotentialDepth',0);
 
-histoneParams = HistoneParams('numHistones',300,'forceParams',histoneForce);
+histoneParams = HistoneParams('numHistones',1,'forceParams',histoneForce);
 h             = Histone(histoneParams);
 
 h.Initialize(initialChainPosition);
 
-
 % Initialize graphics
 if r.params.simulator.showSimulation
-    [histHandle,~,pHistHandle,pPolyHandle,~,projPlane2D,projPlane3D,dnaDensityHandle,histoneDensityHandle]= ...
+    [histHandle,pAxes,pHistHandle,pPolyHandle,~,projPlane2D,projPlane3D,dnaDensityHandle,histoneDensityHandle]= ...
         InitializeGraphics(rectX,rectY,rectWidth,rectHeight,r.simulationGraphics.handles.graphical.mainAxes, h.curPos,initialChainPosition);
 end
 
+sprintf('%s%f%s','Start recording at time: ',r.simulationData.step*r.params.simulator.dt,' sec.')
 
 % Start recording densities with no beam effect
-for sIdx = 1:numRecordingSteps
+for sIdx = 1:numRecordingSteps    
+       
     % advance one step
     [r,h,chainPos] = Step(r,h);
+    
     % Update projectionPlane position according to the cm of the chain
     [rectX,rectY] = UpdateProjectionPlanePositionByCM(chainPos,rectWidth,rectHeight);
     
@@ -135,11 +148,11 @@ for sIdx = 1:numRecordingSteps
     
     % update graphics
     if r.params.simulator.showSimulation
-        UpdateGraphics(r.simulationData.step,r.params.simulator.dt,h.curPos,chainPos,histoneDensity,dnaDensity,rectX,rectY,rectWidth, rectHeight,...
+            UpdateGraphics(r.simulationData.step,r.params.simulator.dt,h.curPos,chainPos,histoneDensity,dnaDensity,...
+            rectX,rectY,rectWidth, rectHeight,...
             dnaDensityHandle,histoneDensityHandle,histHandle,projPlane2D,projPlane3D,pHistHandle,pPolyHandle)
     end
 end
-
 
 % start beam
 chainPos = r.objectManager.GetPosition(1);
@@ -157,33 +170,35 @@ inBeamInds    = find(inBeam);
 frInBeam      = randperm(sum(inBeam));
 fracToExclude = 0; % fraction of damages to induce on the edges in the ray
 inBeam(inBeamInds(frInBeam(1:round(numel(frInBeam)*fracToExclude))))= false;
+affectedBeadsHandle = line('XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2),'Parent',pAxes,'Marker','o','MarkerFaceColor','r','LineStyle','none');
+
 
 r.runSimulation = true;
 
 connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
 bendingElasticityConst = 1/(r.params.simulator.dt);
 
-disp ('Beam on')
+sprintf('%s%f%s','Beam shot at time: ',r.simulationData.step*r.params.simulator.dt,' sec.')
 
 while all([r.simulationData.step<(r.simulationData.step+numBeamSteps),r.runSimulation])
+    
     % Advance one simulation step
     [r,h,chainPos] = Step(r,h);
     [chainPos]     = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingElasticityConst,r.params.simulator.dt);
     r.objectManager.DealCurrentPosition(1,chainPos)
-    
+    set(affectedBeadsHandle,'XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2));
     % Update projectionPlane position according to the cm of the chain
     [rectX,rectY] = UpdateProjectionPlanePositionByCM(chainPos,rectWidth,rectHeight);
     
     % Calculate histone and DNA densities in the ROI
     [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,h.curPos,rectX,rectY,rectWidth,rectHeight,histoneParams.numHistones);
     if r.params.simulator.showSimulation
-        gyrationsphereData   = r.simulationGraphics.handles.graphical.domain(3);% update gyration sphere center to the chain's center of mass
-        UpdateGyrationSphere(r,3,gyrationsphereData,chainPos);
+%         gyrationsphereData   = r.simulationGraphics.handles.graphical.domain(3);% update gyration sphere center to the chain's center of mass
+%         UpdateGyrationSphere(r,3,gyrationsphereData,chainPos);
         UpdateGraphics(r.simulationData.step,r.params.simulator.dt,h.curPos,chainPos,histoneDensity,dnaDensity,...
             rectX,rectY,rectWidth, rectHeight,dnaDensityHandle,histoneDensityHandle,histHandle,projPlane2D,projPlane3D,pHistHandle,pPolyHandle)
     end
 end
-
 end
 
 function [r,h,chainPos] = Step(r,h)
@@ -196,25 +211,26 @@ h.Step(chainPos,r.params.simulator.dt);% update current position
 end
 
 function [chainPos] = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingElasticityConst,dt)
-% Apply forces on the chain falling in the beam
-bForce             = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
-bForce(~inBeam,:)  = 0;
-% Update affected edges of the chain
-chainPos(inBeam,:) = chainPos(inBeam,:) + bForce(inBeam,:)*dt;
+    % Apply forces on the chain falling in the beam
+    bForce             = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
+    bForce(~inBeam,:)  = 0;
+    % Update affected edges of the chain
+    chainPos(inBeam,:) = chainPos(inBeam,:) + bForce(inBeam,:)*dt;
 end
 
 function [histHandle,pAxes,pHistHandle,pPolyHandle,dAxes,projPlane2D,projPlane3D,dnaDensityHandle,histoneDensityHandle]= InitializeGraphics(rectX,rectY,rectWidth,rectHeight,mAxes, histonePosition,initialChainPosition)
 %     mAxes = r.simulationGraphics.handles.graphical.mainAxes;
 
 % initialize histone graphics %TODO: incorporate histone graphics in the simulationGraphics class
+
 histHandle = line('XData',histonePosition(:,1),...
-    'YData',histonePosition(:,2),...
-    'ZData',histonePosition(:,3),...
-    'marker','o',...
-    'MarkerFaceColor','y',...
-    'MarkerSize',10,...
-    'Parent',mAxes,...
-    'LineStyle','none');
+                 'YData',histonePosition(:,2),...
+                 'ZData',histonePosition(:,3),...
+                 'marker','o',...
+                 'MarkerFaceColor','y',...
+                 'MarkerSize',10,...
+                 'Parent',mAxes,...
+                 'LineStyle','none');
 daspect(mAxes,[1 1 1])
 % create figure for the projection in the x-y plane
 pFigure = figure;
@@ -226,21 +242,21 @@ daspect(pAxes,[1 1 1])
 
 % projected histone
 pHistHandle  = line('XData',histonePosition(:,1),...
-    'YData',histonePosition(:,2),...
-    'Marker','o',...
-    'MarkerFaceColor','y',...
-    'MarkerSize',10,...
-    'Parent',pAxes,...
-    'LineStyle','none');
+                    'YData',histonePosition(:,2),...
+                    'Marker','o',...
+                    'MarkerFaceColor','y',...
+                    'MarkerSize',10,...
+                    'Parent',pAxes,...
+                    'LineStyle','none');
 % projected Polymer
 pPolyHandle  = line('XData',initialChainPosition(:,1),...
-    'YDAta',initialChainPosition(:,2),...
-    'Marker','o',...
-    'MarkerFaceColor','none',...
-    'MarkerEdgeColor','b',...
-    'markerSize',7,...
-    'Parent',pAxes,...
-    'LineStyle','-');
+                    'YDAta',initialChainPosition(:,2),...
+                    'Marker','o',...
+                    'MarkerFaceColor','none',...
+                    'MarkerEdgeColor','b',...
+                    'markerSize',7,...
+                    'Parent',pAxes,...
+                    'LineStyle','-');
 
 % create density axes
 dFig   = figure;
@@ -301,7 +317,7 @@ histoneDensityDataX = get(histoneDensityHandle,'XData');
 histoneDensityDataY = get(histoneDensityHandle,'YData');
 
 set(dnaDensityHandle,'XData',[dnaDensityDataX, step*dt], 'YData',[dnaDensityDataY,dnaDensity]);
-set(histoneDensityHandle,'XData',[histoneDensityDataX, step*dt], 'YData',[histoneDensityDataY,histoneDensity]);
+% set(histoneDensityHandle,'XData',[histoneDensityDataX, step*dt], 'YData',[histoneDensityDataY,histoneDensity]);
 %        line('XData',step*dt,'YData',histoneDensity,'Marker','o','markerFaceColor','y','Parent',dAxes)
 %        line('XData',step*dt,'YData',dnaDensity,'Marker','o','Parent',dAxes,'markerFaceColor','b')
 end
@@ -326,9 +342,9 @@ yPos = yPos -yPos(1,1)+ccm(2);
 zPos = zPos -zPos((size(zPos,1)-1)/2,1)+ccm(3);
 
 set(gyrationSphereData.mesh,'XData',xPos,...
-    'YData',yPos,...
-    'ZData',zPos);
-
+                            'YData',yPos,...
+                            'ZData',zPos);
+simulationFrameworkHandle.handles.classes.domain.params(3).domainCenter = ccm;
 simulationFrameworkHandle.simulationGraphics.handles.graphical.domain(domainNumber).points.x = xPos;
 simulationFrameworkHandle.simulationGraphics.handles.graphical.domain(domainNumber).points.y = yPos;
 simulationFrameworkHandle.simulationGraphics.handles.graphical.domain(domainNumber).points.z = zPos;

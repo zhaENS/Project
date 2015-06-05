@@ -104,6 +104,7 @@ classdef SimulationFrameworkParams<handle
         end
         
         function SetPlotHandlerParams(obj)
+           obj.plotHandler.galleryFolderPath=fullfile('pwd','..','..','..','PolymerDynamicsData','Gallery'); 
         end
         
     end
