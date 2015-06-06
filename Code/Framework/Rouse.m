@@ -199,7 +199,7 @@ classdef Rouse<handle
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
                     while ~inDomain  
-                     dx       = obj.params.b*randn(1,obj.params.dimension);
+                     dx       = 0.5*obj.params.b*randn(1,obj.params.dimension);
                      tempPos  = obj.position.prev(bIdx-1,:)+dx;
                      inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
                     end                                          
