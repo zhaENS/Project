@@ -4,12 +4,12 @@ close all
 
 numPoints      = 130;
 dimension      = 3;
-diffusionConst = 0.001;
+diffusionConst = 0.0;
 partSTD        = 2;
 rMat           = RouseMatrix(numPoints);
-fixedParticles = [1, numPoints];
+fixedParticles = [1];
 % numSteps  = 3500;
-alpha     = 1; % force parameter between 0 and 1
+alpha     = 5.1; % force parameter between 0 and 1
 dt        = 0.1; % time step
 % set the particles
 particles = partSTD*randn(numPoints,dimension);
@@ -19,7 +19,7 @@ end
 
 % set graphics
 mainFig  = figure('Units','norm');
-lim = [-1 1]*3.2;
+lim = [-1 1]*5.2;
 mainAxes = axes('Parent',mainFig,'Color','k','Units','norm','XLim',lim, 'YLim',lim,'ZLim',lim);
 uicontrol('Parent',mainFig,'Units','norm','Position',[0.05 0.05, 0.1 0.1],'String','stop','Callback',@StopButtonAction);
 daspect(mainAxes,[1 1 1]);

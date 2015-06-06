@@ -236,6 +236,9 @@ classdef ForceManager<handle
                                                      edgeMat(:,:,2),...
                                                      edgeMat(:,:,3),...
                                                      connectivityMat,bendingConst);
+                                                 
+%               force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
+                                   
               % zero out forces for
               % fixed particles
                force(fixedParticleNum,:) = 0;

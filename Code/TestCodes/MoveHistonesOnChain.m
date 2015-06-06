@@ -2,7 +2,6 @@ function MoveHistonesOnChain
 % This test function moves histones on a Rouse chain
 close all
 % % create chain and domain and register them in the ObjectManager
-numRelaxationSteps = 2500;
 
 % -Relaxation time for the Rouse chain defined by the longest relaxation time--
 % relaxation times - 300 beads ~= 1000 steps
@@ -14,8 +13,8 @@ numRelaxationSteps = 2500;
 %        dt = 0.01
 %        D  = 1; diffusion const.
 % (500*sqrt(3))^2 /(3*pi^2 * 1)
-
-numRecordingSteps  = 1000;
+numRelaxationSteps = 1;
+numRecordingSteps  = 200;
 numBeamSteps       = 1000;
 saveConfiguration  = false;
 loadConfiguration  = false;
@@ -43,7 +42,7 @@ else
                                          'LJPotentialWidth',0.1,...
                                          'LJPotentialDepth',0.1,...
                                          'diffusionForce',true,...
-                                         'diffusionConst',1,...
+                                         'diffusionConst',.1,...
                                          'mechanicalForce',false,...
                                          'mechanicalForceDirection','out',...
                                          'mechanicalForceCenter',[0 0 0],...
@@ -60,14 +59,14 @@ else
     chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,...
                                      'springForce',true,...
                                      'bendingElasticityForce',false,...
-                                     'bendingConst',1,...
-                                     'springConst',simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/sqrt(3)^2,...
+                                     'bendingConst',0,...
+                                     'springConst',1*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
                                      'minParticleEqDistance',0);
     
     cp          = ChainParams('numBeads',300,...
                               'initializeInDomain',3,...
                               'forceParams',chainForces,...
-                              'b',sqrt(3));
+                              'b',1*sqrt(3));
                           
     % create a cylindrical Beam as a domain
     cylinderForces = ForceManagerParams('diffusionForce',false,...
@@ -164,19 +163,27 @@ if r.params.simulator.showSimulation
 end
 
 % Create DNA damages in the ray
-inBeam        = r.handles.classes.domain.InDomain(chainPos,2);
-inBeamInds    = find(inBeam);
+inBeam     = r.handles.classes.domain.InDomain(chainPos,2);
+inBeamTemp = inBeam;
+for iIdx = 2:numel(inBeam)-1
+if inBeam(iIdx)
+    inBeamTemp(iIdx+1) = true;
+    inBeamTemp(iIdx-1) = true;
+end
+end
+inBeam      = inBeamTemp;
+inBeamInds  = find(inBeam);
 % choose a fraction of inBeam to exclude
 frInBeam      = randperm(sum(inBeam));
 fracToExclude = 0; % fraction of damages to induce on the edges in the ray
 inBeam(inBeamInds(frInBeam(1:round(numel(frInBeam)*fracToExclude))))= false;
-affectedBeadsHandle = line('XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2),'Parent',pAxes,'Marker','o','MarkerFaceColor','r','LineStyle','none');
-
+affectedBeadsHandle = line('XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2),...
+                           'Parent',pAxes,'Marker','o','MarkerFaceColor','r','LineStyle','none');
 
 r.runSimulation = true;
 
 connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
-bendingElasticityConst = 1/(r.params.simulator.dt);
+bendingElasticityConst = 1/(2*r.params.simulator.dt);
 
 sprintf('%s%f%s','Beam shot at time: ',r.simulationData.step*r.params.simulator.dt,' sec.')
 
@@ -260,7 +267,7 @@ pPolyHandle  = line('XData',initialChainPosition(:,1),...
 
 % create density axes
 dFig   = figure;
-dAxes  = axes('Parent',dFig,'NextPlot','add','Color','none','FontSize',30);
+dAxes  = axes('Parent',dFig,'NextPlot','add','Color','none','FontSize',30,'YLim',[0 1]);
 xlabel(dAxes,'Time [sec]','FontSize',40);
 ylabel(dAxes,'Density','FontSize',40)
 
