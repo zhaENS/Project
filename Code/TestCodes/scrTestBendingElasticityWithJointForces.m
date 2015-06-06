@@ -2,16 +2,17 @@
 function scrTestBendingElasticityWithJointForces
 close all
 
-numPoints = 13;
-dimension = 3;
-diffusionConst = 1e-6;
-rMat           =RouseMatrix(numPoints);
-fixedParticles = 1;
+numPoints      = 130;
+dimension      = 3;
+diffusionConst = 0.001;
+partSTD        = 2;
+rMat           = RouseMatrix(numPoints);
+fixedParticles = [1, numPoints];
 % numSteps  = 3500;
 alpha     = 1; % force parameter between 0 and 1
 dt        = 0.1; % time step
 % set the particles
-particles = randn(numPoints,dimension);
+particles = partSTD*randn(numPoints,dimension);
 if dimension ==2
     particles(:,3) = 0;
 end
@@ -46,38 +47,24 @@ while getappdata(0,'stopButton')
                 
         % the normalized force vector of the neighbors
         dirR = (particles(pIdx+1,:) - midPoint);
-        dirR = dirR./norm(dirR);
-        
-        dirL = (particles(pIdx-1,:) - midPoint);
-        dirL = dirL./norm(dirL);
+        dirR = dirR./norm(dirR);        
         
         a  = sqrt(sum((midPoint -particles(pIdx+1,:)).^2));
-        b = norm(vR);
-        if a<b
-            t= (b-a)*alpha;
-        else
-            t = (b-a +b*alpha);
-        end
         
-        forceVector(pIdx+1,:) = forceVector(pIdx+1,:) + dirR*t ;
+        b = norm(vR);                
+        forceVector(pIdx+1,:) = forceVector(pIdx+1,:) + dirR*(b-a)*alpha ;
         
-        b    = norm(vL);
-        if a<b
-            t= (b-a)*alpha;
-        else
-            t = (b-a +b*alpha);
-        end
-        forceVector(pIdx-1,:) = forceVector(pIdx-1,:) + dirR*t;
+        b    = norm(vL);                
+        forceVector(pIdx-1,:) = forceVector(pIdx-1,:) + dirR*(b-a)*alpha;
     end
     forceVector(fixedParticles,:) = 0;% keep first particle fixed
-    springForce = -dimension*diffusionConst*rMat*particles;
-    springForce(fixedParticles,:) = 0;
+    springForce = -(dimension*diffusionConst./partSTD^2)*rMat*particles;
+    springForce(fixedParticles,:) = 0;   
     diffusionForce = sqrt(2*diffusionConst*dt)*randn(size(particles));
     diffusionForce(fixedParticles,:) = 0;
     particles = particles+forceVector*dt +springForce*dt+ diffusionForce;
     set(l,'XData',particles(:,1),'YDAta',particles(:,2),'ZData',particles(:,3));
     drawnow
-%     pause(dt)
 end
 end
 
