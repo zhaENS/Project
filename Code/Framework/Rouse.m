@@ -188,7 +188,7 @@ classdef Rouse<handle
             % set initial position for the first beads
            flag = false;
            while ~flag
-            obj.position.prev(1,:) = obj.params.b*randn(1,obj.params.dimension);
+            obj.position.prev(1,:) = 0.2*obj.params.b*randn(1,obj.params.dimension);
             flag = domainHandler.InDomain(obj.position.prev(1,:),obj.params.initializeInDomain);      
            end
            
@@ -199,7 +199,7 @@ classdef Rouse<handle
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
                     while ~inDomain  
-                     dx       = 0.5*obj.params.b*randn(1,obj.params.dimension);
+                     dx       = 0.2*obj.params.b*randn(1,obj.params.dimension);
                      tempPos  = obj.position.prev(bIdx-1,:)+dx;
                      inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
                     end                                          
