@@ -4,12 +4,13 @@ close all
 
 numPoints      = 130;
 dimension      = 3;
-diffusionConst = 0.0;
+diffusionConst = 0.01;
 partSTD        = 2;
+springConst    = (dimension*diffusionConst./partSTD^2);
 rMat           = RouseMatrix(numPoints);
-fixedParticles = [1];
+fixedParticles = [];
 % numSteps  = 3500;
-alpha     = 5.1; % force parameter between 0 and 1
+alpha     = 1.0; % force parameter between 0 and 1
 dt        = 0.1; % time step
 % set the particles
 particles = partSTD*randn(numPoints,dimension);
@@ -58,7 +59,7 @@ while getappdata(0,'stopButton')
         forceVector(pIdx-1,:) = forceVector(pIdx-1,:) + dirR*(b-a)*alpha;
     end
     forceVector(fixedParticles,:) = 0;% keep first particle fixed
-    springForce = -(dimension*diffusionConst./partSTD^2)*rMat*particles;
+    springForce = -springConst*rMat*particles;
     springForce(fixedParticles,:) = 0;   
     diffusionForce = sqrt(2*diffusionConst*dt)*randn(size(particles));
     diffusionForce(fixedParticles,:) = 0;
