@@ -13,17 +13,19 @@ close all
 %        dt = 0.01
 %        D  = 1; diffusion const.
 % (500*sqrt(3))^2 /(3*pi^2 * 1)
-numRelaxationSteps = 1;
-numRecordingSteps  = 200;
+numRelaxationSteps = 250;
+numRecordingSteps  = 150;
 numBeamSteps       = 1000;
 saveConfiguration  = false;
 loadConfiguration  = false;
 
-% Define the ROI for density estimation
-rectX      = -4;
-rectY      = -4;
-rectWidth  = 2*abs(rectX);
-rectHeight = 2*abs(rectY);
+
+
+% spring opening angle 
+openningAngle = pi;
+
+bendingElasticityConst = 10;%/(2*r.params.simulator.dt);
+
 
 if loadConfiguration
     r = LoadConfiguration(loadConfiguration);
@@ -34,7 +36,7 @@ else
     simulatorParams = SimulationFrameworkParams('showSimulation',true,...
                                                 'numSteps',numRelaxationSteps,...
                                                 'dimension', 3,...
-                                                'dt',0.01,...
+                                                'dt',0.1,...
                                                 'objectInteraction',false);                                                
                                                                                         
     % create an open domain
@@ -42,7 +44,7 @@ else
                                          'LJPotentialWidth',0.1,...
                                          'LJPotentialDepth',0.1,...
                                          'diffusionForce',true,...
-                                         'diffusionConst',1,...
+                                         'diffusionConst',0.1,...
                                          'mechanicalForce',false,...
                                          'mechanicalForceDirection','out',...
                                          'mechanicalForceCenter',[0 0 0],...
@@ -57,16 +59,16 @@ else
                                                                                                                 
     % % create a chain
     chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,...
-                                     'springForce',false,...
+                                     'springForce',true,...
                                      'bendingElasticityForce',false,...
                                      'bendingConst',0,...
-                                     'springConst',1*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
+                                     'springConst',simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(1)^2,...
                                      'minParticleEqDistance',0);
     
     cp          = ChainParams('numBeads',300,...
                               'initializeInDomain',3,...
                               'forceParams',chainForces,...
-                              'b',1*sqrt(3));
+                              'b',1);
                           
     % create a cylindrical Beam as a domain
     cylinderForces = ForceManagerParams('diffusionForce',false,...
@@ -75,7 +77,7 @@ else
     
     dp(2)          = DomainHandlerParams('domainShape','cylinder',...
                                          'reflectionType','off',...
-                                         'domainWidth',2,...
+                                         'domainWidth',sqrt(cp.numBeads/6)*cp.b *0.1,...
                                          'domainHeight',70,...
                                          'forceParams',cylinderForces);
     
@@ -102,6 +104,12 @@ else
     % save configuration by name as chainPos
     SaveConfiguration(r,saveConfiguration);
 end
+
+% Define the ROI for density estimation
+rectX      = -sqrt(cp.numBeads/6)*cp.b *0.2;
+rectY      = -sqrt(cp.numBeads/6)*cp.b *0.2;
+rectWidth  = 2*abs(rectX);
+rectHeight = 2*abs(rectY);
 
 
 % get the chain position to initialize the histone on it
@@ -132,6 +140,10 @@ if r.params.simulator.showSimulation
 end
 
 sprintf('%s%f%s','Start recording at time: ',r.simulationData.step*r.params.simulator.dt,' sec.')
+chainPos = r.objectManager.GetPosition(1);
+chainPos = chainPos{1};
+[rectX,rectY] = UpdateProjectionPlanePositionByCM(chainPos,rectWidth,rectHeight);
+[dnaLengthIn,~] = PolygonLengthInRoi(chainPos(:,1:2),rectX,rectY,rectWidth, rectHeight);
 
 % Start recording densities with no beam effect
 for sIdx = 1:numRecordingSteps    
@@ -143,7 +155,7 @@ for sIdx = 1:numRecordingSteps
     [rectX,rectY] = UpdateProjectionPlanePositionByCM(chainPos,rectWidth,rectHeight);
     
     % Calculate histone and DNA densities in the ROI
-    [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,h.curPos,rectX,rectY,rectWidth,rectHeight,histoneParams.numHistones);
+    [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,h.curPos,rectX,rectY,rectWidth,rectHeight,histoneParams.numHistones,dnaLengthIn);
     
     % update graphics
     if r.params.simulator.showSimulation
@@ -161,6 +173,9 @@ UpdateBeamPosition(chainPos,r,2);
 if r.params.simulator.showSimulation
     UpdateBeamGraphics(r,2)
 end
+
+
+[dnaLengthIn,~] = PolygonLengthInRoi(chainPos(:,1:2),rectX,rectY,rectWidth, rectHeight);
 
 % Create DNA damages in the ray
 inBeam     = r.handles.classes.domain.InDomain(chainPos,2);
@@ -183,7 +198,7 @@ affectedBeadsHandle = line('XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2)
 r.runSimulation = true;
 
 connectivityMat        = r.objectManager.GetConnectivityMapAsOne(1);
-bendingElasticityConst = 1/(2*r.params.simulator.dt);
+
 
 sprintf('%s%f%s','Beam shot at time: ',r.simulationData.step*r.params.simulator.dt,' sec.')
 
@@ -191,14 +206,14 @@ while all([r.simulationData.step<(r.simulationData.step+numBeamSteps),r.runSimul
     
     % Advance one simulation step
     [r,h,chainPos] = Step(r,h);
-    [chainPos]     = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingElasticityConst,r.params.simulator.dt);
+    [chainPos]     = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingElasticityConst,openningAngle,r.params.simulator.dt);
     r.objectManager.DealCurrentPosition(1,chainPos)
     set(affectedBeadsHandle,'XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2));
     % Update projectionPlane position according to the cm of the chain
     [rectX,rectY] = UpdateProjectionPlanePositionByCM(chainPos,rectWidth,rectHeight);
     
     % Calculate histone and DNA densities in the ROI
-    [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,h.curPos,rectX,rectY,rectWidth,rectHeight,histoneParams.numHistones);
+    [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,h.curPos,rectX,rectY,rectWidth,rectHeight,histoneParams.numHistones,dnaLengthIn);
     if r.params.simulator.showSimulation
 %         gyrationsphereData   = r.simulationGraphics.handles.graphical.domain(3);% update gyration sphere center to the chain's center of mass
 %         UpdateGyrationSphere(r,3,gyrationsphereData,chainPos);
@@ -217,10 +232,20 @@ chainPos     = chainPos{1};
 h.Step(chainPos,r.params.simulator.dt);% update current position
 end
 
-function [chainPos] = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingElasticityConst,dt)
+function [chainPos] = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingElasticityConst,openningAngle,dt)
     % Apply forces on the chain falling in the beam
-    bForce             = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
+% %  calculate the force in teh direction of the mean vector 
+%     bForce             = ForceManager.GetBendingElasticityForce(true,chainPos,connectivityMat,bendingElasticityConst ,[]);
+% %---
+% calculate the derivative of (cos(theta_0)- cos(theta_i))^2
+    partDist = ForceManager.GetParticleDistance(chainPos);
+    bForce = BendingElasticityWithAngels(chainPos,partDist,-bendingElasticityConst,openningAngle);
+% % ---
+% % calulate the force such that the beads are pushed aside.
+%     bForce = BendingElasticity(chainPos,bendingElasticityConst,[]);
+
     bForce(~inBeam,:)  = 0;
+    bForce = bForce*dt;
     % Update affected edges of the chain
     chainPos(inBeam,:) = chainPos(inBeam,:) + bForce(inBeam,:)*dt;
 end
@@ -267,7 +292,7 @@ pPolyHandle  = line('XData',initialChainPosition(:,1),...
 
 % create density axes
 dFig   = figure;
-dAxes  = axes('Parent',dFig,'NextPlot','add','Color','none','FontSize',30,'YLim',[0 1]);
+dAxes  = axes('Parent',dFig,'NextPlot','add','Color','none','FontSize',30,'YLim',[0 2]);
 xlabel(dAxes,'Time [sec]','FontSize',40);
 ylabel(dAxes,'Density','FontSize',40)
 
@@ -374,7 +399,7 @@ set(beamHandle,'XData',xPos+domainCenter(1),...
 
 end
 
-function [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,histonePos,rectX,rectY, rectWidth, rectHeight,numHistones)
+function [histoneDensity, dnaDensity] = CalculateDensitiesInROI(chainPos,histonePos,rectX,rectY, rectWidth, rectHeight,numHistones,initialDnaInLength)
 % calculate histone density
 histoneDensity =  sum((histonePos(:,1)<=(rectX+rectWidth) & histonePos(:,1)>=rectX &...
     histonePos(:,2)<=(rectY+rectHeight) & histonePos(:,2)>=rectY))/numHistones;
@@ -383,8 +408,6 @@ histoneDensity =  sum((histonePos(:,1)<=(rectX+rectWidth) & histonePos(:,1)>=rec
 [dnaLengthIn,totalDNALength] = PolygonLengthInRoi(chainPos(:,1:2),rectX,rectY,rectWidth, rectHeight);
 dnaDensity = dnaLengthIn./totalDNALength;
 
-%         dnaDensity    = sum((chainPos(:,1)<=(rectX+rectWidth) & chainPos(:,1)>=rectX &...
-%                              chainPos(:,2)<=(rectY+rectHeight) & chainPos(:,2)>=rectY));
 end
 
 function simFramework = LoadConfiguration(loadRelaxationConfiguration)

@@ -4,13 +4,13 @@ close all
 
 numPoints      = 130;
 dimension      = 3;
-diffusionConst = 0.01;
-partSTD        = 2;
-springConst    = (dimension*diffusionConst./partSTD^2);
+diffusionConst = 0.0;
+partSTD        = 5;
+springConst    = 0;%(dimension*diffusionConst./partSTD^2);
 rMat           = RouseMatrix(numPoints);
 fixedParticles = [];
 % numSteps  = 3500;
-alpha     = 1.0; % force parameter between 0 and 1
+alpha     = 1.5; % force parameter between 0 and 1
 dt        = 0.1; % time step
 % set the particles
 particles = partSTD*randn(numPoints,dimension);

@@ -231,13 +231,13 @@ classdef ForceManager<handle
             if bendingElasticityForce
                 % Calculate the edges vectors in all dimension
 
-                edgeMat = GetEdgesVectors_mex(particlePosition,connectivityMat);
-                force   = BendingElasticityForce(edgeMat(:,:,1),...
-                                                     edgeMat(:,:,2),...
-                                                     edgeMat(:,:,3),...
-                                                     connectivityMat,bendingConst);
+%                 edgeMat = GetEdgesVectors_mex(particlePosition,connectivityMat);
+%                 force   = BendingElasticityForce(edgeMat(:,:,1),...
+%                                                  edgeMat(:,:,2),...
+%                                                  edgeMat(:,:,3),...
+%                                                  connectivityMat,bendingConst);
                                                  
-%               force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
+              force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
                                    
               % zero out forces for
               % fixed particles
