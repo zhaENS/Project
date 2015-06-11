@@ -42,12 +42,12 @@ function SetDefaultParams(obj)
 % default params
 % add listener to param change 
 obj.numRounds       = 1;  % number of simulation rounds 
-obj.numSimulations  = 5000; % number of simulations in each round
+obj.numSimulations  = 1; % number of simulations in each round
 obj.dimension       = 3;
 obj.numBeads        = 64;
 obj.b               = sqrt(3);
 obj.diffusionConst  = 1;
-obj.connectedBeads  = [33,64]; % the beads connected other than the trivial connections. given by bead pairs
+obj.connectedBeads  = []; % the beads connected other than the trivial connections. given by bead pairs
 obj.encounterDist   = obj.b/5;
 obj.dt              = 0.1*(obj.b^2)/(12*obj.diffusionConst);
 obj.noiseSTD        = sqrt(2*obj.diffusionConst*obj.dt);
@@ -72,10 +72,10 @@ obj.recipeFileName  = 'simpleRouseDebugRecipe';
 obj.defaultRecipe   = 'simpleRouseDebugRecipe'; % default recipe file name
 obj.saveBeadDist    = 'last'; % [last/current/all/meanSquare] ( note that only for 'last' and 'all' the encounters can reliably be calculated)
 obj.calculateMSD    = false;  % indicate whether to calculate the MSD for each bead (slows down simulations)
-obj.plot            = false;  % TODO: should call the plotter  [obsolete]
-obj.recordPath      = false;  % record bead position (slows down simulations)
+obj.plot            = true;  % TODO: should call the plotter  [obsolete]
+obj.recordPath      = true;  % record bead position (slows down simulations)
 obj.analyzeResults  = false;  % perform analysis post simulations 
-obj.saveResults     = true;  
+obj.saveResults     = false;  
 
 end
 

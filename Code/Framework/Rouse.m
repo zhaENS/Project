@@ -37,6 +37,7 @@ classdef Rouse<handle
     end
     
     methods
+        
         function obj = Rouse(rouseParams,indsInParent,parentHandle)
             % Class constructor
             % the chain parent object is the objectManager 
@@ -78,7 +79,7 @@ classdef Rouse<handle
             
         end
         
-        function SetInputParams(obj)% clean up 
+        function SetInputParams(obj)
 
             % expend the beta vector to match the number of beads 
             if numel(obj.params.beta)~=obj.params.numBeads && numel(obj.params.beta)~=1
@@ -90,12 +91,12 @@ classdef Rouse<handle
         end
         
         function InitializeRouseStruct(obj)
+            
             % Initialize positions
-            obj.position.cur             = randn(obj.params.numBeads,3); 
-            obj.position.prev            = randn(obj.params.numBeads,3);
+            obj.position.cur             = randn(obj.params.numBeads,3);            
+            obj.position.prev            = randn(obj.params.numBeads,3);            
 
             obj.InitializeBeadConnectionMap;
-%             obj.SetInitialChainPosition; % should be moved out of the initialization process
 
         end        
         
@@ -110,26 +111,11 @@ classdef Rouse<handle
         
         function InitializeBeadConnectionMap(obj,varargin)
             % Set the default linear connection 
-            % define the Rouse matrix 
-            obj.mobilityMatrices.rouse = RouseMatrix(obj.params.numBeads);                        
-            
-%             [v,lambda]           = obj.GetRouseEig;
-            % if the lambdas are changed, then the connection map is
-            % changed. 
-
+            % define the Rouse matrix             
             cm = obj.params.connectedBeads;
-            assert(all(cm(:)<=obj.params.numBeads),'The monomers index to connect cannot exceed the number of monomers in the chain')            
-            % recalculate the connection map 
-%             connectionMatrix = v*diag(lambda)*v';
-%             connectionMatrix = connectionMatrix.*(abs(connectionMatrix)>1e-12);
-%             for bIdx = 1:size(cm,1)
-%                 connectionMatrix(cm(bIdx,1),cm(bIdx,2))  = -1;
-%                 connectionMatrix(cm(bIdx,2),cm(bIdx,1))  = -1;
-%             end
+            assert(all(cm(:)<=obj.params.numBeads),...
+                'The monomers index to connect cannot exceed the number of monomers in the chain');
             
-%             obj.connectionMap.connectionMatrix = connectionMatrix; % used for multiplication of beads location 
-%             cMap = logical((connectionMatrix-diag(diag(connectionMatrix)))~=0);
-%             cMap(~cMap) = NaN;
            % add the connection between distant beads
            cMap = logical(diag(ones(1,obj.params.numBeads-1),-1)+diag(ones(1,obj.params.numBeads-1),1));
            for bIdx = 1:size(cm,1)
@@ -141,8 +127,7 @@ classdef Rouse<handle
                       
            [obj.connectionMap.indices.in.map]   = find(cMap); % linear indices of positions of monomer pairs connected. 
            [obj.connectionMap.indices.in.list(:,1), obj.connectionMap.indices.in.list(:,2)] = find(triu(cMap));
-           
-            
+                       
         end        
          
         function UpdateLinearConnectivityMap(obj)
@@ -188,18 +173,18 @@ classdef Rouse<handle
             % set initial position for the first beads
            flag = false;
            while ~flag
-            obj.position.prev(1,:) = 0.2*obj.params.b*randn(1,obj.params.dimension);
+            obj.position.prev(1,:) = 0.2*obj.params.b*randn(1,3);
             flag = domainHandler.InDomain(obj.position.prev(1,:),obj.params.initializeInDomain);      
            end
            
             if exist('domainHandler','var')
               if isempty(obj.params.beadsOnBoundary)
-                
+                fp = domainHandler.params.forceParams;
                 % The bead positions                
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
                     while ~inDomain  
-                     dx       = 0.2*obj.params.b*randn(1,obj.params.dimension);
+                     dx       = sqrt(2*fp.diffusionConst*fp.dt)*randn(1,3);
                      tempPos  = obj.position.prev(bIdx-1,:)+dx;
                      inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
                     end                                          
@@ -226,7 +211,7 @@ classdef Rouse<handle
             
             else                
                 % The bead positions
-               r = randn(obj.params.numBeads-1,3);
+               r = randn(obj.params.numBeads-1,obj.params.dimension);
                obj.position.prev = [obj.position.prev(1,:); cumsum(r)];
             end
             
@@ -240,7 +225,7 @@ classdef Rouse<handle
             newPos   = ForceManager.ApplyInternalForces(obj.position.cur,beadDist,obj.connectionMap.map,...  
                                               forceParams.springForce,forceParams.bendingElasticityForce,...
                                               forceParams.springConst,forceParams.bendingConst,...                                           
-                                              forceParams.minParticleEqDistance,forceParams.fixedParticleNum,dt);
+                                              forceParams.minParticleEqDistance,obj.params.fixedBeadNum,dt);
                                          
             obj.position.cur = newPos;  % update current position % the positions are updated after the domain has exerted its force on the chain                      
         end
