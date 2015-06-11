@@ -102,7 +102,7 @@ classdef ForceManager<handle
                                                         connectivityMap,minParticleDistance,fixedParticleNum);
             
             % Bending forces
-            bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,...
+            bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistances,...
                                                                    connectivityMap,bendingConst,fixedParticleNum);
 
 
@@ -148,9 +148,9 @@ classdef ForceManager<handle
         end 
         
        function newParticlePosition = ApplyCompositeInternalForces(pos,particleDistance,connectivityMap,...
-                                                                        springForce,bendingElasticityForce,...
-                                                                        springConst,bendingConst,...                                                         
-                                                                         minParticleDistance,fixedParticleNum,dt)
+                                                                       springForce,bendingElasticityForce,...
+                                                                       springConst,bendingConst,...                                                         
+                                                                       minParticleDistance,fixedParticleNum,dt)
                                                      
             % Apply forces on a composite structure composed of several chains with different parameters                          
             % pariclePosition is the position for each chain in cell array            
@@ -196,7 +196,8 @@ classdef ForceManager<handle
             else
                 bendingElasticityForceFlag = false;
              end            
-            bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForceFlag,particlePosition,connectivityMap,bendingConst(1),fixedParticleNum);
+            bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForceFlag,particlePosition,particleDistance,...
+                connectivityMap,bendingConst(1),openningAngle(1),fixedParticleNum);
             % zero out forces for object with no bending elasticity force
             % active
             bendingForces([indsObj{~bendingElasticityForce}],:) = 0;
@@ -225,7 +226,7 @@ classdef ForceManager<handle
             end
         end
         
-        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,connectivityMat,bendingConst,fixedParticleNum)
+        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,connectivityMat,bendingConst,fixedParticleNum)
             % Get bending elasticity force
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
@@ -237,7 +238,8 @@ classdef ForceManager<handle
 %                                                  edgeMat(:,:,3),...
 %                                                  connectivityMat,bendingConst);
                                                  
-              force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
+%               force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
+              force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,pi);
                                    
               % zero out forces for
               % fixed particles
