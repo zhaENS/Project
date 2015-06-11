@@ -1,6 +1,6 @@
 % scrTestBendingElasticityWithAnagles
 close all
-numParticles     = 400;
+numParticles     = 25;
 dimension        = 3;
 
 numSteps         = 550;
@@ -8,18 +8,18 @@ dt               = 0.01;
 angle0           = pi;
 b                = sqrt(3);
 diffusionConst   = 1;
-bendingConst     = -10*dimension*diffusionConst./b^2;
-springConst      = -5*dimension*diffusionConst./b^2;
+bendingConst     = 10*dimension*diffusionConst./b^2;
+springConst      = 5*dimension*diffusionConst./b^2;
 particlePosition = cumsum(sqrt(2*diffusionConst*dt)*randn(numParticles,dimension));
 
 connectivityMap  = (diag(ones(1,numParticles-1),1)+diag(ones(1,numParticles-1),-1))~=0;
-minParticleDist  = 1;
+minParticleDist  = 0;
 fixedParticleNum = [];
-afectedBeadsNumber  = 150:250;
+afectedBeadsNumber  = [];
 
 % flags
-diffusionFlag      = true;
-springsFlag        = false;
+diffusionFlag      = false;
+springsFlag        = true;
 bendingFlag        = true;
 
 % rMat = RouseMatrix(numParticles);
@@ -55,7 +55,7 @@ for sIdx = 1:numSteps
     bendingForce(~affectedBeads,:) = 0;
     diffusionForce = sqrt(2*diffusionConst*dt)*randn(numParticles,dimension);
 %     springForce    = springConst*rMat*particlePosition;
-    springForce   = ForceManager.GetSpringForce(springsFlag,particlePosition,particleDist,-springConst,connectivityMap,minParticleDist,fixedParticleNum);
+    springForce   = ForceManager.GetSpringForce(springsFlag,particlePosition,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum);
     
     particlePosition = particlePosition +bendingFlag*bendingForce*dt +springsFlag*springForce*dt+ diffusionFlag*diffusionForce;
                 
