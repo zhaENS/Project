@@ -6,11 +6,11 @@ particlePosition = cumsum(randn(numParticles,dimension));
 numSteps       = 250;
 dt             = 0.1;
 angle0         = pi;
-bendingConst   = -1.7;
+bendingConst   = -5.1;
 diffusionConst = 0.1;
 % flags
 diffusionFlag      = false;
-springsFlag        = true;
+springsFlag        = false;
 bendingFlag        = true;
 
 b              = sqrt(3);

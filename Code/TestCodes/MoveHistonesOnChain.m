@@ -13,7 +13,7 @@ close all
 %        dt = 0.01
 %        D  = 1; diffusion const.
 % (500*sqrt(3))^2 /(3*pi^2 * 1)
-numRelaxationSteps = 250;
+numRelaxationSteps = 750;
 numRecordingSteps  = 150;
 numBeamSteps       = 1000;
 saveConfiguration  = false;
@@ -24,7 +24,7 @@ loadConfiguration  = false;
 % spring opening angle 
 openningAngle = pi;
 
-bendingElasticityConst = 10;%/(2*r.params.simulator.dt);
+bendingElasticityConst = 0.09;%/(2*r.params.simulator.dt);
 
 
 if loadConfiguration
@@ -44,7 +44,7 @@ else
                                          'LJPotentialWidth',0.1,...
                                          'LJPotentialDepth',0.1,...
                                          'diffusionForce',true,...
-                                         'diffusionConst',0.1,...
+                                         'diffusionConst',0.001,...
                                          'mechanicalForce',false,...
                                          'mechanicalForceDirection','out',...
                                          'mechanicalForceCenter',[0 0 0],...
@@ -65,7 +65,7 @@ else
                                      'springConst',simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(1)^2,...
                                      'minParticleEqDistance',0);
     
-    cp          = ChainParams('numBeads',300,...
+    cp          = ChainParams('numBeads',500,...
                               'initializeInDomain',3,...
                               'forceParams',chainForces,...
                               'b',1);
@@ -179,14 +179,14 @@ end
 
 % Create DNA damages in the ray
 inBeam     = r.handles.classes.domain.InDomain(chainPos,2);
-inBeamTemp = inBeam;
-for iIdx = 2:numel(inBeam)-1
-if inBeam(iIdx)
-    inBeamTemp(iIdx+1) = true;
-    inBeamTemp(iIdx-1) = true;
-end
-end
-inBeam      = inBeamTemp;
+% inBeamTemp = inBeam;
+% for iIdx = 2:numel(inBeam)-1
+% if inBeam(iIdx)
+%     inBeamTemp(iIdx+1) = true;
+%     inBeamTemp(iIdx-1) = true;
+% end
+% end
+% inBeam      = inBeamTemp;
 inBeamInds  = find(inBeam);
 % choose a fraction of inBeam to exclude
 frInBeam      = randperm(sum(inBeam));
@@ -245,7 +245,6 @@ function [chainPos] = ApplyDamageEffect(chainPos,inBeam,connectivityMat,bendingE
 %     bForce = BendingElasticity(chainPos,bendingElasticityConst,[]);
 
     bForce(~inBeam,:)  = 0;
-    bForce = bForce*dt;
     % Update affected edges of the chain
     chainPos(inBeam,:) = chainPos(inBeam,:) + bForce(inBeam,:)*dt;
 end

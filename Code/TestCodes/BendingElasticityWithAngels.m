@@ -2,7 +2,7 @@ function force = BendingElasticityWithAngels(particlePosition, particleDistance,
 %===========
 % Calculate the force on each particle given its connectivity
 numParticles = size(particlePosition,1);
-dimension    = 3;
+dimension    = size(particlePosition,2);
 force        = zeros(numParticles,dimension);
 
 cosTheta  = @(pos,dist,i) ((1./(dist(i,i+1)*dist(i+1,i+2)))*sum((pos(i,:)-pos(i+1,:)).*(pos(i+2,:)-pos(i+1,:))));
