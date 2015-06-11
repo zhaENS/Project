@@ -100,7 +100,7 @@ classdef SimpleRouseFramework<handle
             catch
                 % If the recipe file was not found, switch to default
                 % recipe
-                warning('%s%s%s','Recipe file',[obj.params.recipeFileName,'.rcp'], ' was not found! Continuing with defaultRecipe') 
+                warning('%s%s%s','Recipe file ',[obj.params.recipeFileName,'.rcp'], ' was not found! Continuing with defaultRecipe') 
                 t = fileread(fullfile(obj.params.recipeFolder, [obj.params.defaultRecipe,'.rcp']));
             end
             

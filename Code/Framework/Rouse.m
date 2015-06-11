@@ -194,12 +194,12 @@ classdef Rouse<handle
            
             if exist('domainHandler','var')
               if isempty(obj.params.beadsOnBoundary)
-                
+                fp =domainHandler.params.forceParams;
                 % The bead positions                
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
                     while ~inDomain  
-                     dx       = 0.2*obj.params.b*randn(1,obj.params.dimension);
+                     dx       = sqrt(2*fp.diffusionConst*fp.dt)*randn(1,obj.params.dimension);
                      tempPos  = obj.position.prev(bIdx-1,:)+dx;
                      inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
                     end                                          
