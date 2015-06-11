@@ -93,13 +93,13 @@ classdef SimulationFrameworkGraphics<handle
                     points.x = repmat(x,10,1);
                     points.y = repmat(y,10,1);
                     points.z = repmat(linspace(-dp.domainHeight/2,dp.domainHeight/2,...
-                        size(points.x,1))',1,size(points.x,2));
+                                        size(points.x,1))',1,size(points.x,2));
                     
                     if dp.dimension ==1
-                        points.y = zeros(size(y));
-                        points.z = zeros(size(z));
+                        points.y = zeros(size(points.y));
+                        points.z = zeros(size(points.z));
                     elseif dp.dimension==2
-                        points.z = zeros(size(z));
+                        points.z = dp.domainCenter(3)*ones(size(points.z));
                     end
                 elseif strcmpi(dp.domainShape,'twoPlates')
                     [points.z,points.y] = ...
