@@ -215,9 +215,10 @@ classdef Rouse<handle
                     % set position for the constrained beads
                     % 2. iteratively pass a Brownian bridge between these
                     % points
-                    numSteps   = range(obj.params.beadsOnBoundary); % this serves as the number of steps to walk on the boundary 
+                   % numSteps   = range(obj.params.beadsOnBoundary); % this serves as the number of steps to walk on the boundary 
                     % get initial points 
                     initialPoint = domainHandler.GetRandomBoundarySample(1);
+                    obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,domainHandler.params,obj.params.beadsOnBoundary,obj.params.numBeads);
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
                     
