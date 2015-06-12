@@ -12,6 +12,7 @@ classdef ForceManagerParams<handle
         
         % Parameters for the forces
         bendingConst@double
+        openningAngle@double
         springConst@double
         diffusionConst@double
         LJPotentialWidth@double

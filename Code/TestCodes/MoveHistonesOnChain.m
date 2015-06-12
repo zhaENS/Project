@@ -22,8 +22,7 @@ loadConfiguration  = false;
 
 
 
-% spring opening angle 
-openningAngle = pi;
+
 
 % bendingElasticityConst = 0.5;%/(2*r.params.simulator.dt);
 
@@ -67,6 +66,7 @@ else
                                      'bendingElasticityForce',false,...
                                      'bendingConst',20*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
                                      'springConst', 1*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
+                                     'openningAngle',pi,...
                                      'minParticleEqDistance',1);
     
     cp          = ChainParams('numBeads',400,...
@@ -118,7 +118,7 @@ rectX      = -(sqrt(cp.numBeads/6)*cp.b) *0.12;
 rectY      = -(sqrt(cp.numBeads/6)*cp.b) *0.12;
 rectWidth  = 2*abs(rectX);
 rectHeight = 2*abs(rectY);
-roiRes     = 4;% divide the ROI into pixels for density calculation , should be an even integer
+roiRes     = 10;% divide the ROI into pixels for density calculation , should be an even integer
 
 
 % get the chain position to initialize the histone on it
@@ -180,10 +180,11 @@ for sIdx = 1:numRecordingSteps
 end
 
 % start beam
-chainPos = r.objectManager.GetPosition(1);
-chainPos = chainPos{1};
+chainPos = r.objectManager.curPos;
+
 % move the beam to the chain's center of mass
 UpdateBeamPosition(chainPos,r,2);
+
 if r.params.simulator.showSimulation
     UpdateBeamGraphics(r,2)
 end
@@ -220,10 +221,9 @@ while all([r.simulationData.step<(r.simulationData.step+numBeamSteps),r.runSimul
     
     % Advance one simulation step
     [r,h,chainPos]          = Step(r,h);
-    [chainPos]              = ApplyDamageEffect(chainPos,inBeam,connectivityMat,cp.forceParams.bendingConst,openningAngle,...
+    [chainPos]              = ApplyDamageEffect(chainPos,inBeam,connectivityMat,cp.forceParams.bendingConst,cp.forceParams.openningAngle,...
                                                 r.params.simulator.dt); 
     r.objectManager.curPos  = chainPos;
-%     r.objectManager.prevPos = chainPos;
 
     if r.params.simulator.showSimulation
         set(affectedBeadsHandle,'XData',chainPos(inBeam,1),'YData',chainPos(inBeam,2));       

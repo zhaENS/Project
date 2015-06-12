@@ -226,7 +226,7 @@ classdef ForceManager<handle
             end
         end
         
-        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,connectivityMat,bendingConst,fixedParticleNum)
+        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,connectivityMat,bendingConst,fixedParticleNum,openningAngle)
             % Get bending elasticity force
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
@@ -239,7 +239,7 @@ classdef ForceManager<handle
 %                                                  connectivityMat,bendingConst);
                                                  
 %               force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
-              force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,pi);
+              force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,openningAngle);
                                    
               % zero out forces for
               % fixed particles
