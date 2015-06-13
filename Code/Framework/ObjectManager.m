@@ -159,8 +159,8 @@ classdef ObjectManager<handle
             % appearance in the curPos and the object list             
             
             inds = (obj.map.GetAllInds(objList));
-            obj.curPos(inds,:) = curPos;% update the position
-            notify(obj,'curPosChange'); % notify all registered listeners
+            obj.curPos(inds,:) = curPos; % update the position
+            notify(obj,'curPosChange');  % notify all registered listeners
 
         end
         

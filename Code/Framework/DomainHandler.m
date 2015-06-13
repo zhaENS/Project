@@ -49,6 +49,8 @@ classdef DomainHandler<handle
                % currently this function supports domains which do not
                % overlap or contained domains in which one is completely
                % permeable 
+               % the function applies force on all particles in the
+               % simulation 
                
                % experimental- apply forces iteratively from each domain 
                for dIdx = 1:obj.numDomains
@@ -56,19 +58,18 @@ classdef DomainHandler<handle
                    dp           = obj.params(dIdx);
                    fp           = dp.forceParams;
                    curParticlePosition = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,...
-                                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,fp.mechanicalForce,...
-                                                    fp.LJPotentialWidth,fp.LJPotentialDepth,...
-                                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
-                                                    fp.mechanicalForceCenter, fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
-                                                    fp.minParticleEqDistance,fixedParticleNum,dt);
+                                                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,fp.mechanicalForce,...
+                                                                    fp.LJPotentialWidth,fp.LJPotentialDepth,...
+                                                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
+                                                                    fp.mechanicalForceCenter, fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
+                                                                    fp.minParticleEqDistance,fixedParticleNum,dt);
                                                                                                
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
                      [~,curParticlePosition] = obj.Reflect(prevParticlePosition,curParticlePosition,domainNumber);
                    end
-               end
                
-               newParticlePosition = curParticlePosition;
-               
+               end                             
+              newParticlePosition = curParticlePosition;
         end
                      
         function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2,domainNumber,reflectDirection)%TODO: complete reflection out in all domain shapes

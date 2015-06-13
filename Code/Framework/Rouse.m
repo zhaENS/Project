@@ -65,12 +65,12 @@ classdef Rouse<handle
         
         function UpdatePrevPosListenerCallback(obj,sourceObj,varargin)
             % pull the prevPosition from ObjectManager
-            obj.position.prev = sourceObj.prevPos(obj.indsInParent,:);
+            obj.position.prev(:,1:obj.params.dimension) = sourceObj.prevPos(obj.indsInParent,1:obj.params.dimension);
         end
         
         function UpdateCurPosListenerCallback(obj,sourceObj,varargin)
             % pull the curPosition from ObjectManager
-            obj.position.cur = sourceObj.curPos(obj.indsInParent,:);
+            obj.position.cur(:,1:obj.params.dimension) = sourceObj.curPos(obj.indsInParent,1:obj.params.dimension);
         end
         
         function UpdateConnectivityListenerCallback(obj,sourceObj,varargin)
@@ -93,8 +93,10 @@ classdef Rouse<handle
         function InitializeRouseStruct(obj)
             
             % Initialize positions
-            obj.position.cur             = randn(obj.params.numBeads,3);            
+            obj.position.cur             = randn(obj.params.numBeads,3);       
+            obj.position.cur(:,(1:3)>obj.params.dimension) = 0;
             obj.position.prev            = randn(obj.params.numBeads,3);            
+            obj.position.prev(:,(1:3)>obj.params.dimension) = 0;
 
             obj.InitializeBeadConnectionMap;
 
@@ -172,8 +174,11 @@ classdef Rouse<handle
            
             % set initial position for the first beads
            flag = false;
+           dimInds = (1:3)>obj.params.dimension;% dimensions not included
+           exDimDomVals = domainHandler.params(obj.params.initializeInDomain).domainCenter(dimInds); 
            while ~flag
             obj.position.prev(1,:) = 0.2*obj.params.b*randn(1,3);
+            obj.position.prev(1,dimInds) = exDimDomVals;
             flag = domainHandler.InDomain(obj.position.prev(1,:),obj.params.initializeInDomain);      
            end
            
@@ -184,15 +189,16 @@ classdef Rouse<handle
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
                     while ~inDomain  
-                     dx       = sqrt(2*fp.diffusionConst*fp.dt)*randn(1,3);
-                     tempPos  = obj.position.prev(bIdx-1,:)+dx;
-                     inDomain = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
+                     dx          = sqrt(2*fp.diffusionConst*fp.dt)*randn(1,3);
+                     dx(dimInds) = exDimDomVals;
+                     tempPos     = obj.position.prev(bIdx-1,:)+dx;
+                     inDomain    = domainHandler.InDomain(tempPos,obj.params.initializeInDomain);     
                     end                                          
                     obj.position.prev(bIdx,:)= tempPos;
                     
                 end
                 obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
-                
+                                
                 
                 else % if there are beads constrained to lay on the boundary 
                     
@@ -227,7 +233,7 @@ classdef Rouse<handle
                                               forceParams.springConst,forceParams.bendingConst,...                                           
                                               forceParams.minParticleEqDistance,obj.params.fixedBeadNum,dt);
                                          
-            obj.position.cur = newPos;  % update current position % the positions are updated after the domain has exerted its force on the chain                      
+            obj.position.cur(:,1:obj.params.dimension) = newPos(:,1:obj.params.dimension);  % update current position % the positions are updated after the domain has exerted its force on the chain                      
         end
         
         function SetPrevBeadPosition(obj,pos)% obsolete, externaly used
