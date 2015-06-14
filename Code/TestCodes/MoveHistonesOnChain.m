@@ -13,19 +13,14 @@ close all
 %        dt = 0.01
 %        D  = 1; diffusion const.
 % (500*sqrt(3))^2 /(3*pi^2 * 1)
+
+%% Parameters
 numRelaxationSteps = 100;
 numRecordingSteps  = 100;
 numBeamSteps       = 100;
 
 saveConfiguration  = false;
 loadConfiguration  = false;
-
-
-
-
-
-% bendingElasticityConst = 0.5;%/(2*r.params.simulator.dt);
-
 
 if loadConfiguration
     r = LoadConfiguration(loadConfiguration);
@@ -64,7 +59,7 @@ else
     chainForces = ForceManagerParams('dt',simulatorParams.simulator.dt,...
                                      'springForce',true,...
                                      'bendingElasticityForce',false,...
-                                     'bendingConst',1*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
+                                     'bendingConst',3*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
                                      'springConst', 1*simulatorParams.simulator.dimension*openSpaceForces.diffusionConst/(sqrt(3))^2,...
                                      'openningAngle',pi,...
                                      'minParticleEqDistance',1);
@@ -122,8 +117,7 @@ roiRes     = 20;% divide the ROI into pixels for density calculation , should be
 
 
 % get the chain position to initialize the histone on it
-[~,initialChainPosition] = r.objectManager.GetMembersPosition(1);
-initialChainPosition     = initialChainPosition{1};
+initialChainPosition = r.objectManager.curPos;
 
 % Initialize histones with the chain position
 histoneForce = ForceManagerParams('dt',r.params.simulator.dt,...
