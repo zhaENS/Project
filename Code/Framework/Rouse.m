@@ -218,11 +218,13 @@ classdef Rouse<handle
                    % numSteps   = range(obj.params.beadsOnBoundary); % this serves as the number of steps to walk on the boundary 
                     % get initial points 
                     initialPoint = domainHandler.GetRandomBoundarySample(1);
-                    obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,domainHandler.params,obj.params.beadsOnBoundary,obj.params.numBeads);
+                    obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,domainHandler.params,...
+                                                          obj.params.beadsOnBoundary,obj.params.numBeads);
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
+                
                     
-             end
+              end
         
             
             else                

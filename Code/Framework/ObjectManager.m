@@ -69,12 +69,12 @@ classdef ObjectManager<handle
               % update the position list
               obj.prevPos = [obj.prevPos; obj.handles.chain(cIdx).position.prev];
               obj.curPos  = [obj.curPos; obj.handles.chain(cIdx).position.cur];
-              
+         
               % Update cumulative object indices 
               cNb = cNb+obj.objParams(cIdx).numBeads;
             end 
-           
               obj.connectivity = (logical(obj.connectivity));
+          
         end
         
         function Merge(obj,objList)

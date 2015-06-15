@@ -89,8 +89,8 @@ classdef DomainHandler<handle
                 numBeads = size(pos1,1);
                 inFlag   = true(numBeads,1);         
                                                  
-                inIdx    = obj.InDomain(pos2,domainNumber); % find all particles in the domain 
-                outIdx   = find(~inIdx);       % find all particles outside the domain 
+                [inIdx,onIdx] = obj.InDomain(pos2,domainNumber); % find all particles in the domain 
+                outIdx        = find(~(inIdx&onIdx));       % find all particles outside the domain 
 %                 dc       = obj.params(domainNumber).domainCenter;
                 % For each particle outside the domain, reflect until it is
                 % inside the domain 
@@ -225,7 +225,7 @@ classdef DomainHandler<handle
             end
         end
         
-        function inIdx = InDomain(obj,vecIn,domainNumber)
+        function [inIdx, onIdx] = InDomain(obj,vecIn,domainNumber)
             % Check if points in vecIn are inside domain(domainNumber)            
             % the output is a binary vector with 1 if the point is inside
             % the domain, 0 otherwise.           
@@ -235,12 +235,14 @@ classdef DomainHandler<handle
             
             numParticles = size(vecIn,1);
 %             for dIdx = 1:obj.numDomains
-                inIdx        = true(numParticles,1);
+                inIdx  = true(numParticles,1);
+                onIdx  = false(numParticles,1);
                 if strcmpi(obj.params(domainNumber).domainShape,'Sphere')
                     % the vector norm
                     dc    = obj.params(domainNumber).domainCenter;
-                    n     = sqrt(sum(bsxfun(@minus,vecIn,dc).^2,2));
-                    inIdx = (n<=(obj.params(domainNumber).domainWidth+eps));
+                    n     = (sum(bsxfun(@minus,vecIn,dc).^2,2));
+                    inIdx = (n<(obj.params(domainNumber).domainWidth)^2);
+                    onIdx = ((n-obj.params(domainNumber).domainWidth.^2).^2)<eps;
 
                 elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')                
                     % the vector norm
