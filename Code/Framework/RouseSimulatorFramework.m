@@ -188,13 +188,34 @@ classdef RouseSimulatorFramework<handle
             fixedParticleNum        = [obj.objectManager.fixedParticles{:}];
             
             
-%             % Apply external forces from all domains and reflect
+
+            % diffuse particles on the boundary (currently works only on
+            % spheres)
+            for oIdx = 1:obj.objectManager.numObjects
+                cp                    = obj.objectManager.GetObjectParameters(oIdx);
+                particlesOnBoundary   = cp{1}.beadsOnBoundary;
+                domainNum             = cp{1}.initializeInDomain;
+                points                = zeros(numel(particlesOnBoundary),3);
+                particlePos           = obj.objectManager.GetPositionAsOne(oIdx);                
+                
+                for boIdx = 1:numel(particlesOnBoundary)
+                    particleInitPos = particlePos(particlesOnBoundary(boIdx),:);
+                    domainRad = obj.handles.classes.domain.params(domainNum).domainWidth;
+                    dc        = obj.handles.classes.domain.params(domainNum).domainCenter;
+                    diffusionConst = obj.handles.classes.domain.params(domainNum).forceParams.diffusionConst;
+                    points(boIdx,:) = DiffuseOnSphere(particleInitPos,1,domainRad,dc,dt,diffusionConst);
+                end
+                if oIdx >1
+            curParticlePosition( size(obj.objectManager.GetPositionAsOne(oIdx-1),1)+particlesOnBoundary,:) = points;
+                else
+            curParticlePosition(particlesOnBoundary,:) = points;        
+                end
+            end
+             %             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                                                   curParticlePosition,...
                                                                   particleDist,fixedParticleNum,dt);
-
-                                     
-                                                       
+                                                              
             % Deal the positions after reflection between the objects and their members in
             % the domain             
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);

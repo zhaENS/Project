@@ -27,6 +27,7 @@ classdef ForceManagerParams<handle
         mechanicalForceMagnitude@double
         edges@double %matrices representing the edges between connected particles
         particleDistance@double % pairwise distance between particles (unused)
+        particlesOnBoundary@double%the number of particles on the boundary
     end 
     
     methods 

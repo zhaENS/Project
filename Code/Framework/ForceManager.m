@@ -92,7 +92,8 @@ classdef ForceManager<handle
                                                                    particleDistances,connectivityMap,...
                                                                    springForce,bendingElasticityForce,...
                                                                    springConst,bendingConst,...
-                                                                   minParticleDistance,fixedParticleNum,dt)
+                                                                   minParticleDistance,fixedParticleNum,...
+                                                                   particlesOnBoundary,dt)%TODO: beds on boundary should receive forces
                                             
              % Apply object's internal forces to get the new position of
              % its vertices, represented by newParticlePosition                         
@@ -100,12 +101,12 @@ classdef ForceManager<handle
             % Spring force
             springForces  = ForceManager.GetSpringForce(springForce,particlePosition,particleDistances,springConst,...
                                                         connectivityMap,minParticleDistance,fixedParticleNum);
-            
+            springForces(particlesOnBoundary,:) = 0;% temp, do not assign forces for beads on the boundary
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistances,...
                                                                    connectivityMap,bendingConst,fixedParticleNum);
 
-
+            bendingForces(particlesOnBoundary,:) = 0;% temp, do not assign forces for beads on the boundary
             dx = (springForces+ bendingForces)*dt;
             
             newParticlePosition = particlePosition+dx;
@@ -118,7 +119,8 @@ classdef ForceManager<handle
                                                             LJPotentialWidth,LJPotentialDepth,...
                                                             morsePotentialDepth, morsePotentialWidth,morseForceType,...
                                                             mechaicalForceCenter, mechanicalForceDirection,mechanicalForceMagnitude,...
-                                                            minParticleDist,fixedParticleNum,dt)%TODO: pass force parameters
+                                                            minParticleDist,fixedParticleNum,...,
+                                                            dt)%TODO: pass force parameters
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
              
@@ -264,6 +266,7 @@ classdef ForceManager<handle
                 [force, forceDirection] = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
             end
             force(fixedParticleNum,:) = 0;
+      
         end
         
         function force = GetMorseForce(morseForce,morsePotentialDepth,...
@@ -278,6 +281,7 @@ classdef ForceManager<handle
                  edgesX,edgesY,edgesZ, particleDistance,forceType);
             end
             force(fixedParticleNum,:) = 0;
+       
         end
         
         function force = GetMechanicalPointForce(mechanicalForce,particlePosition,pointSourcePosition, forceDirection, forceMagnitude)

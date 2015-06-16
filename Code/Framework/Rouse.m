@@ -217,13 +217,19 @@ classdef Rouse<handle
                     % points
                    % numSteps   = range(obj.params.beadsOnBoundary); % this serves as the number of steps to walk on the boundary 
                     % get initial points 
+               
                     initialPoint = domainHandler.GetRandomBoundarySample(1);
+                    rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params.domainCenter).^2));
+                    while (rho-domainHandler.params.domainWidth)^2 ~=0
+                       initialPoint = domainHandler.GetRandomBoundarySample(1);
+                       rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params.domainCenter).^2));
+                    end
                     obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,domainHandler.params,...
                                                           obj.params.beadsOnBoundary,obj.params.numBeads);
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
                 
-                    
+                   obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
               end
         
             
@@ -243,7 +249,8 @@ classdef Rouse<handle
             newPos   = ForceManager.ApplyInternalForces(obj.position.cur,beadDist,obj.connectionMap.map,...  
                                               forceParams.springForce,forceParams.bendingElasticityForce,...
                                               forceParams.springConst,forceParams.bendingConst,...                                           
-                                              forceParams.minParticleEqDistance,obj.params.fixedBeadNum,dt);
+                                              forceParams.minParticleEqDistance,obj.params.fixedBeadNum,...
+                                              obj.params.beadsOnBoundary,dt);
                                          
             obj.position.cur = newPos;  % update current position % the positions are updated after the domain has exerted its force on the chain                      
         end

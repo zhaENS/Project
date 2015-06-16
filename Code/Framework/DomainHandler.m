@@ -90,7 +90,7 @@ classdef DomainHandler<handle
                 inFlag   = true(numBeads,1);         
                                                  
                 [inIdx,onIdx] = obj.InDomain(pos2,domainNumber); % find all particles in the domain 
-                outIdx        = find(~(inIdx&onIdx));       % find all particles outside the domain 
+                outIdx        = find(~(inIdx|onIdx));       % find all particles outside the domain 
 %                 dc       = obj.params(domainNumber).domainCenter;
                 % For each particle outside the domain, reflect until it is
                 % inside the domain 
@@ -240,10 +240,12 @@ classdef DomainHandler<handle
                 if strcmpi(obj.params(domainNumber).domainShape,'Sphere')
                     % the vector norm
                     dc    = obj.params(domainNumber).domainCenter;
-                    n     = (sum(bsxfun(@minus,vecIn,dc).^2,2));
-                    inIdx = (n<(obj.params(domainNumber).domainWidth)^2);
-                    onIdx = ((n-obj.params(domainNumber).domainWidth.^2).^2)<eps;
-
+                    n     = sqrt(sum(bsxfun(@minus,vecIn,dc).^2,2));
+                    onIdx = ((n-obj.params(domainNumber).domainWidth).^2)<eps;
+                    inIdx = (n<(obj.params(domainNumber).domainWidth));
+                   if any(onIdx& inIdx)
+                       disp('stop')
+                   end
                 elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')                
                     % the vector norm
                     dc    = obj.params(domainNumber).domainCenter;
