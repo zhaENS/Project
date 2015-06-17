@@ -187,23 +187,25 @@ classdef RouseSimulatorFramework<handle
             particleDist            = obj.objectManager.particleDist; % distance before applying internal forces
             fixedParticleNum        = [obj.objectManager.fixedParticles{:}];
             
-            
+                                                            
+
 
             % diffuse particles on the boundary (currently works only on
             % spheres)
             for oIdx = 1:obj.objectManager.numObjects
-                cp                    = obj.objectManager.GetObjectParameters(oIdx);
-                particlesOnBoundary   = cp{1}.beadsOnBoundary;
-                domainNum             = cp{1}.initializeInDomain;
-                points                = zeros(numel(particlesOnBoundary),3);
-                particlePos           = obj.objectManager.GetPositionAsOne(oIdx);                
+                cp                            = obj.objectManager.GetObjectParameters(oIdx);
+                particlesOnBoundary           = cp{1}.beadsOnBoundary;
+                domainNum                     = cp{1}.initializeInDomain;
+                points                        = zeros(numel(particlesOnBoundary),3);
+               [~,particleCurPos] = obj.objectManager.GetPositionAsOne(oIdx);                
                 
                 for boIdx = 1:numel(particlesOnBoundary)
-                    particleInitPos = particlePos(particlesOnBoundary(boIdx),:);
+                    particleInitPos = particleCurPos(particlesOnBoundary(boIdx),:);
                     domainRad = obj.handles.classes.domain.params(domainNum).domainWidth;
                     dc        = obj.handles.classes.domain.params(domainNum).domainCenter;
                     diffusionConst = obj.handles.classes.domain.params(domainNum).forceParams.diffusionConst;
-                    points(boIdx,:) = DiffuseOnSphere(particleInitPos,1,domainRad,dc,dt,diffusionConst);
+                    posTempo       = DiffuseOnSphere(particleInitPos,2,domainRad,dc,dt,diffusionConst);
+                    points(boIdx,:) = posTempo(2,:);
                 end
                 if oIdx >1
             curParticlePosition( size(obj.objectManager.GetPositionAsOne(oIdx-1),1)+particlesOnBoundary,:) = points;
@@ -211,11 +213,12 @@ classdef RouseSimulatorFramework<handle
             curParticlePosition(particlesOnBoundary,:) = points;        
                 end
             end
-             %             % Apply external forces from all domains and reflect
+            % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                                                   curParticlePosition,...
-                                                                  particleDist,fixedParticleNum,dt);
-                                                              
+                                                                  particleDist,fixedParticleNum,particlesOnBoundary,dt);
+         
+                    
             % Deal the positions after reflection between the objects and their members in
             % the domain             
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);

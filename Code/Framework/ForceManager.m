@@ -29,7 +29,8 @@ classdef ForceManager<handle
         minParticleDistance    = 0;
         dt                     = 0; % the time to activate the force
         fixedParticleNum       = [];
-                
+        particlesOnBoundary    = [];        
+        
         edges % matrices representing the edges between connected particles
         particleDistance % pairwise distance between particles
         
@@ -119,21 +120,21 @@ classdef ForceManager<handle
                                                             LJPotentialWidth,LJPotentialDepth,...
                                                             morsePotentialDepth, morsePotentialWidth,morseForceType,...
                                                             mechaicalForceCenter, mechanicalForceDirection,mechanicalForceMagnitude,...
-                                                            minParticleDist,fixedParticleNum,...,
+                                                            minParticleDist,fixedParticleNum,particlesOnBoundary,...
                                                             dt)%TODO: pass force parameters
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
              
              % Lenard-jones force             
-            ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum);
+            ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum,particlesOnBoundary);
             
             % Thermal (diffusion) force
-            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum);
+            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum,particlesOnBoundary);
             
             
             % Morse force                        
             morseForce = ForceManager.GetMorseForce(morseForce,morsePotentialDepth,morsePotentialWidth,...
-                                         minParticleDist, particlePosition,particleDistances,morseForceType,fixedParticleNum);
+                                         minParticleDist, particlePosition,particleDistances,morseForceType,fixedParticleNum,particlesOnBoundary);
             
                                      
             mechanicalForce = ForceManager.GetMechanicalPointForce(mechanicalForce,particlePosition,mechaicalForceCenter,...
@@ -249,28 +250,29 @@ classdef ForceManager<handle
             end            
         end
         
-        function force  = GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum)
+        function force  = GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum,particlesOnBoundary)
             % get thermal (diffusion) force
             force = zeros(size(particlePosition));
             if diffusionForce
                 force = randn(size(particlePosition))*sqrt(2*diffusionConst*dt);
             end 
-            force(fixedParticleNum,:) = 0;
+            force(fixedParticleNum,:)    = 0;
+            force(particlesOnBoundary,:) = 0;
         end
         
-        function [force, forceDirection]  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth,fixedParticleNum)
+        function [force, forceDirection]  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth,fixedParticleNum,particlesOnBoundary)
             % calculate Lenard jones force between particles
             force = zeros(size(particlePosition));
             if ljForce
 %                 force = LennardJones(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
                 [force, forceDirection] = LennardJones_mex(particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth);
             end
-            force(fixedParticleNum,:) = 0;
-      
+            force(fixedParticleNum,:)    = 0;
+            force(particlesOnBoundary,:) = 0;
         end
         
         function force = GetMorseForce(morseForce,morsePotentialDepth,...
-                            morsePotentialWidth,morseEqDistance, particlePosition,particleDistance,forceType,fixedParticleNum)
+                            morsePotentialWidth,morseEqDistance, particlePosition,particleDistance,forceType,fixedParticleNum,particlesOnBoundary)
             force = zeros(size(particlePosition));
             if morseForce
              edgeMat = GetEdgesVectors_mex(particlePosition,true(size(particleDistance,1)));
@@ -280,8 +282,8 @@ classdef ForceManager<handle
              [force] = MorseForce(morsePotentialDepth,morsePotentialWidth, morseEqDistance, ...
                  edgesX,edgesY,edgesZ, particleDistance,forceType);
             end
-            force(fixedParticleNum,:) = 0;
-       
+            force(fixedParticleNum,:)    = 0;
+            force(particlesOnBoundary,:) = 0;
         end
         
         function force = GetMechanicalPointForce(mechanicalForce,particlePosition,pointSourcePosition, forceDirection, forceMagnitude)

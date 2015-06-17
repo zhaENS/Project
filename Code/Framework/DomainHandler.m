@@ -43,7 +43,7 @@ classdef DomainHandler<handle
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
         end        
                 
-        function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,dt)                                                
+        function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,particlesOnBoundary,dt)                                                
                % Apply forces on particles in the domain to obtain their
                % new position 
                % currently this function supports domains which do not
@@ -60,7 +60,7 @@ classdef DomainHandler<handle
                                                     fp.LJPotentialWidth,fp.LJPotentialDepth,...
                                                     fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
                                                     fp.mechanicalForceCenter, fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
-                                                    fp.minParticleEqDistance,fixedParticleNum,dt);
+                                                    fp.minParticleEqDistance,fixedParticleNum,particlesOnBoundary,dt);
                                                                                                
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
                      [~,curParticlePosition] = obj.Reflect(prevParticlePosition,curParticlePosition,domainNumber);
@@ -242,7 +242,7 @@ classdef DomainHandler<handle
                     dc    = obj.params(domainNumber).domainCenter;
                     n     = sqrt(sum(bsxfun(@minus,vecIn,dc).^2,2));
                     onIdx = ((n-obj.params(domainNumber).domainWidth).^2)<eps;
-                    inIdx = (n<(obj.params(domainNumber).domainWidth));
+                    inIdx = (n+1e-14<(obj.params(domainNumber).domainWidth));
                    if any(onIdx& inIdx)
                        disp('stop')
                    end
