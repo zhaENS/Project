@@ -77,9 +77,9 @@ classdef SimulationFrameworkGraphics<handle
                 if strcmpi(dp.domainShape,'sphere')
                     [x,y,z] = sphere(20);
                     
-                    points.x = x*dp.domainWidth;
-                    points.y = y*dp.domainWidth;
-                    points.z = z*dp.domainWidth;
+                    points.x = x*dp.domainWidth+dp.domainCenter(1);
+                    points.y = y*dp.domainWidth+dp.domainCenter(2);
+                    points.z = z*dp.domainWidth+dp.domainCenter(3);
                     
                     if dp.dimension ==1
                         points.y = zeros(size(y));
