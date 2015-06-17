@@ -69,7 +69,7 @@ else
                                      'openningAngle',pi,...
                                      'minParticleEqDistance',1);
     
-    cp          = ChainParams('numBeads',1600,...
+    cp          = ChainParams('numBeads',600,...
                               'dimension',simulatorParams.simulator.dimension,...
                               'initializeInDomain',3,...
                               'forceParams',chainForces,...                              
@@ -95,7 +95,7 @@ else
                                       'morseForce',false,...
                                       'mechanicalForce',false);
     
-    dp(3)        = DomainHandlerParams('domainWidth',sqrt(cp.numBeads/6)*cp.b/2,...% radius of Gyration
+    dp(3)        = DomainHandlerParams('domainWidth',sqrt(cp.numBeads/6)*cp.b,...% radius of Gyration
                                        'dimension',simulatorParams.simulator.dimension,...
                                        'domainCenter',[0 0 0],...
                                        'reflectionType','preserveEnergy',...
@@ -157,7 +157,7 @@ chainPos        = r.objectManager.curPos;
                                                                       roiRes,histoneParams.numHistones,dnaLengthIn,1);
 
 % % shut down diffusion before laser shot
-r.handles.classes.domain.params.forceParams.diffusionForce = false;
+% r.handles.classes.domain.params.forceParams.diffusionForce = false;
 
 % Start recording densities with no beam effect
 for sIdx = 1:numRecordingSteps    
@@ -447,7 +447,8 @@ numBeads =  sum((chainPos(:,1)<=(rectX+rectWidth) & chainPos(:,1)>=rectX &...
     chainPos(:,2)<=(rectY+rectHeight) & chainPos(:,2)>=rectY));
 
 % Calculate DNA density
-[dnaLengthIn,totalDNALength] = PolygonLengthInRoi(chainPos(:,1:2),rectX,rectY,rectWidth, rectHeight);
+% [dnaLengthIn,totalDNALength] = PolygonLengthInRoi(chainPos(:,1:2),rectX,rectY,rectWidth, rectHeight);
+dnaLengthIn = 1;
 dnaDensity = dnaLengthIn;%./initialDnaInLength;%totalDNALength;
 
 

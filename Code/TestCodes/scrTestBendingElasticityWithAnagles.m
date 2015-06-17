@@ -1,19 +1,19 @@
 % scrTestBendingElasticityWithAnagles
 close all
-numParticles     = 25;
+numParticles     = 15;
 dimension        = 3;
 
-numSteps         = 550;
-dt               = 0.01;
+numSteps         = 1550;
+dt               = 0.1;
 angle0           = pi;
 b                = sqrt(3);
 diffusionConst   = 1;
-bendingConst     = 10*dimension*diffusionConst./b^2;
-springConst      = 5*dimension*diffusionConst./b^2;
+bendingConst     = 1*dimension*diffusionConst./b^2;
+springConst      = 1*dimension*diffusionConst./b^2;
 particlePosition = cumsum(sqrt(2*diffusionConst*dt)*randn(numParticles,dimension));
 
 connectivityMap  = (diag(ones(1,numParticles-1),1)+diag(ones(1,numParticles-1),-1))~=0;
-minParticleDist  = 0;
+minParticleDist  = 1;
 fixedParticleNum = [];
 afectedBeadsNumber  = [];
 
@@ -23,7 +23,7 @@ springsFlag        = true;
 bendingFlag        = true;
 
 % rMat = RouseMatrix(numParticles);
-gr = 2*sqrt(numParticles/6)*b^2 ;
+gr = sqrt(numParticles/6)*b^2 ;
 % graphics
 mainFig      = figure('Units','norm');
 mainAxes     = axes('Parent',mainFig,'Units','norm','Color','k','XLim',[-gr gr],'YLim',[-gr gr],'ZLim',[-gr gr]);
@@ -46,7 +46,7 @@ affectedBeadsHandle = line('XData',particlePosition(afectedBeadsNumber ,1),...
                            'Zdata',particlePosition(afectedBeadsNumber ,3),...
                           'Marker','o','MarkerFaceColor','g','MarkerEdgeColor','g',...
                            'LineStyle','-','Color','w','LineWidth',4);
- affectedBeads          = false(numParticles,1);
+ affectedBeads          = true(numParticles,1);
 for sIdx = 1:numSteps
     
     particleDist = ForceManager.GetParticleDistance(particlePosition);
@@ -72,11 +72,5 @@ for sIdx = 1:numSteps
     
     drawnow    
     
-    if sIdx ==200
-        affectedBeads          = false(numParticles,1);
-        affectedBeads(afectedBeadsNumber ) = true;
-        set(affectedBeadsHandle,'MarkerFaceColor','r','MarkerEdgeColor','r')
-        
-    end
 end
 
