@@ -189,7 +189,7 @@ classdef Rouse<handle
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
                     while ~inDomain  
-                     dx          = sqrt(2*fp.diffusionConst*fp.dt*2)*randn(1,3);
+                     dx          = sqrt(2*fp.diffusionConst)*randn(1,3);
 %                      dx          = sqrt(2*fp.diffusionConst)*randn(1,3);
                      dx(dimInds) = exDimDomVals;
                      tempPos     = obj.position.prev(bIdx-1,:)+dx;

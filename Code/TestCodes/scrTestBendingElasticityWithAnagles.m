@@ -1,10 +1,10 @@
 % scrTestBendingElasticityWithAnagles
 close all
-numParticles     = 15;
+numParticles     = 55;
 dimension        = 3;
 
-numSteps         = 1550;
-dt               = 0.1;
+numSteps         = 1000;
+dt               = 0.01;
 angle0           = pi;
 b                = sqrt(3);
 diffusionConst   = 1;
