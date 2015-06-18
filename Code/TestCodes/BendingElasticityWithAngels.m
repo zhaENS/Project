@@ -5,7 +5,7 @@ numParticles = size(particlePosition,1);
 dimension    = size(particlePosition,2);
 force        = zeros(numParticles,dimension);
 
-cosTheta  = @(pos,dist,i) ((1./(dist(i,i+1)*dist(i+1,i+2)))*sum((pos(i,:)-pos(i+1,:)).*(pos(i+2,:)-pos(i+1,:))));
+% cosTheta  = @(pos,dist,i) ((1./(dist(i,i+1)*dist(i+1,i+2)))*sum((pos(i,:)-pos(i+1,:)).*(pos(i+2,:)-pos(i+1,:))));
 
 % F1        = @(pos,dist,i)(-1./dist(i+1,i+2))*((pos(i+1,:)-pos(i,:))./dist(i,i+1) + (1/dist(i+1,i+2)).*(pos(i+2,:)-pos(i+1,:)).*...
 %                         cosTheta(pos,dist,i));
@@ -48,7 +48,7 @@ for pIdx = 1:numParticles
 %                                       (cosTheta(particlePosition,particleDistance,pIdx-1)-bAngle)*F2(particlePosition,particleDistance,pIdx));
          force(pIdx,:) = bendingConst*(F2(pos,dist,2,bAngle)+F3(pos,dist,2,bAngle));
         
-    elseif pIdx == (numParticles-1)
+    elseif pIdx == (numParticles-1) && (pIdx~=2)
 %         force(pIdx,:) = bendingConst*((cosTheta(particlePosition,particleDistance,pIdx-2)-bAngle)*F1(particlePosition,particleDistance,pIdx)+...
 %                                       (cosTheta(particlePosition,particleDistance,pIdx-1)-bAngle)*F2(particlePosition,particleDistance,pIdx));
           force(pIdx,:) = bendingConst*(F2(pos,dist,pIdx,bAngle)+F1(pos,dist,pIdx,bAngle));
