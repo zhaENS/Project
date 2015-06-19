@@ -118,7 +118,7 @@ classdef ForceManager<handle
                                                             LJPotentialWidth,LJPotentialDepth,...
                                                             morsePotentialDepth, morsePotentialWidth,morseForceType,...
                                                             mechaicalForceCenter, mechanicalForceDirection,mechanicalForceMagnitude,...
-                                                            minParticleDist,fixedParticleNum,dt)%TODO: pass force parameters
+                                                            minParticleDist,fixedParticleNum,dt,dimension)%TODO: pass force parameters
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
              
@@ -126,7 +126,7 @@ classdef ForceManager<handle
             ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum);
             
             % Thermal (diffusion) force
-            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum);
+            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,dimension,size(particlePosition,1),diffusionConst,dt,fixedParticleNum);
             
             
             % Morse force                        
@@ -247,11 +247,11 @@ classdef ForceManager<handle
             end            
         end
         
-        function force  = GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum)
+        function force  = GetDiffusionForce(diffusionForce,dimension,numParticles,diffusionConst,dt,fixedParticleNum)
             % get thermal (diffusion) force
-            force = zeros(size(particlePosition));
+            force = zeros(numParticles,3);
             if diffusionForce
-                force = randn(size(particlePosition))*sqrt(2*diffusionConst*dt);
+                force(:,1:dimension) = randn(numParticles,dimension)*sqrt(2*diffusionConst*dt);
             end 
             force(fixedParticleNum,:) = 0;
         end

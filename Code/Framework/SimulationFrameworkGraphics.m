@@ -264,7 +264,7 @@ classdef SimulationFrameworkGraphics<handle
             
             c       = clock;
             % assign a name according to the clock 
-            uName   = ['snapshot_' num2str(c(2:end))];
+            uName   = ['snapshot_' sprintf('%s',[num2str(c(3)),'_',num2str(c(2)),'_',num2str(c(4)),'_',num2str(c(5))])];
             [~,~,~] = mkdir(obj.params.plotHandler.galleryFolderPath);
             fr      = obj.handles.framework;
             
