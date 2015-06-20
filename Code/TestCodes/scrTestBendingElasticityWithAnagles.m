@@ -1,6 +1,6 @@
 % scrTestBendingElasticityWithAnagles
 close all
-numParticles     = 20;
+numParticles     = 4;
 dimension        = 3;
 
 numSteps         = 5000;
