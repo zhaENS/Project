@@ -1,9 +1,9 @@
 % scrTestBendingElasticityWithAnagles
 close all
-numParticles     = 4;
+numParticles     = 400;
 dimension        = 3;
 
-numSteps         = 5000;
+numSteps         = 1800;
 dt               = 0.01;
 angle0           = 1*pi;
 b                = sqrt(3);
@@ -14,15 +14,15 @@ particlePosition = cumsum(sqrt(2*diffusionConst*dt)*randn(numParticles,dimension
 
 connectivityMap    = (diag(ones(1,numParticles-1),1)+diag(ones(1,numParticles-1),-1))~=0;
 % form a looped polymer 
-connectivityMap(1,end) = true;
-connectivityMap(end,1) = true;
+% connectivityMap(1,end) = true;
+% connectivityMap(end,1) = true;
 
-minParticleDist    = 1;
+minParticleDist    = 0;
 fixedParticleNum   = [];
 afectedBeadsNumber = [];
 
 % flags
-diffusionFlag      = false;
+diffusionFlag      = true;
 springsFlag        = true;
 bendingFlag        = true;
 
