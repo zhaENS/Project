@@ -191,7 +191,7 @@ classdef DomainHandler<handle
                      A  = prevPos;
                      B  = curPos; 
                      C  = (B-A);%./norm(B-A);
-                     
+                     if C>eps
                      gamma = dot(A,A);
                      alpha = dot (A,B) -gamma;
                      beta  = dot(C,C);
@@ -211,6 +211,10 @@ classdef DomainHandler<handle
                     else
                         intersectionPoint = [];
                     end
+                     else
+                         intersectionPoint = prevPos+C/2;
+                     end
+                     
             elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
                     r  = obj.params(domainNumber).domainWidth;                                    
                     c  = cross([0 1 0],[0 0 1]);

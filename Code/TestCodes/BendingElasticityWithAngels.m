@@ -1,4 +1,4 @@
-function force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,angle0,affectedParticles)
+function force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,angle0, affectedParticles)
 %===========
 % Calculate the force on each particle given its connectivity
 numParticles = size(particlePosition,1);
@@ -43,7 +43,7 @@ for pIdx = 1:numel(affectedParticles)
 %         force(pIdx,:) = bendingConst*(cosTheta(particlePosition,particleDistance,pIdx)-bAngle)*...
 %                                    F3(particlePosition,particleDistance,pIdx);
 %                                     F2(particlePosition,particleDistance,pIdx);
-         force(affectedParticles(pIdx),:) = bendingConst*F3(pos,dist,1,bAngle);
+         force(1,:) = bendingConst*F3(pos,dist,1,bAngle);
     elseif affectedParticles(pIdx)== 2 && (affectedParticles(pIdx)~=(numParticles-1));
         
 %         force(pIdx,:) = bendingConst*((cosTheta(particlePosition,particleDistance,pIdx)-bAngle)*F3(particlePosition,particleDistance,pIdx)+...
@@ -51,7 +51,7 @@ for pIdx = 1:numel(affectedParticles)
          force(affectedParticles(pIdx),:) = bendingConst*(F2(pos,dist,2,bAngle)+F3(pos,dist,2,bAngle));
          
      elseif affectedParticles(pIdx) == 2 && (affectedParticles(pIdx)==(numParticles-1))
-           force(affectedParticles(pIdx),:) = bendingConst*(F2(pos,dist,2,bAngle));
+           force(2,:) = bendingConst*(F2(pos,dist,2,bAngle));
            
     elseif affectedParticles(pIdx) == (numParticles-1) && (affectedParticles(pIdx)~=2)
 %         force(pIdx,:) = bendingConst*((cosTheta(particlePosition,particleDistance,pIdx-2)-bAngle)*F1(particlePosition,particleDistance,pIdx)+...
