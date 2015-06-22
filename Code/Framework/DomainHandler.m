@@ -191,7 +191,7 @@ classdef DomainHandler<handle
                      A  = prevPos;
                      B  = curPos; 
                      C  = (B-A);%./norm(B-A);
-                     
+                     if C>eps
                      gamma = dot(A,A);
                      alpha = dot (A,B) -gamma;
                      beta  = dot(C,C);
@@ -211,6 +211,10 @@ classdef DomainHandler<handle
                     else
                         intersectionPoint = [];
                     end
+                     else
+                         intersectionPoint = prevPos+C/2;
+                     end
+                     
             elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
                     r  = obj.params(domainNumber).domainWidth;                                    
                     c  = cross([0 1 0],[0 0 1]);
@@ -240,8 +244,8 @@ classdef DomainHandler<handle
                 if strcmpi(obj.params(domainNumber).domainShape,'Sphere')
                     % the vector norm
                     dc    = obj.params(domainNumber).domainCenter;
-                    n     = sqrt(sum(bsxfun(@minus,vecIn,dc).^2,2));
-                    inIdx = (n<=(obj.params(domainNumber).domainWidth+eps));
+                    n     = (sum(bsxfun(@minus,vecIn,dc).^2,2));
+                    inIdx = (n<=(obj.params(domainNumber).domainWidth+1e-10)^2);
 
                 elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')                
                     % the vector norm

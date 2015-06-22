@@ -1,21 +1,21 @@
 % scrTestBendingElasticityWithAnagles
 close all
-numParticles     = 20;
+numParticles     = 36;
 dimension        = 3;
 
-numSteps         = 5000;
-dt               = 0.01;
+numSteps         = 1500;
+dt               = 0.1;
 angle0           = 1*pi;
 b                = sqrt(3);
 diffusionConst   = 1;
-bendingConst     = 1*dimension*diffusionConst./b^2;
+bendingConst     = 1.5*dimension*diffusionConst./b^2;
 springConst      = 1*dimension*diffusionConst./b^2;
 particlePosition = cumsum(sqrt(2*diffusionConst*dt)*randn(numParticles,dimension));
 
 connectivityMap    = (diag(ones(1,numParticles-1),1)+diag(ones(1,numParticles-1),-1))~=0;
 % form a looped polymer 
-connectivityMap(1,end) = true;
-connectivityMap(end,1) = true;
+% connectivityMap(1,end) = true;
+% connectivityMap(end,1) = true;
 
 minParticleDist    = 1;
 fixedParticleNum   = [];
@@ -47,7 +47,8 @@ dcm           = pdist2(particlePosition,cm);
 meanDistCM    = line('XData',dt,'YData', mean(dcm),'Parent',dcmAxes,'Linewidth',3);
 bLine         = line('XData',[0 0],'YData',[0 0],'color','g','Parent',dcmAxes);
 
-affectedBeads = true(numParticles,1);
+affectedBeads = false(numParticles,1);
+affectedBeads(10:17) = true;
 % particleDist  = b*ones(numParticles);
 for sIdx = 1:numSteps
     

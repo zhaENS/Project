@@ -89,13 +89,13 @@ classdef ForceManager<handle
     methods (Static)
         
          function [newParticlePosition,springForces,bendingForces] = ApplyInternalForces(particlePosition,...
-                                                                   particleDistances,connectivityMap,...
-                                                                   springForce,bendingElasticityForce,...
-                                                                   springConst,bendingConst,...
-                                                                   minParticleDistance,fixedParticleNum,dt)
+                                                                           particleDistances,connectivityMap,...
+                                                                           springForce,bendingElasticityForce,...
+                                                                           springConst,bendingConst,bendingAffectedParticles,bendingOpeningAngle,...
+                                                                           minParticleDistance,fixedParticleNum,dt)
                                             
-             % Apply object's internal forces to get the new position of
-             % its vertices, represented by newParticlePosition                         
+            % Apply object's internal forces to get the new position of
+            % its vertices, represented by newParticlePosition                         
             
             % Spring force
             springForces  = ForceManager.GetSpringForce(springForce,particlePosition,particleDistances,springConst,...
@@ -103,8 +103,10 @@ classdef ForceManager<handle
             
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistances,...
-                                                                   particleDistances,connectivityMap,bendingConst,fixedParticleNum);
-
+                                                                   connectivityMap,bendingConst,...
+                                                                   bendingAffectedParticles,bendingOpeningAngle,...
+                                                                   fixedParticleNum);
+                                                     
 
             dx = (springForces+ bendingForces)*dt;
             
@@ -226,7 +228,10 @@ classdef ForceManager<handle
             end
         end
         
-        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,connectivityMat,bendingConst,fixedParticleNum,openningAngle)
+        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,...
+                                                    connectivityMat,bendingConst,...
+                                                    bendingAffectedParticles,bendingOpeningAngle,fixedParticleNum)
+                                                                               
             % Get bending elasticity force
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
@@ -239,7 +244,12 @@ classdef ForceManager<handle
 %                                                  connectivityMat,bendingConst);
                                                  
 %               force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
-              force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,openningAngle);
+                if isempty(bendingAffectedParticles)
+                    bendingAffectedParticles= (1:size(particlePosition,1))';
+                end
+                force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,bendingOpeningAngle, bendingAffectedParticles);
+%               force = BendingElasticity(particlePosition,particleDistance,bendingConst,...
+%                                                   bendingOpeningAngle,bendingAffectedParticles,size(particlePosition,1),size(particlePosition,2));
                                    
               % zero out forces for
               % fixed particles
