@@ -192,33 +192,53 @@ classdef RouseSimulatorFramework<handle
 
             % diffuse particles on the boundary (currently works only on
             % spheres)
+            particlesOnBoundaryCumul =[];
             for oIdx = 1:obj.objectManager.numObjects
                 cp                            = obj.objectManager.GetObjectParameters(oIdx);
-                particlesOnBoundary           = cp{1}.beadsOnBoundary;
-                domainNum                     = cp{1}.initializeInDomain;
-                points                        = zeros(numel(particlesOnBoundary),3);
+                 particlesOnBoundary = cp{1}.beadsOnBoundary;
+                domainNum                     = cp{1}.initializeInDomain;  
+                 points                        = zeros(size(particlesOnBoundary,2),3);
+
                [~,particleCurPos] = obj.objectManager.GetPositionAsOne(oIdx);                
                 
-                for boIdx = 1:numel(particlesOnBoundary)
-                    particleInitPos = particleCurPos(particlesOnBoundary(boIdx),:);
+                for boIdx = 1:size(particlesOnBoundary,2)
+                     particleInitPos = particleCurPos(particlesOnBoundary(boIdx),:);
                     domainRad = obj.handles.classes.domain.params(domainNum).domainWidth;
                     dc        = obj.handles.classes.domain.params(domainNum).domainCenter;
                     diffusionConst = obj.handles.classes.domain.params(domainNum).forceParams.diffusionConst;
-                    posTempo       = DiffuseOnSphere(particleInitPos,2,domainRad,dc,dt,diffusionConst);
+                    posTempo       = DiffusionOnSphere(particleInitPos,dt,diffusionConst*5,2,dc,domainRad);
+                   
+
                     points(boIdx,:) = posTempo(2,:);
                 end
+                
+               % if have more than one chain ,turn the local position to
+               % the global position;
                 if oIdx >1
-            curParticlePosition( size(obj.objectManager.GetPositionAsOne(oIdx-1),1)+particlesOnBoundary,:) = points;
+              curParticlePosition(particlesOnBoundaryCumul(end)+particlesOnBoundary,:) = points;      
+              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary+particlesOnBoundaryCumul(end)]; 
                 else
-            curParticlePosition(particlesOnBoundary,:) = points;        
+              curParticlePosition(particlesOnBoundary,:) = points;            
+              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];      
                 end
             end
+              particlesOnBoundary = particlesOnBoundaryCumul;
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                                                   curParticlePosition,...
                                                                   particleDist,fixedParticleNum,particlesOnBoundary,dt);
-         
-                    
+                                                              
+           %if the fixed beads are also on the boundary ,find the
+           %positions and correct the position such that all the chains
+           %have the same position for the fixed beads;
+           fIdxCumul = [];
+            for bIdx = 1:numel(fixedParticleNum)
+                fIdx = find(particlesOnBoundary==fixedParticleNum(bIdx));
+                fIdxCumul = [fIdxCumul fIdx];
+            end
+            if ~isempty(fIdxCumul)
+            curParticlePosition(particlesOnBoundary(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundary(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
+            end
             % Deal the positions after reflection between the objects and their members in
             % the domain             
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);

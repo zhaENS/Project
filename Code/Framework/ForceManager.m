@@ -13,6 +13,8 @@ classdef ForceManager<handle
     % objects, this will make calculation of the distances done only once
     % every loop for all objects 
     % TODO: pass force params to the Apply functions 
+    % TODO: openingAngle is not defined for compositeForces
+    
     properties
         %  Names of forces acting on the particle system      
         springForce            = false;
@@ -142,7 +144,7 @@ classdef ForceManager<handle
             % zero-out forces for fixed particles
              dx = (ljForces*dt+ morseForce*dt+ mechanicalForce*dt+diffusionForces);
              dx(fixedParticleNum,:) = 0;
-             
+             dx(particlesOnBoundary,:) = 0;
 
             
              % get new position

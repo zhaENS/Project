@@ -229,7 +229,7 @@ classdef Rouse<handle
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
                 
-                   obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
+                    obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
               end
         
             
