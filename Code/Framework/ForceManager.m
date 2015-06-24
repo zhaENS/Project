@@ -103,7 +103,7 @@ classdef ForceManager<handle
             
             % Spring force
             springForces  = ForceManager.GetSpringForce(springForce,particlePosition,particleDistances,springConst,...
-                                                        connectivityMap,minParticleDistance,fixedParticleNum);
+                                                        connectivityMap,minParticleDistance,fixedParticleNum,particlesOnBoundary);
             springForces(particlesOnBoundary,:) = 0;% temp, do not assign forces for beads on the boundary
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistances,...
@@ -213,7 +213,7 @@ classdef ForceManager<handle
             newParticlePosition = particlePosition+dx;                                                                           
         end    
         
-        function force  = GetSpringForce(springForce,particlePosition,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum)
+        function force  = GetSpringForce(springForce,particlePosition,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum,particlesOnBoundary)
             % Calculate the spring force between N particles in any dimension M.
             % particleDist    - NxN matrix of pairwise particle distances
             % springConst     - NxN double matrix of spring constants
@@ -227,7 +227,8 @@ classdef ForceManager<handle
                 sumForces                 = sum(L,2);
                 force                     = -springConst.*(diag(sumForces)-L); % set the maindiagonal                
                 force                     = force*particlePosition;
-                force(fixedParticleNum,:) = 0;% zero out forces for fixed particles
+                force(fixedParticleNum,:)    = 0;% zero out forces for fixed particles
+                force(particlesOnBoundary,:) =0;
             end
         end
         

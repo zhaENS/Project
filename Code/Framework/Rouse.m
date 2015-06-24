@@ -224,11 +224,16 @@ classdef Rouse<handle
                        initialPoint = domainHandler.GetRandomBoundarySample(1);
                        rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params.domainCenter).^2));
                     end
+                
                     obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,domainHandler.params,...
                                                           obj.params.beadsOnBoundary,obj.params.numBeads);
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly
-                
+            
+                        
+                        
+           
+                    
                     obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
               end
         

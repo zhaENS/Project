@@ -120,7 +120,7 @@ classdef RouseSimulatorFramework<handle
              obj.recipe.(functionName) = t(funcEndPos2(end)+1:end);     
         end               
         
-        function Run(obj)
+        function Run(obj,step)
             % Run the simulation according to the specified simulationType
             % parameter
            
@@ -134,9 +134,12 @@ classdef RouseSimulatorFramework<handle
                         % perform actions before the current step
                         obj.PreStepActions
                         % advance one step of the polymer chain    
-                        obj.Step;                       
-                        % perform action post the current step 
-                        obj.PostStepActions                                              
+                        obj.Step;   
+                       % perform action post the current step 
+                        obj.PostStepActions
+                       %detache the beads on the boundary;
+                        obj.DetachedBeadsOnBoundary(step);
+                       
                     end
                     % perform actions post simulation
                     obj.PostRunActions
@@ -194,10 +197,11 @@ classdef RouseSimulatorFramework<handle
             % spheres)
             particlesOnBoundaryCumul =[];
             for oIdx = 1:obj.objectManager.numObjects
-                cp                            = obj.objectManager.GetObjectParameters(oIdx);
+                cp                   = obj.objectManager.GetObjectParameters(oIdx);
                  particlesOnBoundary = cp{1}.beadsOnBoundary;
-                domainNum                     = cp{1}.initializeInDomain;  
-                 points                        = zeros(size(particlesOnBoundary,2),3);
+                 numBeads(oIdx)      = cp{1}.numBeads;
+                domainNum            = cp{1}.initializeInDomain;  
+                 points              = zeros(size(particlesOnBoundary,2),3);
 
                [~,particleCurPos] = obj.objectManager.GetPositionAsOne(oIdx);                
                 
@@ -215,11 +219,12 @@ classdef RouseSimulatorFramework<handle
                % if have more than one chain ,turn the local position to
                % the global position;
                 if oIdx >1
-              curParticlePosition(particlesOnBoundaryCumul(end)+particlesOnBoundary,:) = points;      
-              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary+particlesOnBoundaryCumul(end)]; 
+              curParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:) = points;      
+              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary+sum(numBeads(1:oIdx-1))]; 
                 else
               curParticlePosition(particlesOnBoundary,:) = points;            
-              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];      
+              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];
+              
                 end
             end
               particlesOnBoundary = particlesOnBoundaryCumul;
@@ -256,6 +261,30 @@ classdef RouseSimulatorFramework<handle
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
                 obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
         end  
+        
+        function DetachedBeadsOnBoundary(obj,step)
+            for oIdx = 1:obj.objectManager.numObjects
+                if obj.simulationData.step==step
+                    detachedPartNumber = obj.objectManager.handles.chain(oIdx).params.beadsOnBoundary(end);
+                    obj.objectManager.handles.chain(oIdx).params.beadsOnBoundary =obj.objectManager.handles.chain(oIdx).params.beadsOnBoundary(1:end-1);
+                    [prevPos curPos] = obj.objectManager.GetPosition(oIdx);
+                    prevPos   = prevPos{1};
+                    curPos    = curPos{1};
+                    particlePosition = curPos(detachedPartNumber,:);
+                    domainCenter = obj.handles.classes.domain.params.domainCenter;
+                    vec             = particlePosition-domainCenter;
+                    prevParticlePosition          = domainCenter+(1-1e-9)*vec;
+                    curPartPosition               = domainCenter+(1-1e-8)*vec;
+                    curPos(detachedPartNumber,:)  = curPartPosition;
+                    prevPos(detachedPartNumber,:) = prevParticlePosition;
+                    obj.objectManager.DealPreviousPosition(oIdx,prevPos);
+                    obj.objectManager.DealCurrentPosition(oIdx,curPos);
+                    sprintf('%s','Disconnect')
+                end
+            end
+            
+        
+        end
                 
         function PostStepActions(obj)
             eval(obj.recipe.PostStepActions);
@@ -264,7 +293,7 @@ classdef RouseSimulatorFramework<handle
               obj.runSimulation = obj.runSimulation && ...
              (obj.simulationData(obj.batchRound,obj.simulationRound).step<obj.params.simulator.numSteps);
         end
-        
+     
         function PostRunActions(obj)
             % Calculate distributions related to the Rouse polymer
             % chain
