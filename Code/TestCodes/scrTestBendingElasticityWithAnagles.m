@@ -1,23 +1,24 @@
 % scrTestBendingElasticityWithAnagles
-close all
-numParticles     = 36;
-dimension        = 3;
+% close all
+numParticles     = 200;
+dimension        = 2;
 
 numSteps         = 1500;
 dt               = 0.1;
 angle0           = 1*pi;
 b                = sqrt(3);
 diffusionConst   = 1;
-bendingConst     = 1.5*dimension*diffusionConst./b^2;
+bendingConst     = 1*dimension*diffusionConst./b^2;
 springConst      = 1*dimension*diffusionConst./b^2;
-particlePosition = cumsum(sqrt(2*diffusionConst*dt)*randn(numParticles,dimension));
+particlePosition = cumsum(sqrt(2*diffusionConst*dt)*randn(numParticles,3));
+particlePosition(:,(1:3)>dimension) = 0;
 
 connectivityMap    = (diag(ones(1,numParticles-1),1)+diag(ones(1,numParticles-1),-1))~=0;
 % form a looped polymer 
 % connectivityMap(1,end) = true;
 % connectivityMap(end,1) = true;
 
-minParticleDist    = 1;
+minParticleDist    = b;
 fixedParticleNum   = [];
 afectedBeadsNumber = [];
 
@@ -48,7 +49,8 @@ meanDistCM    = line('XData',dt,'YData', mean(dcm),'Parent',dcmAxes,'Linewidth',
 bLine         = line('XData',[0 0],'YData',[0 0],'color','g','Parent',dcmAxes);
 
 affectedBeads = false(numParticles,1);
-affectedBeads(10:17) = true;
+n = randperm(numParticles);
+affectedBeads(n(1:10)) = true;
 % particleDist  = b*ones(numParticles);
 for sIdx = 1:numSteps
     
@@ -57,23 +59,26 @@ for sIdx = 1:numSteps
     % calculate bending elasticity force
     bendingForce = BendingElasticityWithAngels(particlePosition, particleDist,bendingConst,angle0);
     bendingForce(~affectedBeads,:) = 0;
-    diffusionForce = sqrt(2*diffusionConst*dt)*randn(numParticles,dimension);
+    diffusionForce = sqrt(2*0.001*dt)*randn(numParticles,3);
+    diffusionForce(:,(1:3)>dimension) =0;
 %     springForce    = springConst*rMat*particlePosition;
     springForce   = ForceManager.GetSpringForce(springsFlag,particlePosition,particleDist,springConst,connectivityMap,minParticleDist,fixedParticleNum);
     
     particlePosition = particlePosition +bendingFlag*bendingForce*dt +springsFlag*springForce*dt+ diffusionFlag*diffusionForce;
                 
     set(particleHandle,'XData', particlePosition(:,1),...
-        'YData',particlePosition(:,2),...
-        'ZData',particlePosition(:,3));
+                       'YData',particlePosition(:,2),...
+                       'ZData',particlePosition(:,3));
     
     cm  = mean(particlePosition,1);
     dcm = pdist2(particlePosition,cm);
-    set(meanDistCM,'XData',[get(meanDistCM,'XData'), sIdx*dt],'YData',[get(meanDistCM,'YData'), mean(dcm)]);
+    set(meanDistCM,'XData',[get(meanDistCM,'XData'), sIdx*dt],...
+                   'YData',[get(meanDistCM,'YData'), mean(dcm)]);
     drawnow    
     
     if sIdx ==numSteps/2
-                set(bLine,'XData',[sIdx sIdx].*dt,'YData',[0 max(get(meanDistCM,'YData'))],'Color','g','Parent',dcmAxes)
+                set(bLine,'XData',[sIdx sIdx].*dt,...
+                          'YData',[0 max(get(meanDistCM,'YData'))],'Color','g','Parent',dcmAxes)
     end
     
     if sIdx>numSteps/2
