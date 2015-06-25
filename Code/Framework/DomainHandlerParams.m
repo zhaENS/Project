@@ -9,6 +9,7 @@ classdef DomainHandlerParams<handle
         domainShape@char % [sphere |cylinder |twoPlates |open] 
         domainWidth@double
         domainHeight@double
+        domainLength@double
         LJPotentialWidth@double
         LJPotentialDepth@double
         lennardJonesForce@logical% lennard jones force on particles in the domain 
