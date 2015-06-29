@@ -120,7 +120,7 @@ classdef RouseSimulatorFramework<handle
              obj.recipe.(functionName) = t(funcEndPos2(end)+1:end);     
         end               
         
-        function Run(obj,step)
+        function Run(obj)
             % Run the simulation according to the specified simulationType
             % parameter
            
@@ -137,8 +137,7 @@ classdef RouseSimulatorFramework<handle
                         obj.Step;   
                        % perform action post the current step 
                         obj.PostStepActions
-                       %detache the beads on the boundary;
-                        obj.DetachedBeadsOnBoundary(step);
+                     
                        
                     end
                     % perform actions post simulation
@@ -175,6 +174,7 @@ classdef RouseSimulatorFramework<handle
         end
         
         function Step(obj,varargin)
+            
             % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
             dt             = obj.params.simulator.dt;
@@ -191,7 +191,7 @@ classdef RouseSimulatorFramework<handle
             fixedParticleNum        = [obj.objectManager.fixedParticles{:}];
             
                                                             
-
+           
 
             % diffuse particles on the boundary (currently works only on
             % spheres)
@@ -244,10 +244,11 @@ classdef RouseSimulatorFramework<handle
             if ~isempty(fIdxCumul)
             curParticlePosition(particlesOnBoundary(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundary(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
             end
+            
             % Deal the positions after reflection between the objects and their members in
             % the domain             
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-            obj.objectManager.DealPreviousPosition(objList,curParticlePosition);% update previous position 
+            obj.objectManager.DealPreviousPosition(objList,prevParticlePosition);% update previous position 
                                     
             % Show simulation
             obj.simulationGraphics.ShowSimulation
@@ -262,29 +263,7 @@ classdef RouseSimulatorFramework<handle
                 obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
         end  
         
-        function DetachedBeadsOnBoundary(obj,step)
-            for oIdx = 1:obj.objectManager.numObjects
-                if obj.simulationData.step==step
-                    detachedPartNumber = obj.objectManager.handles.chain(oIdx).params.beadsOnBoundary(end);
-                    obj.objectManager.handles.chain(oIdx).params.beadsOnBoundary =obj.objectManager.handles.chain(oIdx).params.beadsOnBoundary(1:end-1);
-                    [prevPos curPos] = obj.objectManager.GetPosition(oIdx);
-                    prevPos   = prevPos{1};
-                    curPos    = curPos{1};
-                    particlePosition = curPos(detachedPartNumber,:);
-                    domainCenter = obj.handles.classes.domain.params.domainCenter;
-                    vec             = particlePosition-domainCenter;
-                    prevParticlePosition          = domainCenter+(1-1e-9)*vec;
-                    curPartPosition               = domainCenter+(1-1e-8)*vec;
-                    curPos(detachedPartNumber,:)  = curPartPosition;
-                    prevPos(detachedPartNumber,:) = prevParticlePosition;
-                    obj.objectManager.DealPreviousPosition(oIdx,prevPos);
-                    obj.objectManager.DealCurrentPosition(oIdx,curPos);
-                    sprintf('%s','Disconnect')
-                end
-            end
-            
-        
-        end
+      
                 
         function PostStepActions(obj)
             eval(obj.recipe.PostStepActions);
