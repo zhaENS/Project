@@ -5,6 +5,7 @@ classdef SimulationDataRecorderParams<handle
         resultsFolder@char
         recipeFileName@char
         encounterDist@double
+        stickyTime@double
         
     end
     
@@ -19,6 +20,7 @@ classdef SimulationDataRecorderParams<handle
             obj.resultsFolder  = 'D:\Ofir\Work\PolymerChainDynamicsResults';
             obj.recipeFileName = '';%will be copied by framework class
             obj.encounterDist  = []; %  The distance for which two monomer are considered to have met
+            obj.stickyTime     = [];
         end
         
     end
