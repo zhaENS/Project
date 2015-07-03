@@ -185,37 +185,43 @@ classdef RouseSimulatorFramework<handle
             objList        = 1:obj.objectManager.numObjects;
             
             % Apply domain (global) forces on all objects in the domain 
-            prevParticlePosition    = obj.objectManager.prevPos;      % prev position 
-            curParticlePosition     = obj.objectManager.curPos;       % new pos after internal forces
-            particleDist            = obj.objectManager.particleDist; % distance before applying internal forces
-            fixedParticleNum        = [obj.objectManager.fixedParticles{:}];
-            
-                                                            
+            prevParticlePosition     = obj.objectManager.prevPos;      % prev position 
+            curParticlePosition      = obj.objectManager.curPos;       % new pos after internal forces
+            particleDist             = obj.objectManager.particleDist; % distance before applying internal forces
+            fixedParticleNum         = [obj.objectManager.fixedParticles{:}];
+            stickyBeadsCumul         = [];
+            particlesOnBoundaryCumul = [];
+          
+        
+                                                              
            
 
             % diffuse particles on the boundary (currently works only on
             % spheres)
-            particlesOnBoundaryCumul =[];
-            stickyBeadsCumul         =[];
+      
+          
             for oIdx = 1:obj.objectManager.numObjects
                 cp                   = obj.objectManager.GetObjectParameters(oIdx);
-                 particlesOnBoundary = cp{1}.beadsOnBoundary;
-                 stickyBeads         = cp{1}.stickyBeads;%indice of the sticky beads;
-                 numBeads(oIdx)      = cp{1}.numBeads;
+                numBeads(oIdx)       = cp{1}.numBeads;
+                stickyBeads          = cp{1}.stickyBeads;%indice of the sticky beads;  
+                particlesOnBoundary  = cp{1}.beadsOnBoundary;
                 domainNum            = cp{1}.initializeInDomain;  
-                 points              = zeros(size(particlesOnBoundary,2),3);
-
-               [~,particleCurPos] = obj.objectManager.GetPositionAsOne(oIdx);                
+                pointscur            = zeros(size(particlesOnBoundary,2),3);
+                pointspre            = zeros(size(particlesOnBoundary,2),3);   
+               [prevPos,curPos] = obj.objectManager.GetPositionAsOne(oIdx);                
                 
                 for boIdx = 1:size(particlesOnBoundary,2)
-                     particleInitPos = particleCurPos(particlesOnBoundary(boIdx),:);
+                    particleInitcurPos = curPos(particlesOnBoundary(boIdx),:);
+                    particleInitprePos = prevPos(particlesOnBoundary(boIdx),:);
                     domainRad        = obj.handles.classes.domain.params(domainNum).domainWidth;
                     dc               = obj.handles.classes.domain.params(domainNum).domainCenter;
                     diffusionConst   = obj.handles.classes.domain.params(domainNum).forceParams.diffusionConst;
-                    posTempo         = DiffusionOnSphere(particleInitPos,dt,diffusionConst*5,2,dc,domainRad);
-                    points(boIdx,:)  = posTempo(2,:);
+                    poscurTempo      = DiffusionOnSphere(particleInitcurPos,dt,diffusionConst*5,2,dc,domainRad);
+                    pospreTempo      = DiffusionOnSphere(particleInitprePos,dt,diffusionConst*5,2,dc,domainRad);  
+                    pointscur(boIdx,:)  = poscurTempo(2,:);
+                    pointspre(boIdx,:)  = pospreTempo(2,:);
                 end
-             
+                
                 
                 
                 
@@ -223,60 +229,66 @@ classdef RouseSimulatorFramework<handle
                % if have more than one chain ,turn the local position to
                % the global position;
                 if oIdx >1
-              curParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:) = points;      
+              curParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:)  = pointscur;
+              prevParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:) = pointspre;
               particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary+sum(numBeads(1:oIdx-1))]; 
               stickyBeadsCumul         = [stickyBeadsCumul stickyBeads+sum(numBeads(1:oIdx-1))];  
                 else
-              curParticlePosition(particlesOnBoundary,:) = points;            
-              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];
-              stickyBeadsCumul         = [stickyBeadsCumul stickyBeads];
+              curParticlePosition(particlesOnBoundary,:)  = pointscur;
+              prevParticlePosition(particlesOnBoundary,:) = pointspre;
+              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];                       
+              stickyBeadsCumul         = [stickyBeadsCumul stickyBeads];        
                 end
             end
-              particlesOnBoundary = particlesOnBoundaryCumul;
-              
-              
-              stickyBeads         =stickyBeadsCumul;
-              
-              %check if the beads should be sticked ;                     
-                  if ~isempty(stickyBeads)
-                %calculate each pair of beads in the list stickyBeads to see
-                %if their distances are smaller than encounterDist; 
-                stickyDistance = obj.params.simulator.encounterDist;
-                      A        = curParticlePosition(stickyBeads,:);
-                      D        = pdist2mex(A',A','euc',[],[],[],[]);
-                    [row ,col] = find(tril(D)< stickyDistance & tril(D)>0);
-                 %  set the index to registre the stickyTime;    
-                     tIdx      = find(obj.params.simulator.stickyTime==0);
-                     if isempty(tIdx)
-                     disp('stop')
-                     end
-                     tIdx      = max(tIdx);
-                     if ~isempty(row)
-                          sprintf('sticky')
-                          obj.params.simulator.stickyTime(tIdx) = obj.simulationData.step*cp{1}.dt;
-                          curParticlePosition(stickyBeads(row(1:end)),:) = ...
-                          curParticlePosition(stickyBeads(col(1:end)),:);
-                     end
-
-
-
-
-                    obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-
-                 end        
+            
+            particlesOnBoundary = particlesOnBoundaryCumul;
+            
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
-                                                                  curParticlePosition,...
-                                                                  particleDist,fixedParticleNum,particlesOnBoundary,dt);
-                                                              
-           %if the fixed beads are also on the boundary ,find the
+                                  curParticlePosition,particleDist,fixedParticleNum,...
+                                  particlesOnBoundary,dt);
+               
+              %check if the beads should be sticked ;
+              
+              stickyBeads = stickyBeadsCumul; 
+              if ~isempty(stickyBeads)
+                  %calculate each pair of beads in the list stickyBeads to see
+                  %if their distances are smaller than encounterDist;
+                  stickyDistance = obj.params.simulator.encounterDist;
+                  A        = curParticlePosition(stickyBeads,:);
+                  D        = pdist2mex(A',A','euc',[],[],[],[]);
+                  [row ,col] = find(tril(D)< stickyDistance & tril(D)>0);
+                  %  set the index to registre the stickyTime;
+                  tIdx      = find(obj.params.simulator.stickyTime==0);
+                  if isempty(tIdx)
+                      disp('stop')
+                  end
+                  tIdx      = max(tIdx);
+                  if ~isempty(row)
+                      sprintf('sticky')
+                      sprintf('%d and %d',row,col)
+                      obj.params.simulator.stickyTime(tIdx) = obj.simulationData.step*cp{1}.dt;
+                      % add the stickybeads to the list fixedParticles;                    
+                      [obj.objectManager.fixedParticles] = ...
+                      [obj.objectManager.fixedParticles stickyBeads(row) stickyBeads(col)];
+                  end
+                  
+                  
+              end
+
+                obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
+
+                fixedParticleNum = [obj.objectManager.fixedParticles{:}]; 
+                                                             
+           %if the fixed beads/sticky beeads are also on the boundary ,find the
            %positions and correct the position such that all the chains
            %have the same position for the fixed beads;
            fIdxCumul = [];
             for bIdx = 1:numel(fixedParticleNum)
-                fIdx = find(particlesOnBoundary==fixedParticleNum(bIdx));
+                fIdx      = find(particlesOnBoundary==fixedParticleNum(bIdx));
                 fIdxCumul = [fIdxCumul fIdx];
             end
+         
             if ~isempty(fIdxCumul)
             curParticlePosition(particlesOnBoundary(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundary(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
             end
