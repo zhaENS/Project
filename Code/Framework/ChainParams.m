@@ -20,6 +20,7 @@ classdef ChainParams<handle
         beadsOnBoundary@double    % indices of beads attached to the boundary at initialization
         allowSelfAffinity@logical % allow beads to attach to other beads on the chain
         initializeInDomain@double % the index of the domain to initialize the chain in 
+        beadsPos@double %the position of a bead indicated during all the simulations  
         forceParams  = ForceManagerParams;     
     end
     
@@ -40,7 +41,7 @@ classdef ChainParams<handle
             obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
             obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain     = 1;     % default initialize in the first domain created
-            
+            obj.beadsPos               = [];
             % forces
             obj.bendingElasticityForce = false;
             obj.springForce            = true;                               
