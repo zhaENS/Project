@@ -195,17 +195,20 @@ classdef RouseSimulatorFramework<handle
             curParticlePosition      = obj.objectManager.curPos;       % new pos after internal forces
             particleDist             = obj.objectManager.particleDist; % distance before applying internal forces
             fixedParticleNum         = [obj.objectManager.fixedParticles{:}];
-            stickyBeadsCumul         = [];
-            particlesOnBoundaryCumul = [];
+            stickyBeads              = [obj.objectManager.stickyParticles{:}];
+            particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
           
         
-                                                              
+             for oIdx = 1:numel(particlesOnBoundaryAll)
+             
+             
+             
+             
+             end
            
 
             % diffuse particles on the boundary (currently works only on
             % spheres)
-      
-          
             for oIdx = 1:obj.objectManager.numObjects
                 cp                   = obj.objectManager.GetObjectParameters(oIdx);
                 numBeads(oIdx)       = cp{1}.numBeads;
@@ -227,23 +230,18 @@ classdef RouseSimulatorFramework<handle
                 
                 
                 
-                
                % if have more than one chain ,turn the local position to
                % the global position;
-                if oIdx >1
-              curParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:)  = pointscur;
-            %  prevParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:) = pointspre;
-              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary+sum(numBeads(1:oIdx-1))]; 
-              stickyBeadsCumul         = [stickyBeadsCumul stickyBeads+sum(numBeads(1:oIdx-1))];  
-                else
-              curParticlePosition(particlesOnBoundary,:)  = pointscur;
-          %    prevParticlePosition(particlesOnBoundary,:) = pointspre;
-              particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];                       
-              stickyBeadsCumul         = [stickyBeadsCumul stickyBeads];        
-                end
+%                 if oIdx >1
+%               curParticlePosition(sum(numBeads(1:oIdx-1))+particlesOnBoundary,:)  = pointscur;
+%               %particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary+sum(numBeads(1:oIdx-1))]; 
+%               %stickyBeadsCumul         = [stickyBeadsCumul stickyBeads+sum(numBeads(1:oIdx-1))];  
+%                 else
+%               curParticlePosition(particlesOnBoundary,:)  = pointscur;
+%               %particlesOnBoundaryCumul = [particlesOnBoundaryCumul particlesOnBoundary];                       
+%               %stickyBeadsCumul         = [stickyBeadsCumul stickyBeads];        
+%                 end
             end
-            
-            particlesOnBoundary = particlesOnBoundaryCumul;
             
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
@@ -268,8 +266,8 @@ classdef RouseSimulatorFramework<handle
                   if ~isempty(row)
                       sprintf('sticky')
                       sprintf('%d and %d',row,col)
-                      obj.params.simulator.stickyTime(tIdx) = obj.simulationData.step*dt;
-                    
+                      obj.params.simulator.stickyTime(tIdx)   = obj.simulationData.step*dt;
+                  
                   end
                   
                   
@@ -309,10 +307,8 @@ classdef RouseSimulatorFramework<handle
              
             % Update simulation data
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
-                obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
-        end  
-        
-      
+            obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
+        end                
                 
         function PostStepActions(obj)
             eval(obj.recipe.PostStepActions);

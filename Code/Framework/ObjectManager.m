@@ -20,6 +20,8 @@ classdef ObjectManager<handle
         particleDist   % pairwise distance between all particles (All)
         connectivity   % connectivity matrix of particles (All)
         fixedParticles % fixed particles (All) 
+        stickyParticles%sticky particles (All)
+        particlesOnBoundary%particles on boundary (All)
         curPos         % current particle position (All)
         prevPos        % previous particle position (All)       
         map            % struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
@@ -65,6 +67,14 @@ classdef ObjectManager<handle
               % set fixed particle num (TODO: consider listing for each
               % object individually)
               obj.fixedParticles          = [obj.fixedParticles, {obj.objParams(cIdx).fixedBeadNum + cNb}];
+              
+              
+              %set sticky particle num
+              obj.stickyParticles         = [obj.stickyParticles, {obj.objParams(cIdx).stickyBeads + cNb}];
+              
+            
+              %set boundary particle num
+              obj.particlesOnBoundary     = [obj.particlesOnBoundary,{obj.objParams(cIdx).beadsOnBoundary + cNb}];
               
               % update the position list
               obj.prevPos = [obj.prevPos; obj.handles.chain(cIdx).position.prev];
@@ -235,7 +245,7 @@ classdef ObjectManager<handle
 
         end
         
-        function fixedParticles = GetFixedParticles(obj,objList)
+       function fixedParticles  = GetFixedParticles(obj,objList)
             % get the list of fixed particles 
             memberList     = obj.map.GetObjectMembers(objList);
             fixedParticles = [obj.objParams(memberList).fixedBeadNum];
@@ -244,7 +254,29 @@ classdef ObjectManager<handle
                     fixedParticles(mIdx) = fixedParticles(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
                 end
             end
-%             fixedParticles = [obj.fixedParticles{memberList}];
+            % fixedParticles = [obj.fixedParticles{memberList}];
+        end
+        
+        function stickyParticles = GetStickyParticles(obj,objList)
+            % get the list of sticky particles 
+            memberList      = obj.map.GetObjectMembers(objList);
+            stickyParticles = [obj.objParams(memberList).stickyBeads];
+            if ~isempty(stickyParticles)
+                for mIdx = 2:numel(memberList)
+                    stickyParticles(mIdx) = stickyParticles(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
+                end
+            end
+        end
+        
+        function particleOnBoundary = GetParticlesOnBoundary(obj,objList)
+            % get the list of particles on the boundary of (any) domain 
+            memberList      = obj.map.GetObjectMembers(objList);
+            particleOnBoundary = [obj.objParams(memberList).beadsOnBoundary];
+            if ~isempty(particleOnBoundary)
+                for mIdx = 2:numel(memberList)
+                    particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
+                end
+            end
         end
         
         function particleDistance = GetParticleDistance(obj,objList)
@@ -428,6 +460,7 @@ classdef ObjectManager<handle
                    springConst      = obj.GetSpringConstAsOne(objNum(oIdx));
                    minParticleDist  = obj.GetMinParticleDistAsOne(objNum(oIdx));
                    fixedParticleNum = obj.GetFixedParticles(objNum(oIdx));
+       
                    
                    % split parameters to pass to the forceManager
                    par = obj.GetObjectParameters(objNum(oIdx));
