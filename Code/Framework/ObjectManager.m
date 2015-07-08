@@ -361,8 +361,7 @@ classdef ObjectManager<handle
             if objNum(1)~=objNum(2)
                 obj.Merge((objNum))
                   disp('Merge')
-            else
-                disp('Same obj')
+            else                
                 notify(obj,'connectivityChange');
             end
             

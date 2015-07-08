@@ -93,10 +93,10 @@ classdef Rouse<handle
         function InitializeRouseStruct(obj)
             
             % Initialize positions
-            obj.position.cur             = randn(obj.params.numBeads,3);       
-            obj.position.cur(:,(1:3)>obj.params.dimension) = 0;
-            obj.position.prev            = randn(obj.params.numBeads,3);            
-            obj.position.prev(:,(1:3)>obj.params.dimension) = 0;
+%             obj.position.cur             = randn(obj.params.numBeads,3);       
+%             obj.position.cur(:,(1:3)>obj.params.dimension) = 0;
+%             obj.position.prev            = randn(obj.params.numBeads,3);            
+%             obj.position.prev(:,(1:3)>obj.params.dimension) = 0;
 
             obj.InitializeBeadConnectionMap;
 
@@ -177,14 +177,14 @@ classdef Rouse<handle
            dimInds = (1:3)>obj.params.dimension;% dimensions not included
            exDimDomVals = domainHandler.params(obj.params.initializeInDomain).domainCenter(dimInds); 
            while ~flag
-            obj.position.prev(1,:) = 0.2*obj.params.b*randn(1,3);
+            obj.position.prev(1,:)       = 0.2*obj.params.b*randn(1,3);
             obj.position.prev(1,dimInds) = exDimDomVals;
             flag = domainHandler.InDomain(obj.position.prev(1,:),obj.params.initializeInDomain);      
            end
            
             if exist('domainHandler','var')
               if isempty(obj.params.beadsOnBoundary)
-                fp = domainHandler.params.forceParams;
+                fp = domainHandler.params(obj.params.initializeInDomain).forceParams;
                 % The bead positions                
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
