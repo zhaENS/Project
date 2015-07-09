@@ -155,7 +155,7 @@ classdef ForceManager<handle
        function newParticlePosition = ApplyCompositeInternalForces(pos,particleDistance,connectivityMap,...
                                                                        springForce,bendingElasticityForce,...
                                                                        springConst,bendingConst,...                                                         
-                                                                       minParticleDistance,fixedParticleNum,dt)
+                                                                       minParticleDistance,fixedParticleNum,particlesOnBoundary,dt)
                                                      
             % Apply forces on a composite structure composed of several chains with different parameters                          
             % pariclePosition is the position for each chain in cell array            
@@ -190,7 +190,7 @@ classdef ForceManager<handle
             end 
             
             springForces  = ForceManager.GetSpringForce(springForceFlag,particlePosition,particleDistance,...
-                                            springConst,connectivityMap,minParticleDistance,fixedParticleNum);            
+                                            springConst,connectivityMap,minParticleDistance,fixedParticleNum,particlesOnBoundary);            
             % zero-out forces for object with no spring force
             % active
             springForces([indsObj{~springForce}],:)=0;
@@ -202,7 +202,8 @@ classdef ForceManager<handle
                 bendingElasticityForceFlag = false;
              end            
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForceFlag,particlePosition,particleDistance,...
-                connectivityMap,bendingConst(1),openningAngle(1),fixedParticleNum);
+                connectivityMap,bendingConst(1),fixedParticleNum);
+          
             % zero out forces for object with no bending elasticity force
             % active
             bendingForces([indsObj{~bendingElasticityForce}],:) = 0;
@@ -228,7 +229,9 @@ classdef ForceManager<handle
                 force                     = -springConst.*(diag(sumForces)-L); % set the maindiagonal                
                 force                     = force*particlePosition;
                 force(fixedParticleNum,:)    = 0;% zero out forces for fixed particles
-                force(particlesOnBoundary,:) =0;
+                if ~isempty(particlesOnBoundary)
+                force(particlesOnBoundary,:) = 0;
+                end
             end
         end
         

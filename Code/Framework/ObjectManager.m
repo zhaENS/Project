@@ -69,13 +69,6 @@ classdef ObjectManager<handle
               obj.fixedParticles          = [obj.fixedParticles, {obj.objParams(cIdx).fixedBeadNum + cNb}];
               
               
-              %set sticky particle num
-              obj.stickyParticles         = [obj.stickyParticles, {obj.objParams(cIdx).stickyBeads + cNb}];
-              
-            
-              %set boundary particle num
-              obj.particlesOnBoundary     = [obj.particlesOnBoundary,{obj.objParams(cIdx).beadsOnBoundary + cNb}];
-              
               % update the position list
               obj.prevPos = [obj.prevPos; obj.handles.chain(cIdx).position.prev];
               obj.curPos  = [obj.curPos; obj.handles.chain(cIdx).position.cur];
@@ -269,16 +262,22 @@ classdef ObjectManager<handle
         end
         
         function particleOnBoundary = GetParticlesOnBoundary(obj,objList)
-            % get the list of particles on the boundary of (any) domain 
+            % get the list of particles on the boundary of (any) domain
             memberList      = obj.map.GetObjectMembers(objList);
             particleOnBoundary = [obj.objParams(memberList).beadsOnBoundary];
-            if ~isempty(particleOnBoundary)
-                for mIdx = 2:numel(memberList)
-                    particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
+            if ~isempty(particleOnBoundary) && (numel(memberList)>1)
+                for lIdx = 1:numel(memberList)-1
+                    pSize1 = numel(obj.objParams(memberList(lIdx)).beadsOnBoundary);
+                    pSize2 = numel(obj.objParams(memberList(lIdx+1)).beadsOnBoundary);
+                    mIdx = pSize1*lIdx+1:pSize1*lIdx+pSize2;
+                    particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+sum([obj.objParams(memberList(1:lIdx)).numBeads]);
+                    
                 end
             end
+        
         end
         
+      
         function particleDistance = GetParticleDistance(obj,objList)
             % Get the pairwise distances of particles in objList
             % the objects indices in objList corrospond to objects listed
@@ -454,13 +453,13 @@ classdef ObjectManager<handle
 
                 else
                    % For composite object made of several sub-objects
-                   connectivityMap  = obj.GetConnectivityMapAsOne(objNum(oIdx));
-                   particleDistance = obj.GetParticleDistance(objNum(oIdx)); 
-                   [~,curMemberPos] = obj.GetMembersPosition(objNum(oIdx));
-                   springConst      = obj.GetSpringConstAsOne(objNum(oIdx));
-                   minParticleDist  = obj.GetMinParticleDistAsOne(objNum(oIdx));
-                   fixedParticleNum = obj.GetFixedParticles(objNum(oIdx));
-       
+                   connectivityMap     = obj.GetConnectivityMapAsOne(objNum(oIdx));
+                   particleDistance    = obj.GetParticleDistance(objNum(oIdx)); 
+                   [~,curMemberPos]    = obj.GetMembersPosition(objNum(oIdx));
+                   springConst         = obj.GetSpringConstAsOne(objNum(oIdx));
+                   minParticleDist     = obj.GetMinParticleDistAsOne(objNum(oIdx));
+                   fixedParticleNum    = obj.GetFixedParticles(objNum(oIdx));
+                   particlesBoundary   = obj.GetParticlesOnBoundary(objNum(oIdx));
                    
                    % split parameters to pass to the forceManager
                    par = obj.GetObjectParameters(objNum(oIdx));
@@ -471,7 +470,7 @@ classdef ObjectManager<handle
                    newPos = ForceManager.ApplyCompositeInternalForces(curMemberPos,particleDistance,connectivityMap,...
                                                          [fp.springForce],[fp.bendingElasticityForce],...
                                                          springConst,[fp.bendingConst],...                                                         
-                                                         minParticleDist,fixedParticleNum,dt);
+                                                         minParticleDist,fixedParticleNum,particlesBoundary,dt);
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
