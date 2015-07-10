@@ -200,7 +200,7 @@ classdef DomainHandler<handle
                      
                       % === end test ====
                      % Take only the positive root smaller than 1 
-                    t    = t(t>0&t<=1); 
+                    t    = t(t>1e-13&t<=1); 
                     if ~isempty(t) && isreal(t)   
                         if numel(t)>1
                             disp('two roots')

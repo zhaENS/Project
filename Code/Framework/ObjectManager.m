@@ -68,6 +68,8 @@ classdef ObjectManager<handle
               % object individually)
               obj.fixedParticles          = [obj.fixedParticles, {obj.objParams(cIdx).fixedBeadNum + cNb}];
               
+              %set sticky particle num
+              obj.stickyParticles         = [obj.stickyParticles, {obj.objParams(cIdx).stickyBeads + cNb}];
               
               % update the position list
               obj.prevPos = [obj.prevPos; obj.handles.chain(cIdx).position.prev];
@@ -267,9 +269,9 @@ classdef ObjectManager<handle
             particleOnBoundary = [obj.objParams(memberList).beadsOnBoundary];
             if ~isempty(particleOnBoundary) && (numel(memberList)>1)
                 for lIdx = 1:numel(memberList)-1
-                    pSize1 = numel(obj.objParams(memberList(lIdx)).beadsOnBoundary);
-                    pSize2 = numel(obj.objParams(memberList(lIdx+1)).beadsOnBoundary);
-                    mIdx = pSize1*lIdx+1:pSize1*lIdx+pSize2;
+                    pSize1(lIdx)  = numel(obj.objParams(memberList(lIdx)).beadsOnBoundary);
+                    pSize2(lIdx) = numel(obj.objParams(memberList(lIdx+1)).beadsOnBoundary);
+                    mIdx         = sum(pSize1(1:lIdx))+1 : sum(pSize2(lIdx))+sum(pSize1(1:lIdx));
                     particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+sum([obj.objParams(memberList(1:lIdx)).numBeads]);
                     
                 end
