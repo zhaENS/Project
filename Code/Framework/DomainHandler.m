@@ -137,7 +137,7 @@ classdef DomainHandler<handle
                             disp('no intersection point')
                         end
                         
-                    elseif strcmpi(obj.params.domainShape,'cylinder');
+                    elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder');
                         % find the intersection in 2D first
                         intersectionPoint = obj.FindIntersectionPoint([prevPos(:,1) prevPos(:,2) zeros(size(prevPos,1),1)],[curPos(:,1) curPos(:,2) zeros(size(curPos,1),1)],domainNumber);
                         
@@ -254,7 +254,12 @@ classdef DomainHandler<handle
                     n     = sqrt(sum(bsxfun(@minus,vecIn(:,1:2),dc(:,1:2)).^2,2));
                     inIdx = n<=obj.params(domainNumber).domainWidth;
                 elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
-                    inIdx = vecIn.x<obj.params(domainNumber).domainWidth;
+                    inIdx = vecIn(3)<(obj.params(domainNumber).domainCenter(3)+obj.params(domainNumber).domainHeight/2) &&...
+                            vecIn(3)>(obj.params(domainNumber).domainCenter(3)-obj.params(domainNumber).domainHeight/2) &&...
+                            vecIn(2)<(obj.params(domainNumber).domainCenter(3)+obj.params(domainNumber).domainWidth/2) &&...
+                            vecIn(2)>(obj.params(domainNumber).domainCenter(3)-obj.params(domainNumber).domainWidth/2) &&...
+                            vecIn(1)<(obj.params(domainNumber).domainCenter(3)+obj.params(domainNumber).domainLength/2) &&...
+                            vecIn(1)>(obj.params(domainNumber).domainCenter(3)-obj.params(domainNumber).domainLength/2);
                 elseif strcmpi(obj.params(domainNumber).domainShape,'box')
                     % unfinished
                 elseif strcmpi(obj.params(domainNumber).domainShape,'open')
@@ -292,10 +297,22 @@ classdef DomainHandler<handle
                domainNorm(3) = 0;
                domainNorm = domainNorm/sqrt(sum(domainNorm.^2));
            elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
-               if point(1)< obj.params(domainNumber).domainWidth+1e-7 && point(1)> obj.params(domainNumber).domainWidth-1e-7 
-                   domainNorm = -[1,0 0];
-               elseif point(1)<-obj.params(domainNumber).domainWidth+1e-7 && point(1)>-obj.params(domainNumber).domainWidth-1e-7
+               
+               if point(3)< obj.params(domainNumber).domainHeight+1e-7 && point(3)> obj.params(domainNumber).domainHeight-1e-7 
+                   domainNorm = -[0,0 1];
+               elseif point(3)<-obj.params(domainNumber).domainHeight+1e-7 && point(3)>-obj.params(domainNumber).domainHeight-1e-7
+                   domainNorm = [0 0 1];
+                   
+               elseif point(2)< obj.params(domainNumber).domainWidth+1e-7 && point(3)> obj.params(domainNumber).domainWidth-1e-7 
+                   domainNorm = -[0,1, 0];
+               elseif point(2)<-obj.params(domainNumber).domainWidth+1e-7 && point(3)>-obj.params(domainNumber).domainWidth-1e-7
+                   domainNorm = [0 1 0];
+                   
+               elseif point(1)< obj.params(domainNumber).domainLength+1e-7 && point(1)> obj.params(domainNumber).domainLength-1e-7 
+                   domainNorm = -[1,0, 0];
+               elseif point(1)<-obj.params(domainNumber).domainLength+1e-7 && point(3)>-obj.params(domainNumber).domainLength-1e-7
                    domainNorm = [1 0 0];
+                                
                end
            elseif  strcmpi(obj.params(domainNumber).domainShape,'open')
                domainNorm = [];

@@ -103,7 +103,7 @@ classdef RouseSimulatorFramework<handle
             obj.objectManager = ObjectManager(obj.params.chain);
             obj.objectManager.InitializeObjects(obj.handles.classes.domain);
                                                                                
-        end        
+        end 
         
         function ReadRecipeFile(obj)
             
