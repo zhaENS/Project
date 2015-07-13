@@ -18,9 +18,10 @@ classdef ChainParams<handle
         bendingConst@double      
         stickyBeads@double        % indices of beads capeable of sticking to other sticky beads or domain
         beadsOnBoundary@double    % indices of beads attached to the boundary at initialization
-        allowSelfAffinity@logical % allow beads to attach to other beads on the chain
+        allowSelfAffinity@logical     % allow beads to attach to other beads on the chain
+        probAttachToBoundary@double    % probability to attach to boundary (if distance is below encounter distance)
+        probAttachToStickyBeads@double % probability to attach to other sticky beads (if distance is below encounter distance)
         initializeInDomain@double % the index of the domain to initialize the chain in 
-        beadsPos@double %the position of a bead indicated during all the simulations  
         forceParams  = ForceManagerParams;     
     end
     
@@ -28,20 +29,21 @@ classdef ChainParams<handle
         
         function obj = ChainParams(varargin)
             % default parameters
-            obj.dimension              = 3;         % inherited from framework
-            obj.beta                   = 2;         % for rouse, place 2. 
-            obj.b                      = 1*sqrt(3); % std of distance between beads
-            obj.dt                     = 1e-2;      % inherited from framework
-            obj.diffusionConst         = 1;
-            obj.numBeads               = 32;
-            obj.connectedBeads         = [];
-            obj.fixedBeadNum           = [];    % beads which do not move    
-            obj.fixedBeadsPosition     = [];    % position for the fixed beads (can be on the boundary)
-            obj.beadsOnBoundary        = [];    % list of bead attached to the domain's boundary 
-            obj.allowSelfAffinity      = false; % can sticky beads stick to other sticky beads on the same chain?
-            obj.stickyBeads            = [];    % beads that can stick to others, is also used to stick to other chains
-            obj.initializeInDomain     = 1;     % default initialize in the first domain created
-            obj.beadsPos               = [];
+            obj.dimension               = 3;         % inherited from framework
+            obj.beta                    = 2;         % for rouse, place 2. 
+            obj.b                       = 1*sqrt(3); % std of distance between beads
+            obj.dt                      = 1e-2;      % inherited from framework
+            obj.diffusionConst          = 1;
+            obj.numBeads                = 32;
+            obj.connectedBeads          = [];
+            obj.fixedBeadNum            = [];    % beads which do not move    
+            obj.fixedBeadsPosition      = [];    % position for the fixed beads (can be on the boundary)
+            obj.beadsOnBoundary         = [];    % list of bead attached to the domain's boundary 
+            obj.allowSelfAffinity       = false; % can sticky beads stick to other sticky beads on the same chain?
+            obj.stickyBeads             = [];    % beads that can stick to others, is also used to stick to other chains
+            obj.initializeInDomain      = 1;     % default initialize in the first domain created
+            obj.probAttachToStickyBeads = 0.9;   % sticky beads attachment to other sticky beads
+            obj.probAttachToBoundary    = rand(1);
             % forces
             obj.bendingElasticityForce = false;
             obj.springForce            = true;                               

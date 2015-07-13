@@ -22,6 +22,7 @@ classdef ObjectManager<handle
         fixedParticles % fixed particles (All) 
         stickyParticles%sticky particles (All)
         particlesOnBoundary%particles on boundary (All)
+        connectedStickyBeads %the num of sticky beads that have already connected
         curPos         % current particle position (All)
         prevPos        % previous particle position (All)       
         map            % struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
@@ -278,8 +279,7 @@ classdef ObjectManager<handle
             end
         
         end
-        
-      
+            
         function particleDistance = GetParticleDistance(obj,objList)
             % Get the pairwise distances of particles in objList
             % the objects indices in objList corrospond to objects listed
@@ -375,6 +375,76 @@ classdef ObjectManager<handle
             inds = obj.map.GetAllInds();
         end        
         
+        function ConnectStickyParticles(obj,stickyDistance)
+                  %calculate each pair of beads in the list stickyBeads to see
+                  %if their distances are smaller than encounterDist;
+                  %return objNum to see if they are in the same object or
+                  %not;
+                  stickyBeads = [obj.stickyParticles{:}];
+                  A          = obj.curPos(stickyBeads,:);
+                  D          = pdist2mex(A',A','euc',[],[],[],[]);
+                  [row ,col] = find(tril(D)< stickyDistance & tril(D)>0);
+                  % get the probability for two sticky beads to attach
+                  stickyBeadConnectProb    =  obj.objParams.probAttachToStickyBeads;% the attachment prob.
+                  stickyBeadDisconnectProb = 1-stickyBeadConnectProb;
+                  r = rand(numel(row));%a random value to test if the beads should be connected or disconnected;
+                  connectInd = r<stickyBeadConnectProb;
+                  if ~isempty(row)
+                       for rIdx = 1:numel(row)
+                          % Test if two sticky beads should be connected
+                          if connectInd
+                                sprintf('sticky')
+                                sprintf('%d and %d',stickyBeads(row),stickyBeads(col))          
+                              obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
+                              %update the list of CONNECTED sticky beads;
+                              obj.connectedStickyBeads =[obj.connectedStickyBeads; stickyBeads(row(rIdx))...
+                                  stickyBeads(col(rIdx))];     
+                          end
+                      end
+                  end
+                  
+                  
+                  % for each object
+                 
+                      % get the off-diagonal connectivity
+                      % (non-nearest-neighbor)
+                      connectedPart = obj.connectedStickyBeads;% obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
+                      % see which connected particle is sticky
+                      
+                      r = rand(size(connectedPart,1),1);
+                      disconnectInd = r<stickyBeadDisconnectProb;
+                      for rIdx = 1:size(connectedPart,1)
+                          if disconnectInd(rIdx)
+                              
+                              obj.DisconnectParticles(connectedPart(rIdx,1), connectedPart(rIdx,2))
+                          end
+                      end
+                                            
+                      obj.connectedStickyBeads(disconnectInd,:) = [];
+                   %Disconnecte the particles(don't include the sticky
+                   %beads connected in previous loop)          
+%                    if r < stickyBeadDisconnectProb &&(~isempty(obj.connectedStickyBeads))
+%                        %if the row is not empty which means in the same
+%                        %step there are beads sticked so the list shouldn't
+%                        %includ them;
+%                        if ~isempty(row)
+%                        cIdx = numel(obj.connectedStickyBeads)-numel(stickyBeads(row))*2;
+%                        else
+%                        cIdx = numel(obj.connectedStickyBeads);    
+%                        end
+%                        if cIdx~=0
+%                        for rIdx = 1:cIdx/2 
+%                           sprintf('%d and %d disconnected',obj.connectedStickyBeads(2*(rIdx-1)+1),obj.connectedStickyBeads(2*(rIdx-1)+2)) 
+%                           obj.DisconnectParticles(obj.connectedStickyBeads(2*(rIdx-1)+1),...
+%                               obj.connectedStickyBeads(2*(rIdx-1)+2));
+%                        end
+%                        obj.connectedStickyBeads(1:cIdx)=[];
+%                        end
+%                        
+%                    end                   
+                                                         
+        end
+        
         function ConnectParticles(obj,particle1,particle2)% should move to ObjectInteractionManager
             % Connect two particles
             % particle1 and particle2 are number of particles in the general particle list   
@@ -440,7 +510,8 @@ classdef ObjectManager<handle
             % Advance the objects one step in the simulation, apply forces
             % etc. 
             obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);
-                         
+            obj.particlesOnBoundary = [];
+            cNb=0;             
             for oIdx = 1:numel(objNum)% for each object
                 memberList = obj.map.GetObjectMembers(oIdx);% members of the objects
                
@@ -476,8 +547,14 @@ classdef ObjectManager<handle
                                                                                      
                 % Deal the new pos to the object 
                    obj.DealCurrentPosition(oIdx,newPos);
-                 end
-            end
+                end
+                %Deal with particles on the boundary for each step;
+                obj.particlesOnBoundary = ...
+                [obj.particlesOnBoundary, {obj.GetParticlesOnBoundary(objNum(oIdx)) + cNb}];
+                %Update cumulative object indices 
+                cNb = cNb+numel(obj.map.GetAllInds(oIdx)); 
+            end 
+          
             
             % Check for possible interaction between objects
 %             obj.ObjectInteraction;

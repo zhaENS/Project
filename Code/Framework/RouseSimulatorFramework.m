@@ -174,11 +174,7 @@ classdef RouseSimulatorFramework<handle
         end
         
         function Step(obj,varargin)
-          
-                
-            obj.params.simulator.beadsPos(1,:,obj.simulationData.step) = obj.objectManager.curPos(10,:);
-            obj.params.simulator.beadsPos(2,:,obj.simulationData.step) = obj.objectManager.curPos(50,:);         
-            % Next simulation step 
+             % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
             dt             = obj.params.simulator.dt;
             % Advance one step and apply object forces                        
@@ -186,34 +182,14 @@ classdef RouseSimulatorFramework<handle
             
             % Update object list
             objList        = 1:obj.objectManager.numObjects;
-            
-            
-            
-            
+         
             % Apply domain (global) forces on all objects in the domain 
             prevParticlePosition     = obj.objectManager.prevPos;      % prev position 
             curParticlePosition      = obj.objectManager.curPos;       % new pos after internal forces
             particleDist             = obj.objectManager.particleDist; % distance before applying internal forces
             fixedParticleNum         = [obj.objectManager.fixedParticles{:}];             
             stickyBeads              = [obj.objectManager.stickyParticles{:}];
-            %update the stickyBeads and particlesOnBoundaryAll in each
-            %step;
-            cNb = 0;
-            obj.objectManager.particlesOnBoundary = [];
-         %   obj.objectManager.stickyParticles     = [];
-            for oIdx = 1:obj.objectManager.numObjects
-%                 stickyBeads            = obj.objectManager.GetStickyParticles(oIdx);
-%                 if numel(stickyBeads)>1
-%                 stickyBeads = stickyBeads(end);
-%                 end
-                particlesOnBoundary = obj.objectManager.GetParticlesOnBoundary(oIdx);
-                obj.objectManager.particlesOnBoundary = ...
-                [obj.objectManager.particlesOnBoundary, {particlesOnBoundary + cNb}];
-                %Update cumulative object indices 
-              %  cNb = cNb+obj.objectManager.objParams(oIdx).numBeads;
-                 cNb = cNb+numel(obj.objectManager.map.GetAllInds(oIdx));
-            end
-            particlesOnBoundaryAll  = [obj.objectManager.particlesOnBoundary{:}];
+            particlesOnBoundaryAll  =  [obj.objectManager.particlesOnBoundary{:}];
     
                   
             % Apply external forces from all domains and reflect
@@ -235,34 +211,18 @@ classdef RouseSimulatorFramework<handle
              end
            
              
-              %check if the beads should be sticked 
-              if ~isempty(stickyBeads)
-                  %calculate each pair of beads in the list stickyBeads to see
-                  %if their distances are smaller than encounterDist;
-                  stickyDistance = obj.params.simulator.encounterDist;
-                  A        = curParticlePosition(stickyBeads,:);
-                  D        = pdist2mex(A',A','euc',[],[],[],[]);
-                  [row ,col] = find(tril(D)< stickyDistance & tril(D)>0);
-                  %  set the index to registre the stickyTime;
-                  tIdx      = find(obj.params.simulator.stickyTime==0);
-                  if isempty(tIdx)
-                      disp('stop')
-                  end
-                  tIdx      = max(tIdx);
-                  if ~isempty(row)
-                      sprintf('sticky')
-                      sprintf('%d and %d',stickyBeads(row),stickyBeads(col))
-                      obj.params.simulator.stickyTime(tIdx)   = obj.simulationData.step*dt;
-                     %connect the stickyBeads;
-                     obj.objectManager.ConnectParticles(stickyBeads(row),stickyBeads(col));
-                        % Update object list
-                     objList = 1:obj.objectManager.numObjects;
-                  end
-                  
-                  
-              end
-
-              obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
+             %check if the beads should be sticked
+             if ~isempty(stickyBeads)
+                 stickyDistance = obj.params.simulator.encounterDist;
+                 %stick the beads and return the objNum
+                 obj.objectManager.ConnectStickyParticles(stickyDistance);
+               %  sprintf('step %d',obj.simulationData.step)
+                 %update the objList
+                 objList = 1:obj.objectManager.numObjects;
+             end
+             
+             %Deal the position after sticked;
+             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
 
              
                                                              
