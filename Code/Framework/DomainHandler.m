@@ -255,6 +255,8 @@ classdef DomainHandler<handle
                     inIdx = n<=obj.params(domainNumber).domainWidth;
                 elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
                     inIdx = vecIn.x<obj.params(domainNumber).domainWidth;
+                elseif strcmpi(obj.params(domainNumber).domainShape,'box')
+                    % unfinished
                 elseif strcmpi(obj.params(domainNumber).domainShape,'open')
                     % Do nothing
                 end            
