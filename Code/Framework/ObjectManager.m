@@ -20,9 +20,10 @@ classdef ObjectManager<handle
         particleDist   % pairwise distance between all particles (All)
         connectivity   % connectivity matrix of particles (All)
         fixedParticles % fixed particles (All) 
-        stickyParticles%sticky particles (All)
-        particlesOnBoundary%particles on boundary (All)
+        stickyParticles     %sticky particles (All)
+        particlesOnBoundary %particles on boundary (All)
         connectedStickyBeads %the num of sticky beads that have already connected
+        domainInds     % the indices of domain the particle belong to 
         curPos         % current particle position (All)
         prevPos        % previous particle position (All)       
         map            % struct('chainNum',cell(1),'inds',cell(1)); % map indices of objects to their chain members
@@ -64,6 +65,9 @@ classdef ObjectManager<handle
               
               % Set connectivity 
               obj.connectivity(inds,inds) = obj.handles.chain(cIdx).connectionMap.map;
+              
+              % domain indices 
+              obj.domainInds(inds,1) = obj.objParams(cIdx).initializeInDomain;
               
               % set fixed particle num (TODO: consider listing for each
               % object individually)
@@ -387,7 +391,7 @@ classdef ObjectManager<handle
                   % get the probability for two sticky beads to attach
                   stickyBeadConnectProb    =  obj.objParams.probAttachToStickyBeads;% the attachment prob.
                   stickyBeadDisconnectProb = 1-stickyBeadConnectProb;
-                  r = rand(numel(row));%a random value to test if the beads should be connected or disconnected;
+                  r = rand(numel(row));%random values to test if the beads should be connected or disconnected;
                   connectInd = r<stickyBeadConnectProb;
                   if ~isempty(row)
                        for rIdx = 1:numel(row)
@@ -396,53 +400,26 @@ classdef ObjectManager<handle
                                 sprintf('sticky')
                                 sprintf('%d and %d',stickyBeads(row),stickyBeads(col))          
                               obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
-                              %update the list of CONNECTED sticky beads;
-                              obj.connectedStickyBeads =[obj.connectedStickyBeads; stickyBeads(row(rIdx))...
-                                  stickyBeads(col(rIdx))];     
-                          end
+                           end
                       end
                   end
                   
-                  
-                  % for each object
-                 
-                      % get the off-diagonal connectivity
-                      % (non-nearest-neighbor)
-                      connectedPart = obj.connectedStickyBeads;% obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
-                      % see which connected particle is sticky
-                      
-                      r = rand(size(connectedPart,1),1);
-                      disconnectInd = r<stickyBeadDisconnectProb;
-                      for rIdx = 1:size(connectedPart,1)
+                  for oIdx=1:obj.numObjects
+                  connectedPart = obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
+                  obj.connectedStickyBeads = [obj.connectedStickyBeads;connectedPart];
+                  end
+                  if ~isempty(row)
+                    obj.connectedStickyBeads =   obj.connectedStickyBeads(1:(end-numel(stickyBeads(row))),:);
+                  end
+                  r = rand(size(obj.connectedStickyBeads,1),1);
+                  disconnectInd = r<stickyBeadDisconnectProb;
+                   for rIdx = 1:size(obj.connectedStickyBeads,1)
                           if disconnectInd(rIdx)
-                              
-                              obj.DisconnectParticles(connectedPart(rIdx,1), connectedPart(rIdx,2))
+                              sprintf('%d and %d disconnected',obj.connectedStickyBeads(rIdx,1),obj.connectedStickyBeads(rIdx,2))
+                              obj.DisconnectParticles(obj.connectedStickyBeads(rIdx,1),obj.connectedStickyBeads(rIdx,2))
                           end
-                      end
-                                            
-                      obj.connectedStickyBeads(disconnectInd,:) = [];
-                   %Disconnecte the particles(don't include the sticky
-                   %beads connected in previous loop)          
-%                    if r < stickyBeadDisconnectProb &&(~isempty(obj.connectedStickyBeads))
-%                        %if the row is not empty which means in the same
-%                        %step there are beads sticked so the list shouldn't
-%                        %includ them;
-%                        if ~isempty(row)
-%                        cIdx = numel(obj.connectedStickyBeads)-numel(stickyBeads(row))*2;
-%                        else
-%                        cIdx = numel(obj.connectedStickyBeads);    
-%                        end
-%                        if cIdx~=0
-%                        for rIdx = 1:cIdx/2 
-%                           sprintf('%d and %d disconnected',obj.connectedStickyBeads(2*(rIdx-1)+1),obj.connectedStickyBeads(2*(rIdx-1)+2)) 
-%                           obj.DisconnectParticles(obj.connectedStickyBeads(2*(rIdx-1)+1),...
-%                               obj.connectedStickyBeads(2*(rIdx-1)+2));
-%                        end
-%                        obj.connectedStickyBeads(1:cIdx)=[];
-%                        end
-%                        
-%                    end                   
-                                                         
+                   end
+                 obj.connectedStickyBeads = [];
         end
         
         function ConnectParticles(obj,particle1,particle2)% should move to ObjectInteractionManager
@@ -734,6 +711,12 @@ classdef ObjectManager<handle
             % postSet - notify all registered listeners for connectivity
             % changes
             notify(obj,'connectivityChange')
+        end
+        
+        function domainInd = GetDomainIndices(obj)
+            % Give the domain number the particles belong to (all
+            % particles)
+            domainInd =  obj.domainInds;
         end
         
     end

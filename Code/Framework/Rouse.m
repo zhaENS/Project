@@ -91,8 +91,8 @@ classdef Rouse<handle
         
         function InitializeRouseStruct(obj)
             % Initialize positions
-            obj.position.cur             = randn(obj.params.numBeads,3); 
-            obj.position.prev            = randn(obj.params.numBeads,3);
+%             obj.position.cur             = randn(obj.params.numBeads,3); 
+%             obj.position.prev            = randn(obj.params.numBeads,3);
 
             obj.InitializeBeadConnectionMap;
 %             obj.SetInitialChainPosition; % should be moved out of the initialization process
@@ -188,13 +188,13 @@ classdef Rouse<handle
             % set initial position for the first beads
            flag = false;
            while ~flag
-            obj.position.prev(1,:) = 0.2*obj.params.b*randn(1,obj.params.dimension);
+            obj.position.prev(1,:) = domainHandler.params(obj.params.initializeInDomain).domainCenter+0.2*obj.params.b*randn(1,obj.params.dimension);
             flag = domainHandler.InDomain(obj.position.prev(1,:),obj.params.initializeInDomain);      
            end
            
             if exist('domainHandler','var')
               if isempty(obj.params.beadsOnBoundary)
-                fp =domainHandler.params.forceParams;
+                fp =domainHandler.params(obj.params.initializeInDomain).forceParams;
                 % The bead positions                
                 for bIdx = 2:obj.params.numBeads         
                     inDomain = false;
@@ -218,14 +218,14 @@ classdef Rouse<handle
                    % numSteps   = range(obj.params.beadsOnBoundary); % this serves as the number of steps to walk on the boundary 
                     % get initial points 
                
-                    initialPoint = domainHandler.GetRandomBoundarySample(1);
-                    rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params.domainCenter).^2));
-                    while (rho-domainHandler.params.domainWidth)^2 ~=0
-                       initialPoint = domainHandler.GetRandomBoundarySample(1);
-                       rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params.domainCenter).^2));
+                    initialPoint = domainHandler.GetRandomBoundarySample(1,obj.params.initializeInDomain);
+                    rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params(obj.params.initializeInDomain).domainCenter).^2));
+                    while (rho-domainHandler.params(obj.params.initializeInDomain).domainWidth)^2 ~=0
+                       initialPoint = domainHandler.GetRandomBoundarySample(1,obj.params.initializeInDomain);
+                       rho          = sqrt(sum(bsxfun(@minus,initialPoint,domainHandler.params(obj.params.initializeInDomain).domainCenter).^2));
                     end
                 
-                    obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,domainHandler.params,...
+                    obj.position.prev = BrownianBridgeSim(initialPoint,domainHandler,obj.params.initializeInDomain,...
                                                           obj.params.beadsOnBoundary,obj.params.numBeads);
                     % diffuse from the initial point numSteps
                     % draw two angles from a normal wrapped distribution and advance accordingly

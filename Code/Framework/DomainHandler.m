@@ -43,7 +43,7 @@ classdef DomainHandler<handle
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
         end        
                 
-        function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,particlesOnBoundary,dt)                                                
+        function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,particlesOnBoundary,domainInds,dt)                                                
                % Apply forces on particles in the domain to obtain their
                % new position 
                % currently this function supports domains which do not
@@ -52,18 +52,31 @@ classdef DomainHandler<handle
                
                % experimental- apply forces iteratively from each domain 
                for dIdx = 1:obj.numDomains
+                 
                    domainNumber = dIdx;
+                   p    = domainInds(particlesOnBoundary);
+                   pInd = (p==dIdx);%obtain the index of particlesOnBoundary for each domain;
                    dp           = obj.params(dIdx);
                    fp           = dp.forceParams;
-                   curParticlePosition = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,...
-                                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,fp.mechanicalForce,...
+                   dInds = (domainInds==dIdx);
+                   %if has more than one domain,as the particlesOnBoundary
+                   %is a global number,change the index to fit current
+                   %domain;
+%                    if dIdx >1
+%                    particlesOnBoundary(pInd) = particlesOnBoundary(pInd)-numel(find(dInds~=0));
+%                    end                  
+                   cp = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,...
+                                                    fp.diffusionConst,fp.lennardJonesForce,...
+                                                    fp.diffusionForce,fp.morseForce,fp.mechanicalForce,...
                                                     fp.LJPotentialWidth,fp.LJPotentialDepth,...
-                                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
-                                                    fp.mechanicalForceCenter, fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
-                                                    fp.minParticleEqDistance,fixedParticleNum,particlesOnBoundary,dt);
-                                                                                               
+                                                    fp.morsePotentialDepth,fp.morsePotentialWidth,fp.morseForceType,...
+                                                    fp.mechanicalForceCenter,fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
+                                                    fp.minParticleEqDistance,fixedParticleNum,...
+                                                    particlesOnBoundary(pInd),dt);
+                    curParticlePosition(dInds,:)= cp(dInds,:);
+                    
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
-                     [~,curParticlePosition] = obj.Reflect(prevParticlePosition,curParticlePosition,domainNumber);
+                     [~,curParticlePosition(dInds,:)] = obj.Reflect(prevParticlePosition(dInds ,:),curParticlePosition(dInds,:),domainNumber);
                    end
                end
                
@@ -108,7 +121,7 @@ classdef DomainHandler<handle
                         % Find intersection with the domain 
                         intersectionPoint = obj.FindIntersectionPoint(prevPos(ind,:),curPos(ind,:),domainNumber);
                         
-                        if all([obj.InDomain(prevPos(ind,:),domainNumber),~obj.InDomain(curPos(ind,:),domainNumber),isempty(intersectionPoint)])
+                        if ~obj.InDomain(prevPos(ind,:),domainNumber)
                             error('something is wrong with the intersection point function')
                         end
                         
@@ -185,14 +198,14 @@ classdef DomainHandler<handle
 
             if strcmpi(obj.params(domainNumber).domainShape,'sphere') || strcmpi(obj.params(domainNumber).domainShape,'cylinder')
                     % Find the intersection of a point and the surface of the domain
-%                      dc = obj.params(domainNumber).domainCenter;
+                     dc = obj.params(domainNumber).domainCenter;
                      R  = obj.params(domainNumber).domainWidth;% domain radius                    
-                     A  = prevPos;
-                     B  = curPos; 
+                     A  = prevPos-dc;
+                     B  = curPos-dc; 
                      C  = (B-A);%./norm(B-A);
                      
                      gamma = dot(A,A);
-                     alpha = dot (A,B) -gamma;
+                     alpha = dot (A,B)-gamma;
                      beta  = dot(C,C);
                      t(1)  = (-alpha+sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
                      t(2)  = (-alpha-sqrt(alpha^2 -beta*(gamma-R^2)))/(beta);
@@ -207,6 +220,7 @@ classdef DomainHandler<handle
                             
                         end
                        intersectionPoint = prevPos+min(t)*(C);
+%                        intersectionPoint = intersectionPoint+dc;
                     else
                         intersectionPoint = [];
                     end
@@ -318,9 +332,9 @@ classdef DomainHandler<handle
                 v     = rand(numPoints,1);
                 phi   = 2*pi*u;
                 theta = acos(2*v -1);
-                boundaryPoints(:,1) = obj.params(domainNumber).domainWidth.*sin(theta).*cos(phi);
-                boundaryPoints(:,2) = obj.params(domainNumber).domainWidth.*sin(theta).*sin(phi);
-                boundaryPoints(:,3) = obj.params(domainNumber).domainWidth.*cos(theta);
+                boundaryPoints(:,1) = obj.params(domainNumber).domainWidth.*sin(theta).*cos(phi)+obj.params(domainNumber).domainCenter(1);
+                boundaryPoints(:,2) = obj.params(domainNumber).domainWidth.*sin(theta).*sin(phi)+obj.params(domainNumber).domainCenter(2);
+                boundaryPoints(:,3) = obj.params(domainNumber).domainWidth.*cos(theta)+obj.params(domainNumber).domainCenter(3);
                 
             end
             

@@ -182,37 +182,41 @@ classdef RouseSimulatorFramework<handle
             
             % Update object list
             objList        = 1:obj.objectManager.numObjects;
-         
+            domainInd     = obj.objectManager.GetDomainIndices;% the boundary number the beads belong to 
+          
             % Apply domain (global) forces on all objects in the domain 
             prevParticlePosition     = obj.objectManager.prevPos;      % prev position 
             curParticlePosition      = obj.objectManager.curPos;       % new pos after internal forces
             particleDist             = obj.objectManager.particleDist; % distance before applying internal forces
             fixedParticleNum         = [obj.objectManager.fixedParticles{:}];             
             stickyBeads              = [obj.objectManager.stickyParticles{:}];
-            particlesOnBoundaryAll  =  [obj.objectManager.particlesOnBoundary{:}];
-    
-                  
+            particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
+            
+
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
-                                  curParticlePosition,particleDist,fixedParticleNum,...
-                                  particlesOnBoundaryAll,dt);
-          
-            
+                                    curParticlePosition,particleDist,fixedParticleNum,...
+                                    particlesOnBoundaryAll,domainInd,dt);
+                                            
             % diffuse particles on the boundary(currently works only on
             % spheres)
-             particleInitPos     = curParticlePosition(particlesOnBoundaryAll,:); 
-             domainRad           = obj.handles.classes.domain.params.domainWidth;
-             dc                  = obj.handles.classes.domain.params.domainCenter;
-             diffusionConst      = obj.handles.classes.domain.params.forceParams.diffusionConst;
-            
-             for oIdx = 1:numel(particlesOnBoundaryAll)
-             poscurTempo         = DiffusionOnSphere(particleInitPos(oIdx,:),dt,diffusionConst*5,2,dc,domainRad);
-             curParticlePosition(particlesOnBoundaryAll(oIdx),:) = poscurTempo(2,:);
+            for dIdx =1:numel(obj.params.domain)             
+             p    = domainInd(particlesOnBoundaryAll);
+             pInd = p==dIdx;
+             particleInitPos     = curParticlePosition(particlesOnBoundaryAll(pInd),:); 
+             domainRad           = obj.handles.classes.domain.params(dIdx).domainWidth;
+             dc                  = obj.handles.classes.domain.params(dIdx).domainCenter;
+             diffusionConst      = obj.handles.classes.domain.params(dIdx).forceParams.diffusionConst;
+             pIdx                = particlesOnBoundaryAll(pInd);
+             for oIdx = 1:numel(particlesOnBoundaryAll(pInd))
+                 poscurTempo         = DiffusionOnSphere(particleInitPos(oIdx,:),dt,diffusionConst*5,2,dc,domainRad);
+                 curParticlePosition(pIdx(oIdx),:) = poscurTempo(2,:);
              end
            
-             
+             s    = domainInd(stickyBeads);
+             sInd = s==dIdx;
              %check if the beads should be sticked
-             if ~isempty(stickyBeads)
+             if ~isempty(stickyBeads(sInd))
                  stickyDistance = obj.params.simulator.encounterDist;
                  %stick the beads and return the objNum
                  obj.objectManager.ConnectStickyParticles(stickyDistance);
@@ -220,9 +224,12 @@ classdef RouseSimulatorFramework<handle
                  %update the objList
                  objList = 1:obj.objectManager.numObjects;
              end
-             
+            end
+            
+            
+            
              %Deal the position after sticked;
-             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
+           obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
 
              
                                                              
