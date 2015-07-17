@@ -136,8 +136,7 @@ classdef RouseSimulatorFramework<handle
                         % advance one step of the polymer chain    
                         obj.Step;   
                        % perform action post the current step 
-                        obj.PostStepActions
-                     
+                        obj.PostStepActions                     
                        
                     end
                     % perform actions post simulation
@@ -219,8 +218,7 @@ classdef RouseSimulatorFramework<handle
              if ~isempty(stickyBeads(sInd))
                  stickyDistance = obj.params.simulator.encounterDist;
                  %stick the beads and return the objNum
-                 obj.objectManager.ConnectStickyParticles(stickyDistance);
-               %  sprintf('step %d',obj.simulationData.step)
+             obj.objectManager.ConnectStickyParticles(stickyDistance);
                  %update the objList
                  objList = 1:obj.objectManager.numObjects;
              end
