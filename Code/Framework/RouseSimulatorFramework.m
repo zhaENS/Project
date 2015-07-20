@@ -191,6 +191,7 @@ classdef RouseSimulatorFramework<handle
             stickyBeads              = [obj.objectManager.stickyParticles{:}];
             particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
             
+          
 
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
@@ -211,7 +212,14 @@ classdef RouseSimulatorFramework<handle
                  poscurTempo         = DiffusionOnSphere(particleInitPos(oIdx,:),dt,diffusionConst*5,2,dc,domainRad);
                  curParticlePosition(pIdx(oIdx),:) = poscurTempo(2,:);
              end
-           
+                
+ %                test if the beads can be attached to the boundary
+             encounterDistance = obj.params.simulator.encounterDist;
+             domainClass       = obj.handles.classes.domain;
+             obj.objectManager.AttachToBoundary(encounterDistance,domainClass);
+        
+             
+             
              s    = domainInd(stickyBeads);
              sInd = s==dIdx;
              %check if the beads should be sticked

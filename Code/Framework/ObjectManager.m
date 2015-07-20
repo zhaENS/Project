@@ -379,6 +379,50 @@ classdef ObjectManager<handle
             inds = obj.map.GetAllInds();
         end        
         
+        
+        function AttachToBoundary(obj,encounterDistance,domainClass)
+            %allow beads in domain to attach to boundary if distance is
+            %below encounter distance;
+            AttachProbability = obj.objParams.probAttachToBoundary;
+            for oIdx=1:obj.numObjects
+                beadsOnBoundary    = obj.GetParticlesOnBoundary(oIdx);
+                [prevPosition,curPosition]    = obj.GetPosition(oIdx);
+                %prevPos             = prevPos{1};
+                curPosition        = curPosition{1};
+                prevPosition       = prevPosition{1};
+                D                  = pdist2mex(curPosition',curPosition','euc',[],[],[],[]);
+                [~,col]          = find(D(beadsOnBoundary,:)<encounterDistance & D(beadsOnBoundary,:)>0);
+                if ~isempty(col)
+                    for cIdx = 1:numel(beadsOnBoundary)
+                        col(find(beadsOnBoundary(cIdx)==col))=[];
+                    end
+                    r   = rand(numel(col),1);
+                    attachIndx = r<AttachProbability;
+                    for rIdx = 1:numel(col)
+                        if attachIndx(rIdx)
+                            sprintf('Attachment to the boundary!')
+                            %update the position such that they are on the
+                            %boundary;
+                            [obj.handles.chain(oIdx).params.beadsOnBoundary] = ...
+                            [obj.handles.chain(oIdx).params.beadsOnBoundary col(rIdx)];
+                            obj.handles.chain(oIdx).params.beadsOnBoundary = ...
+                                sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
+                            curPosition(col(rIdx),:)  = domainClass.GetRandomBoundarySample(1);
+                            prevPosition(col(rIdx),:) = domainClass.GetRandomBoundarySample(1);
+                            obj.handles.chain(oIdx).position.cur(col(rIdx),:)  =  curPosition(col(rIdx),:);
+                            obj.handles.chain(oIdx).position.prev(col(rIdx),:) =  prevPosition(col(rIdx),:);
+%                             obj.DealCurrentPosition(oIdx,curPosition);
+%                             obj.DealPreviousPosition(oIdx,prevPosition);
+%                           
+                        end
+                    end
+                end
+            end
+            
+        end
+        
+        
+        
         function ConnectStickyParticles(obj,stickyDistance)
                   %calculate each pair of beads in the list stickyBeads to see
                   %if their distances are smaller than encounterDist;
@@ -391,26 +435,31 @@ classdef ObjectManager<handle
                   % get the probability for two sticky beads to attach
                   stickyBeadConnectProb    =  obj.objParams.probAttachToStickyBeads;% the attachment prob.
                   stickyBeadDisconnectProb = 1-stickyBeadConnectProb;
-                  r = rand(numel(row));%random values to test if the beads should be connected or disconnected;
+                  r = rand(numel(row),1);%random values to test if the beads should be connected or disconnected;
                   connectInd = r<stickyBeadConnectProb;
                   if ~isempty(row)
                        for rIdx = 1:numel(row)
                           % Test if two sticky beads should be connected
-                          if connectInd
+                          if connectInd(rIdx)
                                 sprintf('sticky')
-                                sprintf('%d and %d',stickyBeads(row),stickyBeads(col))          
+                                sprintf('%d and %d',stickyBeads(row(rIdx)),stickyBeads(row(rIdx)))          
                               obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
                            end
                       end
                   end
                   
                   for oIdx=1:obj.numObjects
+                  %Get the connected particles 'offDiagonal' for each step;
                   connectedPart = obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
                   obj.connectedStickyBeads = [obj.connectedStickyBeads;connectedPart];
                   end
+                  %the particles connected can't be
+                  %disconnected in the same step;
                   if ~isempty(row)
                     obj.connectedStickyBeads =   obj.connectedStickyBeads(1:(end-numel(stickyBeads(row))),:);
                   end
+                  %add the probablity for each connected particles to test
+                  %if they should be disconnected;
                   r = rand(size(obj.connectedStickyBeads,1),1);
                   disconnectInd = r<stickyBeadDisconnectProb;
                    for rIdx = 1:size(obj.connectedStickyBeads,1)

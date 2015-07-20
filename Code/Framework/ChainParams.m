@@ -43,7 +43,7 @@ classdef ChainParams<handle
             obj.stickyBeads             = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain      = 1;     % default initialize in the first domain created
             obj.probAttachToStickyBeads = 0.9;   % sticky beads attachment to other sticky beads
-            obj.probAttachToBoundary    = rand(1);
+            obj.probAttachToBoundary    = 0.9;
             % forces
             obj.bendingElasticityForce = false;
             obj.springForce            = true;                               
