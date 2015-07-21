@@ -414,8 +414,7 @@ classdef ObjectManager<handle
                         end
                     end
                 end
-            end
-            
+            end         
         end
         
         
