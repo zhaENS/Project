@@ -380,18 +380,17 @@ classdef ObjectManager<handle
         end        
         
         
-        function AttachToBoundary(obj,encounterDistance,domainClass)
+         function AttachToBoundary(obj,encounterDistance)
             %allow beads in domain to attach to boundary if distance is
             %below encounter distance;
             AttachProbability = obj.objParams.probAttachToBoundary;
             for oIdx=1:obj.numObjects
                 beadsOnBoundary    = obj.GetParticlesOnBoundary(oIdx);
                 [prevPosition,curPosition]    = obj.GetPosition(oIdx);
-                %prevPos             = prevPos{1};
+                prevPosition           = prevPosition{1};
                 curPosition        = curPosition{1};
-                prevPosition       = prevPosition{1};
                 D                  = pdist2mex(curPosition',curPosition','euc',[],[],[],[]);
-                [~,col]          = find(D(beadsOnBoundary,:)<encounterDistance & D(beadsOnBoundary,:)>0);
+                [row,col]          = find(D(beadsOnBoundary,:)<encounterDistance & D(beadsOnBoundary,:)>0);
                 if ~isempty(col)
                     for cIdx = 1:numel(beadsOnBoundary)
                         col(find(beadsOnBoundary(cIdx)==col))=[];
@@ -400,27 +399,24 @@ classdef ObjectManager<handle
                     attachIndx = r<AttachProbability;
                     for rIdx = 1:numel(col)
                         if attachIndx(rIdx)
-                            sprintf('Attachment to the boundary!')
+                            sprintf('Attachment to the boundary! beads %d of chain %d',col(rIdx),oIdx)
                             %update the position such that they are on the
                             %boundary;
                             [obj.handles.chain(oIdx).params.beadsOnBoundary] = ...
                             [obj.handles.chain(oIdx).params.beadsOnBoundary col(rIdx)];
+                            
                             obj.handles.chain(oIdx).params.beadsOnBoundary = ...
-                                sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
-                            curPosition(col(rIdx),:)  = domainClass.GetRandomBoundarySample(1);
-                            prevPosition(col(rIdx),:) = domainClass.GetRandomBoundarySample(1);
-                            obj.handles.chain(oIdx).position.cur(col(rIdx),:)  =  curPosition(col(rIdx),:);
-                            obj.handles.chain(oIdx).position.prev(col(rIdx),:) =  prevPosition(col(rIdx),:);
-%                             obj.DealCurrentPosition(oIdx,curPosition);
-%                             obj.DealPreviousPosition(oIdx,prevPosition);
-%                           
+                            sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
+                            curPosition(col(rIdx),:)  = curPosition(beadsOnBoundary(row(rIdx)),:);
+                            prevPosition(col(rIdx),:) = prevPosition(beadsOnBoundary(row(rIdx)),:);
+                              obj.DealCurrentPosition(oIdx,curPosition);    
+                              obj.DealPreviousPosition(oIdx,prevPosition);
                         end
                     end
                 end
             end
             
         end
-        
         
         
         function ConnectStickyParticles(obj,stickyDistance)

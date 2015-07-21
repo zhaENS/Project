@@ -172,7 +172,7 @@ classdef RouseSimulatorFramework<handle
             eval(obj.recipe.PreStepActions);
         end
         
-        function Step(obj,varargin)
+    function Step(obj,varargin)
              % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
             dt             = obj.params.simulator.dt;
@@ -197,7 +197,11 @@ classdef RouseSimulatorFramework<handle
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                     curParticlePosition,particleDist,fixedParticleNum,...
                                     particlesOnBoundaryAll,domainInd,dt);
-                                            
+            
+                                
+                                
+                                
+                                
             % diffuse particles on the boundary(currently works only on
             % spheres)
             for dIdx =1:numel(obj.params.domain)             
@@ -212,11 +216,28 @@ classdef RouseSimulatorFramework<handle
                  poscurTempo         = DiffusionOnSphere(particleInitPos(oIdx,:),dt,diffusionConst*5,2,dc,domainRad);
                  curParticlePosition(pIdx(oIdx),:) = poscurTempo(2,:);
              end
-                
- %                test if the beads can be attached to the boundary
+             obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
+            %if the fixed beads beads are also on the boundary ,find the
+           %positions and correct the position such that all the chains
+           %have the same position for the fixed beads;
+           fIdxCumul = [];
+            for bIdx = 1:numel(fixedParticleNum)
+                fIdx      = find(particlesOnBoundaryAll==fixedParticleNum(bIdx));
+                fIdxCumul = [fIdxCumul fIdx];
+            end
+         
+            if ~isempty(fIdxCumul)
+            curParticlePosition(particlesOnBoundaryAll(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundaryAll(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
+            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
+            end
+             
+             
+             
+             
+             
+             %test if the beads in domain can be attached to the boundary
              encounterDistance = obj.params.simulator.encounterDist;
-             domainClass       = obj.handles.classes.domain;
-             obj.objectManager.AttachToBoundary(encounterDistance,domainClass);
+             obj.objectManager.AttachToBoundary(encounterDistance);
         
              
              
@@ -231,34 +252,7 @@ classdef RouseSimulatorFramework<handle
                  objList = 1:obj.objectManager.numObjects;
              end
             end
-            
-            
-            
-             %Deal the position after sticked;
-           obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-
-             
-                                                             
-           %if the fixed beads beads are also on the boundary ,find the
-           %positions and correct the position such that all the chains
-           %have the same position for the fixed beads;
-           fIdxCumul = [];
-            for bIdx = 1:numel(fixedParticleNum)
-                fIdx      = find(particlesOnBoundaryAll==fixedParticleNum(bIdx));
-                fIdxCumul = [fIdxCumul fIdx];
-            end
-         
-            if ~isempty(fIdxCumul)
-            curParticlePosition(particlesOnBoundaryAll(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundaryAll(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
-            end
-            
-            
-             
-            % Deal the positions after reflection between the objects and their members in
-            % the domain             
-            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-            obj.objectManager.DealPreviousPosition(objList,prevParticlePosition);% update previous position 
-                                    
+                        
             % Show simulation
             obj.simulationGraphics.ShowSimulation
             
@@ -271,6 +265,7 @@ classdef RouseSimulatorFramework<handle
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
             obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
         end                
+                            
                 
         function PostStepActions(obj)
             eval(obj.recipe.PostStepActions);
