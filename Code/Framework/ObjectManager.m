@@ -409,8 +409,7 @@ classdef ObjectManager<handle
                             sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
                             curPosition(col(rIdx),:)  = curPosition(beadsOnBoundary(row(rIdx)),:);
                             prevPosition(col(rIdx),:) = prevPosition(beadsOnBoundary(row(rIdx)),:);
-                            obj.DealCurrentPosition(oIdx,curPosition);    
-                            
+                            obj.DealCurrentPosition(oIdx,curPosition);                              
                             obj.DealPreviousPosition(oIdx,prevPosition);
                         end
                     end
