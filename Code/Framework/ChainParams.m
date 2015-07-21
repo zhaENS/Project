@@ -19,6 +19,7 @@ classdef ChainParams<handle
         stickyBeads@double        % indices of beads capeable of sticking to other sticky beads or domain
         beadsOnBoundary@double    % indices of beads attached to the boundary at initialization
         allowSelfAffinity@logical     % allow beads to attach to other beads on the chain
+        allowAttachToBoundary@logical  %allow beads to attach to boundary
         probAttachToBoundary@double    % probability to attach to boundary (if distance is below encounter distance)
         probAttachToStickyBeads@double % probability to attach to other sticky beads (if distance is below encounter distance)
         initializeInDomain@double % the index of the domain to initialize the chain in 
@@ -40,6 +41,7 @@ classdef ChainParams<handle
             obj.fixedBeadsPosition      = [];    % position for the fixed beads (can be on the boundary)
             obj.beadsOnBoundary         = [];    % list of bead attached to the domain's boundary 
             obj.allowSelfAffinity       = false; % can sticky beads stick to other sticky beads on the same chain?
+            obj.allowAttachToBoundary   = false;
             obj.stickyBeads             = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain      = 1;     % default initialize in the first domain created
             obj.probAttachToStickyBeads = 0.9;   % sticky beads attachment to other sticky beads
