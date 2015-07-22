@@ -1,7 +1,7 @@
 classdef ChainParams<handle
     % This class holds the parameters for a chain Class 
     
-    properties
+properties
         dimension@double
         beta@double
         b@double
@@ -9,7 +9,6 @@ classdef ChainParams<handle
         dt@double
         numBeads@double
         connectedBeads@double
-<<<<<<< HEAD
         bendingElasticityForce@logical
         springForce@logical
         minBeadDistance@double
@@ -24,20 +23,6 @@ classdef ChainParams<handle
         probAttachToBoundary@double    % probability to attach to boundary (if distance is below encounter distance)
         probAttachToStickyBeads@double % probability to attach to other sticky beads (if distance is below encounter distance)
         initializeInDomain@double % the index of the domain to initialize the chain in 
-=======
-        bendingConst@double            % bending constant
-        bendingElasticityForce@logical % flag for bending force 
-        springForce@logical            % flag for spring force
-        springAffectedBeads@double % beads affected by spring force
-        minBeadDistance@double     % minimal distance betwen beads, affected by spring forces only
-        fixedBeadNum@double        % beads unaffeted by forces, remain fixed throughout
-        fixedBeadsPosition@double  % set the position of fixed beads
-        springConst@double         % spring constant        
-        stickyBeads@double         % indices of beads capeable of sticking to other sticky beads or domain
-        beadsOnBoundary@double     % indices of beads attached to the boundary at initialization
-        allowSelfAffinity@logical  % allow beads to attach to other beads on the chain
-        initializeInDomain@double  % the index of the domain to initialize the chain in 
->>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
         forceParams  = ForceManagerParams;     
     end
     

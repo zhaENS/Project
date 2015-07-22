@@ -382,19 +382,15 @@ classdef ObjectManager<handle
         
         function AttachToBoundary(obj,encounterDistance,domainClass)
             %allow beads in domain to attach to boundary if distance is
-            %below encounter distance;
+            %below encounter distance and satisfaire the probability;
             AttachProbability = obj.objParams.probAttachToBoundary;
             flag              = [obj.objParams.allowAttachToBoundary];
             for oIdx=1:obj.numObjects
                 if flag(oIdx)
-                   % beadsOnBoundary    = obj.GetParticlesOnBoundary(oIdx);
-           [~,curPosition]  = obj.GetPosition(oIdx);
-             %       prevPosition       = prevPosition{1};
-                    curPosition        = curPosition{1};
-                    %D                  = pdist2mex(curPosition',curPosition','euc',[],[],[],[]);
+                    [~,curPosition]    = obj.GetPosition(oIdx);
+                    curPosition        = curPosition{1};%Get the current position for each object;
                     D                  = pdist2(curPosition,domainClass.params.domainCenter);
                     D                  = (domainClass.params.domainWidth-D).^2;
-                  %  [row,col]          = find(D(beadsOnBoundary,:)<encounterDistance & D(beadsOnBoundary,:)>0);
                    [col,~]             = find(D<encounterDistance.^2& D>eps);
                     if ~isempty(col)
                         r   = rand(numel(col),1);
@@ -402,16 +398,15 @@ classdef ObjectManager<handle
                         for rIdx = 1:numel(col)
                             if attachIndx(rIdx)
                                 sprintf('Attachment to the boundary! beads %d of chain %d',col(rIdx),oIdx)
-                                %update the position such that they are on the
-                                %boundary;
+                                %add the beads to the beadsOnBoundary;
                                 [obj.handles.chain(oIdx).params.beadsOnBoundary] = ...
                                 [obj.handles.chain(oIdx).params.beadsOnBoundary col(rIdx)];
-                                obj.handles.chain(oIdx).params.beadsOnBoundary = unique(obj.handles.chain(oIdx).params.beadsOnBoundary);
-                               
                                 obj.handles.chain(oIdx).params.beadsOnBoundary = ...
-                                    sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
+                                sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
+                                %update the position such that they are on the
+                                %boundary;
                                 theta = atan(curPosition(col(rIdx),2)/curPosition(col(rIdx),1));
-                                 phi  = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));                              
+                                phi   = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));                              
                                 curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phi)*cos(theta);                              
                                 curPosition(col(rIdx),2)  = domainClass.params.domainWidth*sin(theta)*sin(phi);
                                 curPosition(col(rIdx),3)  = domainClass.params.domainWidth*cos(phi);                              
@@ -443,8 +438,8 @@ classdef ObjectManager<handle
                        for rIdx = 1:numel(row)
                           % Test if two sticky beads should be connected
                           if connectInd(rIdx)
-                                sprintf('sticky')
-                                sprintf('%d and %d',stickyBeads(row(rIdx)),stickyBeads(row(rIdx)))          
+                               % sprintf('sticky')
+                              %  sprintf('%d and %d',stickyBeads(row(rIdx)),stickyBeads(row(rIdx)))          
                               obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
                            end
                       end
@@ -466,7 +461,7 @@ classdef ObjectManager<handle
                   disconnectInd = r<stickyBeadDisconnectProb;
                    for rIdx = 1:size(obj.connectedStickyBeads,1)
                           if disconnectInd(rIdx)
-                              sprintf('%d and %d disconnected',obj.connectedStickyBeads(rIdx,1),obj.connectedStickyBeads(rIdx,2))
+                           %   sprintf('%d and %d disconnected',obj.connectedStickyBeads(rIdx,1),obj.connectedStickyBeads(rIdx,2))
                               obj.DisconnectParticles(obj.connectedStickyBeads(rIdx,1),obj.connectedStickyBeads(rIdx,2))
                           end
                    end

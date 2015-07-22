@@ -27,7 +27,6 @@ classdef SimulationFrameworkParams<handle
             obj.simulator.dt                   = 1e-2;  % time step 
             obj.simulator.numChains            = 1;     % TODO: should be determined after chain initialization 
             obj.simulator.encounterDist        = 0.1;   % TODO: move out- The distance for which two monomer are considered to have met 
-            obj.simulator.stickyTime           = [];    %a list contains the encounter Time for the beads;
             obj.simulator.showSimulation       = true; 
             obj.simulator.recordData           = false;
             obj.simulator.notifyByEmail        = false;
@@ -102,7 +101,6 @@ classdef SimulationFrameworkParams<handle
             % inherit the framework params
             obj.dataRecorder.recipeFileName = obj.simulator.recipeFileName;
             obj.dataRecorder.encounterDist  = obj.simulator.encounterDist;
-            obj.dataRecorder.stickyTime     = obj.simulator.stickyTime;
         end
         
         function SetPlotHandlerParams(obj)

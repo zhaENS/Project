@@ -6,7 +6,7 @@ classdef SimulationDataRecorderParams<handle
         recipeFileName@char
         encounterDist@double
         stickyTime@double
-        
+        numCluster@double
     end
     
     methods
@@ -21,6 +21,7 @@ classdef SimulationDataRecorderParams<handle
             obj.recipeFileName = '';%will be copied by framework class
             obj.encounterDist  = []; %  The distance for which two monomer are considered to have met
             obj.stickyTime     = [];
+            obj.numCluster     = [];
         end
         
     end
