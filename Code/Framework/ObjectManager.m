@@ -393,9 +393,9 @@ classdef ObjectManager<handle
                     curPosition        = curPosition{1};
                     %D                  = pdist2mex(curPosition',curPosition','euc',[],[],[],[]);
                     D                  = pdist2(curPosition,domainClass.params.domainCenter);
-                    D                  = domainClass.params.domainWidth-D;
+                    D                  = (domainClass.params.domainWidth-D).^2;
                   %  [row,col]          = find(D(beadsOnBoundary,:)<encounterDistance & D(beadsOnBoundary,:)>0);
-                   [col,~]             = find(D<encounterDistance & D>1e-14);
+                   [col,~]             = find(D<encounterDistance.^2& D>eps);
                     if ~isempty(col)
                         r   = rand(numel(col),1);
                         attachIndx = r<AttachProbability;
