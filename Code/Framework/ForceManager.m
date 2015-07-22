@@ -49,9 +49,9 @@ classdef ForceManager<handle
         end
         
         function newParticlePosition = Apply(obj,particleDistances,particlePosition,connectivityMap,...
-                                                         springConst,diffusionConst,bendingConst,...
-                                                         LJPotentialWidth,LJPotentialDepth,...
-                                                         minParticleDistance,fixedParticleNum,dt)
+                                                 springConst,diffusionConst,bendingConst,...
+                                                 LJPotentialWidth,LJPotentialDepth,...
+                                                 minParticleDistance,fixedParticleNum,dt)
                 
             % Apply chosen forces on the N vertices/particles of an object
             % object must contain the position of its vertices in any
@@ -92,14 +92,21 @@ classdef ForceManager<handle
     methods (Static)
         
          function [newParticlePosition,springForces,bendingForces] = ApplyInternalForces(particlePosition,...
+<<<<<<< HEAD
                                                                    particleDistances,connectivityMap,...
                                                                    springForce,bendingElasticityForce,...
                                                                    springConst,bendingConst,...
                                                                    minParticleDistance,fixedParticleNum,...
                                                                    particlesOnBoundary,dt)%TODO: beds on boundary should receive forces
+=======
+                                                                           particleDistances,connectivityMap,...
+                                                                           springForce,bendingElasticityForce,...
+                                                                           springConst,bendingConst,bendingAffectedParticles,bendingOpeningAngle,...
+                                                                           minParticleDistance,fixedParticleNum,dt)
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
                                             
-             % Apply object's internal forces to get the new position of
-             % its vertices, represented by newParticlePosition                         
+            % Apply object's internal forces to get the new position of
+            % its vertices, represented by newParticlePosition                         
             
             % Spring force
             springForces  = ForceManager.GetSpringForce(springForce,particlePosition,particleDistances,springConst,...
@@ -107,9 +114,17 @@ classdef ForceManager<handle
             springForces(particlesOnBoundary,:) = 0;% temp, do not assign forces for beads on the boundary
             % Bending forces
             bendingForces = ForceManager.GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistances,...
+<<<<<<< HEAD
                                                                    connectivityMap,bendingConst,fixedParticleNum);
 
             bendingForces(particlesOnBoundary,:) = 0;% temp, do not assign forces for beads on the boundary
+=======
+                                                                   connectivityMap,bendingConst,...
+                                                                   bendingAffectedParticles,bendingOpeningAngle,...
+                                                                   fixedParticleNum);
+                                                     
+
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
             dx = (springForces+ bendingForces)*dt;
             
             newParticlePosition = particlePosition+dx;
@@ -122,8 +137,12 @@ classdef ForceManager<handle
                                                             LJPotentialWidth,LJPotentialDepth,...
                                                             morsePotentialDepth, morsePotentialWidth,morseForceType,...
                                                             mechaicalForceCenter, mechanicalForceDirection,mechanicalForceMagnitude,...
+<<<<<<< HEAD
                                                             minParticleDist,fixedParticleNum,particlesOnBoundary,...
                                                             dt)%TODO: pass force parameters
+=======
+                                                            minParticleDist,fixedParticleNum,dt,dimension)%TODO: pass force parameters
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
              
@@ -131,7 +150,11 @@ classdef ForceManager<handle
             ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum,particlesOnBoundary);
             
             % Thermal (diffusion) force
+<<<<<<< HEAD
             diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum,particlesOnBoundary);
+=======
+            diffusionForces = ForceManager.GetDiffusionForce(diffusionForce,dimension,size(particlePosition,1),diffusionConst,dt,fixedParticleNum);
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
             
             
             % Morse force                        
@@ -235,7 +258,10 @@ classdef ForceManager<handle
             end
         end
         
-        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,connectivityMat,bendingConst,fixedParticleNum)
+        function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,...
+                                                    connectivityMat,bendingConst,...
+                                                    bendingAffectedParticles,bendingOpeningAngle,fixedParticleNum)
+                                                                               
             % Get bending elasticity force
             force = zeros(size(particlePosition,1),size(particlePosition,2));
             if bendingElasticityForce
@@ -248,7 +274,12 @@ classdef ForceManager<handle
 %                                                  connectivityMat,bendingConst);
                                                  
 %               force = BendingElasticity(particlePosition,bendingConst,fixedParticleNum);
-              force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,pi);
+                if isempty(bendingAffectedParticles)
+                    bendingAffectedParticles= (1:size(particlePosition,1))';
+                end
+                force = BendingElasticityWithAngels(particlePosition, particleDistance,bendingConst,bendingOpeningAngle, bendingAffectedParticles);
+%               force = BendingElasticity(particlePosition,particleDistance,bendingConst,...
+%                                                   bendingOpeningAngle,bendingAffectedParticles,size(particlePosition,1),size(particlePosition,2));
                                    
               % zero out forces for
               % fixed particles
@@ -256,11 +287,15 @@ classdef ForceManager<handle
             end            
         end
         
+<<<<<<< HEAD
         function force  = GetDiffusionForce(diffusionForce,particlePosition,diffusionConst,dt,fixedParticleNum,particlesOnBoundary)
+=======
+        function force  = GetDiffusionForce(diffusionForce,dimension,numParticles,diffusionConst,dt,fixedParticleNum)
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
             % get thermal (diffusion) force
-            force = zeros(size(particlePosition));
+            force = zeros(numParticles,3);
             if diffusionForce
-                force = randn(size(particlePosition))*sqrt(2*diffusionConst*dt);
+                force(:,1:dimension) = randn(numParticles,dimension)*sqrt(2*diffusionConst*dt);
             end 
             force(fixedParticleNum,:)    = 0;
             force(particlesOnBoundary,:) = 0;

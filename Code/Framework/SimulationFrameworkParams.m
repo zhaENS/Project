@@ -74,7 +74,7 @@ classdef SimulationFrameworkParams<handle
             for cIdx = 1:obj.simulator.numChains
                 % inherit the framework parameters 
                 obj.chain(cIdx).forceParams.diffusionConst = obj.simulator.diffusionConst;
-                obj.chain(cIdx).dimension                  = obj.simulator.dimension;            
+%                 obj.chain(cIdx).dimension                  = obj.simulator.dimension;            
                 obj.chain(cIdx).forceParams.dt             = obj.simulator.dt;
 %                 obj.chain(cIdx).SetForceParams;
             end
@@ -86,7 +86,7 @@ classdef SimulationFrameworkParams<handle
             
             % Inherit framework parameters
             for dIdx = 1:numel(obj.domain)
-                obj.domain(dIdx).dimension        = obj.simulator.dimension;
+%                 obj.domain(dIdx).dimension        = obj.simulator.dimension;
 %                 obj.domain(dIdx).forceParams.diffusionConst   = obj.simulator.diffusionConst;
                 obj.domain(dIdx).showDomain       = obj.simulator.showSimulation;
                 obj.domain(dIdx).forceParams.dt   = obj.simulator.dt;

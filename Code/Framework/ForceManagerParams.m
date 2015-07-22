@@ -12,12 +12,14 @@ classdef ForceManagerParams<handle
         
         % Parameters for the forces
         bendingConst@double
+        bendingOpeningAngle@double
+        bendingAffectedParticles@double
         springConst@double
         diffusionConst@double
         LJPotentialWidth@double
         LJPotentialDepth@double
         minParticleEqDistance@double % can be a matrix representing pairwise min particle distance
-        dt@double % the time to activate the force
+        dt@double % the time to activate the force [obsolete]
         fixedParticleNum@double
         morsePotentialDepth@double
         morsePotentialWidth@double

@@ -68,7 +68,8 @@ classdef Histone<handle
             % Update the histone position on the new chain position 
             obj.UpdateHistonePositionOnChain(chainPos);
             fp                 = obj.params.forceParams;
-            diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,obj.curPos,fp.diffusionConst,dt,[]);
+            chainDim = sum(all(chainPosition~=0));
+            diffusionForce     = ForceManager.GetDiffusionForce(fp.diffusionForce,chainDim-1,size(obj.curPos,1),fp.diffusionConst,dt,[]);
             
             if fp.lennardJonesForce
              histoneDist        = ForceManager.GetParticleDistance(obj.curPos);

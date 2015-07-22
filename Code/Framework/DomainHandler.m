@@ -43,12 +43,18 @@ classdef DomainHandler<handle
             obj.handles.graphical.mainAxes = obj.params.parentAxes;
         end        
                 
+<<<<<<< HEAD
         function newParticlePosition = Step(obj, prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,particlesOnBoundary,domainInds,dt)                                                
+=======
+        function newParticlePosition = Step(obj,prevParticlePosition,curParticlePosition,particleDist,fixedParticleNum,dt)                                                
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
                % Apply forces on particles in the domain to obtain their
                % new position 
                % currently this function supports domains which do not
                % overlap or contained domains in which one is completely
                % permeable 
+               % the function applies force on all particles in the
+               % simulation 
                
                % experimental- apply forces iteratively from each domain 
                for dIdx = 1:obj.numDomains
@@ -58,6 +64,7 @@ classdef DomainHandler<handle
                    pInd = (p==dIdx);%obtain the index of particlesOnBoundary for each domain;
                    dp           = obj.params(dIdx);
                    fp           = dp.forceParams;
+<<<<<<< HEAD
                    dInds = (domainInds==dIdx);
                    %if has more than one domain,as the particlesOnBoundary
                    %is a global number,change the index to fit current
@@ -75,13 +82,21 @@ classdef DomainHandler<handle
                                                     particlesOnBoundary(pInd),dt);
                     curParticlePosition(dInds,:)= cp(dInds,:);
                     
+=======
+                   curParticlePosition = ForceManager.ApplyExternalForces(curParticlePosition,particleDist,...
+                                                                    fp.diffusionConst,fp.lennardJonesForce,fp.diffusionForce, fp.morseForce,fp.mechanicalForce,...
+                                                                    fp.LJPotentialWidth,fp.LJPotentialDepth,...
+                                                                    fp.morsePotentialDepth, fp.morsePotentialWidth,fp.morseForceType,...
+                                                                    fp.mechanicalForceCenter, fp.mechanicalForceDirection,fp.mechanicalForceMagnitude,...
+                                                                    fp.minParticleEqDistance,fixedParticleNum,dt,dp.dimension);
+                                                                                               
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
                      [~,curParticlePosition(dInds,:)] = obj.Reflect(prevParticlePosition(dInds ,:),curParticlePosition(dInds,:),domainNumber);
                    end
-               end
                
-               newParticlePosition = curParticlePosition;
-               
+               end                             
+              newParticlePosition = curParticlePosition;
         end
                      
         function [prevPos,curPos,inFlag] = Reflect(obj,pos1,pos2,domainNumber,reflectDirection)%TODO: complete reflection out in all domain shapes
@@ -149,7 +164,7 @@ classdef DomainHandler<handle
                             disp('no intersection point')
                         end
                         
-                    elseif strcmpi(obj.params.domainShape,'cylinder');
+                    elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder');
                         % find the intersection in 2D first
                         intersectionPoint = obj.FindIntersectionPoint([prevPos(:,1) prevPos(:,2) zeros(size(prevPos,1),1)],[curPos(:,1) curPos(:,2) zeros(size(curPos,1),1)],domainNumber);
                         
@@ -203,7 +218,7 @@ classdef DomainHandler<handle
                      A  = prevPos-dc;
                      B  = curPos-dc; 
                      C  = (B-A);%./norm(B-A);
-                     
+                     if C>eps
                      gamma = dot(A,A);
                      alpha = dot (A,B)-gamma;
                      beta  = dot(C,C);
@@ -224,6 +239,10 @@ classdef DomainHandler<handle
                     else
                         intersectionPoint = [];
                     end
+                     else
+                         intersectionPoint = prevPos+C/2;
+                     end
+                     
             elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
                     r  = obj.params(domainNumber).domainWidth;                                    
                     c  = cross([0 1 0],[0 0 1]);
@@ -254,12 +273,18 @@ classdef DomainHandler<handle
                 if strcmpi(obj.params(domainNumber).domainShape,'Sphere')
                     % the vector norm
                     dc    = obj.params(domainNumber).domainCenter;
+<<<<<<< HEAD
                     n     = sqrt(sum(bsxfun(@minus,vecIn,dc).^2,2));
                     onIdx = ((n-obj.params(domainNumber).domainWidth).^2)<eps;
                     inIdx = (n+1e-14<(obj.params(domainNumber).domainWidth));
                    if any(onIdx& inIdx)
                        disp('stop')
                    end
+=======
+                    n     = (sum(bsxfun(@minus,vecIn,dc).^2,2));
+                    inIdx = (n<=(obj.params(domainNumber).domainWidth+1e-10)^2);
+
+>>>>>>> b37d0c516ba2907ab13e94275d9c8072c7b33b2a
                 elseif strcmpi(obj.params(domainNumber).domainShape,'cylinder')                
                     % the vector norm
                     dc    = obj.params(domainNumber).domainCenter;
@@ -267,7 +292,14 @@ classdef DomainHandler<handle
                     n     = sqrt(sum(bsxfun(@minus,vecIn(:,1:2),dc(:,1:2)).^2,2));
                     inIdx = n<=obj.params(domainNumber).domainWidth;
                 elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
-                    inIdx = vecIn.x<obj.params(domainNumber).domainWidth;
+                    inIdx = vecIn(3)<(obj.params(domainNumber).domainCenter(3)+obj.params(domainNumber).domainHeight/2) &&...
+                            vecIn(3)>(obj.params(domainNumber).domainCenter(3)-obj.params(domainNumber).domainHeight/2) &&...
+                            vecIn(2)<(obj.params(domainNumber).domainCenter(3)+obj.params(domainNumber).domainWidth/2) &&...
+                            vecIn(2)>(obj.params(domainNumber).domainCenter(3)-obj.params(domainNumber).domainWidth/2) &&...
+                            vecIn(1)<(obj.params(domainNumber).domainCenter(3)+obj.params(domainNumber).domainLength/2) &&...
+                            vecIn(1)>(obj.params(domainNumber).domainCenter(3)-obj.params(domainNumber).domainLength/2);
+                elseif strcmpi(obj.params(domainNumber).domainShape,'box')
+                    % unfinished
                 elseif strcmpi(obj.params(domainNumber).domainShape,'open')
                     % Do nothing
                 end            
@@ -303,10 +335,22 @@ classdef DomainHandler<handle
                domainNorm(3) = 0;
                domainNorm = domainNorm/sqrt(sum(domainNorm.^2));
            elseif strcmpi(obj.params(domainNumber).domainShape,'twoPlates')
-               if point(1)< obj.params(domainNumber).domainWidth+1e-7 && point(1)> obj.params(domainNumber).domainWidth-1e-7 
-                   domainNorm = -[1,0 0];
-               elseif point(1)<-obj.params(domainNumber).domainWidth+1e-7 && point(1)>-obj.params(domainNumber).domainWidth-1e-7
+               
+               if point(3)< obj.params(domainNumber).domainHeight+1e-7 && point(3)> obj.params(domainNumber).domainHeight-1e-7 
+                   domainNorm = -[0,0 1];
+               elseif point(3)<-obj.params(domainNumber).domainHeight+1e-7 && point(3)>-obj.params(domainNumber).domainHeight-1e-7
+                   domainNorm = [0 0 1];
+                   
+               elseif point(2)< obj.params(domainNumber).domainWidth+1e-7 && point(3)> obj.params(domainNumber).domainWidth-1e-7 
+                   domainNorm = -[0,1, 0];
+               elseif point(2)<-obj.params(domainNumber).domainWidth+1e-7 && point(3)>-obj.params(domainNumber).domainWidth-1e-7
+                   domainNorm = [0 1 0];
+                   
+               elseif point(1)< obj.params(domainNumber).domainLength+1e-7 && point(1)> obj.params(domainNumber).domainLength-1e-7 
+                   domainNorm = -[1,0, 0];
+               elseif point(1)<-obj.params(domainNumber).domainLength+1e-7 && point(3)>-obj.params(domainNumber).domainLength-1e-7
                    domainNorm = [1 0 0];
+                                
                end
            elseif  strcmpi(obj.params(domainNumber).domainShape,'open')
                domainNorm = [];
