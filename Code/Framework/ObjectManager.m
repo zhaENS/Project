@@ -135,9 +135,7 @@ classdef ObjectManager<handle
                 inds       = obj.map.GetMemberInds(objNum,pIdx);
                 prev{pIdx} = obj.prevPos(inds,:);
                 cur{pIdx}  = obj.curPos(inds,:);
-
-            end
-           
+            end           
         end 
         
         function [prevPos,curPos] = GetPositionAsOne(obj,objList)
@@ -245,7 +243,7 @@ classdef ObjectManager<handle
 
         end
         
-       function fixedParticles  = GetFixedParticles(obj,objList)
+        function fixedParticles  = GetFixedParticles(obj,objList)
             % get the list of fixed particles 
             memberList     = obj.map.GetObjectMembers(objList);
             fixedParticles = [obj.objParams(memberList).fixedBeadNum];
@@ -372,14 +370,13 @@ classdef ObjectManager<handle
             
         end
         
-        function memberDist = GetMemberDistance(obj,memberList)%unfinished
+        function memberDist = GetMemberDistance(obj,memberList)%[unfinished]
             %get the pairwise distances between members in memberList
             memberDist = [];
             objs = obj.map.GetObjectFromMember(memberList);
             inds = obj.map.GetAllInds();
         end        
-        
-        
+                
         function AttachToBoundary(obj,encounterDistance,domainClass)
             %allow beads in domain to attach to boundary if distance is
             %below encounter distance and satisfaire the probability;
@@ -390,7 +387,7 @@ classdef ObjectManager<handle
                     [prevPosition,curPosition]    = obj.GetPosition(oIdx);
                     curPosition        = curPosition{1};%Get the current position for each object;
                     prevPosition       = prevPosition{1};
-                    D                  = pdist2(curPosition,domainClass.params.domainCenter);
+                    D                  = pdist2mex(curPosition',domainClass.params.domainCenter','euc',[],[],[]);
                     D                  = (domainClass.params.domainWidth-D).^2;
                    [col,~]             = find(D<encounterDistance.^2& D>eps);
                     if ~isempty(col)
@@ -407,16 +404,17 @@ classdef ObjectManager<handle
                                 %update the position such that they are on the
                                 %boundary;
                                 thetaCur  = atan(curPosition(col(rIdx),2)/curPosition(col(rIdx),1));
-                                phiCur    = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));                              
+                                phiCur    = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));
                                 thetaPrev = atan(prevPosition(col(rIdx),2)/prevPosition(col(rIdx),1));
-                                phiPrev   = atan(sqrt(prevPosition(col(rIdx),1).^2+prevPosition(col(rIdx),2).^2)./prevPosition(col(rIdx),3));                              
-                                curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phiCur)*cos(thetaCur);                              
+                                phiPrev   = atan(sqrt(prevPosition(col(rIdx),1).^2+prevPosition(col(rIdx),2).^2)./prevPosition(col(rIdx),3));   
+                                curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phiCur)*cos(thetaCur);         
                                 curPosition(col(rIdx),2)  = domainClass.params.domainWidth*sin(thetaCur)*sin(phiCur);
                                 curPosition(col(rIdx),3)  = domainClass.params.domainWidth*cos(phiCur);                              
                                 prevPosition(col(rIdx),1) = domainClass.params.domainWidth*sin(phiPrev)*cos(thetaPrev);
                                 prevPosition(col(rIdx),2) = domainClass.params.domainWidth*sin(thetaPrev)*sin(phiPrev);
                                 prevPosition(col(rIdx),3) = domainClass.params.domainWidth*cos(phiPrev); 
-                                 obj.DealCurrentPosition(oIdx,curPosition);
+                                
+                                obj.DealCurrentPosition(oIdx,curPosition);
                                 obj.DealPreviousPosition(oIdx,prevPosition);
                          
                             end
@@ -425,8 +423,7 @@ classdef ObjectManager<handle
                 end
             end
         end
-        
-        
+                
         function ConnectStickyParticles(obj,stickyDistance)
                   %calculate each pair of beads in the list stickyBeads to see
                   %if their distances are smaller than encounterDist;
@@ -496,8 +493,7 @@ classdef ObjectManager<handle
                   disp('Merge')
             else                
                 notify(obj,'connectivityChange');
-            end
-            
+            end            
         end
         
         function DisconnectParticles(obj,particle1,particle2)%should move to ObjectInteractionManager
@@ -540,7 +536,7 @@ classdef ObjectManager<handle
             % etc. 
             obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);
             obj.particlesOnBoundary = [];
-            cNb=0;       
+            cNb    = 0;       
             numObj = numel(objNum);
             for oIdx = 1:numObj% for each object
                 memberList = obj.map.GetObjectMembers(oIdx);% members of the objects
@@ -550,7 +546,7 @@ classdef ObjectManager<handle
                         beadInds     = obj.map.GetMemberInds(objNum(oIdx),1);
                         beadDistance = obj.particleDist(beadInds,beadInds);
                         % advance each member one step
-                        obj.handles.chain(memberList(1)).Step(beadDistance,dt)   
+                        obj.handles.chain(memberList(1)).Step(beadDistance,dt)
                         % update the curPos list 
                         obj.curPos(beadInds,:)  = obj.handles.chain(memberList(1)).position.cur;
 
@@ -584,11 +580,9 @@ classdef ObjectManager<handle
                 %Update cumulative object indices 
                 cNb = cNb+numel(obj.map.GetAllInds(oIdx)); 
             end 
-          
-            
+                      
             % Check for possible interaction between objects
-%             obj.ObjectInteraction;
-   
+%             obj.ObjectInteraction;   
         end
         
         function springConst = GetSpringConstAsOne(obj,objNum)% TODO: fix springConst for between objects
@@ -616,8 +610,7 @@ classdef ObjectManager<handle
                 
                  numX = numX+numParticles1;
                  numY = 0;
-            end
-            
+            end            
         end
         
         function minParticleDist = GetMinParticleDistAsOne(obj,objNum)
@@ -776,7 +769,7 @@ classdef ObjectManager<handle
 
 methods (Static)
 
-   function [row,col] = ListConnectivity(cMat)
+       function [row,col] = ListConnectivity(cMat)
             % find the connectivity of cMAt
            [row, col] = find(triu(cMat));
     end

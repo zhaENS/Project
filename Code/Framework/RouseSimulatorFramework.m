@@ -136,8 +136,7 @@ classdef RouseSimulatorFramework<handle
                         % advance one step of the polymer chain    
                         obj.Step;   
                        % perform action post the current step 
-                        obj.PostStepActions                     
-                       
+                        obj.PostStepActions                       
                     end
                     % perform actions post simulation
                     obj.PostRunActions
@@ -172,7 +171,7 @@ classdef RouseSimulatorFramework<handle
             eval(obj.recipe.PreStepActions);
         end
         
-    function Step(obj,varargin)
+        function Step(obj,varargin)
              % Next simulation step 
             objList        = 1:obj.objectManager.numObjects;
             dt             = obj.params.simulator.dt;
@@ -190,21 +189,15 @@ classdef RouseSimulatorFramework<handle
             fixedParticleNum         = [obj.objectManager.fixedParticles{:}];             
             stickyBeads              = [obj.objectManager.stickyParticles{:}];
             particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
-            
-          
-
+                      
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                     curParticlePosition,particleDist,fixedParticleNum,...
-                                    particlesOnBoundaryAll,domainInd,dt);
-            
-                                
-                                
-                                
+                                    particlesOnBoundaryAll,domainInd,dt);            
                                 
             % diffuse particles on the boundary(currently works only on
             % spheres)
-            for dIdx =1:numel(obj.params.domain)             
+            for dIdx =1:numel(obj.params.domain)
              p    = domainInd(particlesOnBoundaryAll);
              pInd = p==dIdx;
              particleInitPos     = curParticlePosition(particlesOnBoundaryAll(pInd),:); 
@@ -247,7 +240,7 @@ classdef RouseSimulatorFramework<handle
             end
              %test if the beads in domain can be attached to the boundary
              encounterDistance = obj.params.simulator.encounterDist;
-            obj.objectManager.AttachToBoundary(encounterDistance,obj.handles.classes.domain);
+             obj.objectManager.AttachToBoundary(encounterDistance,obj.handles.classes.domain);
             
             % Show simulation
             obj.simulationGraphics.ShowSimulation
