@@ -387,8 +387,9 @@ classdef ObjectManager<handle
             flag              = [obj.objParams.allowAttachToBoundary];
             for oIdx=1:obj.numObjects
                 if flag(oIdx)
-                    [~,curPosition]    = obj.GetPosition(oIdx);
+                    [prevPosition,curPosition]    = obj.GetPosition(oIdx);
                     curPosition        = curPosition{1};%Get the current position for each object;
+                    prevPosition       = prevPosition{1};
                     D                  = pdist2(curPosition,domainClass.params.domainCenter);
                     D                  = (domainClass.params.domainWidth-D).^2;
                    [col,~]             = find(D<encounterDistance.^2& D>eps);
@@ -405,12 +406,18 @@ classdef ObjectManager<handle
                                 sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
                                 %update the position such that they are on the
                                 %boundary;
-                                theta = atan(curPosition(col(rIdx),2)/curPosition(col(rIdx),1));
-                                phi   = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));                              
-                                curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phi)*cos(theta);                              
-                                curPosition(col(rIdx),2)  = domainClass.params.domainWidth*sin(theta)*sin(phi);
-                                curPosition(col(rIdx),3)  = domainClass.params.domainWidth*cos(phi);                              
-                                obj.DealCurrentPosition(oIdx,curPosition);
+                                thetaCur  = atan(curPosition(col(rIdx),2)/curPosition(col(rIdx),1));
+                                phiCur    = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));                              
+                                thetaPrev = atan(prevPosition(col(rIdx),2)/prevPosition(col(rIdx),1));
+                                phiPrev   = atan(sqrt(prevPosition(col(rIdx),1).^2+prevPosition(col(rIdx),2).^2)./prevPosition(col(rIdx),3));                              
+                                curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phiCur)*cos(thetaCur);                              
+                                curPosition(col(rIdx),2)  = domainClass.params.domainWidth*sin(thetaCur)*sin(phiCur);
+                                curPosition(col(rIdx),3)  = domainClass.params.domainWidth*cos(phiCur);                              
+                                prevPosition(col(rIdx),1) = domainClass.params.domainWidth*sin(phiPrev)*cos(thetaPrev);
+                                prevPosition(col(rIdx),2) = domainClass.params.domainWidth*sin(thetaPrev)*sin(phiPrev);
+                                prevPosition(col(rIdx),3) = domainClass.params.domainWidth*cos(phiPrev); 
+                                 obj.DealCurrentPosition(oIdx,curPosition);
+                                obj.DealPreviousPosition(oIdx,prevPosition);
                          
                             end
                         end
