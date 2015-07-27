@@ -21,7 +21,7 @@ classdef ObjectManager<handle
         connectivity   % connectivity matrix of particles (All)
         fixedParticles % fixed particles (All) 
         stickyParticles     %sticky particles (All)
-        particlesOnBoundary %particles on boundary (All)
+       % particlesOnBoundary %particles on boundary (All)
         connectedStickyBeads %the num of sticky beads that have already connected
         domainInds     % the indices of domain the particle belong to 
         curPos         % current particle position (All)
@@ -278,15 +278,11 @@ classdef ObjectManager<handle
 %                     particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+sum([obj.objParams(memberList(1:lIdx)).numBeads]);
 %                     
 %                 end
+%             end
+            memberList      = obj.map.GetObjectMembers(objList);
+            beadsOnBoudary  = [obj.objParams(memberList).beadsOnBoundary];
             
-         memberList         = obj.map.GetObjectMembers(objList);
-            beadsOnBoudary  = [obj.objParams(memberList).stickyBeads];
-            if ~isempty(beadsOnBoudary)
-                for mIdx = 2:numel(memberList)
-                    beadsOnBoudary(mIdx) = beadsOnBoudary(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
-                end
-            end
-        end
+    end
             
         function particleDistance = GetParticleDistance(obj,objList)
             % Get the pairwise distances of particles in objList
@@ -553,7 +549,7 @@ classdef ObjectManager<handle
             % Advance the objects one step in the simulation, apply forces
             % etc. 
             obj.particleDist = ForceManager.GetParticleDistance(obj.curPos);
-            obj.particlesOnBoundary = [];
+           % obj.particlesOnBoundary = [];
             cNb    = 0;       
             numObj = numel(objNum);
             for oIdx = 1:numObj% for each object
@@ -593,10 +589,10 @@ classdef ObjectManager<handle
                    obj.DealCurrentPosition(oIdx,newPos);
                 end
                 %Deal with particles on the boundary for each step;
-                obj.particlesOnBoundary = ...
-                [obj.particlesOnBoundary, {obj.GetParticlesOnBoundary(objNum(oIdx)) + cNb}];
-                %Update cumulative object indices 
-                cNb = cNb+numel(obj.map.GetAllInds(oIdx)); 
+%                 obj.particlesOnBoundary = ...
+%                 [obj.particlesOnBoundary, {obj.GetParticlesOnBoundary(objNum(oIdx)) + cNb}];
+%                 %Update cumulative object indices 
+%                 cNb = cNb+numel(obj.map.GetAllInds(oIdx)); 
             end 
                       
             % Check for possible interaction between objects
