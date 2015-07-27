@@ -266,20 +266,26 @@ classdef ObjectManager<handle
             end
         end
         
-        function particleOnBoundary = GetParticlesOnBoundary(obj,objList)
+        function beadsOnBoudary = GetParticlesOnBoundary(obj,objList)
             % get the list of particles on the boundary of (any) domain
-            memberList      = obj.map.GetObjectMembers(objList);
-            particleOnBoundary = [obj.objParams(memberList).beadsOnBoundary];
-            if ~isempty(particleOnBoundary) && (numel(memberList)>1)
-                for lIdx = 1:numel(memberList)-1
-                    pSize1(lIdx)  = numel(obj.objParams(memberList(lIdx)).beadsOnBoundary);
-                    pSize2(lIdx) = numel(obj.objParams(memberList(lIdx+1)).beadsOnBoundary);
-                    mIdx         = sum(pSize1(1:lIdx))+1 : sum(pSize2(lIdx))+sum(pSize1(1:lIdx));
-                    particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+sum([obj.objParams(memberList(1:lIdx)).numBeads]);
-                    
+%             memberList      = obj.map.GetObjectMembers(objList);
+%             particleOnBoundary = [obj.objParams(memberList).beadsOnBoundary];
+%             if ~isempty(particleOnBoundary) && (numel(memberList)>1)
+%                 for lIdx = 1:numel(memberList)-1
+%                     pSize1(lIdx)  = numel(obj.objParams(memberList(lIdx)).beadsOnBoundary);
+%                     pSize2(lIdx) = numel(obj.objParams(memberList(lIdx+1)).beadsOnBoundary);
+%                     mIdx         = sum(pSize1(1:lIdx))+1 : sum(pSize2(lIdx))+sum(pSize1(1:lIdx));
+%                     particleOnBoundary(mIdx) = particleOnBoundary(mIdx)+sum([obj.objParams(memberList(1:lIdx)).numBeads]);
+%                     
+%                 end
+            
+         memberList         = obj.map.GetObjectMembers(objList);
+            beadsOnBoudary  = [obj.objParams(memberList).stickyBeads];
+            if ~isempty(beadsOnBoudary)
+                for mIdx = 2:numel(memberList)
+                    beadsOnBoudary(mIdx) = beadsOnBoudary(mIdx)+obj.objParams(memberList(mIdx-1)).numBeads;
                 end
             end
-        
         end
             
         function particleDistance = GetParticleDistance(obj,objList)
@@ -381,15 +387,13 @@ classdef ObjectManager<handle
             %allow beads in domain to attach to boundary if distance is
             %below encounter distance and satisfaire the probability;
             AttachProbability = obj.objParams.probAttachToBoundary;
-            flag              = [obj.objParams.allowAttachToBoundary];
             for oIdx=1:obj.numObjects
+                flag = [obj.objParams.allowAttachToBoundary];
                 if flag(oIdx)
-                    [prevPosition,curPosition]    = obj.GetPosition(oIdx);
-                    curPosition        = curPosition{1};%Get the current position for each object;
-                    prevPosition       = prevPosition{1};
+                    [prevPosition,curPosition]    = obj.GetPositionAsOne(oIdx);
                     D                  = pdist2mex(curPosition',domainClass.params.domainCenter','euc',[],[],[]);
                     D                  = (domainClass.params.domainWidth-D).^2;
-                   [col,~]             = find(D<encounterDistance.^2& D>eps);
+                    [col,~]             = find(D<encounterDistance.^2& D>eps);
                     if ~isempty(col)
                         r   = rand(numel(col),1);
                         attachIndx = r<AttachProbability;
@@ -397,33 +401,47 @@ classdef ObjectManager<handle
                             if attachIndx(rIdx)
                                 sprintf('Attachment to the boundary! beads %d of chain %d',col(rIdx),oIdx)
                                 %add the beads to the beadsOnBoundary;
-                                [obj.handles.chain(oIdx).params.beadsOnBoundary] = ...
-                                [obj.handles.chain(oIdx).params.beadsOnBoundary col(rIdx)];
-                                obj.handles.chain(oIdx).params.beadsOnBoundary = ...
-                                sort(obj.handles.chain(oIdx).params.beadsOnBoundary);
-                                %update the position such that they are on the
-                                %boundary;
-                                thetaCur  = atan(curPosition(col(rIdx),2)/curPosition(col(rIdx),1));
-                                phiCur    = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));
-                                thetaPrev = atan(prevPosition(col(rIdx),2)/prevPosition(col(rIdx),1));
-                                phiPrev   = atan(sqrt(prevPosition(col(rIdx),1).^2+prevPosition(col(rIdx),2).^2)./prevPosition(col(rIdx),3));   
-                                curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phiCur)*cos(thetaCur);         
-                                curPosition(col(rIdx),2)  = domainClass.params.domainWidth*sin(thetaCur)*sin(phiCur);
-                                curPosition(col(rIdx),3)  = domainClass.params.domainWidth*cos(phiCur);                              
-                                prevPosition(col(rIdx),1) = domainClass.params.domainWidth*sin(phiPrev)*cos(thetaPrev);
-                                prevPosition(col(rIdx),2) = domainClass.params.domainWidth*sin(thetaPrev)*sin(phiPrev);
-                                prevPosition(col(rIdx),3) = domainClass.params.domainWidth*cos(phiPrev); 
-                                
-                                obj.DealCurrentPosition(oIdx,curPosition);
-                                obj.DealPreviousPosition(oIdx,prevPosition);
-                         
+                                memberList = obj.map.GetObjectMembers(oIdx);
+                                if numel(memberList)==1
+                                    [obj.handles.chain(memberList).params.beadsOnBoundary] = ...
+                                        [obj.handles.chain(memberList).params.beadsOnBoundary col(rIdx)];
+                                    obj.handles.chain(memberList).params.beadsOnBoundary = ...
+                                        sort(obj.handles.chain(memberList).params.beadsOnBoundary);
+                                else
+                                    idx = find(col(rIdx)<=obj.objParams(memberList(1)).numBeads);
+                                    for mIdx = 1:numel(memberList)
+                                        if idx
+                                            [obj.handles.chain(memberList((mIdx))).params.beadsOnBoundary] = ...
+                                                [obj.handles.chain(memberList(mIdx)).params.beadsOnBoundary col(rIdx)];
+                                            obj.handles.chain(memberList(mIdx)).params.beadsOnBoundary = ...
+                                                sort(obj.handles.chain(memberList(mIdx)).params.beadsOnBoundary);
+                                        else
+                                            idx = idx +obj.objParams(memberList(mIdx+1)).numBeads;
+                                            idx = find(col(rIdx)<=idx);
+                                        end
+                                    end
+                                end
+                            %update the position such that they are on the
+                            %boundary;
+                            thetaCur  = atan(curPosition(col(rIdx),2)/curPosition(col(rIdx),1));
+                            phiCur    = atan(sqrt(curPosition(col(rIdx),1).^2+curPosition(col(rIdx),2).^2)./curPosition(col(rIdx),3));
+                            thetaPrev = atan(prevPosition(col(rIdx),2)/prevPosition(col(rIdx),1));
+                            phiPrev   = atan(sqrt(prevPosition(col(rIdx),1).^2+prevPosition(col(rIdx),2).^2)./prevPosition(col(rIdx),3));
+                            curPosition(col(rIdx),1)  = domainClass.params.domainWidth*sin(phiCur)*cos(thetaCur)+domainClass.params.domainCenter(1);
+                            curPosition(col(rIdx),2)  = domainClass.params.domainWidth*sin(thetaCur)*sin(phiCur)+domainClass.params.domainCenter(2);
+                            curPosition(col(rIdx),3)  = domainClass.params.domainWidth*cos(phiCur)+domainClass.params.domainCenter(3);
+%                             prevPosition(col(rIdx),1) = domainClass.params.domainWidth*sin(phiPrev)*cos(thetaPrev);
+%                             prevPosition(col(rIdx),2) = domainClass.params.domainWidth*sin(thetaPrev)*sin(phiPrev);
+%                             prevPosition(col(rIdx),3) = domainClass.params.domainWidth*cos(phiPrev);
+                             obj.DealCurrentPosition(oIdx,curPosition);
+                            obj.DealPreviousPosition(oIdx,prevPosition);
                             end
                         end
                     end
                 end
             end
         end
-                
+        
         function ConnectStickyParticles(obj,stickyDistance)
                   %calculate each pair of beads in the list stickyBeads to see
                   %if their distances are smaller than encounterDist;
@@ -442,8 +460,8 @@ classdef ObjectManager<handle
                        for rIdx = 1:numel(row)
                           % Test if two sticky beads should be connected
                           if connectInd(rIdx)
-                               % sprintf('sticky')
-                              %  sprintf('%d and %d',stickyBeads(row(rIdx)),stickyBeads(row(rIdx)))          
+                                sprintf('sticky')
+                                sprintf('%d and %d',stickyBeads(row(rIdx)),stickyBeads(col(rIdx)))          
                               obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
                            end
                       end

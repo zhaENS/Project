@@ -208,8 +208,10 @@ classdef RouseSimulatorFramework<handle
              pIdx                = particlesOnBoundaryAll(pInd);
              pSize               = numel(particlesOnBoundaryAll(pInd));
              for oIdx = 1:pSize
-                 poscurTempo         = DiffusionOnSphere(particleInitPos(oIdx,:),dt,diffusionConst*5,2,dc,domainRad);
-                 curParticlePosition(pIdx(oIdx),:) = poscurTempo(2,:);
+                 s = randperm(50,10);
+                 s = max(s);
+                 poscurTempo         = DiffusionOnSphere(particleInitPos(oIdx,:),dt,diffusionConst,s,dc,domainRad); 
+                 curParticlePosition(pIdx(oIdx),:) = poscurTempo(s,:);
              end
              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
             %if the fixed beads beads are also on the boundary ,find the
@@ -232,8 +234,8 @@ classdef RouseSimulatorFramework<handle
              %check if the beads should be sticked
              if ~isempty(stickyBeads(sInd))
                  stickyDistance = obj.params.simulator.encounterDist;
-                 %stick the beads and return the objNum
-             obj.objectManager.ConnectStickyParticles(stickyDistance);
+                 %stick the beads
+                 obj.objectManager.ConnectStickyParticles(stickyDistance);
                  %update the objList
                  objList = 1:obj.objectManager.numObjects;
              end
