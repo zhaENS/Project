@@ -5,7 +5,7 @@ classdef SimulationDataRecorderParams<handle
         resultsFolder@char
         recipeFileName@char
         encounterDist@double
-        stickyTime@double
+        stickyTime
         numCluster
     end
     

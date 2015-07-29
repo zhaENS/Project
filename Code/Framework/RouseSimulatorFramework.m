@@ -183,46 +183,37 @@ classdef RouseSimulatorFramework<handle
             domainInd     = obj.objectManager.GetDomainIndices;% the boundary number the beads belong to 
           
             % Apply domain (global) forces on all objects in the domain 
-            %prevParticlePosition     = obj.objectManager.prevPos;      % prev position 
-            %curParticlePosition      = obj.objectManager.curPos;       % new pos after internal forces
-           % particleDist             = obj.objectManager.particleDist; % distance before applying internal forces
-           % fixedParticleNum         = [obj.objectManager.fixedParticles{:}];             
+            prevParticlePosition     = obj.objectManager.prevPos;      % prev position 
+            curParticlePosition      = obj.objectManager.curPos;       % new pos after internal forces
+            particleDist             = obj.objectManager.particleDist; % distance before applying internal forces
+            fixedParticleNum         = [obj.objectManager.fixedParticles{:}];             
             stickyBeads              = [obj.objectManager.stickyParticles{:}];
-           % particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
-           cNb = 1;
-           for oIdx = 1:obj.objectManager.numObjects
-            numBeads         = obj.objectManager.map.GetAllInds(oIdx);
-            members = obj.objectManager.map.GetObjectMembers(oIdx);
-            particlesOnBoundaryAll = obj.objectManager.GetParticlesOnBoundary(oIdx);
-            [prevParticlePosition,curParticlePosition]   = obj.objectManager.GetPositionAsOne(oIdx);
-            particleDist = obj.objectManager.GetObjectDistance(oIdx);
-            fixedParticleNum = obj.objectManager.GetFixedParticles(oIdx);
-          if numel(members)==1
-             % Apply external forces from all domains and reflect
+            particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
+
+            % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                     curParticlePosition,particleDist,fixedParticleNum,...
-                                    particlesOnBoundaryAll,domainInd(cNb:(cNb+numel(numBeads)-1),1),dt);            
-             
-             cNb = numel(numBeads)+1;       
+                                    particlesOnBoundaryAll,domainInd,dt);            
+            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);  
             % diffuse particles on the boundary(currently works only on
             % spheres)
             for dIdx =1:numel(obj.params.domain)
-             p    = domainInd(particlesOnBoundaryAll);
-             pInd = p==dIdx;
-             particleInitPos     = curParticlePosition(particlesOnBoundaryAll(pInd),:); 
-             domainRad           = obj.handles.classes.domain.params(dIdx).domainWidth;
-             dc                  = obj.handles.classes.domain.params(dIdx).domainCenter;
-             %diffusionConst      = obj.handles.classes.domain.params(dIdx).forceParams.diffusionConst;
-             diffusionConst      = obj.params.domain(dIdx).forceParams.diffusionConst;
-             pIdx                = particlesOnBoundaryAll(pInd);
-             pSize               = numel(particlesOnBoundaryAll(pInd));
-             for nIdx = 1:pSize
-                 s = randperm(50,10);
-                 s = max(s);
-                 poscurTempo         = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,s,dc,domainRad); 
-                 curParticlePosition(pIdx(nIdx),:) = poscurTempo(s,:);
-             end
-             obj.objectManager.DealCurrentPosition(oIdx,curParticlePosition); 
+%              p    = domainInd(particlesOnBoundaryAll);
+%              pInd = p==dIdx;
+%              particleInitPos     = curParticlePosition(particlesOnBoundaryAll(pInd),:); 
+%              domainRad           = obj.handles.classes.domain.params(dIdx).domainWidth;
+%              dc                  = obj.handles.classes.domain.params(dIdx).domainCenter;
+%              %diffusionConst      = obj.handles.classes.domain.params(dIdx).forceParams.diffusionConst;
+%              diffusionConst      = obj.params.domain(dIdx).forceParams.diffusionConst;
+%              pIdx                = particlesOnBoundaryAll(pInd);
+%              pSize               = numel(particlesOnBoundaryAll(pInd));
+%              for nIdx = 1:pSize
+%                  s = randperm(50,10);
+%                  s = max(s);
+%                  poscurTempo         = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,s,dc,domainRad); 
+%                  curParticlePosition(pIdx(nIdx),:) = poscurTempo(s,:);
+%              end
+             obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
            
            %if the fixed beads beads are also on the boundary ,find the
            %positions and correct the position such that all the chains
@@ -236,7 +227,7 @@ classdef RouseSimulatorFramework<handle
          
             if ~isempty(fIdxCumul)
             curParticlePosition(particlesOnBoundaryAll(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundaryAll(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
-            obj.objectManager.DealCurrentPosition(oIdx,curParticlePosition);
+            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
             end
                      
              s    = domainInd(stickyBeads);
@@ -250,12 +241,10 @@ classdef RouseSimulatorFramework<handle
                  objList = 1:obj.objectManager.numObjects;
              end
             end
-          end
-           end
              %test if the beads in domain can be attached to the boundary
              encounterDistance = obj.params.simulator.encounterDist;
              obj.objectManager.AttachToBoundary(encounterDistance,obj.handles.classes.domain);
-            
+             
             % Show simulation
             obj.simulationGraphics.ShowSimulation
             
@@ -319,4 +308,3 @@ classdef RouseSimulatorFramework<handle
     end
        
 end
-    

@@ -206,7 +206,7 @@ classdef Rouse<handle
                     obj.position.prev(bIdx,:)= tempPos;
                     
                 end
-              %  obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
+              obj.position.prev(obj.params.fixedBeadNum,:) = obj.params.fixedBeadsPosition;
                 
                 
                 else % if there are beads constrained to lay on the boundary 
