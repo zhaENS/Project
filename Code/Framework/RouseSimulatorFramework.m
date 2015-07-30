@@ -198,21 +198,21 @@ classdef RouseSimulatorFramework<handle
             % diffuse particles on the boundary(currently works only on
             % spheres)
             for dIdx =1:numel(obj.params.domain)
-%              p    = domainInd(particlesOnBoundaryAll);
-%              pInd = p==dIdx;
-%              particleInitPos     = curParticlePosition(particlesOnBoundaryAll(pInd),:); 
-%              domainRad           = obj.handles.classes.domain.params(dIdx).domainWidth;
-%              dc                  = obj.handles.classes.domain.params(dIdx).domainCenter;
-%              %diffusionConst      = obj.handles.classes.domain.params(dIdx).forceParams.diffusionConst;
-%              diffusionConst      = obj.params.domain(dIdx).forceParams.diffusionConst;
-%              pIdx                = particlesOnBoundaryAll(pInd);
-%              pSize               = numel(particlesOnBoundaryAll(pInd));
-%              for nIdx = 1:pSize
-%                  s = randperm(50,10);
-%                  s = max(s);
-%                  poscurTempo         = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,s,dc,domainRad); 
-%                  curParticlePosition(pIdx(nIdx),:) = poscurTempo(s,:);
-%              end
+             p    = domainInd(particlesOnBoundaryAll);
+             pInd = p==dIdx;
+             particleInitPos     = curParticlePosition(particlesOnBoundaryAll(pInd),:); 
+             domainRad           = obj.handles.classes.domain.params(dIdx).domainWidth;
+             dc                  = obj.handles.classes.domain.params(dIdx).domainCenter;
+             %diffusionConst      = obj.handles.classes.domain.params(dIdx).forceParams.diffusionConst;
+             diffusionConst      = obj.params.domain(dIdx).forceParams.diffusionConst;
+             pIdx                = particlesOnBoundaryAll(pInd);
+             pSize               = numel(particlesOnBoundaryAll(pInd));
+             for nIdx = 1:pSize
+                 s = randperm(50,10);
+                 s = max(s);
+                 poscurTempo         = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,s,dc,domainRad); 
+                 curParticlePosition(pIdx(nIdx),:) = poscurTempo(s,:);
+             end
              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
            
            %if the fixed beads beads are also on the boundary ,find the
