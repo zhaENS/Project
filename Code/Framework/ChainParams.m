@@ -44,7 +44,7 @@ properties
             obj.allowAttachToBoundary   = false;
             obj.stickyBeads             = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain      = 1;     % default initialize in the first domain created
-            obj.probAttachToStickyBeads = 0.5;   % sticky beads attachment to other sticky beads
+            obj.probAttachToStickyBeads = 0.7;   % sticky beads attachment to other sticky beads
             obj.probAttachToBoundary    = 0.0007;
             % forces
             obj.bendingElasticityForce = false;
