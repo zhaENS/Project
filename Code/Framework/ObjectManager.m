@@ -487,13 +487,13 @@ classdef ObjectManager<handle
                   %which satisfait the  AttachStickyProb;If yes, connect
                   %the sticky beads;Also the connected sticky could be
                   %deconnected according to probability;
-                 obj.connectedStickyBeads=[];      
-                for oIdx=1:obj.numObjects
-                  %Get the connected particles 'offDiagonal' for each step;
-                  connectedPart = obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
-                  obj.connectedStickyBeads = [obj.connectedStickyBeads;connectedPart];
-                end
-             stickyBeads = [obj.stickyParticles{:}];
+                 obj.connectedStickyBeads=[];
+                 objNum = 1:obj.numObjects;
+                 for oIdx=1:obj.numObjects
+                 connectPart = obj.GetObjectConnectedParticles(objNum(oIdx),'offDiagonals');
+                 obj.connectedStickyBeads = [obj.connectedStickyBeads;connectPart];
+                 end
+                  stickyBeads = [obj.stickyParticles{:}];
                   A = obj.curPos(stickyBeads,:);
                   D = pdist2mex(A',A','euc',[],[],[],[]);
                  [row, col] = find(tril(D)< stickyDistance & tril(D)>0);
@@ -506,23 +506,20 @@ classdef ObjectManager<handle
                        for rIdx = 1:numel(row)
                           % Test if two sticky beads should be connected
                           if connectInd(rIdx)
-%                                 sprintf('sticky')
-%                                 sprintf('%d and %d',stickyBeads(row),stickyBeads(col))          
                                  obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
                            end
                       end
                  end                  
 %                add the probablity for each connected particles to test
 %                   if they should be disconnected;
-%   
-                  r = rand(size(obj.connectedStickyBeads,1),1);
-                  disconnectInd = r<stickyBeadDisconnectProb;
-                   for rIdx = 1:size( obj.connectedStickyBeads,1)
+                  prob = rand(size(obj.connectedStickyBeads,1),1);
+                  disconnectInd = prob<stickyBeadDisconnectProb;
+                   for rIdx = 1:size(obj.connectedStickyBeads,1)
                           if disconnectInd(rIdx)
-                             obj.DisconnectParticles( obj.connectedStickyBeads(rIdx,1), obj.connectedStickyBeads(rIdx,2));
+                           obj.DisconnectParticles( obj.connectedStickyBeads(rIdx,1), obj.connectedStickyBeads(rIdx,2));
                           end
                    end
-         
+           
         end
         
         function ConnectParticles(obj,particle1,particle2)% should move to ObjectInteractionManager
@@ -595,7 +592,6 @@ classdef ObjectManager<handle
             for oIdx = 1:numObj% for each object
                 memberList = obj.map.GetObjectMembers(oIdx);% members of the objects
                 %update the stickyParticles.
-                %obj.stickyParticles{objNum(oIdx)} = obj.GetGlobalStickyParticles(objNum(oIdx));
                 if numel(memberList)==1
                         % get the indices for the members of the object 
                         beadInds     = obj.map.GetMemberInds(objNum(oIdx),1);
@@ -612,14 +608,14 @@ classdef ObjectManager<handle
                   [~,curMemberPos]      = obj.GetMembersPosition(objNum(oIdx));
                   springConst           = obj.GetSpringConstAsOne(objNum(oIdx));
                   
-                  stickyParticleGlobal  = obj.GetGlobalStickyParticles(objNum(oIdx));
-                  stickyParticleLocal   = obj.GetStickyParticles(objNum(oIdx));
-                  sInds =[];
-                  connecteStickyBeads = obj.GetObjectConnectedParticles(objNum(oIdx),'offDiagonals');
-                  for mIdx = 1:numel(connecteStickyBeads)
-                  mInds   = find(stickyParticleGlobal==connecteStickyBeads(mIdx));
-                  [sInds] = [sInds stickyParticleLocal(mInds)];
-                  end
+%                   stickyParticleGlobal  = obj.GetGlobalStickyParticles(objNum(oIdx));
+%                   stickyParticleLocal   = obj.GetStickyParticles(objNum(oIdx));
+                    sInds =[];
+                 % connecteStickyBeads = obj.GetObjectConnectedParticles(objNum(oIdx),'offDiagonals');
+%                   for mIdx = 1:numel(connecteStickyBeads)
+%                   mInds   = find(stickyParticleGlobal==connecteStickyBeads(mIdx));
+%                   [sInds] = [sInds stickyParticleLocal(mInds)];
+%                   end
                   minParticleDist     = obj.GetMinParticleDistAsOne(objNum(oIdx));
                   fixedParticleNum    = obj.GetObjectFixedParticles(objNum(oIdx));
                   particlesBoundary   = obj.GetParticlesOnBoundary(objNum(oIdx));
