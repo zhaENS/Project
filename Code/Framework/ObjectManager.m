@@ -483,20 +483,20 @@ classdef ObjectManager<handle
         
         function ConnectStickyParticles(obj,stickyDistance)
                   %calculate each pair of beads in the list stickyBeads to see
-                  %if their distances are smaller than encounterDist;
-                  %return objNum to see if they are in the same object or
-                  %not;
-              
-%                 for oIdx=1:obj.numObjects
-%                   %Get the connected particles 'offDiagonal' for each step;
-%                   connectedPart = obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
-%                   obj.connectedStickyBeads = [obj.connectedStickyBeads;connectedPart];
-%                  end
-             obj.connectedStickyBeads=[];    
+                  %if their distances are smaller than encounterDist and
+                  %which satisfait the  AttachStickyProb;If yes, connect
+                  %the sticky beads;Also the connected sticky could be
+                  %deconnected according to probability;
+                 obj.connectedStickyBeads=[];      
+                for oIdx=1:obj.numObjects
+                  %Get the connected particles 'offDiagonal' for each step;
+                  connectedPart = obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
+                  obj.connectedStickyBeads = [obj.connectedStickyBeads;connectedPart];
+                end
              stickyBeads = [obj.stickyParticles{:}];
                   A = obj.curPos(stickyBeads,:);
                   D = pdist2mex(A',A','euc',[],[],[],[]);
-                  [row, col] = find(tril(D)< stickyDistance & tril(D)>0);
+                 [row, col] = find(tril(D)< stickyDistance & tril(D)>0);
                   % get the probability for two sticky beads to attach
                   stickyBeadConnectProb    =  obj.objParams.probAttachToStickyBeads;% the attachment prob.
                   stickyBeadDisconnectProb = 1-stickyBeadConnectProb;
@@ -508,28 +508,21 @@ classdef ObjectManager<handle
                           if connectInd(rIdx)
 %                                 sprintf('sticky')
 %                                 sprintf('%d and %d',stickyBeads(row),stickyBeads(col))          
-                                obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
+                                 obj.ConnectParticles(stickyBeads(row(rIdx)),stickyBeads(col(rIdx)));
                            end
                       end
-                 end
-                      
-                for oIdx=1:obj.numObjects
-                  %Get the connected particles 'offDiagonal' for each step;
-                  connectedPart = obj.GetObjectConnectedParticles(oIdx,'offDiagonals');
-                  obj.connectedStickyBeads = [obj.connectedStickyBeads;connectedPart];
-                 end
-               % add the probablity for each connected particles to test
+                 end                  
+%                add the probablity for each connected particles to test
 %                   if they should be disconnected;
-  
-%                   r = rand(size( obj.connectedStickyBeads,1),1);
-%                   disconnectInd = r<stickyBeadDisconnectProb;
-%                    for rIdx = 1:size( obj.connectedStickyBeads,1)
-%                           if disconnectInd(rIdx)
-%                           %    sprintf('%d and %d disconnected',connectedPart(rIdx,1),connectedPart(rIdx,2))
-%  %                             obj.DisconnectParticles( obj.connectedStickyBeads(rIdx,1), obj.connectedStickyBeads(rIdx,2));
-%                           end
-%                    end
-           % obj.connectedStickyBeads=[];       
+%   
+                  r = rand(size(obj.connectedStickyBeads,1),1);
+                  disconnectInd = r<stickyBeadDisconnectProb;
+                   for rIdx = 1:size( obj.connectedStickyBeads,1)
+                          if disconnectInd(rIdx)
+                             obj.DisconnectParticles( obj.connectedStickyBeads(rIdx,1), obj.connectedStickyBeads(rIdx,2));
+                          end
+                   end
+         
         end
         
         function ConnectParticles(obj,particle1,particle2)% should move to ObjectInteractionManager
@@ -614,10 +607,19 @@ classdef ObjectManager<handle
                 else
                     
                    % For composite object made of several sub-objects
-                  connectivityMap     = obj.GetConnectivityMapAsOne(objNum(oIdx));
-                 particleDistance    = obj.GetParticleDistance(objNum(oIdx)); 
-                  [~,curMemberPos]    = obj.GetMembersPosition(objNum(oIdx));
-                  springConst         = obj.GetSpringConstAsOne(objNum(oIdx));
+                    connectivityMap     = obj.GetConnectivityMapAsOne(objNum(oIdx));
+                    particleDistance    = obj.GetParticleDistance(objNum(oIdx)); 
+                  [~,curMemberPos]      = obj.GetMembersPosition(objNum(oIdx));
+                  springConst           = obj.GetSpringConstAsOne(objNum(oIdx));
+                  
+                  stickyParticleGlobal  = obj.GetGlobalStickyParticles(objNum(oIdx));
+                  stickyParticleLocal   = obj.GetStickyParticles(objNum(oIdx));
+                  sInds =[];
+                  connecteStickyBeads = obj.GetObjectConnectedParticles(objNum(oIdx),'offDiagonals');
+                  for mIdx = 1:numel(connecteStickyBeads)
+                  mInds   = find(stickyParticleGlobal==connecteStickyBeads(mIdx));
+                  [sInds] = [sInds stickyParticleLocal(mInds)];
+                  end
                   minParticleDist     = obj.GetMinParticleDistAsOne(objNum(oIdx));
                   fixedParticleNum    = obj.GetObjectFixedParticles(objNum(oIdx));
                   particlesBoundary   = obj.GetParticlesOnBoundary(objNum(oIdx));
@@ -630,14 +632,12 @@ classdef ObjectManager<handle
                    newPos = ForceManager.ApplyCompositeInternalForces(curMemberPos,particleDistance,connectivityMap,...
                                                          [fp.springForce],[fp.bendingElasticityForce],...
                                                          springConst,[fp.bendingConst],... 
-                                                          minParticleDist,fixedParticleNum,particlesBoundary,dt);
-              
+                                                          minParticleDist,fixedParticleNum,particlesBoundary,sInds,dt);
+                  
+                                             
+                
                 % Deal the new pos to the object 
-                    obj.DealCurrentPosition(oIdx,newPos);
-                       for cIdx=1:size(obj.connectedStickyBeads,1) 
-                 obj.curPos(obj.connectedStickyBeads(cIdx,1),:) = obj.curPos(obj.connectedStickyBeads(cIdx,2),:); 
-                      end
-                       
+                    obj.DealCurrentPosition(oIdx,newPos);                       
                 end
                 %Deal with particles on the boundary for each step;
                  obj.particlesOnBoundary = ...

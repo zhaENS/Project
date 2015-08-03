@@ -189,12 +189,13 @@ classdef RouseSimulatorFramework<handle
             fixedParticleNum         = [obj.objectManager.fixedParticles{:}];             
             stickyBeads              = [obj.objectManager.stickyParticles{:}];
             particlesOnBoundaryAll   = [obj.objectManager.particlesOnBoundary{:}];
-
             % Apply external forces from all domains and reflect
             curParticlePosition = obj.handles.classes.domain.Step(prevParticlePosition,...
                                     curParticlePosition,particleDist,fixedParticleNum,...
                                     particlesOnBoundaryAll,domainInd,dt);            
-            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);  
+
+                 obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
+                 
             % diffuse particles on the boundary(currently works only on
             % spheres)
             for dIdx =1:numel(obj.params.domain)

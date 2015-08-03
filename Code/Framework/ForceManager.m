@@ -126,7 +126,6 @@ classdef ForceManager<handle
                                                             dt)%TODO: pass force parameters
              % Apply external forces on an object to get the new position
              % for its vertices represented by newParticlePosition
-             
              % Lenard-jones force             
             ljForces      = ForceManager.GetLenardJonesForce(ljForce,particlePosition,particleDistances,LJPotentialWidth,LJPotentialDepth,fixedParticleNum,particlesOnBoundary);
             
@@ -145,7 +144,7 @@ classdef ForceManager<handle
              dx = (ljForces*dt+ morseForce*dt+ mechanicalForce*dt+diffusionForces);
              dx(fixedParticleNum,:) = 0;
              dx(particlesOnBoundary,:) = 0;
-
+          
             
              % get new position
              newParticlePosition = particlePosition+dx;
@@ -155,7 +154,7 @@ classdef ForceManager<handle
        function newParticlePosition = ApplyCompositeInternalForces(pos,particleDistance,connectivityMap,...
                                                                        springForce,bendingElasticityForce,...
                                                                        springConst,bendingConst,...                                                         
-                                                                       minParticleDistance,fixedParticleNum,particlesOnBoundary,dt)
+                                                                       minParticleDistance,fixedParticleNum,particlesOnBoundary,connecteStickyBeads,dt)
                                                      
             % Apply forces on a composite structure composed of several chains with different parameters                          
             % pariclePosition is the position for each chain in cell array            
@@ -210,7 +209,7 @@ classdef ForceManager<handle
             
             % The effect of applying forces is addative
             dx = (springForces+bendingForces)*dt;
-            
+            dx(connecteStickyBeads,:)=0;
             newParticlePosition = particlePosition+dx;                                                                           
         end    
         
@@ -264,6 +263,7 @@ classdef ForceManager<handle
             end 
             force(fixedParticleNum,:)    = 0;
             force(particlesOnBoundary,:) = 0;
+            
         end
         
         function [force, forceDirection]  = GetLenardJonesForce(ljForce,particlePosition,particleDist,LJPotentialWidth,LJPotentialDepth,fixedParticleNum,particlesOnBoundary)
