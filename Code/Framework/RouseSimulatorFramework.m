@@ -295,7 +295,7 @@ classdef RouseSimulatorFramework<handle
         function PostSimulationBatchActions(obj)
             % actions performed post simulation batch
             eval(obj.recipe.PostSimulationBatchActions);            
-            obj.dataRecorder.ClearAllSimulationData;            
+         %   obj.dataRecorder.ClearAllSimulationData;            
 %             obj.simulationRound = 0;               
         end                                        
         

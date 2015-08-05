@@ -221,16 +221,17 @@ classdef ForceManager<handle
             % fixedParticleNum - particles in the system which do not move
             force = zeros(size(particlePosition));
             if springForce
-                L                         = (1-minParticleDist./particleDist).*connectivityMap;
+                particleDist(1:size(particlePosition,1)+1:size(particlePosition,1)^2)= Inf;
+                L                         = (1-(minParticleDist./particleDist)).*connectivityMap;
                 L(~connectivityMap)       = 0;
                 sumForces                 = sum(L,2);
                 force                     = -springConst.*(diag(sumForces)-L); % set the maindiagonal                
                 force                     = force*particlePosition;
                 force(fixedParticleNum,:)    = 0;% zero out forces for fixed particles
                 if ~isempty(particlesOnBoundary)
-                force(particlesOnBoundary,:) = 0;
+                   force(particlesOnBoundary,:) = 0;
                 end
-            end
+            end            
         end
         
         function force  = GetBendingElasticityForce(bendingElasticityForce,particlePosition,particleDistance,connectivityMat,bendingConst,fixedParticleNum)

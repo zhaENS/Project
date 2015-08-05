@@ -71,14 +71,15 @@ classdef SimulationDataRecorder<handle
         
         function AddBeadsPosition(obj)
             % Record the position of the rouse chains
-            for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
+                for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
                 obj.simulationData(obj.simulationRound).positions(cIdx).x = ...
                     obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,1);                
-                 obj.simulationData(obj.simulationRound).positions(cIdx).y = ...
-                    obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,2);                
-                 obj.simulationData(obj.simulationRound).positions(cIdx).z = ...
+                obj.simulationData(obj.simulationRound).positions(cIdx).y = ...
+                    obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,2);          
+                obj.simulationData(obj.simulationRound).positions(cIdx).z = ...
                     obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,3);
-            end
+                end
+            
         end
         
         function NewSimulation(obj,chainObj,frameworkParams)
