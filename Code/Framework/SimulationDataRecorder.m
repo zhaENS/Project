@@ -42,7 +42,7 @@ classdef SimulationDataRecorder<handle
             obj.simulationData(obj.simulationRound).step = obj.simulationData(obj.simulationRound).step+1;
             obj.AddBeadDist
             obj.AddBeadsPosition
-            obj.AddBeadEncounterHist
+          %  obj.AddBeadEncounterHist
         end
         
         function AddBeadDist(obj)
@@ -72,8 +72,12 @@ classdef SimulationDataRecorder<handle
         function AddBeadsPosition(obj)
             % Record the position of the rouse chains
             for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
-                obj.simulationData(obj.simulationRound).positions(cIdx) = ...
-                    obj.simulationData(obj.simulationRound).chainObj(cIdx).positions.beads.cur;
+                obj.simulationData(obj.simulationRound).positions(cIdx).x = ...
+                    obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,1);                
+                 obj.simulationData(obj.simulationRound).positions(cIdx).y = ...
+                    obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,2);                
+                 obj.simulationData(obj.simulationRound).positions(cIdx).z = ...
+                    obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,3);
             end
         end
         

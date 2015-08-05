@@ -194,7 +194,7 @@ classdef RouseSimulatorFramework<handle
                                     curParticlePosition,particleDist,fixedParticleNum,...
                                     particlesOnBoundaryAll,domainInd,dt);            
 
-                 obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
+             obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
                  
             % diffuse particles on the boundary(currently works only on
             % spheres)
@@ -219,17 +219,17 @@ classdef RouseSimulatorFramework<handle
            %if the fixed beads beads are also on the boundary ,find the
            %positions and correct the position such that all the chains
            %have the same position for the fixed beads;
-           fIdxCumul = [];
-           fSize = numel(fixedParticleNum);
-            for bIdx = 1:fSize
-                fIdx      = find(particlesOnBoundaryAll==fixedParticleNum(bIdx));
-                fIdxCumul = [fIdxCumul fIdx];
-            end
-         
-            if ~isempty(fIdxCumul)
-            curParticlePosition(particlesOnBoundaryAll(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundaryAll(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
-            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-            end
+%            fIdxCumul = [];
+%            fSize = numel(fixedParticleNum);
+%             for bIdx = 1:fSize
+%                 fIdx      = find(particlesOnBoundaryAll==fixedParticleNum(bIdx));
+%                 fIdxCumul = [fIdxCumul fIdx];
+%             end
+%          
+%             if ~isempty(fIdxCumul)
+%             curParticlePosition(particlesOnBoundaryAll(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundaryAll(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
+%             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
+%             end
                      
              s    = domainInd(stickyBeads);
              sInd = s==dIdx;
@@ -240,6 +240,7 @@ classdef RouseSimulatorFramework<handle
                  obj.objectManager.ConnectStickyParticles(stickyDistance);
                  %update the objList
                  objList = 1:obj.objectManager.numObjects;
+                 %obj.objectManager.connectedStickyBeads{obj.simulationData.step} = cp;
              end
             end
              %test if the beads in domain can be attached to the boundary
