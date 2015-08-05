@@ -154,7 +154,7 @@ classdef ForceManager<handle
        function newParticlePosition = ApplyCompositeInternalForces(pos,particleDistance,connectivityMap,...
                                                                        springForce,bendingElasticityForce,...
                                                                        springConst,bendingConst,...                                                         
-                                                                       minParticleDistance,fixedParticleNum,particlesOnBoundary,connecteStickyBeads,dt)
+                                                                       minParticleDistance,fixedParticleNum,particlesOnBoundary,dt)
                                                      
             % Apply forces on a composite structure composed of several chains with different parameters                          
             % pariclePosition is the position for each chain in cell array            
@@ -209,7 +209,6 @@ classdef ForceManager<handle
             
             % The effect of applying forces is addative
             dx = (springForces+bendingForces)*dt;
-            dx(connecteStickyBeads,:)=0;
             newParticlePosition = particlePosition+dx;                                                                           
         end    
         
