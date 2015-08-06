@@ -258,6 +258,8 @@ classdef Rouse<handle
                                               obj.params.beadsOnBoundary,dt);
                                          
             obj.position.cur = newPos;  % update current position % the positions are updated after the domain has exerted its force on the chain                      
+            obj.beadsDist    = pdist2mex(obj.position.cur',...
+                obj.position.cur','euc',[],[],[]);
         end
         
         function SetPrevBeadPosition(obj,pos)% obsolete, externaly used

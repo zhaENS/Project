@@ -42,7 +42,8 @@ classdef SimulationDataRecorder<handle
             obj.simulationData(obj.simulationRound).step = obj.simulationData(obj.simulationRound).step+1;
             obj.AddBeadDist
             obj.AddBeadsPosition
-          %  obj.AddBeadEncounterHist
+            obj.AddMeanSquareDeplacement
+
         end
         
         function AddBeadDist(obj)
@@ -79,6 +80,17 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).positions(cIdx).z = ...
                     obj.simulationData(obj.simulationRound).chainObj(cIdx).position.cur(:,3);
                 end
+        end
+        
+        function AddMeanSquareDeplacement(obj)
+              for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
+              posAll =  [obj.simulationData(obj.simulationRound).positions(cIdx).x...
+                          obj.simulationData(obj.simulationRound).positions(cIdx).y...
+                           obj.simulationData(obj.simulationRound).positions(cIdx).z];
+                         for bIdx=1:obj.simulationData(obj.simulationRound).chainObj(cIdx).params.numBeads
+              obj.simulationData(obj.simulationRound).meanSquareDeplac{cIdx}(bIdx)  = (sqrt(sum(posAll(bIdx,:).^2))).^2/( obj.simulationData(obj.simulationRound).chainObj.params.dt*obj.simulationData(obj.simulationRound).step);
+                         end
+              end
             
         end
         
@@ -108,6 +120,7 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).beadDist{cIdx} = chainObj(cIdx).beadsDist;
                 obj.simulationData(obj.simulationRound).encounterHist{cIdx} = zeros(chainObj(cIdx).params.numBeads);
                 obj.simulationData(obj.simulationRound).encounterTime{cIdx} = zeros(chainObj(cIdx).params.numBeads);
+                obj.simulationData(obj.simulationRound).meanSquareDeplac{cIdx} = zeros(chainObj(cIdx).params.numBeads,1);
                 % record positions
                 obj.simulationData(obj.simulationRound).positions.x = chainObj(cIdx).position.cur(:,1);
                 obj.simulationData(obj.simulationRound).positions.y = chainObj(cIdx).position.cur(:,2);
@@ -209,17 +222,18 @@ classdef SimulationDataRecorder<handle
                 fileName = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
                                                   '_SimulationRound',num2str(obj.simulationRound),...
                                                   '_Chain_',num2str(cIdx));
-                results.beadDistMat       = obj.simulationData(obj.simulationRound).beadDist{cIdx}(:,:,3000:end); % save the mean distance matrix
-                results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
-                results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
-                results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
+               % results.beadDistMat       = obj.simulationData(obj.simulationRound).beadDist{cIdx}(:,:,3000:end); % save the mean distance matrix
+                %results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
+               % results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
+               % results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
                 results.params            = obj.simulationData(obj.simulationRound).parameters;
+                results.meansquareDist    = obj.simulationData(obj.simulationRound).meanSquareDeplac{cIdx};                               
                 save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
             end
             
             % save the parameter file and the recipe file 
-            copyfile(fullfile(pwd,'Framework','SimulationFrameworkParams.xml'),fullfile(currentSimulationResultsPath,'SimulationFrameworkParams.xml'));
-            copyfile(fullfile(pwd,'Framework','Recipes',[obj.params.recipeFileName '.rcp']),currentSimulationResultsPath);
+          %   copyfile(fullfile(pwd,'Framework','SimulationFrameworkParams.xml'),fullfile(currentSimulationResultsPath,'SimulationFrameworkParams.xml'));
+         %    copyfile(fullfile(pwd ,'Recipes',[obj.params.recipeFileName '.rcp']),currentSimulationResultsPath);
         end
     end
 end
