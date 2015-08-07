@@ -208,11 +208,11 @@ classdef RouseSimulatorFramework<handle
              diffusionConst      = obj.params.domain(dIdx).forceParams.diffusionConst;
              pIdx                = particlesOnBoundaryAll(pInd);
              pSize               = numel(particlesOnBoundaryAll(pInd));
+             maxStepsOnBoundary  = obj.objectManager.handles.chain(1).params.maxStepsOnBoundaryPerTime;% temp
              for nIdx = 1:pSize
-                 s = randperm(50,10);
-                 s = max(s);
-                 poscurTempo         = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,s,dc,domainRad); 
-                 curParticlePosition(pIdx(nIdx),:) = poscurTempo(s,:);
+                 stepsOnB    = randperm(maxStepsOnBoundary-1)+1;
+                 poscurTempo = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,stepsOnB(1),dc,domainRad);
+                 curParticlePosition(pIdx(nIdx),:) = poscurTempo(stepsOnB(1),:);
              end
              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
            
@@ -231,8 +231,8 @@ classdef RouseSimulatorFramework<handle
             obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
             end
                      
-             s    = domainInd(stickyBeads);
-             sInd = s==dIdx;
+             stepsOnB    = domainInd(stickyBeads);
+             sInd = stepsOnB==dIdx;
              %check if the beads should be sticked
              if ~isempty(stickyBeads(sInd))
                  stickyDistance = obj.params.simulator.encounterDist;
@@ -259,8 +259,7 @@ classdef RouseSimulatorFramework<handle
             obj.simulationData(obj.batchRound,obj.simulationRound).step = ...
             obj.simulationData(obj.batchRound,obj.simulationRound).step+1;
         end                
-                            
-                
+                                            
         function PostStepActions(obj)
             eval(obj.recipe.PostStepActions);
               obj.Record % record data related to the Rouse polymer                        

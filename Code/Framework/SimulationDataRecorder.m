@@ -8,6 +8,7 @@ classdef SimulationDataRecorder<handle
             'step',0,...
             'time',0,...
             'positions',[],...
+            'initialPosition',[],...
             'beadDist',cell(1)); % stores data regarding each simulation step
         simulationBatchRound = 0  % the number of simulation batch
         simulationRound      = 0; % the simulation index
@@ -42,7 +43,7 @@ classdef SimulationDataRecorder<handle
             obj.simulationData(obj.simulationRound).step = obj.simulationData(obj.simulationRound).step+1;
             obj.AddBeadDist
             obj.AddBeadsPosition
-            obj.AddMeanSquareDeplacement
+            obj.AddMeanSquareDisplacement
 
         end
         
@@ -82,16 +83,20 @@ classdef SimulationDataRecorder<handle
                 end
         end
         
-        function AddMeanSquareDeplacement(obj)
-              for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
-              posAll =  [obj.simulationData(obj.simulationRound).positions(cIdx).x...
-                          obj.simulationData(obj.simulationRound).positions(cIdx).y...
-                           obj.simulationData(obj.simulationRound).positions(cIdx).z];
-                         for bIdx=1:obj.simulationData(obj.simulationRound).chainObj(cIdx).params.numBeads
-              obj.simulationData(obj.simulationRound).meanSquareDeplac{cIdx}(bIdx)  = (sqrt(sum(posAll(bIdx,:).^2))).^2/( obj.simulationData(obj.simulationRound).chainObj.params.dt*obj.simulationData(obj.simulationRound).step);
-                         end
-              end
-            
+        function AddMeanSquareDisplacement(obj)
+            stepIdx = obj.simulationData(obj.simulationRound).step;
+                for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
+                    posAll =  [obj.simulationData(obj.simulationRound).positions(cIdx).x...
+                        obj.simulationData(obj.simulationRound).positions(cIdx).y...
+                        obj.simulationData(obj.simulationRound).positions(cIdx).z];
+                    initPos = [obj.simulationData(obj.simulationRound).initialPosition(cIdx).x,...
+                        obj.simulationData(obj.simulationRound).initialPosition(cIdx).y,...
+                        obj.simulationData(obj.simulationRound).initialPosition(cIdx).z];
+                    obj.simulationData(obj.simulationRound).msd{cIdx}(:,stepIdx)= ...
+                        sqrt(sum(bsxfun(@minus, posAll,initPos).^2,2))./...
+                        (obj.simulationData(obj.simulationRound).chainObj.params.dt*...
+                        obj.simulationData(obj.simulationRound).step);
+                end                        
         end
         
         function NewSimulation(obj,chainObj,frameworkParams)
@@ -106,8 +111,7 @@ classdef SimulationDataRecorder<handle
         
         function CreateNewSimulationStruct(obj,chainObj,frameworkParams)
             % Initialize new simulation structure witht he chain object
-            % participating in the simulation round
-            
+            % participating in the simulation round            
             obj.simulationRound = obj.simulationRound+1; % advance the index by 1
             
             obj.simulationData(obj.simulationRound).chainObj  =  chainObj;             
@@ -120,11 +124,15 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).beadDist{cIdx} = chainObj(cIdx).beadsDist;
                 obj.simulationData(obj.simulationRound).encounterHist{cIdx} = zeros(chainObj(cIdx).params.numBeads);
                 obj.simulationData(obj.simulationRound).encounterTime{cIdx} = zeros(chainObj(cIdx).params.numBeads);
-                obj.simulationData(obj.simulationRound).meanSquareDeplac{cIdx} = zeros(chainObj(cIdx).params.numBeads,1);
+                obj.simulationData(obj.simulationRound).msd{cIdx} = zeros(chainObj(cIdx).params.numBeads,1);
                 % record positions
-                obj.simulationData(obj.simulationRound).positions.x = chainObj(cIdx).position.cur(:,1);
-                obj.simulationData(obj.simulationRound).positions.y = chainObj(cIdx).position.cur(:,2);
-                obj.simulationData(obj.simulationRound).positions.z = chainObj(cIdx).position.cur(:,3);
+                obj.simulationData(obj.simulationRound).positions(cIdx).x = chainObj(cIdx).position.cur(:,1);
+                obj.simulationData(obj.simulationRound).positions(cIdx).y = chainObj(cIdx).position.cur(:,2);
+                obj.simulationData(obj.simulationRound).positions(cIdx).z = chainObj(cIdx).position.cur(:,3);
+                
+                obj.simulationData(obj.simulationRound).initialPosition(cIdx).x = chainObj(cIdx).position.cur(:,1);
+                obj.simulationData(obj.simulationRound).initialPosition(cIdx).y = chainObj(cIdx).position.cur(:,2);
+                obj.simulationData(obj.simulationRound).initialPosition(cIdx).z = chainObj(cIdx).position.cur(:,3);
             end
         end
         
@@ -164,7 +172,7 @@ classdef SimulationDataRecorder<handle
                 % Save to external mat files, no data is saved in the
                 % class. use this option when memery problems occur
                 obj.ExportData
-%                 obj.ClearCurrentSimulationData   % clear data from fields
+               % obj.ClearCurrentSimulationData   % clear data from fields
             elseif strcmpi(obj.params.saveType,'none')
                 % Clear data from fields dont export data to mat files
                 obj.ClearCurrentSimulationData;
@@ -188,7 +196,7 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).step             = [];
                 obj.simulationData(obj.simulationRound).time             = [];
                 obj.simulationData(obj.simulationRound).beadDist{end}    = [];
-            end
+            end 
         end
         
         function ClearAllSimulationData(obj)
@@ -227,7 +235,7 @@ classdef SimulationDataRecorder<handle
                % results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
                % results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
                 results.params            = obj.simulationData(obj.simulationRound).parameters;
-                results.meansquareDist    = obj.simulationData(obj.simulationRound).meanSquareDeplac{cIdx};                               
+                results.msd        = obj.simulationData(obj.simulationRound).msd{cIdx}(:,1001:end);                               
                 save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
             end
             

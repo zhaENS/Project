@@ -25,6 +25,7 @@ classdef Rouse<handle
         mobilityMatrices
         beadsDist
         relaxationTime %[sec] relaxation time of the first mode        
+  %      simulationRound=0;
     end
     
     properties (SetObservable)
@@ -43,7 +44,7 @@ classdef Rouse<handle
             % the inds in parent represent a list of integer in
             % objectManager;
             
-            obj.params        = rouseParams;
+            obj.params       = rouseParams;
             
             obj.indsInParent  = indsInParent; % the list of indices for position in ObjectManager
             if exist('parentHandle','var')

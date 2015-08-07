@@ -21,6 +21,8 @@ properties
         allowSelfAffinity@logical     % allow beads to attach to other beads on the chain
         allowAttachToBoundary@logical  %allow beads to attach to boundary
         probAttachToBoundary@double    % probability to attach to boundary (if distance is below encounter distance)
+        boundaryMotionType@char        % % what is the type of motion assigned to beads on boundary options: ['random'|'fixed'|'directed']
+        maxStepsOnBoundaryPerTime@double % how many steps a bead on the boundary is allowed to make per time step
         probAttachToStickyBeads@double % probability to attach to other sticky beads (if distance is below encounter distance)
         initializeInDomain@double % the index of the domain to initialize the chain in 
         forceParams  = ForceManagerParams;     
@@ -42,6 +44,10 @@ properties
             obj.beadsOnBoundary         = [];    % list of bead attached to the domain's boundary 
             obj.allowSelfAffinity       = false; % can sticky beads stick to other sticky beads on the same chain?
             obj.allowAttachToBoundary   = false;
+%             obj.boundaryMotionType          = 'random'; % what is the
+%             type of motion assigned to beads on boundary options:
+%             ['random'|'fixed'|'directed'] saved for future use 
+            obj.maxStepsOnBoundaryPerTime = 1; % how many step per dt the bead is allowed to move on the boundary. not work with boundaryMotionType='fixed' default =1
             obj.stickyBeads             = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain      = 1;     % default initialize in the first domain created
             obj.probAttachToStickyBeads = 0.7;   % sticky beads attachment to other sticky beads
