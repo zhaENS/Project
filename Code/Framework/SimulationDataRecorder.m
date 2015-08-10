@@ -99,6 +99,42 @@ classdef SimulationDataRecorder<handle
                 end                        
         end
         
+        function AddNumCluster(obj,connectivity,frameWorkParams)
+            connectMat  = connectivity;
+            connectMat  = connectMat & ~diag(true(1,size(connectMat,1)-1),1)  & ~diag(true(1,size(connectMat,1)-1),-1);
+            numSim   = obj.simulationRound;
+            obj.simulationData(numSim).step = obj.simulationData(numSim).step+1;
+            numSteps = frameWorkParams.simulator.numSteps;
+             dt      = frameWorkParams.simulator.dt;
+             step    = obj.simulationData(numSim).step;
+             % find the number of clusters
+             [s,~,~] = networkComponents(connectMat);
+             obj.simulationData(numSim).numCluster(step) = s;      
+        if step==numSteps
+            idx= min(find( obj.simulationData(numSim).numCluster~=0));
+            if isempty(idx)
+                obj.simulationData(numSim).numCluster = 0;
+                obj.simulationData(numSim).stickyTime=0;
+            else
+                k    = 1;
+                dIdx = [];
+                for nIdx = idx:numSteps-1
+                    if obj.simulationData(numSim).numCluster(nIdx)~=obj.simulationData(numSim).numCluster(nIdx+1)
+                        dIdx(k) = nIdx+1;
+                        k = k+1;
+                    end
+                end
+                if ~isempty(dIdx)
+                    obj.simulationData(numSim).stickyTime = [idx*dt dIdx*dt];
+                    numCluster(numSim,1) =  obj.simulationData(numSim).numCluster(idx);
+                    numCluster(numSim,2:k)= obj.simulationData(numSim).numCluster(dIdx);
+                  obj.simulationData(numSim).numCluster = zeros(1,k);
+                  obj.simulationData(numSim).numCluster = numCluster(numSim,:);
+                end
+            end
+        end
+        end
+        
         function NewSimulation(obj,chainObj,frameworkParams)
             obj.CreateNewSimulationStruct(chainObj,frameworkParams);
         end
@@ -114,11 +150,13 @@ classdef SimulationDataRecorder<handle
             % participating in the simulation round            
             obj.simulationRound = obj.simulationRound+1; % advance the index by 1
             
-            obj.simulationData(obj.simulationRound).chainObj  =  chainObj;             
-            obj.simulationData(obj.simulationRound).numChains =  numel(chainObj);
-            obj.simulationData(obj.simulationRound).step      =  1;
-            obj.simulationData(obj.simulationRound).time      =  0;
+            obj.simulationData(obj.simulationRound).chainObj   =  chainObj;             
+            obj.simulationData(obj.simulationRound).numChains  =  numel(chainObj);
+            obj.simulationData(obj.simulationRound).step       =  1;
+            obj.simulationData(obj.simulationRound).time       =  0;
             obj.simulationData(obj.simulationRound).parameters = frameworkParams;
+            obj.simulationData(obj.simulationRound).numCluster = [];
+            obj.simulationData(obj.simulationRound).stickyTime = [];
             for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
                 % add initialized beadDistance matrix
                 obj.simulationData(obj.simulationRound).beadDist{cIdx} = chainObj(cIdx).beadsDist;
@@ -172,7 +210,7 @@ classdef SimulationDataRecorder<handle
                 % Save to external mat files, no data is saved in the
                 % class. use this option when memery problems occur
                 obj.ExportData
-               % obj.ClearCurrentSimulationData   % clear data from fields
+                obj.ClearCurrentSimulationData   % clear data from fields
             elseif strcmpi(obj.params.saveType,'none')
                 % Clear data from fields dont export data to mat files
                 obj.ClearCurrentSimulationData;
@@ -197,6 +235,9 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).time             = [];
                 obj.simulationData(obj.simulationRound).beadDist{end}    = [];
             end 
+            obj.simulationData(obj.simulationRound).numCluster = [];
+            obj.simulationData(obj.simulationRound).stickyTime = [];
+         
         end
         
         function ClearAllSimulationData(obj)
@@ -234,11 +275,19 @@ classdef SimulationDataRecorder<handle
                 %results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
                % results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
                % results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
-                results.params            = obj.simulationData(obj.simulationRound).parameters;
-                results.msd        = obj.simulationData(obj.simulationRound).msd{cIdx}(:,1001:end);                               
-                save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
+                 % results.params            = obj.simulationData(obj.simulationRound).parameters;
+%                 results.msd               = obj.simulationData(obj.simulationRound).msd{cIdx}(:,1001:end);                               
+           
+%                save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
             end
-            
+           fileNameBis = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
+                                                  '_SimulationRound',num2str(obj.simulationRound),...
+                                                  '_NumCluster_and_StickyTime_');
+             
+                result.numcluster        = obj.simulationData(obj.simulationRound).numCluster;
+                result.stickyTime        = obj.simulationData(obj.simulationRound).stickyTime;
+         
+            save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
             % save the parameter file and the recipe file 
           %   copyfile(fullfile(pwd,'Framework','SimulationFrameworkParams.xml'),fullfile(currentSimulationResultsPath,'SimulationFrameworkParams.xml'));
          %    copyfile(fullfile(pwd ,'Recipes',[obj.params.recipeFileName '.rcp']),currentSimulationResultsPath);

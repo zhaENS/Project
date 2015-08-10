@@ -264,6 +264,7 @@ classdef RouseSimulatorFramework<handle
             eval(obj.recipe.PostStepActions);
               obj.Record % record data related to the Rouse polymer                        
               % raise the Stop flag if the number of steps is more than the allowed
+              obj.dataRecorder.AddNumCluster(obj.objectManager.connectivity,obj.params);
               obj.runSimulation = obj.runSimulation && ...
              (obj.simulationData(obj.batchRound,obj.simulationRound).step<obj.params.simulator.numSteps);
         end
