@@ -74,6 +74,7 @@ classdef DomainHandler<handle
                                                     fp.minParticleEqDistance,fixedParticleNum,...
                                                     particlesOnBoundary(pInd),dt);
                     curParticlePosition(dInds,:)= cp(dInds,:);
+                                                      
                     
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
                      [~,curParticlePosition(dInds,:)] = obj.Reflect(prevParticlePosition(dInds ,:),curParticlePosition(dInds,:),domainNumber);
@@ -314,6 +315,30 @@ classdef DomainHandler<handle
           
            
         end
+        
+        function curParticlesPositions = MoveDomain(obj,curPos,domainNumber)
+             if ~exist('domainNumber','var')
+               domainNumber = 1;
+             end
+             
+             if strcmpi(obj.params(domainNumber).moveDomainType,'none')
+                curParticlesPositions = curPos;
+             else
+                 if strcmpi(obj.params(domainNumber).moveDomainType,'rotate')
+                 
+                 end
+                 if strcmpi(obj.params(domainNumber).moveDomainType,'straight')
+                 
+                 
+                 end
+                 if strcmpi(obj.params(domainNumber).moveDomainType,'rotate&straight')
+                 
+                 
+                 end
+             end
+        end
+        
+        
         
         function boundaryPoints = GetRandomBoundarySample(obj,numPoints,domainNumber)%TODO: add support for other domain shapes
             % numPoints random sample of the domain 

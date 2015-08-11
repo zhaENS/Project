@@ -125,7 +125,7 @@ classdef SimulationDataRecorder<handle
                     end
                 end
                 if ~isempty(dIdx)
-                    obj.simulationData(numSim).stickyTime = [idx*dt dIdx*dt];
+                    obj.simulationData(numSim).stickyTime = [(idx-2000)*dt (dIdx-2000)*dt];
                     numCluster(numSim,1) =  obj.simulationData(numSim).numCluster(idx);
                     numCluster(numSim,2:k)= obj.simulationData(numSim).numCluster(dIdx);
                   obj.simulationData(numSim).numCluster = zeros(1,k);
@@ -268,10 +268,10 @@ classdef SimulationDataRecorder<handle
             currentSimulationResultsPath = sprintf('%s%s%s_%s_%s',obj.params.resultsFolder,'\',num2str(c(3)), num2str(c(2)), num2str(c(1)));
             [~,~,~]  = mkdir(currentSimulationResultsPath);
             for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
-                fileName = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
-                                                  '_SimulationRound',num2str(obj.simulationRound),...
-                                                  '_Chain_',num2str(cIdx));
-               % results.beadDistMat       = obj.simulationData(obj.simulationRound).beadDist{cIdx}(:,:,3000:end); % save the mean distance matrix
+%              %   fileName = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
+%                                                   '_SimulationRound',num2str(obj.simulationRound),...
+%                                                   '_Chain_',num2str(cIdx));
+%                % results.beadDistMat       = obj.simulationData(obj.simulationRound).beadDist{cIdx}(:,:,3000:end); % save the mean distance matrix
                 %results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
                % results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
                % results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};

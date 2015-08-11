@@ -22,6 +22,9 @@ classdef DomainHandlerParams<handle
         diffusionConst@double    % diffusion constant 
         reflectionType@char      % current only option: [preserveEnergy | off]
         reflectionDirection@char % either [in |out]
+        moveDomainType@char   %[none|rotate|straight|rotate&straight]
+        moveAngles@double     %[yaw,pitch,roll]
+        moveDistance@double   %[x,y,z]
         domainCenter@double   % position in space for the center default [0 0 0] 3d
         showDomain@logical    % flag to show or hide the domain 
         dt@double             % simulation step time 
@@ -45,6 +48,9 @@ classdef DomainHandlerParams<handle
             obj.reflectionType             = 'preserveEnergy'; % reflection type 
             obj.reflectionDirection        = 'in'; % direction of reflection
             obj.maxReflectionsPerParticle  = 100;
+            obj.moveDomainType             = 'none';
+            obj.moveAngles                 = [0 0 0];
+            obj.moveDistance               = [0 0 0];
             obj.permeability               = 0; % how permeable is the surface (saved for future use)  
                         
             % set input parameters            
