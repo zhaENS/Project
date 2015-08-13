@@ -194,7 +194,11 @@ classdef RouseSimulatorFramework<handle
                                     curParticlePosition,particleDist,fixedParticleNum,...
                                     particlesOnBoundaryAll,domainInd,dt);            
 
-             obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
+               %Move the domain in each step;
+               if mod(obj.simulationData(obj.simulationRound).step,100)==0
+              curParticlePosition = obj.handles.classes.domain.MoveDomain(curParticlePosition);                   
+               end
+              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
                  
             % diffuse particles on the boundary(currently works only on
             % spheres)
@@ -243,7 +247,7 @@ classdef RouseSimulatorFramework<handle
                  %obj.objectManager.connectedStickyBeads{obj.simulationData.step} = cp;
              end
             end
-             %test if the beads in domain can be attached to the boundary
+             %test if the beads in domain can be attached to the boundary[not finish]
              encounterDistance = obj.params.simulator.encounterDist;
              obj.objectManager.AttachToBoundary(encounterDistance,obj.handles.classes.domain);
              

@@ -80,7 +80,11 @@ classdef SimulationFrameworkGraphics<handle
                     points.x = x*dp.domainWidth+ dp.domainCenter(1);
                     points.y = y*dp.domainWidth+ dp.domainCenter(2);
                     points.z = z*dp.domainWidth+ dp.domainCenter(3);
-                    
+                    if mod(obj.handles.framework.simulationData.step,100)==0
+                    points.x = points.x+dp.moveDistance(1);
+                    points.y =points.y +dp.moveDistance(2);
+                    points.z= points.z +dp.moveDistance(3);
+                    end
                     if dp.dimension ==1
                         points.y = zeros(size(y));
                         points.z = zeros(size(z));

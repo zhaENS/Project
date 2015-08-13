@@ -74,13 +74,10 @@ classdef DomainHandler<handle
                                                     fp.minParticleEqDistance,fixedParticleNum,...
                                                     particlesOnBoundary(pInd),dt);
                     curParticlePosition(dInds,:)= cp(dInds,:);
-                                                      
-                    
                    if ~strcmpi(dp.reflectionType,'off')% if reflection is set to on 
                      [~,curParticlePosition(dInds,:)] = obj.Reflect(prevParticlePosition(dInds ,:),curParticlePosition(dInds,:),domainNumber);
                    end
                end
-               
                newParticlePosition = curParticlePosition;
                
         end
@@ -320,22 +317,32 @@ classdef DomainHandler<handle
              if ~exist('domainNumber','var')
                domainNumber = 1;
              end
-             
-             if strcmpi(obj.params(domainNumber).moveDomainType,'none')
-                curParticlesPositions = curPos;
-             else
+             if ~strcmpi(obj.params(domainNumber).moveDomainType,'none')
+                 %define the rotation matrix;
+                 Rx =@(roll) [1 0 0;0 cos(roll) -sin(roll);0 sin(roll) cos(roll)];
+                 Ry =@(pitch) [cos(pitch) 0 sin(pitch) ;0 1 0 ;-sin(pitch) 0 cos(pitch)];
+                 Rz =@(yaw) [cos(yaw) -sin(yaw) 0;sin(yaw) cos(yaw) 0;0 0 1];
+                 rotationMatrix       = @(yaw,pitch,roll) Rz(yaw)*Ry(pitch)*Rx(roll);
+                 moveDistanceVector   =  obj.params(domainNumber).moveDistance;
+                 moveAngles           =  obj.params(domainNumber).moveAngles;
                  if strcmpi(obj.params(domainNumber).moveDomainType,'rotate')
-                 
+                   moveDistanceVector = [0 0 0];%do rotation don't move away;
                  end
                  if strcmpi(obj.params(domainNumber).moveDomainType,'straight')
-                 
-                 
+                   moveAngles = [0 0 0];     
                  end
                  if strcmpi(obj.params(domainNumber).moveDomainType,'rotate&straight')
-                 
-                 
+                 if all(moveAngles&moveDistanceVector)==0
+                     error('move angles and move distance must not be zeros')
                  end
-             end
+                 end
+                for pIdx = 1:size(curPos,1)
+                curPos(pIdx,:) = (rotationMatrix(moveAngles(1),moveAngles(2),...
+                moveAngles(3))*(curPos(pIdx,:)-obj.params(domainNumber).domainCenter)')'...
+                +(obj.params(domainNumber).domainCenter +moveDistanceVector);
+               end
+            end
+             curParticlesPositions = curPos;
         end
         
         
