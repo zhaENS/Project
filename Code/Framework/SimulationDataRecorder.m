@@ -99,8 +99,8 @@ classdef SimulationDataRecorder<handle
                 end                        
         end
         
-        function AddNumCluster(obj,connectivity,frameWorkParams)
-            connectMat  = connectivity;
+        function AddNumCluster(obj,objectManagers,frameWorkParams)
+            connectMat  = objectManagers.connectivity;
             connectMat  = connectMat & ~diag(true(1,size(connectMat,1)-1),1)  & ~diag(true(1,size(connectMat,1)-1),-1);
             numSim   = obj.simulationRound;
             obj.simulationData(numSim).step = obj.simulationData(numSim).step+1;
@@ -110,7 +110,7 @@ classdef SimulationDataRecorder<handle
              % find the number of clusters
              [s,~,~] = networkComponents(connectMat);
              obj.simulationData(numSim).numCluster(step) = s;      
-        if step==numSteps
+        if step==numSteps || objectManagers.numObjects==1
             idx= min(find( obj.simulationData(numSim).numCluster~=0));
             if isempty(idx)
                 obj.simulationData(numSim).numCluster = 0;
@@ -118,14 +118,14 @@ classdef SimulationDataRecorder<handle
             else
                 k    = 1;
                 dIdx = [];
-                for nIdx = idx:numSteps-1
+                for nIdx = idx:step-1
                     if obj.simulationData(numSim).numCluster(nIdx)~=obj.simulationData(numSim).numCluster(nIdx+1)
                         dIdx(k) = nIdx+1;
                         k = k+1;
                     end
                 end
                 if ~isempty(dIdx)
-                    obj.simulationData(numSim).stickyTime = [(idx-2000)*dt (dIdx-2000)*dt];
+                    obj.simulationData(numSim).stickyTime = [(idx-50)*dt (dIdx-50)*dt];
                     numCluster(numSim,1) =  obj.simulationData(numSim).numCluster(idx);
                     numCluster(numSim,2:k)= obj.simulationData(numSim).numCluster(dIdx);
                   obj.simulationData(numSim).numCluster = zeros(1,k);

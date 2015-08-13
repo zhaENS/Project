@@ -195,10 +195,10 @@ classdef RouseSimulatorFramework<handle
                                     particlesOnBoundaryAll,domainInd,dt);            
 
                %Move the domain in each step;
-               if mod(obj.simulationData(obj.simulationRound).step,100)==0
-              curParticlePosition = obj.handles.classes.domain.MoveDomain(curParticlePosition);                   
-               end
-              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
+%                if mod(obj.simulationData(obj.simulationRound).step,100)==0
+%               curParticlePosition = obj.handles.classes.domain.MoveDomain(curParticlePosition);                   
+%                end
+                obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
                  
             % diffuse particles on the boundary(currently works only on
             % spheres)
@@ -265,10 +265,10 @@ classdef RouseSimulatorFramework<handle
         end                
                                             
         function PostStepActions(obj)
-            eval(obj.recipe.PostStepActions);
+              eval(obj.recipe.PostStepActions);
               obj.Record % record data related to the Rouse polymer                        
               % raise the Stop flag if the number of steps is more than the allowed
-              obj.dataRecorder.AddNumCluster(obj.objectManager.connectivity,obj.params);
+              obj.dataRecorder.AddNumCluster(obj.objectManager,obj.params);
               obj.runSimulation = obj.runSimulation && ...
              (obj.simulationData(obj.batchRound,obj.simulationRound).step<obj.params.simulator.numSteps);
         end
