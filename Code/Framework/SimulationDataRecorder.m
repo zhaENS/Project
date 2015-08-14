@@ -110,7 +110,7 @@ classdef SimulationDataRecorder<handle
              % find the number of clusters
              [s,~,~] = networkComponents(connectMat);
              obj.simulationData(numSim).numCluster(step) = s;      
-        if step==numSteps || objectManagers.numObjects==1
+        if step==numSteps || (objectManagers.numObjects==1&&s==1)
             idx= min(find( obj.simulationData(numSim).numCluster~=0));
             if isempty(idx)
                 obj.simulationData(numSim).numCluster = 0;
@@ -125,7 +125,7 @@ classdef SimulationDataRecorder<handle
                     end
                 end
                 if ~isempty(dIdx)
-                    obj.simulationData(numSim).stickyTime = [(idx-50)*dt (dIdx-50)*dt];
+                    obj.simulationData(numSim).stickyTime = [(idx-2000)*dt (dIdx-2000)*dt];
                     numCluster(numSim,1) =  obj.simulationData(numSim).numCluster(idx);
                     numCluster(numSim,2:k)= obj.simulationData(numSim).numCluster(dIdx);
                   obj.simulationData(numSim).numCluster = zeros(1,k);
