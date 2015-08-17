@@ -93,10 +93,8 @@ classdef SimulationDataRecorder<handle
                         obj.simulationData(obj.simulationRound).initialPosition(cIdx).y,...
                         obj.simulationData(obj.simulationRound).initialPosition(cIdx).z];
                     obj.simulationData(obj.simulationRound).msd{cIdx}(:,stepIdx)= ...
-                        sum(bsxfun(@minus, posAll,initPos).^2,2)./...
-                        (obj.simulationData(obj.simulationRound).chainObj.params.dt*...
-                        obj.simulationData(obj.simulationRound).step);
-                end                        
+                    sum(bsxfun(@minus, posAll,initPos).^2,2);   
+                end
         end
         
         function AddNumCluster(obj,objectManagers,frameWorkParams)
@@ -162,7 +160,7 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).beadDist{cIdx} = chainObj(cIdx).beadsDist;
                 obj.simulationData(obj.simulationRound).encounterHist{cIdx} = zeros(chainObj(cIdx).params.numBeads);
                 obj.simulationData(obj.simulationRound).encounterTime{cIdx} = zeros(chainObj(cIdx).params.numBeads);
-                obj.simulationData(obj.simulationRound).msd{cIdx} = zeros(chainObj(cIdx).params.numBeads,1);
+                obj.simulationData(obj.simulationRound).msd{cIdx} = [];
                 % record positions
                 obj.simulationData(obj.simulationRound).positions(cIdx).x = chainObj(cIdx).position.cur(:,1);
                 obj.simulationData(obj.simulationRound).positions(cIdx).y = chainObj(cIdx).position.cur(:,2);
@@ -234,7 +232,6 @@ classdef SimulationDataRecorder<handle
                 obj.simulationData(obj.simulationRound).step             = [];
                 obj.simulationData(obj.simulationRound).time             = [];
                 obj.simulationData(obj.simulationRound).beadDist{end}    = [];
-                obj.simulationData(obj.simulationRound).msd{end}         = [];
             end 
             obj.simulationData(obj.simulationRound).numCluster = [];
             obj.simulationData(obj.simulationRound).stickyTime = [];
@@ -252,7 +249,6 @@ classdef SimulationDataRecorder<handle
                     obj.simulationData(rIdx).step              = [];
                     obj.simulationData(rIdx).time              = [];
                     obj.simulationData(rIdx).beadDist{cIdx}    = [];
-                    obj.simulationData(rIdx).msd{cIdx}         = [];
                     obj.simulationData(rIdx).simulationTime    = 0;
                 end
             end
@@ -277,20 +273,20 @@ classdef SimulationDataRecorder<handle
                 %results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
                % results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
                % results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
-%                 results.params            = obj.simulationData(obj.simulationRound).parameters;
-%                 results.msd               = obj.simulationData(obj.simulationRound).msd{cIdx}(:,1001:end);                               
-%                 save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
+                results.params            = obj.simulationData(obj.simulationRound).parameters;
+                results.msd               = obj.simulationData(obj.simulationRound).msd{cIdx};                               
+                save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
 
            end
-           fileNameBis = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
-                                                  '_SimulationRound',num2str(obj.simulationRound),...
-                                                  '_NumCluster_and_StickyTime_');
-             
-                result.numcluster        = obj.simulationData(obj.simulationRound).numCluster;
-                result.stickyTime        = obj.simulationData(obj.simulationRound).stickyTime;
-         
-           save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
-            % save the parameter file and the recipe file 
+%            fileNameBis = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
+%                                                   '_SimulationRound',num2str(obj.simulationRound),...
+%                                                   '_NumCluster_and_StickyTime_');
+%              
+%                 result.numcluster        = obj.simulationData(obj.simulationRound).numCluster;
+%                 result.stickyTime        = obj.simulationData(obj.simulationRound).stickyTime;
+%          
+%            save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
+%             % save the parameter file and the recipe file 
           %   copyfile(fullfile(pwd,'Framework','SimulationFrameworkParams.xml'),fullfile(currentSimulationResultsPath,'SimulationFrameworkParams.xml'));
          %    copyfile(fullfile(pwd ,'Recipes',[obj.params.recipeFileName '.rcp']),currentSimulationResultsPath);
         end
