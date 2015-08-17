@@ -50,7 +50,7 @@ properties
             obj.maxStepsOnBoundaryPerTime = 1; % how many step per dt the bead is allowed to move on the boundary. not work with boundaryMotionType='fixed' default =1
             obj.stickyBeads             = [];    % beads that can stick to others, is also used to stick to other chains
             obj.initializeInDomain      = 1;     % default initialize in the first domain created
-            obj.probAttachToStickyBeads = 0.7;   % sticky beads attachment to other sticky beads
+            obj.probAttachToStickyBeads = 1;   % sticky beads attachment to other sticky beads
             obj.probAttachToBoundary    = 0.0007;
             % forces
             obj.bendingElasticityForce = false;
