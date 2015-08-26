@@ -15,6 +15,7 @@ classdef ForceManagerParams<handle
         bendingOpeningAngle@double
         bendingAffectedParticles@double
         springConst@double
+        stickyParticlesSpringConst@double
         diffusionConst@double
         LJPotentialWidth@double
         LJPotentialDepth@double

@@ -215,12 +215,19 @@ classdef RouseSimulatorFramework<handle
              maxStepsOnBoundary  = obj.objectManager.handles.chain(1).params.maxStepsOnBoundaryPerTime;% temp
              for nIdx = 1:pSize
                  stepsOnB    = randperm(maxStepsOnBoundary-1)+1;
-                 poscurTempo = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,stepsOnB(1),dc,domainRad);
-                 curParticlePosition(pIdx(nIdx),:) = poscurTempo(stepsOnB(1),:);
+                 stepsOnB    = stepsOnB(1);
+                 ang = zeros(stepsOnB-1,1);
+                 oscillationMag = obj.params.chain.oscillationMag;
+                  theta = obj.params.chain.oscillationAng;
+                 for bIdx = 1:stepsOnB-1
+                     ang(bIdx)   = theta(mod(obj.simulationData(obj.simulationRound).step+bIdx-1,numel(theta)-1)+1);
+                 end
+                 poscurTempo = DiffusionOnSphere(particleInitPos(nIdx,:),dt,diffusionConst,stepsOnB,dc,domainRad,ang,oscillationMag);
+                 curParticlePosition(pIdx(nIdx),:) = poscurTempo(stepsOnB,:);
              end
              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
            
-           %if the fixed beads beads are also on the boundary ,find the
+           %if the fixed beads  are also on the boundary ,find the
            %positions and correct the position such that all the chains
            %have the same position for the fixed beads;
            fIdxCumul = [];
@@ -268,7 +275,7 @@ classdef RouseSimulatorFramework<handle
               eval(obj.recipe.PostStepActions);
               obj.Record % record data related to the Rouse polymer                        
               % raise the Stop flag if the number of steps is more than the allowed
-          %    obj.dataRecorder.AddNumCluster(obj.objectManager,obj.params);
+             % obj.dataRecorder.AddNumCluster(obj.objectManager,obj.params);
               obj.runSimulation = obj.runSimulation && ...
              (obj.simulationData(obj.batchRound,obj.simulationRound).step<obj.params.simulator.numSteps);
         end

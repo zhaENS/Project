@@ -286,9 +286,7 @@ classdef ObjectManager<handle
             end
         stickyParticles = stickPar;    
         end
-        
-        
-        
+                        
         function stickyParticles = GetStickyParticles(obj,objList)
             % get the list of sticky particles 
             memberList      = obj.map.GetObjectMembers(objList);
@@ -662,14 +660,31 @@ classdef ObjectManager<handle
                      else 
                          % place 1 (Temporary)
                          springConst((numX+1):(numX+numParticles1),(numY+1):(numY+numParticles2)) =...
-                             obj.handles.chain(objList(o2Idx)).params.forceParams.springConst;
+                              obj.handles.chain(objList(o2Idx)).params.forceParams.springConst;                                                       
                      end
                      numY = numY+numParticles2;
                 end
                 
                  numX = numX+numParticles1;
                  numY = 0;
-            end            
+            end
+            
+       % place the spring const for sticky beads
+          objInds = obj.map.GetAllInds(objNum);
+          connectedParticles = obj.GetObjectConnectedParticles(objNum,'offDiagonals');% global indices                          
+          stickyPart = obj.GetGlobalStickyParticles(objNum);% global indices                          
+          % for each connected which is sticky assign
+          % stickyParticleSpringConst
+          for rIdx = 1:size(connectedParticles,1)
+              if ismember(connectedParticles(rIdx,1),stickyPart)&& ismember(connectedParticles(rIdx,2),stickyPart); 
+                % map global to local 
+                ind1 = find(objInds==connectedParticles(rIdx,1));
+                ind2 = find(objInds==connectedParticles(rIdx,2));
+                springConst(ind1,ind2)= obj.handles.chain(objList(o2Idx)).params.forceParams.stickyParticlesSpringConst; 
+                springConst(ind2,ind1)= obj.handles.chain(objList(o2Idx)).params.forceParams.stickyParticlesSpringConst; 
+              end
+          end
+            
         end
                 
         function minParticleDist = GetMinParticleDistAsOne(obj,objNum)

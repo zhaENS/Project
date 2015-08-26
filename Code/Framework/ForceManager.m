@@ -25,6 +25,7 @@ classdef ForceManager<handle
         % Parameters for the forces
         bendingConst           = 0;
         springConst            = 0;
+        stickyParticlesSpringConst = 0;
         diffusionConst         = 0;
         LJPotentialWidth       = 0;
         LJPotentialDepth       = 0;
@@ -221,11 +222,12 @@ classdef ForceManager<handle
             % fixedParticleNum - particles in the system which do not move
             force = zeros(size(particlePosition));
             if springForce
-                particleDist(1:size(particlePosition,1)+1:size(particlePosition,1)^2)= Inf;
+            %    particleDist(1:size(particlePosition,1)+1:size(particlePosition,1)^2)= Inf;
                 L                         = (1-(minParticleDist./particleDist)).*connectivityMap;
                 L(~connectivityMap)       = 0;
+                L = L.*springConst;
                 sumForces                 = sum(L,2);
-                force                     = -springConst.*(diag(sumForces)-L); % set the maindiagonal                
+                force                     = -1.*(diag(sumForces)-L); % set the maindiagonal                
                 force                     = force*particlePosition;
                 force(fixedParticleNum,:)    = 0;% zero out forces for fixed particles
                 if ~isempty(particlesOnBoundary)
