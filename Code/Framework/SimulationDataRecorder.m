@@ -106,13 +106,17 @@ classdef SimulationDataRecorder<handle
              dt      = frameWorkParams.simulator.dt;
              step    = obj.simulationData(numSim).step;
              % find the number of clusters
-             [s,~,~] = networkComponents(connectMat);
-             obj.simulationData(numSim).numCluster(step) = s;      
+             [s,~,compo] = networkComponents(connectMat);
+             obj.simulationData(numSim).numCluster(step) = s;
+             if ~isempty(compo)
+             obj.simulationData(numSim).ClusterComponent{step} = compo(~cellfun('isempty',compo));
+             end
         if step==numSteps || (objectManagers.numObjects==1&&s==1)
             idx= min(find( obj.simulationData(numSim).numCluster~=0));
             if isempty(idx)
                 obj.simulationData(numSim).numCluster = 0;
                 obj.simulationData(numSim).stickyTime=0;
+                obj.simulationData(numSim).ClusterComponent = 0;
             else
                 k    = 1;
                 dIdx = [];
@@ -155,6 +159,7 @@ classdef SimulationDataRecorder<handle
             obj.simulationData(obj.simulationRound).parameters = frameworkParams;
             obj.simulationData(obj.simulationRound).numCluster = [];
             obj.simulationData(obj.simulationRound).stickyTime = [];
+            obj.simulationData(obj.simulationRound).ClusterComponent =[];
             for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
                 % add initialized beadDistance matrix
                 obj.simulationData(obj.simulationRound).beadDist{cIdx} = chainObj(cIdx).beadsDist;
@@ -273,7 +278,7 @@ classdef SimulationDataRecorder<handle
 %                 results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
 %                results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
 %                results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
-                 results.params            = obj.simulationData(obj.simulationRound).parameters;
+                  results.params            = obj.simulationData(obj.simulationRound).parameters;
                 results.msd               = obj.simulationData(obj.simulationRound).msd{cIdx};                               
                 save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
 
@@ -285,7 +290,7 @@ classdef SimulationDataRecorder<handle
 %                 result.numcluster        = obj.simulationData(obj.simulationRound).numCluster;
 %                 result.stickyTime        = obj.simulationData(obj.simulationRound).stickyTime;
 % %          
-%              save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
+    %         save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
 % %             % save the parameter file and the recipe file 
           %   copyfile(fullfile(pwd,'Framework','SimulationFrameworkParams.xml'),fullfile(currentSimulationResultsPath,'SimulationFrameworkParams.xml'));
          %    copyfile(fullfile(pwd ,'Recipes',[obj.params.recipeFileName '.rcp']),currentSimulationResultsPath);
