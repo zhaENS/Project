@@ -44,7 +44,6 @@ classdef SimulationDataRecorder<handle
             obj.AddBeadDist
             obj.AddBeadsPosition
             obj.AddMeanSquareDisplacement
-
         end
         
         function AddBeadDist(obj)
@@ -113,7 +112,15 @@ classdef SimulationDataRecorder<handle
              end
         if step==numSteps || (objectManagers.numObjects==1&&s==1)
             idx= min(find( obj.simulationData(numSim).numCluster~=0));
-            if isempty(idx)
+            if idx==step%all the chains form a single cluster at the beginning;
+            obj.simulationData(numSim).numCluster = 1;
+            obj.simulationData(numSim).stickyTime = idx*dt;
+            numClusterComponent{numSim}(1) = numel(obj.simulationData(numSim).ClusterComponent{step}{:});
+            obj.simulationData(numSim).ClusterComponent=[];
+            obj.simulationData(numSim).ClusterComponent{1}=numClusterComponent{numSim};
+            end
+            
+            if isempty(idx)%no cluster is formed during simulation
                 obj.simulationData(numSim).numCluster = 0;
                 obj.simulationData(numSim).stickyTime=0;
                 obj.simulationData(numSim).ClusterComponent = 0;
@@ -124,24 +131,32 @@ classdef SimulationDataRecorder<handle
                     if obj.simulationData(numSim).numCluster(nIdx)~=obj.simulationData(numSim).numCluster(nIdx+1)
                         dIdx(k) = nIdx+1;
                         k = k+1;
+                    else
+                        if nIdx==step-1%the first cluster is formed between the beads in the same chain,then during the remain steps
+                        %the other beads are added in the same cluster.
+                        dIdx(k)=step;
+                        k = k+1;
+                        end
                     end
                 end
                 if ~isempty(dIdx)
+                    %record the stickyTime when each event happens
                     obj.simulationData(numSim).stickyTime = [(idx-2000)*dt (dIdx-2000)*dt];
-                    numCluster(numSim,1) =  obj.simulationData(numSim).numCluster(idx);
-                    numClusterComponent = obj.simulationData(numSim).ClusterComponent{idx};
-                    numClusterComponent    = obj.simulationData(numSim).ClusterComponent{dIdx};
-                    for kIdx=1:k
-                        for uIdx=1:numel(numClusterComponent{kIdx})
-                        numEvent{kIdx}(uIdx) = numel(numClusterComponent{kIdx}{uIdx});
+                    %record the number of clusters  
+                    numCluster(1) =  obj.simulationData(numSim).numCluster(idx);
+                    numCluster(2:k)= obj.simulationData(numSim).numCluster(dIdx);
+                  obj.simulationData(numSim).numCluster = zeros(1,k);
+                  obj.simulationData(numSim).numCluster = numCluster;
+                  %record the number of components in each cluster
+                   numClusterComponent{1} = numel(obj.simulationData(numSim).ClusterComponent{idx}{:});
+                    for kIdx=1:k-1
+                        for cIdx=1:numel(obj.simulationData(numSim).ClusterComponent{dIdx(kIdx)})
+                    numClusterComponent{kIdx+1}(cIdx) =numel(obj.simulationData(numSim).ClusterComponent{dIdx(kIdx)}{cIdx});
                         end
                     end
-                    numCluster(numSim,2:k)= obj.simulationData(numSim).numCluster(dIdx);
-                  obj.simulationData(numSim).numCluster = zeros(1,k);
-                  obj.simulationData(numSim).ClusterComponent =[];
-                  obj.simulationData(numSim).numCluster = numCluster(numSim,:);
-                  obj.simulationData(numSim).ClusterComponent = numEvent;
-                end
+                  obj.simulationData(numSim).ClusterComponent =[];                  
+                  obj.simulationData(numSim).ClusterComponent = numClusterComponent;
+                 end
             end
         end
         end
@@ -249,6 +264,7 @@ classdef SimulationDataRecorder<handle
             end 
             obj.simulationData(obj.simulationRound).numCluster = [];
             obj.simulationData(obj.simulationRound).stickyTime = [];
+                obj.simulationData(obj.simulationRound).ClusterComponent = [];
          
         end
         
@@ -280,26 +296,26 @@ classdef SimulationDataRecorder<handle
             currentSimulationResultsPath = sprintf('%s%s%s_%s_%s',obj.params.resultsFolder,'\',num2str(c(3)), num2str(c(2)), num2str(c(1)));
             [~,~,~]  = mkdir(currentSimulationResultsPath);
             for cIdx = 1:obj.simulationData(obj.simulationRound).numChains
-            fileName = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
-                                                  '_SimulationRound',num2str(obj.simulationRound),...
-                                                  '_Chain_',num2str(cIdx));
-%                % results.beadDistMat       = obj.simulationData(obj.simulationRound).beadDist{cIdx}(:,:,3000:end); % save the mean distance matrix
+% %            fileName = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
+%                                                   '_SimulationRound',num2str(obj.simulationRound),...
+%                                                   '_Chain_',num2str(cIdx));
+% %                % results.beadDistMat       = obj.simulationData(obj.simulationRound).beadDist{cIdx}(:,:,3000:end); % save the mean distance matrix
 %                 results.beadDistanceRMS   = sqrt(mean(obj.simulationData(obj.simulationRound).beadDistSquare{cIdx}(:,:,3000:end),3));
 %                results.beadEncounterHist = obj.simulationData(obj.simulationRound).encounterHist{cIdx};
 %                results.beadEncounterTime = obj.simulationData(obj.simulationRound).encounterTime{cIdx};
-                  results.params            = obj.simulationData(obj.simulationRound).parameters;
-                results.msd               = obj.simulationData(obj.simulationRound).msd{cIdx};                               
-                save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
+%                   results.params            = obj.simulationData(obj.simulationRound).parameters;
+%                 results.msd               = obj.simulationData(obj.simulationRound).msd{cIdx};                               
+%                 save(fullfile(currentSimulationResultsPath,fileName),'results','-v7.3');
 
             end
-%             fileNameBis = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
-%                                                   '_SimulationRound',num2str(obj.simulationRound),...
-%                                                   '_NumCluster_and_StickyTime_');
-%              
-%                 result.numcluster        = obj.simulationData(obj.simulationRound).numCluster;
-%                 result.stickyTime        = obj.simulationData(obj.simulationRound).stickyTime;
-% %          
-    %         save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
+            fileNameBis = sprintf('%s%s%s%s%s%s','SimulationBatch_',num2str(obj.simulationBatchRound),...
+                                                  '_SimulationRound',num2str(obj.simulationRound),...
+                                                  '_NumCluster_and_StickyTime_');
+             
+                result.numcluster        = obj.simulationData(obj.simulationRound).numCluster;
+                result.stickyTime        = obj.simulationData(obj.simulationRound).stickyTime;
+                result.clustercomponents =obj.simulationData(obj.simulationRound). ClusterComponent;
+            save(fullfile(currentSimulationResultsPath,fileNameBis),'result','-v7.3');
 % %             % save the parameter file and the recipe file 
           %   copyfile(fullfile(pwd,'Framework','SimulationFrameworkParams.xml'),fullfile(currentSimulationResultsPath,'SimulationFrameworkParams.xml'));
          %    copyfile(fullfile(pwd ,'Recipes',[obj.params.recipeFileName '.rcp']),currentSimulationResultsPath);
