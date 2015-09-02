@@ -129,9 +129,18 @@ classdef SimulationDataRecorder<handle
                 if ~isempty(dIdx)
                     obj.simulationData(numSim).stickyTime = [(idx-2000)*dt (dIdx-2000)*dt];
                     numCluster(numSim,1) =  obj.simulationData(numSim).numCluster(idx);
+                    numClusterComponent = obj.simulationData(numSim).ClusterComponent{idx};
+                    numClusterComponent    = obj.simulationData(numSim).ClusterComponent{dIdx};
+                    for kIdx=1:k
+                        for uIdx=1:numel(numClusterComponent{kIdx})
+                        numEvent{kIdx}(uIdx) = numel(numClusterComponent{kIdx}{uIdx});
+                        end
+                    end
                     numCluster(numSim,2:k)= obj.simulationData(numSim).numCluster(dIdx);
                   obj.simulationData(numSim).numCluster = zeros(1,k);
+                  obj.simulationData(numSim).ClusterComponent =[];
                   obj.simulationData(numSim).numCluster = numCluster(numSim,:);
+                  obj.simulationData(numSim).ClusterComponent = numEvent;
                 end
             end
         end
