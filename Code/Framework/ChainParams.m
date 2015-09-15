@@ -56,7 +56,7 @@ properties
            
             obj.initializeInDomain      = 1;     % default initialize in the first domain created
             obj.probAttachToStickyBeads = 1;   % sticky beads attachment to other sticky beads
-            obj.probAttachToBoundary    = 0.0007;
+            obj.probAttachToBoundary    = 0.7;
             % forces
             obj.bendingElasticityForce = false;
             obj.springForce            = true;                               

@@ -313,7 +313,7 @@ classdef DomainHandler<handle
            
         end
         
-        function curParticlesPositions = MoveDomain(obj,curPos,domainNumber)
+        function curParticlesPositions = MoveDomain(obj,curPos,step,domainNumber)
              if ~exist('domainNumber','var')
                domainNumber = 1;
              end
@@ -324,7 +324,8 @@ classdef DomainHandler<handle
                  Rz =@(yaw) [cos(yaw) -sin(yaw) 0;sin(yaw) cos(yaw) 0;0 0 1];
                  rotationMatrix       = @(yaw,pitch,roll) Rz(yaw)*Ry(pitch)*Rx(roll);
                  moveDistanceVector   =  obj.params(domainNumber).moveDistance;
-                 moveAngles           =  obj.params(domainNumber).moveAngles;
+                 moveA           =  (obj.params(domainNumber).moveAngles)';
+                 moveAngles = moveA(mod(step,size(moveA,2)-1)+1,:);
                  if strcmpi(obj.params(domainNumber).moveDomainType,'rotate')
                    moveDistanceVector = [0 0 0];%do rotation don't move away;
                  end

@@ -194,10 +194,9 @@ classdef RouseSimulatorFramework<handle
                                     curParticlePosition,particleDist,fixedParticleNum,...
                                     particlesOnBoundaryAll,domainInd,dt);            
 
-               %Move the domain in each step;
-%                if mod(obj.simulationData(obj.simulationRound).step,100)==0
-%               curParticlePosition = obj.handles.classes.domain.MoveDomain(curParticlePosition);                   
-%                end
+               %Move the domain in each step;[not finish]
+              step = obj.simulationData(obj.simulationRound).step;
+              curParticlePosition = obj.handles.classes.domain.MoveDomain(curParticlePosition,step);                   
                 obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
                  
             % diffuse particles on the boundary(currently works only on
@@ -227,20 +226,7 @@ classdef RouseSimulatorFramework<handle
              end
              obj.objectManager.DealCurrentPosition(objList,curParticlePosition); 
            
-           %if the fixed beads  are also on the boundary ,find the
-           %positions and correct the position such that all the chains
-           %have the same position for the fixed beads;
-           fIdxCumul = [];
-           fSize = numel(fixedParticleNum);
-            for bIdx = 1:fSize
-                fIdx      = find(particlesOnBoundaryAll==fixedParticleNum(bIdx));
-                fIdxCumul = [fIdxCumul fIdx];
-            end
-         
-            if ~isempty(fIdxCumul)
-            curParticlePosition(particlesOnBoundaryAll(fIdxCumul),:) = repmat(curParticlePosition(particlesOnBoundaryAll(fIdxCumul(1)),:),[numel(fIdxCumul),1]);
-            obj.objectManager.DealCurrentPosition(objList,curParticlePosition);
-            end
+          
                      
              stepsOnB    = domainInd(stickyBeads);
              sInd = stepsOnB==dIdx;
